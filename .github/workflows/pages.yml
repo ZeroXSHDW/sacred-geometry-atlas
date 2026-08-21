@@ -121,7 +121,7 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
           }
           if (!html.includes('aria-keyshortcuts="J"')) throw new Error('Missing keyboard shortcut metadata');
-          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
+          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom" aria-controls="geometryCanvas"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
