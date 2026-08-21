@@ -176,8 +176,8 @@ jobs:
             if (!app.includes(token)) throw new Error('Comparison study labels must retain context: ' + token);
           }
           if (app.includes('meters wide')) throw new Error('Comparison study labels must use span terminology');
-          if (!app.includes('role="img" aria-labelledby="drawing-title drawing-description" focusable="false"')) throw new Error('Drawing SVG must not become keyboard focusable');
-          for (const token of ['role="img" aria-labelledby="drawing-title drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Status: ${studyStatusDescription(study)}', 'Reference:']) {
+          if (!app.includes('role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"')) throw new Error('Drawing SVG must expose separate accessible name and description relationships');
+          for (const token of ['role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Status: ${studyStatusDescription(study)}', 'Reference:']) {
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
           for (const token of ['const studySurfaceReading = (study) =>', '$("#activeDescription").textContent = studySurfaceReading(study)', '$("#analysisReading").textContent = studySurfaceReading(study)', 'const reading = studySurfaceReading(study);', 'Reading: ${reading || "No interpretive reading supplied."}']) {
