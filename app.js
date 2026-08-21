@@ -176,7 +176,7 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
-  function replaceCatalogRoute() {
+  function updateCatalogRoute(historyMethod = "replaceState") {
     const current = new URL(window.location.href);
     const url = new URL(current.href);
     const values = {
@@ -193,11 +193,19 @@
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
     const currentUrl = `${current.pathname}${current.search}${current.hash}`;
     if (nextUrl === currentUrl) return;
-    window.history.replaceState({
+    window.history[historyMethod]({
       page: state.page,
       studyId: state.page === "atlas" ? state.activeId : null,
       compareIds: state.page === "compare" ? [...state.compareIds] : []
     }, "", nextUrl);
+  }
+
+  function replaceCatalogRoute() {
+    updateCatalogRoute("replaceState");
+  }
+
+  function pushCatalogRoute() {
+    updateCatalogRoute("pushState");
   }
 
   function clearCatalogParams(url) {
@@ -305,23 +313,23 @@
     $("#clearSearchInput").addEventListener("click", () => clearFilter("query", { focus: true }));
     $("#filterSelect").addEventListener("change", (event) => {
       state.filter = event.target.value;
+      pushCatalogRoute();
       refreshCatalog();
-      replaceCatalogRoute();
     });
     $("#filterPlace").addEventListener("change", (event) => {
       state.filterPlace = event.target.value;
+      pushCatalogRoute();
       refreshCatalog();
-      replaceCatalogRoute();
     });
     $("#filterStatus").addEventListener("change", (event) => {
       state.filterStatus = event.target.value;
+      pushCatalogRoute();
       refreshCatalog();
-      replaceCatalogRoute();
     });
     $("#sortSelect").addEventListener("change", (event) => {
       state.sort = event.target.value;
+      pushCatalogRoute();
       refreshCatalog();
-      replaceCatalogRoute();
     });
     $("#clearSearch").addEventListener("click", () => clearCatalogFilters({ resetSort: true, focus: true }));
     $("#clearVisualFilters").addEventListener("click", () => clearCatalogFilters({ resetSort: true, focus: true }));
@@ -419,8 +427,8 @@
       $("#sortSelect").value = "index";
       state.sort = "index";
     }
+    pushCatalogRoute();
     refreshCatalog();
-    replaceCatalogRoute();
     if (focus) focusCatalogControl("query");
   }
 
@@ -528,8 +536,8 @@
       state.sort = "index";
       $("#sortSelect").value = "index";
     }
+    pushCatalogRoute();
     refreshCatalog();
-    replaceCatalogRoute();
     if (focus) focusCatalogControl(key);
   }
 
