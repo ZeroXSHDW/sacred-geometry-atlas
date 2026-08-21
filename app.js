@@ -1605,6 +1605,7 @@
     renderGeometryCompare();
     renderComparisonTable();
     renderCompareSelection();
+    renderCompareContext();
     const selected = state.compareIds.length;
     const edit = $("#editCompare");
     if (edit) {
@@ -1614,11 +1615,23 @@
       const editText = edit.querySelector("span:last-child");
       if (editText) editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";
     }
-    $("#compareScope").textContent = selected >= 2 ? `${selected} selected` : "Full collection";
-    $("#compareHelper").textContent = selected >= 2
+    if (state.page === "compare") updateDocumentTitle("compare");
+  }
+
+  function renderCompareContext() {
+    const selected = state.compareIds.length;
+    const focused = selected >= 2;
+    const compareScopeLabel = focused ? "selected collection" : "full collection";
+    const sectionNote = $("#compareSectionNote");
+    const geometryKicker = $("#geometryCompareKicker");
+    const scope = $("#compareScope");
+    const helper = $("#compareHelper");
+    if (sectionNote) sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;
+    if (geometryKicker) geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";
+    if (scope) scope.textContent = focused ? `${selected} selected` : "Full collection";
+    if (helper) helper.textContent = focused
       ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
       : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
-    if (state.page === "compare") updateDocumentTitle("compare");
   }
 
   function renderCompareSelection() {
