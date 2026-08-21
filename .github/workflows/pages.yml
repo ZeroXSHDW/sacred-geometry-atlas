@@ -114,6 +114,7 @@ jobs:
           for (const token of ['id="studyCount"', 'id="modeCount"', 'id="profileCount"']) {
             if (!html.includes(token)) throw new Error('Hero statistics must expose a dynamic target: ' + token);
           }
+          if (!html.includes('<div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">') || !html.includes('<span class="study-nav-position" id="studyNavPosition">01 / 06 visible</span>') || !styles.includes('.study-nav-position {') || !app.includes('const positionLabel = visible.length && currentIndex >= 0') || !app.includes('navigation.setAttribute("aria-label", visible.length && currentIndex >= 0')) throw new Error('Study navigation must expose its position within the visible collection');
           for (const token of ['function renderHeroStats()', 'studyCount: studies.length', 'modeCount: validModes.size', 'profileCount: activeStudy() ? profileScores(activeStudy()).length : 0', 'renderHeroStats();']) {
             if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
           }
@@ -409,6 +410,7 @@ jobs:
           const fs = require('fs');
           const vm = require('vm');
           const keyboardStatus = { textContent: '' };
+          const elements = new Map();
           const context = {
             URL,
             window: {
@@ -416,13 +418,13 @@ jobs:
             },
             document: {
               body: { classList: { remove() {} } },
-              querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : null; }
+              querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : elements.get(selector) || null; }
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl, handleKeyboard } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav } = context.window.__atlasTest;
           let prevented = false;
           state.page = 'atlas';
           state.compareIds = [];
@@ -436,6 +438,22 @@ jobs:
           const href = navigationUrl(hash);
           if (hash !== '#atlas/gothic/section/interior/axis/1.3') throw new Error(`Unexpected study route: ${hash}`);
           if (href !== '/atlas/?q=central%20plan#atlas/gothic/section/interior/axis/1.3') throw new Error(`Catalog scope was not preserved: ${href}`);
+          const navigation = { setAttribute(name, value) { this[name] = value; } };
+          const position = { textContent: '' };
+          const previous = { disabled: false, setAttribute() {}, title: '' };
+          const next = { disabled: false, setAttribute() {}, title: '' };
+          elements.set('#studyNav', navigation);
+          elements.set('#studyNavPosition', position);
+          elements.set('#prevStudy', previous);
+          elements.set('#nextStudy', next);
+          state.query = '';
+          state.activeId = 'basilica';
+          renderStudyNav();
+          if (position.textContent !== '01 / 06 visible' || navigation['aria-label'] !== 'Move between studies; showing study 1 of 6 visible studies' || previous.disabled || next.disabled) throw new Error('Full study navigation position did not render');
+          state.query = 'gothic';
+          state.activeId = 'gothic';
+          renderStudyNav();
+          if (position.textContent !== '01 / 01 visible' || navigation['aria-label'] !== 'Move between studies; showing study 1 of 1 visible studies' || !previous.disabled || !next.disabled) throw new Error('Filtered study navigation position did not render');
           console.log('Route-native catalog link smoke test passed.');
           NODE
       - name: Smoke-test comparison edit handoff

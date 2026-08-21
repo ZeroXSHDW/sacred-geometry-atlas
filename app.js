@@ -644,6 +644,8 @@
   }
 
   function renderStudyNav() {
+    const navigation = $("#studyNav");
+    const position = $("#studyNavPosition");
     const previous = $("#prevStudy");
     const next = $("#nextStudy");
     if (!previous || !next) return;
@@ -652,6 +654,13 @@
     const canNavigate = visible.length > 1 && currentIndex >= 0;
     const previousStudy = canNavigate ? visible[(currentIndex - 1 + visible.length) % visible.length] : null;
     const nextStudy = canNavigate ? visible[(currentIndex + 1) % visible.length] : null;
+    const positionLabel = visible.length && currentIndex >= 0
+      ? `${String(currentIndex + 1).padStart(2, "0")} / ${String(visible.length).padStart(2, "0")} visible`
+      : "No studies visible";
+    if (position) position.textContent = positionLabel;
+    if (navigation) navigation.setAttribute("aria-label", visible.length && currentIndex >= 0
+      ? `Move between studies; showing study ${currentIndex + 1} of ${visible.length} visible studies`
+      : "Move between studies; no studies visible");
     previous.disabled = !canNavigate;
     next.disabled = !canNavigate;
     previous.setAttribute("aria-label", previousStudy ? `Previous study: ${previousStudy.name}` : "Previous study");
