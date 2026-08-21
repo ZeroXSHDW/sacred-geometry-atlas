@@ -97,6 +97,35 @@ jobs:
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
           if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');
           NODE
+      - name: Audit HTML accessibility references
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class AccessibilityAudit(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids = []
+                  self.references = []
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if "id" in attrs:
+                      self.ids.append(attrs["id"])
+                  for key in ("aria-labelledby", "aria-describedby", "aria-controls", "aria-owns"):
+                      if key in attrs:
+                          self.references.extend(attrs[key].split())
+
+          parser = AccessibilityAudit()
+          parser.feed(Path("index.html").read_text())
+          if len(parser.ids) != len(set(parser.ids)):
+              raise SystemExit("Duplicate HTML IDs found")
+          missing = sorted(set(parser.references) - set(parser.ids))
+          if missing:
+              raise SystemExit("Missing ARIA references: " + ", ".join(missing))
+          print(f"Accessibility reference audit passed: {len(parser.ids)} unique IDs.")
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site artifact
