@@ -55,6 +55,11 @@ select:focus-visible {
 }
 
 .noscript-message {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem 0.8rem;
   padding: 0.8rem 1rem;
   border-bottom: 1px solid var(--coral);
   color: var(--ink);
@@ -63,6 +68,19 @@ select:focus-visible {
   font-size: 0.68rem;
   text-align: center;
 }
+.noscript-message strong { color: var(--coral); }
+.noscript-link { color: var(--amber); text-decoration: none; }
+.noscript-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
+.noscript-index { width: min(1440px, calc(100% - 96px)); margin: 2rem auto 0; padding: 2rem; border: 1px solid var(--line); background: var(--panel); }
+.noscript-index .eyebrow { margin-bottom: 0.85rem; }
+.noscript-index h2 { margin-bottom: 0.8rem; }
+.noscript-intro { max-width: 42rem; color: var(--ink-soft); }
+.noscript-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 2rem 0 1.2rem; padding: 0; list-style: none; }
+.noscript-list li { display: grid; grid-template-columns: 32px 1fr; gap: 0.7rem; padding: 1rem 0; border-top: 1px solid var(--line); }
+.noscript-number { color: var(--amber); font-family: var(--serif); font-size: 1.35rem; line-height: 1; }
+.noscript-list strong { display: block; color: var(--ink); font-size: 0.82rem; }
+.noscript-list small { display: block; margin-top: 0.22rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.45; }
+.noscript-note { margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.59rem; }
 
 .sr-only {
   position: absolute;
@@ -530,6 +548,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 
 @media (max-width: 740px) {
   .site-header, main, .site-footer { width: min(100% - 32px, 600px); }
+  .noscript-index { width: min(100% - 32px, 600px); padding: 1.3rem; }
+  .noscript-list { grid-template-columns: 1fr; margin-top: 1.3rem; }
   .site-header { flex-wrap: wrap; gap: 0.8rem; min-height: auto; padding: 1rem 0; }
   .main-nav { order: 3; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); }
   .nav-button { flex: 1; text-align: center; }
