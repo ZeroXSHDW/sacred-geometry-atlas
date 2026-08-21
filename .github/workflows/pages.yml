@@ -63,7 +63,7 @@ jobs:
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
-          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title', 'Length to span ratio', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0 })', 'announceStudy(activeStudy(), visible.length)']) {
+          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title', 'Length to span ratio', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0 })', 'announceStudy(activeStudy(), visible.length)', 'focusCatalogControl(key)', 'clearFilter(chip.dataset.clearFilter, { focus: keyboardActivation })']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');

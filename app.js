@@ -238,12 +238,14 @@
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
+      const keyboardActivation = event.detail === 0;
       if (event.target.closest("[data-clear-filters]")) {
         clearCatalogFilters();
+        if (keyboardActivation) focusCatalogControl("query");
         return;
       }
       const chip = event.target.closest("[data-clear-filter]");
-      if (chip) clearFilter(chip.dataset.clearFilter);
+      if (chip) clearFilter(chip.dataset.clearFilter, { focus: keyboardActivation });
     });
     window.addEventListener("keydown", handleKeyboard);
   }
@@ -300,7 +302,19 @@
       : "";
   }
 
-  function clearFilter(key) {
+  function focusCatalogControl(key) {
+    const selectors = {
+      query: "#searchInput",
+      filter: "#filterSelect",
+      place: "#filterPlace",
+      status: "#filterStatus"
+    };
+    const control = $(selectors[key] || selectors.query);
+    if (control && typeof control.focus === "function") control.focus({ preventScroll: true });
+  }
+
+  function clearFilter(key, options = {}) {
+    const { focus = false } = options;
     if (key === "query") {
       state.query = "";
       $("#searchInput").value = "";
@@ -318,6 +332,7 @@
       $("#filterStatus").value = "all";
     }
     refreshCatalog();
+    if (focus) focusCatalogControl(key);
   }
 
   function announceKeyboard(message) {
