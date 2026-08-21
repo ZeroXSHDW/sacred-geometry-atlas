@@ -23,6 +23,13 @@
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const MIN_ZOOM = 0.7;
   const MAX_ZOOM = 1.6;
+  const zoomPercent = (zoom) => `${Math.round((zoom ?? state.zoom) * 100)}%`;
+  const parseZoom = (value) => {
+    if (value === undefined || value === "") return null;
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed) || parsed < MIN_ZOOM || parsed > MAX_ZOOM) return null;
+    return Number(parsed.toFixed(2));
+  };
   const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
   const studyStatus = (study) => study.status || "schematic";
   const studyStatusDescription = (study) => studyStatus(study) === "measured"
@@ -130,7 +137,7 @@
         return segment;
       }
     });
-    const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer] = segments;
+    const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer, requestedZoom] = segments;
     const page = validPages.has(requestedPage) ? requestedPage : pageAliases.get(requestedPage) || "atlas";
     const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
@@ -147,6 +154,7 @@
       mode: validModes.has(requestedMode) ? requestedMode : null,
       surface: validSurfaces.has(requestedSurface) ? requestedSurface : null,
       layer: validLayers.has(requestedLayer) ? requestedLayer : null,
+      zoom: page === "atlas" && studyId ? parseZoom(requestedZoom) : null,
       compareIds: compareIds.length >= 2 ? compareIds : []
     };
   }
@@ -226,7 +234,8 @@
 
   function routeHash(page, includeStudy) {
     if (page === "atlas" && includeStudy && state.activeId) {
-      return `#atlas/${encodeURIComponent(state.activeId)}/${state.mode}/${state.surface}/${state.layer}`;
+      const zoomSegment = state.zoom === 1 ? "" : `/${Number(state.zoom.toFixed(2))}`;
+      return `#atlas/${encodeURIComponent(state.activeId)}/${state.mode}/${state.surface}/${state.layer}${zoomSegment}`;
     }
     if (page === "compare" && state.compareIds.length >= 2) {
       return `#compare/${state.compareIds.map((id) => encodeURIComponent(id)).join(",")}`;
@@ -259,6 +268,7 @@
       state.mode = route.mode || "plan";
       state.surface = route.surface || "exterior";
       state.layer = route.layer || "all";
+      state.zoom = route.zoom || 1;
     }
     if (route.page === "compare") {
       state.compareIds = route.compareIds;
@@ -400,6 +410,7 @@
       renderControls();
       renderDrawing();
       announceKeyboard("Drawing zoom reset to 100%.");
+      if (state.page === "atlas") replaceRoute("atlas");
     });
     $("#resetDrawing").addEventListener("click", resetDrawingView);
     $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
@@ -586,7 +597,7 @@
   }
 
   function announceDrawingState() {
-    announceKeyboard(`${state.surface} ${state.mode} view selected, ${layerFocusLabel()}.`);
+    announceKeyboard(`${state.surface} ${state.mode} view selected, ${layerFocusLabel()}, ${zoomPercent()} zoom.`);
   }
 
   function updateSearchClear() {
@@ -677,7 +688,8 @@
       state.zoom = 1;
       renderControls();
       renderDrawing();
-      announceKeyboard("Drawing zoom reset.");
+      announceKeyboard("Drawing zoom reset to 100%.");
+      if (state.page === "atlas") replaceRoute("atlas");
     }
   }
 
@@ -1023,7 +1035,7 @@
     shareUrl.hash = routeHash("atlas", true);
     const sharePayload = {
       title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-      text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}.`,
+      text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
       url: shareUrl.href
     };
 
@@ -1148,7 +1160,7 @@
     citationUrl.hash = routeHash("atlas", true);
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
-    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
@@ -1252,6 +1264,7 @@
         surface: state.surface,
         mode: state.mode,
         layer: state.layer,
+        zoom: state.zoom,
         route: shareUrl.href
       },
       study
@@ -1383,7 +1396,8 @@
     state.zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number((state.zoom + delta).toFixed(2))));
     renderControls();
     renderDrawing();
-    announceKeyboard(`Drawing zoom ${Math.round(state.zoom * 100)}%.`);
+    announceKeyboard(`Drawing zoom ${zoomPercent()}.`);
+    if (state.page === "atlas") replaceRoute("atlas");
   }
 
   function resetDrawingView() {
@@ -1555,7 +1569,7 @@
     const surface = state.surface === "interior" ? "Interior" : "Exterior";
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const reading = studySurfaceReading(study);
-    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name}. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
+    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
