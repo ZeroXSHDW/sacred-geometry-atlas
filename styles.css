@@ -561,6 +561,7 @@ h3 { letter-spacing: -0.04em; }
 .comparison-table-panel[open] summary { border-bottom: 1px solid var(--line); }
 .comparison-table-panel[open] summary::after { content: '−'; }
 .comparison-table-wrap { overflow-x: auto; }
+.comparison-table-wrap:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
 .comparison-table { width: 100%; min-width: 760px; border-collapse: collapse; font-family: var(--mono); font-size: 0.58rem; }
 .comparison-table caption { padding: 0.9rem 1.15rem 0.65rem; color: var(--ink-muted); text-align: left; }
 .comparison-table th, .comparison-table td { padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }

@@ -142,7 +142,9 @@ jobs:
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
+          if (!html.includes('<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable exact comparison table">')) throw new Error('Comparison table must expose a keyboard-scrollable region');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
+          if (!styles.includes('.comparison-table-wrap:focus-visible')) throw new Error('Comparison table region must have a visible focus state');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
           for (const token of ['class="noscript-number" aria-hidden="true"', 'class="study-index" id="activeIndex" aria-hidden="true"', 'class="method-card-index" aria-hidden="true"', 'class="note-icon" aria-hidden="true"']) {
             if (!html.includes(token)) throw new Error('Missing decorative marker guard: ' + token);
