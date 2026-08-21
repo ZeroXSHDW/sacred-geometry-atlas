@@ -33,6 +33,7 @@ jobs:
           test -f .nojekyll
           test -s og.png
           test -s favicon.svg
+          test -s robots.txt
           node - <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
@@ -84,12 +85,14 @@ jobs:
             'name="twitter:image" content="og.png"',
             'name="twitter:card" content="summary_large_image"',
             'property="og:image:width" content="1200"',
-            'property="og:image:height" content="630"'
+            'property="og:image:height" content="630"',
+            'name="robots" content="index, follow"'
           ];
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'The committed tree already includes the Pages workflow']) {
+          if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'robots.txt', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');

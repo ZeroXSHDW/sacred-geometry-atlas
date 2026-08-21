@@ -34,6 +34,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
+- Repository-agnostic `robots.txt` and crawl metadata for the eventual public Pages deployment.
 - A branded `404.html` recovery page for missing GitHub Pages paths.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
@@ -78,7 +79,7 @@ git commit -m "Update Sacred Geometry Atlas"
 
 The included `og.png` is referenced with a same-site relative path so it works from a repository subpath. If a social crawler requires an absolute image URL, replace the `og:image` and `twitter:image` values in `index.html` with the final GitHub Pages URL after publishing.
 
-The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, the social preview, and the data artifacts required by the site.
+The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `robots.txt`, the social preview, and the data artifacts required by the site.
 
 ## Add real churches
 
