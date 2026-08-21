@@ -63,6 +63,9 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
+          if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
+          if (!html.includes('id="shareStudy" type="button" aria-label="Share current study"')) throw new Error('Missing accessible study share label');
+          if (!html.includes('id="copyCitation" type="button" aria-label="Copy a citation for the active study"')) throw new Error('Missing accessible citation label');
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"')) throw new Error('Missing accessible print control');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
