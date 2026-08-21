@@ -26,6 +26,9 @@
   const studyShortName = (study) => study.shortName || study.name;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const validPages = new Set(["atlas", "compare", "method"]);
+  const validModes = new Set(["plan", "elevation", "section"]);
+  const validSurfaces = new Set(["exterior", "interior"]);
+  const validLayers = new Set(["all", "envelope", "rhythm", "axis", "measure"]);
   let shareResetTimer;
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
@@ -45,17 +48,31 @@
   }
 
   function parseRoute() {
-    const raw = decodeURIComponent(window.location.hash.replace(/^#/, "")).replace(/^\/+/, "");
-    const [requestedPage = "atlas", requestedStudy] = raw.split("/");
+    const segments = window.location.hash.replace(/^#/, "").replace(/^\/+/, "").split("/").map((segment) => {
+      try {
+        return decodeURIComponent(segment);
+      } catch (error) {
+        return segment;
+      }
+    });
+    const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer] = segments;
     const page = validPages.has(requestedPage) ? requestedPage : "atlas";
     const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
       : null;
-    return { page, studyId };
+    return {
+      page,
+      studyId,
+      mode: validModes.has(requestedMode) ? requestedMode : null,
+      surface: validSurfaces.has(requestedSurface) ? requestedSurface : null,
+      layer: validLayers.has(requestedLayer) ? requestedLayer : null
+    };
   }
 
   function routeHash(page, includeStudy) {
-    if (page === "atlas" && includeStudy && state.activeId) return `#atlas/${encodeURIComponent(state.activeId)}`;
+    if (page === "atlas" && includeStudy && state.activeId) {
+      return `#atlas/${encodeURIComponent(state.activeId)}/${state.mode}/${state.surface}/${state.layer}`;
+    }
     return `#${page}`;
   }
 
@@ -74,6 +91,9 @@
   function syncFromHash() {
     const route = parseRoute();
     if (route.studyId) state.activeId = route.studyId;
+    if (route.mode) state.mode = route.mode;
+    if (route.surface) state.surface = route.surface;
+    if (route.layer) state.layer = route.layer;
     state.page = route.page;
     showPage(route.page, { updateHash: false, scroll: false });
     renderAll();
@@ -150,16 +170,22 @@
       state.surface = button.dataset.surface;
       renderControls();
       renderDrawing();
+      announceDrawingState();
+      if (state.page === "atlas") replaceRoute("atlas");
     }));
     $$("[data-mode]").forEach((button) => button.addEventListener("click", () => {
       state.mode = button.dataset.mode;
       renderControls();
       renderDrawing();
+      announceDrawingState();
+      if (state.page === "atlas") replaceRoute("atlas");
     }));
     $$("[data-layer]").forEach((button) => button.addEventListener("click", () => {
       state.layer = button.dataset.layer;
       renderControls();
       renderDrawing();
+      announceDrawingState();
+      if (state.page === "atlas") replaceRoute("atlas");
     }));
     $("#zoomOut").addEventListener("click", () => changeZoom(-0.15));
     $("#zoomIn").addEventListener("click", () => changeZoom(0.15));
@@ -253,6 +279,11 @@
     if (status && study) status.textContent = `Study ${study.index}, ${study.name} selected. ${visibleCount} ${visibleCount === 1 ? "study" : "studies"} visible.`;
   }
 
+  function announceDrawingState() {
+    const focus = state.layer === "all" ? "all geometry" : `${state.layer} focus`;
+    announceKeyboard(`${state.surface} ${state.mode} view selected, ${focus}.`);
+  }
+
   function updateSearchClear() {
     const clearButton = $("#clearSearchInput");
     if (clearButton) clearButton.hidden = !state.query;
@@ -301,14 +332,16 @@
       state.mode = modes[key];
       renderControls();
       renderDrawing();
-      announceKeyboard(`${state.mode} view selected.`);
+      announceDrawingState();
+      if (state.page === "atlas") replaceRoute("atlas");
       return;
     }
     if (key === "i" || key === "o") {
       state.surface = key === "i" ? "interior" : "exterior";
       renderControls();
       renderDrawing();
-      announceKeyboard(`${state.surface} geometry selected.`);
+      announceDrawingState();
+      if (state.page === "atlas") replaceRoute("atlas");
       return;
     }
     if (key === "r") {
@@ -485,10 +518,10 @@
     const status = $("#shareStatus");
     if (!study || !button || !status) return;
     const shareUrl = new URL(window.location.href);
-    shareUrl.hash = `atlas/${encodeURIComponent(study.id)}`;
+    shareUrl.hash = routeHash("atlas", true);
     const sharePayload = {
       title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-      text: `Explore ${study.name} in the Sacred Geometry Atlas.`,
+      text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${state.layer === "all" ? "all geometry" : `${state.layer} focus`}.`,
       url: shareUrl.href
     };
 
@@ -705,7 +738,8 @@
   }
 
   function svgBase(study, title) {
-    return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-label="${escapeHtml(title)}"><defs>
+    const description = `${state.surface === "interior" ? "Interior" : "Exterior"} ${state.mode} schematic showing the ${state.layer === "all" ? "complete geometry study" : `${state.layer} layer focus`} for ${study.name}.`;
+    return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title drawing-description"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
     </defs><rect width="820" height="510" fill="url(#grid)" /><g class="drawing-zoom" transform="translate(410 255) scale(${state.zoom}) translate(-410 -255)"><text class="watermark" x="46" y="466">${escapeHtml(study.index)}</text><text class="small-label" x="48" y="42">${escapeHtml(title)}</text>`;

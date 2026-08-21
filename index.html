@@ -196,7 +196,7 @@
             <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite"></span>
 
-            <div class="drawing-controls" aria-label="Drawing controls">
+            <div class="drawing-controls" role="group" aria-label="Drawing controls">
               <div class="segmented-control" role="group" aria-label="Inside or outside">
                 <button class="segment-button is-active" data-surface="exterior" type="button">Outside</button>
                 <button class="segment-button" data-surface="interior" type="button">Inside</button>
@@ -218,7 +218,7 @@
 
             <div class="drawing-card">
               <div class="drawing-toolbar">
-                <div class="drawing-legend" aria-label="Drawing legend">
+                <div class="drawing-legend" role="group" aria-label="Drawing legend">
                   <span><i class="legend-swatch swatch-primary"></i> primary form</span>
                   <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
                   <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
@@ -238,7 +238,7 @@
                   <span class="zoom-readout" id="zoomReadout">100%</span>
                 </div>
               </div>
-              <div class="svg-wrap" id="geometryCanvas" aria-live="polite"></div>
+              <div class="svg-wrap" id="geometryCanvas" aria-live="polite" aria-atomic="true"></div>
               <div class="drawing-caption">
                 <span class="caption-mark" aria-hidden="true">✳</span>
                 <p id="activeDescription">
@@ -249,7 +249,7 @@
             </div>
             <span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>
 
-            <div class="metric-strip" aria-label="Primary measurements">
+            <div class="metric-strip" role="group" aria-label="Primary measurements">
               <div class="metric-cell">
                 <span class="metric-label">overall span</span>
                 <strong id="metricSpan">22.0 m</strong>
@@ -270,11 +270,11 @@
 
             <div class="detail-grid" id="detailGrid"></div>
 
-            <div class="analysis-panel" aria-label="Derived geometry readings">
+            <div class="analysis-panel" role="region" aria-labelledby="analysis-heading">
               <div class="analysis-heading">
                 <div>
                   <p class="analysis-kicker">Derived reading</p>
-                  <h4>How the proportions behave</h4>
+                  <h4 id="analysis-heading">How the proportions behave</h4>
                 </div>
                 <div class="equation" id="activeEquation">R = L ÷ W = 2.64</div>
               </div>

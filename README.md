@@ -17,7 +17,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
-- Shareable hash routes such as `#atlas/gothic`, plus Compare and Method views.
+- Shareable hash routes such as `#atlas/gothic/section/interior/axis`, plus Compare and Method views; the optional segments preserve the selected mode, surface, and geometry focus.
 - Downloadable JSON data from the site.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
 - Print-friendly atlas output for turning the active study into a readable research sheet.
