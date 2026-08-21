@@ -553,11 +553,13 @@
   function renderList() {
     const list = $("#churchList");
     const empty = $("#emptyState");
+    const emptyMessage = $("#emptyStateMessage");
     const visible = visibleStudies();
     const resultCount = $("#catalogResultCount");
     const catalogExport = $("#downloadCatalogView");
     if (resultCount) resultCount.textContent = resultCountText(visible.length);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
+    if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
     renderActiveFilters();
     updateSearchClear();
     renderStudyNav();
@@ -579,6 +581,15 @@
       `;
     }).join("");
     empty.hidden = visible.length !== 0;
+  }
+
+  function emptyCatalogMessage() {
+    const hasCatalogFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterStatus !== "all";
+    if (state.query && hasCatalogFilters) return `No studies match “${state.query}” within the selected catalog filters.`;
+    if (state.query) return `No studies match “${state.query}”.`;
+    if (state.filterStatus === "measured") return "No measured studies are in the atlas yet.";
+    if (hasCatalogFilters) return "No studies match the selected catalog filters.";
+    return "No studies are available in the current catalog view.";
   }
 
   function renderStudy() {
