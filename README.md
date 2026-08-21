@@ -36,7 +36,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
-- Repository-agnostic `robots.txt` and crawl metadata for the eventual public Pages deployment.
+- Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded `404.html` recovery page for missing GitHub Pages paths.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
@@ -79,9 +79,9 @@ git commit -m "Update Sacred Geometry Atlas"
 3. In the repository, open **Settings → Pages** and set the source to **GitHub Actions** if GitHub has not enabled it automatically.
 4. Push to `main` or run the **Deploy static site to GitHub Pages** workflow manually.
 
-The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, and `twitter:image` metadata before uploading the site artifact.
+The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, `twitter:image`, `robots.txt`, and `sitemap.xml` crawl metadata before uploading the site artifact.
 
-The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `robots.txt`, the social preview, and the data artifacts required by the site.
+The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
 
 ## Add real churches
 
@@ -136,6 +136,7 @@ The project has no build step. Check JavaScript syntax, serve the files, and tes
 node --check app.js
 node --check data/geometry.js
 node -e "JSON.parse(require('fs').readFileSync('data/geometry.json', 'utf8'))"
+python3 -c "import xml.etree.ElementTree as ET; ET.parse('sitemap.xml')"
 python3 -m http.server 8000
 ```
 

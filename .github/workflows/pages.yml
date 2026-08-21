@@ -34,6 +34,7 @@ jobs:
           test -s og.png
           test -s favicon.svg
           test -s robots.txt
+          test -s sitemap.xml
           node - <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
@@ -79,6 +80,8 @@ jobs:
           const notFound = fs.readFileSync('404.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
+          const robots = fs.readFileSync('robots.txt', 'utf8');
+          const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const requiredMetadata = [
@@ -94,11 +97,12 @@ jobs:
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
+          if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'robots.txt', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
-          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}']) {
+          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
@@ -336,6 +340,7 @@ jobs:
           python3 - <<'PY'
           from html.parser import HTMLParser
           from pathlib import Path
+          from xml.etree import ElementTree
 
           class AccessibilityAudit(HTMLParser):
               def __init__(self):
@@ -358,6 +363,10 @@ jobs:
           missing = sorted(set(parser.references) - set(parser.ids))
           if missing:
               raise SystemExit("Missing ARIA references: " + ", ".join(missing))
+          sitemap_root = ElementTree.parse("sitemap.xml").getroot()
+          sitemap_namespace = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+          if sitemap_root.tag != f"{sitemap_namespace}urlset" or not sitemap_root.findall(f"{sitemap_namespace}url"):
+              raise SystemExit("Sitemap must contain at least one URL entry")
           print(f"Accessibility reference audit passed: {len(parser.ids)} unique IDs.")
           PY
       - name: Smoke-test data-load recovery
@@ -579,7 +588,23 @@ jobs:
                   raise SystemExit(f"Missing repository-relative metadata: {old}")
               source = source.replace(old, new)
           page.write_text(source)
-          print(f"Stamped absolute Pages metadata for {base_url}")
+
+          robots = Path("robots.txt")
+          robots_source = robots.read_text()
+          robots_marker = "Sitemap: ./sitemap.xml"
+          robots_value = f"Sitemap: {html.escape(base_url + 'sitemap.xml', quote=True)}"
+          if robots_marker not in robots_source:
+              raise SystemExit(f"Missing repository-relative crawl marker: {robots_marker}")
+          robots.write_text(robots_source.replace(robots_marker, robots_value))
+
+          sitemap = Path("sitemap.xml")
+          sitemap_source = sitemap.read_text()
+          sitemap_marker = "<loc>./</loc>"
+          sitemap_value = f"<loc>{html.escape(base_url, quote=True)}</loc>"
+          if sitemap_marker not in sitemap_source:
+              raise SystemExit(f"Missing repository-relative sitemap marker: {sitemap_marker}")
+          sitemap.write_text(sitemap_source.replace(sitemap_marker, sitemap_value))
+          print(f"Stamped absolute Pages metadata and crawl URLs for {base_url}")
           PY
       - name: Verify deployed site metadata
         env:
@@ -591,13 +616,18 @@ jobs:
 
           base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
           page = Path("index.html").read_text()
+          robots = Path("robots.txt").read_text()
+          sitemap = Path("sitemap.xml").read_text()
           expected = [
               f'<link rel="canonical" href="{base_url}" />',
               f'<meta property="og:url" content="{base_url}" />',
               f'<meta property="og:image" content="{base_url}og.png" />',
               f'<meta name="twitter:image" content="{base_url}og.png" />',
+              f'Sitemap: {base_url}sitemap.xml',
+              f'<loc>{base_url}</loc>',
           ]
-          missing = [token for token in expected if token not in page]
+          missing = [token for token in expected[:4] if token not in page]
+          missing.extend(token for token in expected[4:] if token not in (robots + sitemap))
           if missing:
               raise SystemExit("Deployed metadata is incomplete: " + ", ".join(missing))
           print("Absolute Pages metadata verified.")
