@@ -136,9 +136,8 @@ jobs:
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
           if (!html.includes('id="openCompare" type="button" aria-controls="compareView"')) throw new Error('Missing compare destination relationship');
-          for (const token of ['<svg viewBox="0 0 32 32" role="img" focusable="false">', '<svg viewBox="0 0 360 260" role="img" focusable="false">']) {
-            if (!html.includes(token)) throw new Error('Missing decorative SVG focus guard: ' + token);
-          }
+          if (!html.includes('<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">')) throw new Error('Brand mark must be hidden from assistive technology');
+          if (!html.includes('<svg viewBox="0 0 360 260" role="img" focusable="false">')) throw new Error('Missing decorative method SVG focus guard');
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');
           if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
           if (!app.includes('role="img" aria-labelledby="drawing-title drawing-description" focusable="false"')) throw new Error('Drawing SVG must not become keyboard focusable');
