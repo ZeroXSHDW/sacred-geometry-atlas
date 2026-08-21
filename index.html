@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111817" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="Sacred Geometry Atlas — an interactive study of church interiors, exteriors, proportions, modules, and symmetry."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sacred Geometry Atlas" />
+    <meta
+      property="og:description"
+      content="Explore church architecture through plans, sections, modules, axes, and enclosing forms."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sacred Geometry Atlas" />
+    <meta
+      name="twitter:description"
+      content="Explore church architecture through plans, sections, modules, axes, and enclosing forms."
+    />
+    <title>Sacred Geometry Atlas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <noscript>
+      <div class="noscript-message">This atlas needs JavaScript enabled to render the drawings and comparison tools.</div>
+    </noscript>
+
+    <header class="site-header">
+      <a class="brand" href="#atlas" aria-label="Sacred Geometry Atlas home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" role="img">
+            <path d="M16 3v26M9 10h14M11 29h10" />
+            <circle cx="16" cy="16" r="12" />
+          </svg>
+        </span>
+        <span>
+          <span class="brand-name">Sacred Geometry</span>
+          <span class="brand-subtitle">An architectural field atlas</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary navigation">
+        <button class="nav-button is-active" data-view="atlas" type="button">Atlas</button>
+        <button class="nav-button" data-view="compare" type="button">Compare</button>
+        <button class="nav-button" data-view="method" type="button">Method</button>
+      </nav>
+
+      <button class="download-button" id="downloadData" type="button">
+        <span class="download-icon" aria-hidden="true">↓</span>
+        <span>Download data</span>
+      </button>
+      <span class="sr-only" id="downloadStatus" role="status" aria-live="polite"></span>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Sacred geometry / field atlas</p>
+          <h1 id="page-title">Where stone<br /><em>becomes a system.</em></h1>
+          <p class="hero-intro">
+            A visual index of church architecture through the mathematics of its plans, sections,
+            modules, axes, and enclosing forms.
+          </p>
+          <div class="hero-actions">
+            <a class="hero-action hero-action-primary" href="#atlas">Explore the studies <span aria-hidden="true">↘</span></a>
+            <a class="hero-action" href="#method">Read the method <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <div class="hero-stats" aria-label="Atlas statistics">
+          <div class="hero-stat">
+            <span class="stat-number" id="studyCount">06</span>
+            <span class="stat-label">geometry studies</span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-number">03</span>
+            <span class="stat-label">drawing modes</span>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">relationships</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace" id="atlas" aria-labelledby="atlas-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> The collection</p>
+            <h2 id="atlas-heading">Choose a geometry study</h2>
+          </div>
+          <p class="section-note">Illustrative proportions · metric units · v1.1</p>
+        </div>
+
+        <div class="atlas-layout">
+          <aside class="catalog-panel" aria-label="Church geometry studies">
+            <div class="catalog-tools">
+              <label class="search-field">
+                <span class="sr-only">Search geometry studies</span>
+                <span class="search-icon" aria-hidden="true"></span>
+                <input id="searchInput" type="search" placeholder="Search the atlas" autocomplete="off" />
+              </label>
+              <div class="tool-row">
+                <label class="select-wrap">
+                  <span class="sr-only">Filter by typology</span>
+                  <select id="filterSelect">
+                    <option value="all">All typologies</option>
+                  </select>
+                </label>
+                <label class="select-wrap sort-select">
+                  <span class="sr-only">Sort studies</span>
+                  <select id="sortSelect">
+                    <option value="index">Curated order</option>
+                    <option value="height">Height</option>
+                    <option value="span">Span</option>
+                    <option value="ratio">Length / span</option>
+                    <option value="symmetry">Symmetry</option>
+                    <option value="name">Name</option>
+                  </select>
+                </label>
+              </div>
+              <div class="tool-row tool-row-secondary">
+                <label class="select-wrap">
+                  <span class="sr-only">Filter by location</span>
+                  <select id="filterPlace">
+                    <option value="all">All locations</option>
+                  </select>
+                </label>
+                <label class="select-wrap">
+                  <span class="sr-only">Filter by data status</span>
+                  <select id="filterStatus">
+                    <option value="all">All data status</option>
+                    <option value="schematic">Schematic</option>
+                    <option value="measured">Measured</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="catalog-summary">
+              <span class="catalog-summary-label">Showing</span>
+              <span id="catalogResultCount" role="status" aria-live="polite">06 studies</span>
+            </div>
+            <div class="catalog-list" id="churchList" role="group" aria-label="Geometry study choices"></div>
+            <div class="empty-state" id="emptyState" hidden>
+              <span class="empty-mark" aria-hidden="true">∅</span>
+              <p>No geometry matches that search.</p>
+              <button id="clearSearch" type="button">Clear filters</button>
+            </div>
+            <div class="compare-tray" id="compareTray" hidden>
+              <div>
+                <span class="compare-tray-label">Compare set</span>
+                <strong id="compareCount">0 selected</strong>
+              </div>
+              <div class="compare-tray-actions">
+                <button id="clearCompare" type="button">Clear</button>
+                <button id="openCompare" type="button" disabled>Compare selected <span aria-hidden="true">→</span></button>
+              </div>
+            </div>
+            <p class="catalog-footnote"><span class="dot dot-amber"></span> Selected study updates the drawings</p>
+          </aside>
+
+          <div class="visual-column">
+            <div class="study-header">
+              <div>
+                <p class="study-kicker" id="activeKicker">Study 01 / Basilica</p>
+                <div class="study-title-line"><h3 id="activeName">The longitudinal basilica</h3><span class="study-status" id="activeStatus">SCHEMATIC</span></div>
+                <p class="study-meta" id="activeMeta">Mediterranean · 4th–6th century · processional axis</p>
+                <p class="study-source" id="activeSource">Sacred Geometry Atlas proportional model · illustrative proportions</p>
+              </div>
+              <div class="study-header-actions">
+                <button class="share-button" id="shareStudy" type="button">
+                  <span aria-hidden="true">↗</span>
+                  <span>Share study</span>
+                </button>
+                <div class="study-index" id="activeIndex">01</div>
+              </div>
+            </div>
+            <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
+
+            <div class="drawing-controls" aria-label="Drawing controls">
+              <div class="segmented-control" role="group" aria-label="Inside or outside">
+                <button class="segment-button is-active" data-surface="exterior" type="button">Outside</button>
+                <button class="segment-button" data-surface="interior" type="button">Inside</button>
+              </div>
+              <div class="mode-control" role="group" aria-label="Drawing mode">
+                <button class="mode-button is-active" data-mode="plan" type="button">Plan</button>
+                <button class="mode-button" data-mode="elevation" type="button">Elevation</button>
+                <button class="mode-button" data-mode="section" type="button">Section</button>
+              </div>
+              <div class="layer-control" role="group" aria-label="Geometry layer focus">
+                <span class="layer-label">Focus</span>
+                <button class="layer-button is-active" data-layer="all" type="button">All</button>
+                <button class="layer-button" data-layer="envelope" type="button">Envelope</button>
+                <button class="layer-button" data-layer="rhythm" type="button">Rhythm</button>
+                <button class="layer-button" data-layer="axis" type="button">Axis</button>
+                <button class="layer-button" data-layer="measure" type="button">Measure</button>
+              </div>
+            </div>
+
+            <div class="drawing-card">
+              <div class="drawing-toolbar">
+                <div class="drawing-legend" aria-label="Drawing legend">
+                  <span><i class="legend-swatch swatch-primary"></i> primary form</span>
+                  <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
+                  <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
+                </div>
+                <div class="drawing-tools">
+                  <span class="drawing-scale" id="drawingScale">Scale 1 : 200</span>
+                  <div class="zoom-control" role="group" aria-label="Drawing zoom">
+                    <button id="zoomOut" type="button" aria-label="Zoom out">−</button>
+                    <button id="zoomReset" type="button" aria-label="Reset zoom">100%</button>
+                    <button id="zoomIn" type="button" aria-label="Zoom in">+</button>
+                  </div>
+                  <span class="zoom-readout" id="zoomReadout">100%</span>
+                </div>
+              </div>
+              <div class="svg-wrap" id="geometryCanvas" aria-live="polite"></div>
+              <div class="drawing-caption">
+                <span class="caption-mark" aria-hidden="true">✳</span>
+                <p id="activeDescription">
+                  The nave is read as a repeated bay module: length is a sequence, while the apse
+                  closes the axis with a single primary radius.
+                </p>
+              </div>
+            </div>
+
+            <div class="metric-strip" aria-label="Primary measurements">
+              <div class="metric-cell">
+                <span class="metric-label">overall span</span>
+                <strong id="metricSpan">22.0 m</strong>
+              </div>
+              <div class="metric-cell">
+                <span class="metric-label">overall height</span>
+                <strong id="metricHeight">18.0 m</strong>
+              </div>
+              <div class="metric-cell metric-cell-accent">
+                <span class="metric-label">length / span</span>
+                <strong id="metricRatio">2.64 : 1</strong>
+              </div>
+              <div class="metric-cell metric-cell-last">
+                <span class="metric-label">symmetry index</span>
+                <strong id="metricSymmetry">1.00</strong>
+              </div>
+            </div>
+
+            <div class="detail-grid" id="detailGrid"></div>
+
+            <div class="analysis-panel" aria-label="Derived geometry readings">
+              <div class="analysis-heading">
+                <div>
+                  <p class="analysis-kicker">Derived reading</p>
+                  <h4>How the proportions behave</h4>
+                </div>
+                <div class="equation" id="activeEquation">R = L ÷ W = 2.64</div>
+              </div>
+              <div class="analysis-grid">
+                <div class="analysis-cell"><span>bounding area</span><strong id="analysisArea">1,276 m²</strong><small>L × W</small></div>
+                <div class="analysis-cell"><span>section ratio</span><strong id="analysisSection">0.82</strong><small>H ÷ W</small></div>
+                <div class="analysis-cell"><span>module / span</span><strong id="analysisModule">0.33</strong><small>M ÷ W</small></div>
+                <div class="analysis-cell"><span>radial reach</span><strong id="analysisRadius">11.0 m</strong><small>primary radius</small></div>
+                <div class="analysis-cell"><span>estimated volume</span><strong id="analysisVolume">14,239 m³</strong><small id="analysisVolumeBasis">schematic estimate</small></div>
+              </div>
+              <div class="profile-readout">
+                <div class="profile-heading"><span>reading profile</span><span>0 — 100</span></div>
+                <div class="profile-row" id="profileRow"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="compare-view page-view" id="compareView" aria-labelledby="compare-heading" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> Proportion lab</p>
+            <h2 id="compare-heading">The same questions, different answers</h2>
+          </div>
+          <p class="section-note">Relative readings · selected collection</p>
+        </div>
+
+        <div class="compare-intro">
+          <p>
+            Compare the studies by the relationships that make a room feel directional, centered,
+            compressed, or immense. The values are normalized from each schematic model.
+          </p>
+          <div class="compare-callout"><span id="compareScope">Full collection</span><strong>R = L ÷ W</strong><small>length-to-width ratio</small></div>
+        </div>
+
+        <p class="compare-helper" id="compareHelper">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-card wide-card geometry-compare-card">
+            <div class="card-heading">
+              <div><span class="card-kicker">00 / selected geometry</span><h3>Side-by-side envelopes</h3></div>
+              <span class="card-symbol">□</span>
+            </div>
+            <div class="geometry-compare-grid" id="geometryCompare"></div>
+          </div>
+          <div class="comparison-card">
+            <div class="card-heading">
+              <div><span class="card-kicker">01 / linearity</span><h3>Length : span</h3></div>
+              <span class="card-symbol">↔</span>
+            </div>
+            <div class="bar-chart" id="ratioChart"></div>
+            <p class="chart-note">A higher ratio reinforces a long processional reading.</p>
+          </div>
+          <div class="comparison-card">
+            <div class="card-heading">
+              <div><span class="card-kicker">02 / verticality</span><h3>Height : span</h3></div>
+              <span class="card-symbol">↕</span>
+            </div>
+            <div class="bar-chart" id="heightChart"></div>
+            <p class="chart-note">Vertical emphasis is measured against the widest enclosing dimension.</p>
+          </div>
+          <div class="comparison-card wide-card">
+            <div class="card-heading">
+              <div><span class="card-kicker">03 / repetition</span><h3>Module and bay rhythm</h3></div>
+              <span class="card-symbol">∷</span>
+            </div>
+            <div class="module-chart" id="moduleChart"></div>
+            <p class="chart-note">Each line is one notional bay; length shows its module in meters.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="method-view page-view" id="methodView" aria-labelledby="method-heading" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> Reading the drawings</p>
+            <h2 id="method-heading">Geometry is a way of seeing</h2>
+          </div>
+          <p class="section-note">Notes on the atlas model</p>
+        </div>
+
+        <div class="method-hero">
+          <div class="method-copy">
+            <p class="method-number">01 — 04</p>
+            <h3>Every church is an argument between the line and the circle.</h3>
+            <p>
+              This atlas translates a building into a small vocabulary of measurable relationships:
+              axes, modules, radii, envelopes, and proportions. Switch between outside and inside
+              to see how the structural shell becomes a spatial sequence.
+            </p>
+          </div>
+          <div class="method-diagram" aria-hidden="true">
+            <svg viewBox="0 0 360 260" role="img">
+              <defs><pattern id="methodGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-opacity=".12" /></pattern></defs>
+              <rect width="360" height="260" fill="url(#methodGrid)" />
+              <circle cx="180" cy="130" r="76" fill="none" stroke="#e9b36c" stroke-width="1.5" />
+              <path d="M40 130H320M180 32V228" stroke="#88c6ba" stroke-dasharray="4 5" />
+              <path d="M88 74H272V186H88Z" fill="none" stroke="#e77f62" stroke-width="3" />
+              <path d="M88 130H272M180 74V186" stroke="#e77f62" stroke-width="1" />
+              <circle cx="180" cy="130" r="4" fill="#e9b36c" />
+              <text x="180" y="24" text-anchor="middle" fill="#e9b36c">R</text>
+              <text x="334" y="124" fill="#88c6ba">x</text>
+              <text x="190" y="246" fill="#88c6ba">y</text>
+              <text x="180" y="145" text-anchor="middle" fill="#e77f62">primary envelope</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="method-grid">
+          <article class="method-card">
+            <span class="method-card-index">A</span>
+            <h3>Axis</h3>
+            <p>The dominant directional line. It can be longitudinal, radial, or crossed by a transept.</p>
+            <code>A = {p₁ → p₂}</code>
+          </article>
+          <article class="method-card">
+            <span class="method-card-index">B</span>
+            <h3>Module</h3>
+            <p>A repeatable unit that sets the pace of bays, columns, windows, and structural spans.</p>
+            <code>M = L ÷ n</code>
+          </article>
+          <article class="method-card">
+            <span class="method-card-index">C</span>
+            <h3>Envelope</h3>
+            <p>The enclosing figure: rectangle, cross, ellipse, polygon, or a compound of simple forms.</p>
+            <code>E = {x, y, r, θ}</code>
+          </article>
+          <article class="method-card">
+            <span class="method-card-index">D</span>
+            <h3>Symmetry</h3>
+            <p>A reading of how closely the plan mirrors itself across its principal axes.</p>
+            <code>S = 1 − (Δ ÷ P)</code>
+          </article>
+        </div>
+
+        <div class="method-note">
+          <span class="note-icon">i</span>
+          <p><strong>Important:</strong> the current collection is a schematic proportional study, not a measured survey or a claim about every church. Replace the values in <code>data/geometry.js</code> with your own measured dataset to expand the atlas.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p><span class="footer-mark">✳</span> Sacred Geometry Atlas</p>
+      <p>Static, responsive, and GitHub Pages ready</p>
+    </footer>
+
+    <script src="data/geometry.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

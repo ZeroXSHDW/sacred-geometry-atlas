@@ -1,0 +1,744 @@
+(function () {
+  "use strict";
+
+  const studies = Array.isArray(window.CHURCH_GEOMETRY) ? window.CHURCH_GEOMETRY : [];
+  const state = {
+    activeId: studies[0] ? studies[0].id : null,
+    surface: "exterior",
+    mode: "plan",
+    layer: "all",
+    zoom: 1,
+    query: "",
+    filter: "all",
+    filterPlace: "all",
+    filterStatus: "all",
+    sort: "index",
+    page: "atlas",
+    compareIds: []
+  };
+
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+  const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
+  const studyStatus = (study) => study.status || "schematic";
+  const studySource = (study) => study.source || "Unattributed proportional model";
+  const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
+  const studyShortName = (study) => study.shortName || study.name;
+  const number = (value, digits = 1) => Number(value).toFixed(digits);
+  const validPages = new Set(["atlas", "compare", "method"]);
+  let shareResetTimer;
+  const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "'": "&#39;",
+    '"': "&quot;"
+  }[character]));
+
+  function init() {
+    if (!studies.length) return;
+    $("#studyCount").textContent = String(studies.length).padStart(2, "0");
+    populateFilter();
+    bindEvents();
+    window.addEventListener("hashchange", syncFromHash);
+    syncFromHash();
+  }
+
+  function parseRoute() {
+    const raw = decodeURIComponent(window.location.hash.replace(/^#/, "")).replace(/^\/+/, "");
+    const [requestedPage = "atlas", requestedStudy] = raw.split("/");
+    const page = validPages.has(requestedPage) ? requestedPage : "atlas";
+    const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
+      ? requestedStudy
+      : null;
+    return { page, studyId };
+  }
+
+  function routeHash(page, includeStudy) {
+    if (page === "atlas" && includeStudy && state.activeId) return `#atlas/${encodeURIComponent(state.activeId)}`;
+    return `#${page}`;
+  }
+
+  function updateRoute(page, includeStudy = page === "atlas") {
+    const nextHash = routeHash(page, includeStudy);
+    if (window.location.hash === nextHash) return;
+    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null }, "", nextHash);
+  }
+
+  function syncFromHash() {
+    const route = parseRoute();
+    if (route.studyId) state.activeId = route.studyId;
+    state.page = route.page;
+    showPage(route.page, { updateHash: false, scroll: false });
+    renderAll();
+  }
+
+  function populateFilter() {
+    const select = $("#filterSelect");
+    [...new Set(studies.map((study) => study.typology))].forEach((typology) => {
+      const option = document.createElement("option");
+      option.value = typology;
+      option.textContent = typology;
+      select.appendChild(option);
+    });
+    const placeSelect = $("#filterPlace");
+    [...new Set(studies.map((study) => study.place))].forEach((place) => {
+      const option = document.createElement("option");
+      option.value = place;
+      option.textContent = place;
+      placeSelect.appendChild(option);
+    });
+  }
+
+  function bindEvents() {
+    $(".brand").addEventListener("click", (event) => {
+      event.preventDefault();
+      showPage("atlas", { routeStudy: false });
+      renderAll();
+    });
+    $("#searchInput").addEventListener("input", (event) => {
+      state.query = event.target.value.trim().toLowerCase();
+      refreshCatalog();
+    });
+    $("#filterSelect").addEventListener("change", (event) => {
+      state.filter = event.target.value;
+      refreshCatalog();
+    });
+    $("#filterPlace").addEventListener("change", (event) => {
+      state.filterPlace = event.target.value;
+      refreshCatalog();
+    });
+    $("#filterStatus").addEventListener("change", (event) => {
+      state.filterStatus = event.target.value;
+      refreshCatalog();
+    });
+    $("#sortSelect").addEventListener("change", (event) => {
+      state.sort = event.target.value;
+      refreshCatalog();
+    });
+    $("#clearSearch").addEventListener("click", () => {
+      state.query = "";
+      state.filter = "all";
+      state.filterPlace = "all";
+      state.filterStatus = "all";
+      $("#searchInput").value = "";
+      $("#filterSelect").value = "all";
+      $("#filterPlace").value = "all";
+      $("#filterStatus").value = "all";
+      $("#sortSelect").value = "index";
+      state.sort = "index";
+      refreshCatalog();
+    });
+    $("#churchList").addEventListener("click", (event) => {
+      const compareToggle = event.target.closest("[data-compare-id]");
+      if (compareToggle) {
+        toggleCompare(compareToggle.dataset.compareId);
+        return;
+      }
+      const card = event.target.closest("[data-study-id]");
+      if (!card) return;
+      selectStudy(card.dataset.studyId);
+    });
+    $$("[data-surface]").forEach((button) => button.addEventListener("click", () => {
+      state.surface = button.dataset.surface;
+      renderControls();
+      renderDrawing();
+    }));
+    $$("[data-mode]").forEach((button) => button.addEventListener("click", () => {
+      state.mode = button.dataset.mode;
+      renderControls();
+      renderDrawing();
+    }));
+    $$("[data-layer]").forEach((button) => button.addEventListener("click", () => {
+      state.layer = button.dataset.layer;
+      renderControls();
+      renderDrawing();
+    }));
+    $("#zoomOut").addEventListener("click", () => changeZoom(-0.15));
+    $("#zoomIn").addEventListener("click", () => changeZoom(0.15));
+    $("#zoomReset").addEventListener("click", () => {
+      state.zoom = 1;
+      renderDrawing();
+    });
+    $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
+      showPage(button.dataset.view, { routeStudy: false });
+    }));
+    $("#clearCompare").addEventListener("click", () => {
+      state.compareIds = [];
+      renderList();
+      updateCompareTray();
+      renderCompare();
+    });
+    $("#openCompare").addEventListener("click", () => showPage("compare"));
+    $("#geometryCompare").addEventListener("click", (event) => {
+      const studyCard = event.target.closest("[data-compare-study]");
+      if (!studyCard) return;
+      selectStudy(studyCard.dataset.compareStudy);
+    });
+    $("#downloadData").addEventListener("click", downloadData);
+    $("#shareStudy").addEventListener("click", shareStudy);
+  }
+
+  function selectStudy(id) {
+    if (!studies.some((study) => study.id === id)) return;
+    state.activeId = id;
+    showPage("atlas");
+    renderAll();
+  }
+
+  function visibleStudies() {
+    const result = studies.filter((study) => {
+      const haystack = [study.name, study.churchName, study.typology, study.place, study.era, study.emphasis, study.axis, study.envelope, studyStatus(study)].join(" ").toLowerCase();
+      const matchesQuery = !state.query || haystack.includes(state.query);
+      const matchesFilter = state.filter === "all" || study.typology === state.filter;
+      const matchesPlace = state.filterPlace === "all" || study.place === state.filterPlace;
+      const matchesStatus = state.filterStatus === "all" || studyStatus(study) === state.filterStatus;
+      return matchesQuery && matchesFilter && matchesPlace && matchesStatus;
+    });
+    return result.sort((a, b) => {
+      if (state.sort === "height") return b.height - a.height;
+      if (state.sort === "span") return b.span - a.span;
+      if (state.sort === "ratio") return (b.length / b.span) - (a.length / a.span);
+      if (state.sort === "symmetry") return b.symmetry - a.symmetry;
+      if (state.sort === "name") return a.name.localeCompare(b.name);
+      return a.index.localeCompare(b.index);
+    });
+  }
+
+  function refreshCatalog() {
+    const visible = visibleStudies();
+    const previousId = state.activeId;
+    if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
+    renderList();
+    const resultCount = $("#catalogResultCount");
+    if (resultCount) resultCount.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} / ${studies.length}`;
+    if (previousId !== state.activeId) {
+      renderStudy();
+      renderDrawing();
+      document.title = `${studyShortName(activeStudy())} · Sacred Geometry Atlas`;
+    }
+    updateCompareTray();
+  }
+
+  function renderAll() {
+    renderList();
+    renderStudy();
+    renderControls();
+    renderDrawing();
+    renderCompare();
+    updateCompareTray();
+  }
+
+  function renderList() {
+    const list = $("#churchList");
+    const empty = $("#emptyState");
+    const visible = visibleStudies();
+    const resultCount = $("#catalogResultCount");
+    if (resultCount) resultCount.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} / ${studies.length}`;
+    list.innerHTML = visible.map((study) => {
+      const isCompared = state.compareIds.includes(study.id);
+      return `
+        <div class="catalog-entry">
+          <button class="catalog-card ${study.id === state.activeId ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-pressed="${study.id === state.activeId}" aria-label="Open ${escapeHtml(study.name)}">
+            <span class="catalog-number">${escapeHtml(study.index)}</span>
+            <span>
+              <h3>${escapeHtml(study.name)}</h3>
+              <p>${escapeHtml(study.typology)} · ${escapeHtml(study.emphasis)} · ${escapeHtml(studyStatus(study))}</p>
+            </span>
+            ${catalogGlyph(study)}
+          </button>
+          <button class="compare-toggle ${isCompared ? "is-selected" : ""}" data-compare-id="${escapeHtml(study.id)}" type="button" aria-pressed="${isCompared}" aria-label="${isCompared ? "Remove" : "Add"} ${escapeHtml(study.name)} ${isCompared ? "from" : "to"} comparison">${isCompared ? "✓" : "+"}</button>
+        </div>
+      `;
+    }).join("");
+    empty.hidden = visible.length !== 0;
+  }
+
+  function renderStudy() {
+    const study = activeStudy();
+    if (!study) return;
+    const ratio = study.length / study.span;
+    $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
+    $("#activeName").textContent = study.name;
+    $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
+    $("#activeStatus").textContent = studyStatus(study);
+    $("#activeSource").textContent = `${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
+    $("#activeIndex").textContent = study.index;
+    $("#activeDescription").textContent = state.surface === "interior" ? study.interiorNote : study.exteriorNote;
+    $("#metricSpan").textContent = `${number(study.span)} m`;
+    $("#metricHeight").textContent = `${number(study.height)} m`;
+    $("#metricRatio").textContent = `${number(ratio, 2)} : 1`;
+    $("#metricSymmetry").textContent = number(study.symmetry, 2);
+    $("#detailGrid").innerHTML = study.details.map(([label, value]) => `
+      <div class="detail-item"><span class="detail-item-label">${escapeHtml(label)}</span><span class="detail-item-value">${escapeHtml(value)}</span></div>
+    `).join("");
+    const area = study.floorAreaEstimate || study.length * study.span;
+    const sectionRatio = study.height / study.span;
+    const moduleRatio = study.module / study.span;
+    $("#analysisArea").textContent = `${number(area, 0)} m²`;
+    $("#analysisSection").textContent = number(sectionRatio, 2);
+    $("#analysisModule").textContent = number(moduleRatio, 2);
+    $("#analysisRadius").textContent = `${number(study.radius)} m`;
+    $("#analysisVolume").textContent = `${Number(study.volumeEstimate || 0).toLocaleString()} m³`;
+    $("#analysisVolumeBasis").textContent = study.volumeBasis || "schematic estimate";
+    $("#activeEquation").textContent = `R = L ÷ W = ${number(ratio, 2)}`;
+    $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
+      <div class="profile-item"><div class="profile-label"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
+    `).join("");
+  }
+
+  function profileScores(study) {
+    const ratio = study.length / study.span;
+    const radiality = { central: 100, baroque: 84, basilica: 48, gothic: 42, stave: 36, modern: 28 }[study.type] || 40;
+    return [
+      ["linearity", Math.round(Math.min(100, Math.max(0, ((ratio - 1) / 3.5) * 100)))],
+      ["verticality", Math.round(Math.min(100, Math.max(0, (study.height / study.span / 1.2) * 100)))],
+      ["radiality", radiality],
+      ["repetition", Math.round(Math.min(100, (study.bayCount / 8) * 100))]
+    ];
+  }
+
+  function renderControls() {
+    $$('[data-surface]').forEach((button) => {
+      const selected = button.dataset.surface === state.surface;
+      button.classList.toggle("is-active", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    $$('[data-mode]').forEach((button) => {
+      const selected = button.dataset.mode === state.mode;
+      button.classList.toggle("is-active", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    $$('[data-layer]').forEach((button) => {
+      const selected = button.dataset.layer === state.layer;
+      button.classList.toggle("is-active", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    $("#zoomReadout").textContent = `${Math.round(state.zoom * 100)}%`;
+    $("#zoomReset").textContent = `${Math.round(state.zoom * 100)}%`;
+  }
+
+  function showPage(page, options = {}) {
+    const { updateHash: shouldUpdateHash = true, routeStudy = page === "atlas", scroll = true } = options;
+    if (!validPages.has(page)) page = "atlas";
+    state.page = page;
+    const atlas = $("#atlas");
+    const compare = $("#compareView");
+    const method = $("#methodView");
+    atlas.hidden = page !== "atlas";
+    compare.hidden = page !== "compare";
+    method.hidden = page !== "method";
+    $$("[data-view]").forEach((button) => {
+      const selected = button.dataset.view === page;
+      button.classList.toggle("is-active", selected);
+      if (selected) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
+    if (page === "compare") renderCompare();
+    if (shouldUpdateHash) updateRoute(page, routeStudy);
+    if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
+    document.title = page === "atlas" && activeStudy()
+      ? `${studyShortName(activeStudy())} · Sacred Geometry Atlas`
+      : `${page[0].toUpperCase()}${page.slice(1)} · Sacred Geometry Atlas`;
+  }
+
+  async function shareStudy() {
+    const study = activeStudy();
+    const button = $("#shareStudy");
+    const status = $("#shareStatus");
+    if (!study || !button || !status) return;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = `atlas/${encodeURIComponent(study.id)}`;
+    const sharePayload = {
+      title: `${studyShortName(study)} · Sacred Geometry Atlas`,
+      text: `Explore ${study.name} in the Sacred Geometry Atlas.`,
+      url: shareUrl.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(sharePayload);
+        status.textContent = `${study.name} shared.`;
+      } catch (error) {
+        if (error.name !== "AbortError") status.textContent = "Sharing was unavailable. You can copy the page URL from the address bar.";
+      }
+      return;
+    }
+
+    let copied = false;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(shareUrl.href);
+        copied = true;
+      } else {
+        const copyField = document.createElement("textarea");
+        copyField.value = shareUrl.href;
+        copyField.setAttribute("readonly", "");
+        copyField.style.position = "fixed";
+        copyField.style.opacity = "0";
+        document.body.appendChild(copyField);
+        copyField.select();
+        copied = document.execCommand("copy");
+        copyField.remove();
+      }
+    } catch (error) {
+      copied = false;
+    }
+
+    if (copied) {
+      const label = button.querySelector("span:last-child");
+      button.classList.add("is-copied");
+      if (label) label.textContent = "Link copied";
+      status.textContent = `A shareable link for ${study.name} was copied.`;
+      window.clearTimeout(shareResetTimer);
+      shareResetTimer = window.setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (label) label.textContent = "Share study";
+      }, 2200);
+    } else {
+      status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
+    }
+  }
+
+  function downloadData() {
+    const payload = JSON.stringify({ title: "Sacred Geometry Atlas", schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" }, studies }, null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "sacred-geometry-atlas.json";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    $("#downloadStatus").textContent = "Atlas data downloaded as sacred-geometry-atlas.json.";
+    window.setTimeout(() => URL.revokeObjectURL(url), 500);
+  }
+
+  function changeZoom(delta) {
+    state.zoom = Math.min(1.6, Math.max(0.7, Number((state.zoom + delta).toFixed(2))));
+    renderControls();
+    renderDrawing();
+  }
+
+  function toggleCompare(id) {
+    if (state.compareIds.includes(id)) {
+      state.compareIds = state.compareIds.filter((compareId) => compareId !== id);
+    } else {
+      state.compareIds = [...state.compareIds, id];
+    }
+    renderList();
+    updateCompareTray();
+    renderCompare();
+  }
+
+  function updateCompareTray() {
+    const tray = $("#compareTray");
+    const count = $("#compareCount");
+    const open = $("#openCompare");
+    if (!tray || !count || !open) return;
+    tray.hidden = state.compareIds.length === 0;
+    count.textContent = `${state.compareIds.length} selected`;
+    open.disabled = state.compareIds.length < 2;
+  }
+
+  function comparisonStudies() {
+    if (state.compareIds.length >= 2) return studies.filter((study) => state.compareIds.includes(study.id));
+    return studies;
+  }
+
+  function renderCompare() {
+    renderCharts();
+    renderGeometryCompare();
+    const selected = state.compareIds.length;
+    $("#compareScope").textContent = selected >= 2 ? `${selected} selected` : "Full collection";
+    $("#compareHelper").textContent = selected >= 2
+      ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
+      : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
+  }
+
+  function renderGeometryCompare() {
+    const target = $("#geometryCompare");
+    if (!target) return;
+    target.innerHTML = comparisonStudies().map((study) => `
+      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-label="Open ${escapeHtml(study.name)} in the Atlas">
+        <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
+        ${miniPlan(study)}
+        <h4>${escapeHtml(study.name)}</h4>
+        <p>${number(study.length / study.span, 2)} ratio · ${number(study.height / study.span, 2)} section</p>
+      </button>
+    `).join("");
+  }
+
+  function miniPlan(study) {
+    const shapes = {
+      basilica: '<path class="mini-primary" d="M30 30H190V88A28 28 0 0 1 110 112A28 28 0 0 1 30 88Z"/><path class="mini-secondary" d="M70 30V88M150 30V88M110 20V118"/>',
+      gothic: '<path class="mini-primary" d="M72 18H148V58H190V82H148V112L110 128L72 112V82H30V58H72Z"/><path class="mini-secondary" d="M88 20V102M132 20V102M110 18V128"/>',
+      central: '<rect class="mini-primary" x="60" y="20" width="100" height="100"/><circle class="mini-primary" cx="110" cy="70" r="39"/><path class="mini-secondary" d="M110 12V128M52 70H168"/>',
+      baroque: '<rect class="mini-primary" x="32" y="38" width="156" height="64" rx="26"/><ellipse class="mini-primary" cx="110" cy="70" rx="55" ry="39"/><path class="mini-secondary" d="M110 18V122M26 70H194"/>',
+      stave: '<rect class="mini-primary" x="54" y="32" width="112" height="76"/><rect class="mini-primary" x="76" y="18" width="68" height="104"/><path class="mini-secondary" d="M76 18V122M110 18V122M144 18V122"/>',
+      modern: '<polygon class="mini-primary" points="28,98 48,28 132,18 190,48 170,108"/><path class="mini-secondary" d="M55 30L72 105M108 22L120 106M155 34L150 106"/>'
+    };
+    return `<svg class="compare-mini" viewBox="0 0 220 140" role="img" aria-label="Schematic plan of ${escapeHtml(study.name)}"><path class="mini-detail" d="M18 124H202M110 10V130"/>${shapes[study.type] || shapes.basilica}</svg>`;
+  }
+
+  function renderCharts() {
+    if (!$("#ratioChart")) return;
+    const comparison = comparisonStudies();
+    const maxRatio = Math.max(...comparison.map((study) => study.length / study.span));
+    const maxHeightRatio = Math.max(...comparison.map((study) => study.height / study.span));
+    $("#ratioChart").innerHTML = comparison.map((study) => {
+      const ratio = study.length / study.span;
+      return `<div class="bar-row"><span class="bar-label">${escapeHtml(studyShortName(study))}</span><span class="bar-track"><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+    }).join("");
+    $("#heightChart").innerHTML = comparison.map((study) => {
+      const ratio = study.height / study.span;
+      return `<div class="bar-row"><span class="bar-label">${escapeHtml(studyShortName(study))}</span><span class="bar-track"><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+    }).join("");
+    $("#moduleChart").innerHTML = comparison.map((study) => `
+      <div class="module-row">
+        <span class="module-name">${escapeHtml(studyShortName(study))}</span>
+        <span class="module-bars">${Array.from({ length: study.bayCount }, (_, index) => `<i class="module-bar" style="height:${10 + ((index + study.module) % 5) * 3}px"></i>`).join("")}</span>
+        <span class="module-value">${number(study.module)} m</span>
+      </div>
+    `).join("");
+  }
+
+  function catalogGlyph(study) {
+    const glyphs = {
+      basilica: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="10" width="30" height="20"/><path d="M8 10V6h24v4M12 15h16M12 20h16M12 25h16"/><line class="soft" x1="20" y1="5" x2="20" y2="35"/></svg>',
+      gothic: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 30V15l5-5 5 5v15M23 30V15l5-5 5 5v15M5 30h30M12 10V5M28 10V5"/><path class="soft" d="M20 30V7M16 12h8"/></svg>',
+      central: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="12"/><path d="M20 4v32M4 20h32M12 12l16 16M28 12L12 28"/><circle class="soft" cx="20" cy="20" r="5"/></svg>',
+      baroque: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="20" rx="14" ry="10"/><rect x="8" y="14" width="24" height="12" rx="6"/><path class="soft" d="M20 6v28M6 20h28"/></svg>',
+      stave: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 31V13l6-6 7 6 7-6 6 6v18M5 31h30M10 13v18M20 13v18M30 13v18"/><path class="soft" d="M8 22h24"/></svg>',
+      modern: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 29L11 9l15 3 8 17H6Z"/><path class="soft" d="M11 9v20M18 11l4 18M26 12v17M6 25h28"/></svg>'
+    };
+    return glyphs[study.type] || glyphs.basilica;
+  }
+
+  function svgBase(study, title) {
+    return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-label="${escapeHtml(title)}"><defs>
+      <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
+      <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
+    </defs><rect width="820" height="510" fill="url(#grid)" /><g class="drawing-zoom" transform="translate(410 255) scale(${state.zoom}) translate(-410 -255)"><text class="watermark" x="46" y="466">${escapeHtml(study.index)}</text><text class="small-label" x="48" y="42">${escapeHtml(title)}</text>`;
+  }
+
+  function renderDrawing() {
+    const study = activeStudy();
+    if (!study) return;
+    let svg = svgBase(study, `${state.surface} ${state.mode} of ${study.name}`);
+    if (state.mode === "plan") svg += drawPlan(study);
+    if (state.mode === "elevation") svg += drawElevation(study);
+    if (state.mode === "section") svg += drawSection(study);
+    svg += `</g><text class="label-text" x="710" y="449" text-anchor="end">${state.surface === "interior" ? "INNER GEOMETRY" : "OUTER ENVELOPE"}</text></svg>`;
+    $("#geometryCanvas").innerHTML = svg;
+    $("#drawingScale").textContent = `Scale 1 : ${state.mode === "section" ? "120" : "200"}`;
+    renderStudy();
+  }
+
+  function drawingFrame(label, subtitle) {
+    return `<text class="label-text" x="690" y="66" text-anchor="end">${escapeHtml(label)}</text><text class="small-label" x="690" y="82" text-anchor="end">${escapeHtml(subtitle)}</text>`;
+  }
+
+  function dimensionLine(x1, y1, x2, y2, label, tx, ty) {
+    return `<line class="dimension-bracket" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" /><text class="dim-text" x="${tx}" y="${ty}" text-anchor="middle">${escapeHtml(label)}</text>`;
+  }
+
+  function axisCross(cx, cy, radius) {
+    return `<line class="axis-line" x1="${cx - radius}" y1="${cy}" x2="${cx + radius}" y2="${cy}" /><line class="axis-line" x1="${cx}" y1="${cy - radius}" x2="${cx}" y2="${cy + radius}" /><circle cx="${cx}" cy="${cy}" r="3" class="stone-dot" />`;
+  }
+
+  function drawPlan(study) {
+    const scale = Math.min(430 / study.length, 260 / study.span);
+    const width = study.length * scale;
+    const height = study.span * scale;
+    const x = 330 - width / 2;
+    const y = 265 - height / 2;
+    const inner = state.surface === "interior";
+    const mainClass = inner ? "interior-fill" : "primary-fill";
+    let content = drawingFrame(`${study.typology} / PLAN`, inner ? "spatial field · inner face" : "building shell · outer face");
+    content += axisCross(330, 265, Math.max(width, height) / 2 + 38);
+    if (study.type === "basilica") {
+      const aisle = Math.max(10, height * 0.17);
+      const naveX = x + aisle;
+      const naveW = width - aisle * 2;
+      content += `<path class="${mainClass}" d="M${x} ${y}H${x + width}V${y + height * 0.72}A${height * 0.28} ${height * 0.28} 0 0 1 ${x + width / 2} ${y + height}A${height * 0.28} ${height * 0.28} 0 0 1 ${x} ${y + height * 0.72}Z" />`;
+      if (inner) {
+        content += `<rect class="faint-line" x="${naveX}" y="${y + 9}" width="${naveW}" height="${height * 0.66}" />`;
+        for (let i = 1; i < study.bayCount; i += 1) {
+          const px = naveX + (naveW / study.bayCount) * i;
+          content += `<line class="secondary-line" x1="${px}" y1="${y + 18}" x2="${px}" y2="${y + height * 0.67}" />`;
+        }
+        for (let i = 0; i < study.bayCount; i += 1) {
+          const px = naveX + (naveW / study.bayCount) * (i + 0.5);
+          content += `<circle class="column" cx="${px}" cy="${y + 7}" r="4" /><circle class="column" cx="${px}" cy="${y + height * 0.7}" r="4" />`;
+        }
+      } else {
+        content += `<line class="secondary-line" x1="${naveX}" y1="${y}" x2="${naveX}" y2="${y + height * 0.7}" /><line class="secondary-line" x1="${naveX + naveW}" y1="${y}" x2="${naveX + naveW}" y2="${y + height * 0.7}" />`;
+        for (let i = 1; i < study.bayCount; i += 1) {
+          const px = naveX + (naveW / study.bayCount) * i;
+          content += `<line class="secondary-line" x1="${px}" y1="${y + height * 0.1}" x2="${px}" y2="${y + height * 0.62}" />`;
+        }
+      }
+      content += dimensionLine(x, y - 25, x + width, y - 25, `${study.length} m`, x + width / 2, y - 33);
+      content += dimensionLine(x - 25, y, x - 25, y + height * 0.72, `${study.span} m`, x - 34, y + height * 0.36);
+      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">module ${number(study.module)} m · ${study.bayCount} bays · radius ${number(study.radius)} m</text>`;
+    } else if (study.type === "gothic") {
+      const transeptY = y + height * 0.42;
+      const apseR = height * 0.22;
+      const path = `M${x + width * 0.24} ${y}H${x + width * 0.76}V${transeptY}H${x + width}V${transeptY + height * 0.17}H${x + width * 0.76}V${y + height * 0.74}L${x + width * 0.68} ${y + height * 0.9}L${x + width * 0.5} ${y + height}L${x + width * 0.32} ${y + height * 0.9}L${x + width * 0.24} ${y + height * 0.74}V${transeptY + height * 0.17}H${x}V${transeptY}H${x + width * 0.24}Z`;
+      content += `<path class="${mainClass}" d="${path}" />`;
+      content += `<line class="secondary-line" x1="${x + width * 0.34}" y1="${y}" x2="${x + width * 0.34}" y2="${y + height * 0.78}" /><line class="secondary-line" x1="${x + width * 0.66}" y1="${y}" x2="${x + width * 0.66}" y2="${y + height * 0.78}" />`;
+      for (let i = 1; i < study.bayCount; i += 1) {
+        const px = x + width * 0.24 + (width * 0.52 / study.bayCount) * i;
+        content += `<line class="secondary-line" x1="${px}" y1="${y + 6}" x2="${px}" y2="${transeptY - 5}" />`;
+        content += `<circle class="column" cx="${px}" cy="${y + 7}" r="4" /><circle class="column" cx="${px}" cy="${transeptY - 5}" r="4" />`;
+      }
+      content += `<circle class="faint-line" cx="${x + width / 2}" cy="${y + height * 0.86}" r="${apseR}" />`;
+      content += dimensionLine(x, y - 25, x + width, y - 25, `${study.length} m`, x + width / 2, y - 33);
+      content += dimensionLine(x - 25, y + height * 0.42, x - 25, y + height * 0.59, `${study.span} m`, x - 34, y + height * 0.51);
+      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">pointed bay · ${study.bayCount} ribs · radius ${number(study.radius)} m</text>`;
+    } else if (study.type === "central") {
+      const r = Math.min(width, height) * 0.34;
+      content += `<rect class="${mainClass}" x="${330 - r * 1.18}" y="${265 - r * 1.18}" width="${r * 2.36}" height="${r * 2.36}" />`;
+      content += `<circle class="${inner ? "interior-fill" : "primary-fill"}" cx="330" cy="265" r="${r}" />`;
+      content += `<path class="${inner ? "secondary-line" : "faint-line"}" d="M330 ${265 - r * 1.6}V${265 + r * 1.6}M${330 - r * 1.6} 265H${330 + r * 1.6}" />`;
+      [0, 90, 180, 270].forEach((angle) => {
+        const rad = angle * Math.PI / 180;
+        const cx = 330 + Math.cos(rad) * r * 1.22;
+        const cy = 265 + Math.sin(rad) * r * 1.22;
+        content += `<circle class="${mainClass}" cx="${cx}" cy="${cy}" r="${r * 0.32}" />`;
+      });
+      content += `<circle class="secondary-line" cx="330" cy="265" r="${r * 0.2}" fill="none" />`;
+      content += dimensionLine(330 - r * 1.18, 265 + r * 1.55, 330 + r * 1.18, 265 + r * 1.55, `${study.span} m`, 330, 265 + r * 1.7);
+      content += `<text class="small-label" x="330" y="${265 + r * 1.95}" text-anchor="middle">central radius ${number(study.radius)} m · 4 arms · dome field</text>`;
+    } else if (study.type === "baroque") {
+      const rx = width * 0.37;
+      const ry = height * 0.44;
+      content += `<rect class="${mainClass}" x="${x}" y="${y + height * 0.2}" width="${width}" height="${height * 0.6}" rx="${height * 0.12}" />`;
+      content += `<ellipse class="${inner ? "interior-fill" : "primary-line"}" cx="330" cy="265" rx="${rx}" ry="${ry}" fill="${inner ? "rgba(136,198,186,.08)" : "none"}" />`;
+      content += `<line class="secondary-line" x1="330" y1="${y}" x2="330" y2="${y + height}" /><line class="secondary-line" x1="${x}" y1="265" x2="${x + width}" y2="265" />`;
+      content += `<circle class="column" cx="${330 - rx}" cy="265" r="4" /><circle class="column" cx="${330 + rx}" cy="265" r="4" />`;
+      content += dimensionLine(x, y - 25, x + width, y - 25, `${study.length} m`, 330, y - 33);
+      content += `<text class="small-label" x="330" y="${y + height + 33}" text-anchor="middle">ellipse ${number(rx / scale)} × ${number(ry / scale)} m · 2 focal points</text>`;
+    } else if (study.type === "stave") {
+      content += `<rect class="${mainClass}" x="${x + width * 0.15}" y="${y + height * 0.16}" width="${width * 0.7}" height="${height * 0.68}" />`;
+      content += `<rect class="${mainClass}" x="${x + width * 0.28}" y="${y + height * 0.04}" width="${width * 0.44}" height="${height * 0.92}" />`;
+      for (let i = 0; i < study.bayCount; i += 1) {
+        const px = x + width * 0.29 + (width * 0.42 / Math.max(1, study.bayCount - 1)) * i;
+        content += `<line class="secondary-line" x1="${px}" y1="${y + height * 0.06}" x2="${px}" y2="${y + height * 0.94}" />`;
+      }
+      content += `<path class="${inner ? "secondary-line" : "primary-line"}" d="M${x + width * 0.13} ${y + height * 0.16}L${x + width * 0.27} ${y}L${x + width * 0.5} ${y + height * 0.13}L${x + width * 0.73} ${y}L${x + width * 0.87} ${y + height * 0.16}" fill="none" />`;
+      content += dimensionLine(x + width * 0.15, y + height + 25, x + width * 0.85, y + height + 25, `${study.span} m`, 330, y + height + 33);
+      content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">${study.bayCount} post frames · module ${number(study.module)} m</text>`;
+    } else {
+      const poly = `${x + width * 0.08},${y + height * 0.75} ${x + width * 0.17},${y + height * 0.15} ${x + width * 0.6},${y + height * 0.05} ${x + width * 0.92},${y + height * 0.3} ${x + width * 0.78},${y + height * 0.86} ${x + width * 0.08},${y + height * 0.75}`;
+      content += `<polygon class="${mainClass}" points="${poly}" />`;
+      for (let i = 1; i < study.bayCount; i += 1) {
+        const px = x + width * (0.18 + i * 0.18);
+        content += `<line class="secondary-line" x1="${px}" y1="${y + height * 0.14}" x2="${px - 10}" y2="${y + height * 0.78}" />`;
+      }
+      content += `<line class="axis-line" x1="${x}" y1="${y + height * 0.5}" x2="${x + width}" y2="${y + height * 0.5}" />`;
+      content += dimensionLine(x + width * 0.08, y + height + 25, x + width * 0.78, y + height + 25, `${study.length} m`, x + width * 0.43, y + height + 33);
+      content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">offset axis · ${study.bayCount} portal frames · shell thickness study</text>`;
+    }
+    return content;
+  }
+
+  function drawElevation(study) {
+    const scale = Math.min(500 / study.length, 260 / study.height);
+    const width = study.length * scale;
+    const height = study.height * scale;
+    const x = 330 - width / 2;
+    const ground = 390;
+    const top = ground - height;
+    const inner = state.surface === "interior";
+    let content = drawingFrame(`${study.typology} / ELEVATION`, inner ? "room profile · inner face" : "silhouette · outer face");
+    content += `<line class="faint-line" x1="90" y1="${ground}" x2="690" y2="${ground}" />`;
+      if (study.type === "basilica") {
+        const naveTop = top + height * 0.18;
+        content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.33}H${x + width * 0.18}V${naveTop}H${x + width * 0.82}V${top + height * 0.33}H${x + width}V${ground}Z" />`;
+        content += `<path class="${inner ? "secondary-line" : "primary-line"}" d="M${x + width * 0.18} ${naveTop}L${x + width * 0.5} ${top}L${x + width * 0.82} ${naveTop}" fill="none" />`;
+        for (let i = 1; i < study.bayCount; i += 1) {
+          const px = x + width * 0.18 + (width * 0.64 / study.bayCount) * i;
+          content += `<line class="secondary-line" x1="${px}" y1="${naveTop}" x2="${px}" y2="${ground}" />`;
+        }
+      } else if (study.type === "gothic") {
+        const bayW = width * 0.64 / study.bayCount;
+        content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.35}H${x + width * 0.16}L${x + width * 0.24} ${top + height * 0.16}L${x + width * 0.32} ${top + height * 0.35}H${x + width * 0.42}L${x + width * 0.5} ${top}L${x + width * 0.58} ${top + height * 0.35}H${x + width * 0.68}L${x + width * 0.76} ${top + height * 0.16}L${x + width * 0.84} ${top + height * 0.35}H${x + width}V${ground}Z" />`;
+        for (let i = 1; i < study.bayCount; i += 1) {
+          const px = x + width * 0.18 + bayW * i;
+          content += `<path class="secondary-line" d="M${px} ${ground}V${top + height * 0.35}Q${px + bayW / 2} ${top + height * 0.03} ${px + bayW} ${top + height * 0.35}" fill="none" />`;
+        }
+        content += `<line class="secondary-line" x1="${x + width * 0.12}" y1="${top + height * 0.26}" x2="${x + width * 0.12}" y2="${ground}" /><line class="secondary-line" x1="${x + width * 0.88}" y1="${top + height * 0.26}" x2="${x + width * 0.88}" y2="${ground}" />`;
+      } else if (study.type === "central") {
+        const drum = height * 0.28;
+        content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x + width * 0.12} ${ground}V${top + height * 0.43}H${x + width * 0.32}V${top + height * 0.3}H${x + width * 0.68}V${top + height * 0.43}H${x + width * 0.88}V${ground}Z" />`;
+        content += `<path class="${inner ? "secondary-line" : "primary-line"}" d="M${x + width * 0.32} ${top + height * 0.3}Q330 ${top - drum} ${x + width * 0.68} ${top + height * 0.3}" fill="none" />`;
+        content += `<line class="axis-line" x1="330" y1="${top - drum * 0.9}" x2="330" y2="${ground}" />`;
+      } else if (study.type === "baroque") {
+        content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.5}Q${x + width * 0.15} ${top + height * 0.1} ${x + width * 0.3} ${top + height * 0.5}Q330 ${top - height * 0.2} ${x + width * 0.7} ${top + height * 0.5}Q${x + width * 0.85} ${top + height * 0.1} ${x + width} ${top + height * 0.5}V${ground}Z" />`;
+        content += `<line class="secondary-line" x1="330" y1="${top - height * 0.2}" x2="330" y2="${ground}" />`;
+      } else if (study.type === "stave") {
+        content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.4}L${x + width * 0.18} ${top + height * 0.24}L${x + width * 0.33} ${top + height * 0.36}L${x + width * 0.5} ${top}L${x + width * 0.67} ${top + height * 0.36}L${x + width * 0.82} ${top + height * 0.24}L${x + width} ${top + height * 0.4}V${ground}Z" />`;
+        for (let i = 0; i < study.bayCount + 1; i += 1) {
+          const px = x + (width / study.bayCount) * i;
+          content += `<line class="secondary-line" x1="${px}" y1="${top + height * (i % 2 ? 0.35 : 0.22)}" x2="${px}" y2="${ground}" />`;
+        }
+      } else {
+        content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.4}L${x + width * 0.18} ${top + height * 0.12}L${x + width * 0.72} ${top}L${x + width} ${top + height * 0.3}V${ground}Z" />`;
+        for (let i = 1; i < study.bayCount; i += 1) {
+          const px = x + width * (0.15 + i * 0.17);
+          content += `<line class="secondary-line" x1="${px}" y1="${top + height * 0.16}" x2="${px - 7}" y2="${ground}" />`;
+        }
+        content += `<line class="axis-line" x1="${x + width * 0.12}" y1="${ground - height * 0.08}" x2="${x + width * 0.88}" y2="${ground - height * 0.08}" />`;
+      }
+    content += dimensionLine(x, ground + 30, x + width, ground + 30, `${study.length} m`, x + width / 2, ground + 47);
+    content += dimensionLine(x + width + 28, ground, x + width + 28, top, `${study.height} m`, x + width + 42, (ground + top) / 2);
+    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">${study.emphasis.toLowerCase()} · height / span ${number(study.height / study.span, 2)}</text>`;
+    return content;
+  }
+
+  function drawSection(study) {
+    const scale = Math.min(300 / study.span, 250 / study.height);
+    const width = study.span * scale;
+    const height = study.height * scale;
+    const x = 330 - width / 2;
+    const ground = 390;
+    const top = ground - height;
+    const inner = state.surface === "interior";
+    let content = drawingFrame(`${study.typology} / SECTION`, inner ? "section through room" : "section through envelope");
+    content += `<line class="faint-line" x1="90" y1="${ground}" x2="690" y2="${ground}" />`;
+    if (study.type === "central") {
+      content += `<rect class="${inner ? "interior-fill" : "primary-fill"}" x="${x}" y="${top + height * 0.4}" width="${width}" height="${height * 0.6}" />`;
+      content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${top + height * 0.4}Q330 ${top - height * 0.38} ${x + width} ${top + height * 0.4}" />`;
+      content += `<circle class="secondary-line" cx="330" cy="${top + height * 0.28}" r="${Math.max(8, width * 0.1)}" fill="none" />`;
+      content += axisCross(330, top + height * 0.56, Math.max(width, height) * 0.47);
+    } else if (study.type === "gothic") {
+      content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.42}Q${x + width * 0.2} ${top - height * 0.1} 330 ${top}Q${x + width * 0.8} ${top - height * 0.1} ${x + width} ${top + height * 0.42}V${ground}Z" />`;
+      content += `<path class="secondary-line" d="M${x + width * 0.14} ${ground}V${top + height * 0.44}Q${x + width * 0.3} ${top + height * 0.08} 330 ${top + height * 0.18}Q${x + width * 0.7} ${top + height * 0.08} ${x + width * 0.86} ${top + height * 0.44}V${ground}" fill="none" />`;
+      content += axisCross(330, ground - height * 0.32, width * 0.45);
+    } else if (study.type === "baroque") {
+      content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.5}Q${x + width * 0.1} ${top + height * 0.18} 330 ${top}Q${x + width * 0.9} ${top + height * 0.18} ${x + width} ${top + height * 0.5}V${ground}Z" />`;
+      content += `<path class="secondary-line" d="M${x + width * 0.18} ${ground}V${top + height * 0.52}Q330 ${top + height * 0.15} ${x + width * 0.82} ${top + height * 0.52}V${ground}" fill="none" />`;
+      content += axisCross(330, ground - height * 0.35, width * 0.47);
+    } else if (study.type === "stave") {
+      content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.44}L${x + width * 0.22} ${top + height * 0.22}L330 ${top}L${x + width * 0.78} ${top + height * 0.22}L${x + width} ${top + height * 0.44}V${ground}Z" />`;
+      content += `<path class="secondary-line" d="M${x + width * 0.16} ${ground}V${top + height * 0.47}L330 ${top + height * 0.16}L${x + width * 0.84} ${top + height * 0.47}V${ground}" fill="none" />`;
+      [0.25, 0.5, 0.75].forEach((fraction) => { content += `<line class="secondary-line" x1="${x + width * fraction}" y1="${top + height * 0.2}" x2="${x + width * fraction}" y2="${ground}" />`; });
+    } else if (study.type === "modern") {
+      content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.36}L${x + width * 0.28} ${top + height * 0.15}L${x + width * 0.82} ${top}L${x + width} ${top + height * 0.28}V${ground}Z" />`;
+      content += `<path class="secondary-line" d="M${x + width * 0.12} ${ground}V${top + height * 0.42}L${x + width * 0.5} ${top + height * 0.2}L${x + width * 0.88} ${top + height * 0.32}V${ground}" fill="none" />`;
+      content += `<line class="axis-line" x1="${x + width * 0.16}" y1="${top + height * 0.62}" x2="${x + width * 0.86}" y2="${top + height * 0.62}" />`;
+    } else {
+      content += `<path class="${inner ? "interior-fill" : "primary-fill"}" d="M${x} ${ground}V${top + height * 0.34}H${x + width * 0.16}V${top + height * 0.2}H${x + width * 0.84}V${top + height * 0.34}H${x + width}V${ground}Z" />`;
+      content += `<path class="secondary-line" d="M${x + width * 0.18} ${ground}V${top + height * 0.36}H${x + width * 0.82}V${ground}" fill="none" />`;
+      for (let i = 1; i < study.bayCount; i += 1) { const px = x + width * 0.18 + (width * 0.64 / study.bayCount) * i; content += `<line class="secondary-line" x1="${px}" y1="${top + height * 0.25}" x2="${px}" y2="${ground}" />`; }
+    }
+    content += dimensionLine(x, ground + 30, x + width, ground + 30, `${study.span} m`, 330, ground + 47);
+    content += dimensionLine(x + width + 28, ground, x + width + 28, top, `${study.height} m`, x + width + 42, (ground + top) / 2);
+    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">vault / roof profile · ${study.type === "central" ? "central radius" : `module ${number(study.module)} m`}</text>`;
+    return content;
+  }
+
+  init();
+})();
