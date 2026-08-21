@@ -1176,7 +1176,7 @@
   function downloadDrawing() {
     const study = activeStudy();
     const svgElement = $("#geometryCanvas svg");
-    const status = $("#downloadStatus");
+    const status = $("#drawingDownloadStatus");
     const button = $("#downloadDrawing");
     if (!study || !svgElement) return;
     const exportStyles = `
