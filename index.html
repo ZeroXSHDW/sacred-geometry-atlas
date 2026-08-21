@@ -222,8 +222,8 @@
               </div>
               <div class="study-header-actions">
                 <div class="study-nav" role="group" aria-label="Move between studies">
-                  <button id="prevStudy" type="button" aria-label="Previous study" title="Previous study">←</button>
-                  <button id="nextStudy" type="button" aria-label="Next study" title="Next study">→</button>
+                  <button id="prevStudy" type="button" aria-label="Previous study" aria-keyshortcuts="K" title="Previous study">←</button>
+                  <button id="nextStudy" type="button" aria-label="Next study" aria-keyshortcuts="J" title="Next study">→</button>
                 </div>
                 <div class="study-share-actions">
                   <button class="share-button" id="shareStudy" type="button">
@@ -248,13 +248,13 @@
 
             <div class="drawing-controls" role="group" aria-label="Drawing controls">
               <div class="segmented-control" role="group" aria-label="Inside or outside">
-                <button class="segment-button is-active" data-surface="exterior" type="button">Outside</button>
-                <button class="segment-button" data-surface="interior" type="button">Inside</button>
+                <button class="segment-button is-active" data-surface="exterior" type="button" aria-keyshortcuts="O">Outside</button>
+                <button class="segment-button" data-surface="interior" type="button" aria-keyshortcuts="I">Inside</button>
               </div>
               <div class="mode-control" role="group" aria-label="Drawing mode">
-                <button class="mode-button is-active" data-mode="plan" type="button">Plan</button>
-                <button class="mode-button" data-mode="elevation" type="button">Elevation</button>
-                <button class="mode-button" data-mode="section" type="button">Section</button>
+                <button class="mode-button is-active" data-mode="plan" type="button" aria-keyshortcuts="1">Plan</button>
+                <button class="mode-button" data-mode="elevation" type="button" aria-keyshortcuts="2">Elevation</button>
+                <button class="mode-button" data-mode="section" type="button" aria-keyshortcuts="3">Section</button>
               </div>
               <div class="layer-control" role="group" aria-label="Geometry layer focus">
                 <span class="layer-label">Focus</span>
@@ -272,7 +272,18 @@
                   <span><i class="legend-swatch swatch-primary"></i> primary form</span>
                   <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
                   <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
-                  <span class="drawing-shortcuts">J / K studies · 1 / 2 / 3 views</span>
+                  <details class="shortcut-guide">
+                    <summary>Keyboard guide</summary>
+                    <div class="shortcut-guide-panel">
+                      <p>With Atlas active</p>
+                      <dl>
+                        <div><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next / previous study</dd></div>
+                        <div><dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></dt><dd>Plan / elevation / section</dd></div>
+                        <div><dt><kbd>I</kbd> <kbd>O</kbd></dt><dd>Inside / outside</dd></div>
+                        <div><dt><kbd>R</kbd></dt><dd>Reset drawing zoom</dd></div>
+                      </dl>
+                    </div>
+                  </details>
                 </div>
                 <div class="drawing-tools">
                   <span class="drawing-scale" id="drawingScale">Scale 1 : 200</span>
@@ -282,7 +293,7 @@
                   </button>
                   <div class="zoom-control" role="group" aria-label="Drawing zoom">
                     <button id="zoomOut" type="button" aria-label="Zoom out">−</button>
-                    <button id="zoomReset" type="button" aria-label="Reset zoom to 100%">100%</button>
+                    <button id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-keyshortcuts="R">100%</button>
                     <button id="zoomIn" type="button" aria-label="Zoom in">+</button>
                   </div>
                   <span class="zoom-readout" id="zoomReadout" role="status" aria-live="polite" aria-atomic="true">100%</span>

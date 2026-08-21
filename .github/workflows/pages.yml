@@ -57,6 +57,8 @@ jobs:
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
           if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
+          if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');
+          if (!html.includes('aria-keyshortcuts="J"')) throw new Error('Missing keyboard shortcut metadata');
           for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
@@ -73,7 +75,7 @@ jobs:
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
-          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === "compare" && state.compareIds.length >= 2', 'route.page === "compare"', 'function shareComparison()']) {
+          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', '\"summary\"].includes(tagName)', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
           if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
