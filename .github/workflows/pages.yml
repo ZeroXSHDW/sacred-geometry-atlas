@@ -44,6 +44,30 @@ jobs:
           };
           const exported = JSON.parse(fs.readFileSync('data/geometry.json', 'utf8'));
           if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
+          const requiredTextFields = ['id', 'index', 'name', 'shortName', 'typology', 'place', 'era', 'emphasis', 'type', 'churchName', 'status', 'source', 'sourceNote', 'envelope', 'axis', 'exteriorNote', 'interiorNote'];
+          const requiredNumericFields = ['length', 'span', 'height', 'bayCount', 'module', 'radius', 'symmetry'];
+          const statusValues = new Set((source.schema && source.schema.statusValues) || []);
+          const ids = new Set();
+          const indexes = new Set();
+          source.studies.forEach((study, index) => {
+            for (const field of requiredTextFields) {
+              if (typeof study[field] !== 'string' || !study[field].trim()) throw new Error(`Study ${index + 1} has missing text field: ${field}`);
+            }
+            for (const field of requiredNumericFields) {
+              if (!Number.isFinite(study[field]) || study[field] <= 0) throw new Error(`Study ${study.id || index + 1} has invalid numeric field: ${field}`);
+            }
+            if (ids.has(study.id)) throw new Error(`Duplicate study id: ${study.id}`);
+            if (indexes.has(study.index)) throw new Error(`Duplicate study index: ${study.index}`);
+            if (!statusValues.has(study.status)) throw new Error(`Study ${study.id} has unsupported status: ${study.status}`);
+            if (!Number.isInteger(study.bayCount)) throw new Error(`Study ${study.id} must use an integer bayCount`);
+            if (study.symmetry > 1) throw new Error(`Study ${study.id} has symmetry above 1`);
+            if (!Array.isArray(study.details) || !study.details.length || study.details.some((detail) => !Array.isArray(detail) || detail.length !== 2 || detail.some((value) => typeof value !== 'string' || !value.trim()))) {
+              throw new Error(`Study ${study.id} has invalid details`);
+            }
+            ids.add(study.id);
+            indexes.add(study.index);
+          });
+          console.log(`Geometry schema validation passed: ${source.studies.length} records.`);
           const html = fs.readFileSync('index.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
