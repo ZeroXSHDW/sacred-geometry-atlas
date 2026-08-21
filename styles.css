@@ -195,6 +195,7 @@ main,
   position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.38rem;
   padding: 0.8rem 0;
   color: var(--ink-muted);

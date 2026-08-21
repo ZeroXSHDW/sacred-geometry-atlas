@@ -153,7 +153,7 @@ jobs:
           for (const token of ['function updateCompareNavigation()', 'const label = selectedCount ? `Compare (${selectedCount} selected)` : "Compare";', 'button.setAttribute("aria-label", label);', 'count.hidden = selectedCount === 0;', 'updateCompareNavigation();']) {
             if (!app.includes(token)) throw new Error('Compare navigation state must reflect the active selection: ' + token);
           }
-          if (!styles.includes('.nav-count {') || !styles.includes('.nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }')) throw new Error('Compare navigation count must remain visible in forced-colors mode');
+          if (!styles.includes('.nav-count {') || !styles.includes('  justify-content: center;\n  gap: 0.38rem;') || !styles.includes('.nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }')) throw new Error('Compare navigation count must remain aligned and visible in forced-colors mode');
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
           if (!html.includes('<span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Catalog scope changes must have a live status channel');
           if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>')) throw new Error('Missing visual empty state');
