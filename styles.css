@@ -359,6 +359,19 @@ h3 { letter-spacing: -0.04em; }
 .clear-search { padding: 0; color: var(--amber); font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; }
 
 .visual-column { min-width: 0; }
+.visual-empty-state { display: grid; min-height: 470px; align-content: center; justify-items: center; gap: 0.65rem; padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line); background: var(--panel); text-align: center; }
+.visual-column.is-empty > .study-header,
+.visual-column.is-empty > .drawing-controls,
+.visual-column.is-empty > .drawing-card,
+.visual-column.is-empty > .metric-strip,
+.visual-column.is-empty > .detail-grid,
+.visual-column.is-empty > .analysis-panel { display: none; }
+.visual-empty-state .empty-mark { margin-bottom: 0; }
+.visual-empty-kicker { margin: 0; color: var(--amber); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.visual-empty-state h3 { max-width: 18ch; margin: 0; font-size: clamp(1.4rem, 3vw, 2.2rem); }
+.visual-empty-state p:not(.visual-empty-kicker) { max-width: 30rem; margin: 0; color: var(--ink-soft); font-size: 0.78rem; }
+.visual-empty-action { margin-top: 0.45rem; padding: 0.55rem 0.75rem; border: 1px solid var(--amber); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.57rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.visual-empty-action:hover { color: var(--ink); background: rgba(233, 179, 108, 0.22); }
 .study-header { display: flex; align-items: start; justify-content: space-between; gap: 2rem; margin-bottom: 1.7rem; }
 .study-header > div:first-child { min-width: 0; }
 .study-kicker { margin-bottom: 0.55rem; color: var(--amber); }
@@ -642,6 +655,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-share-actions { justify-content: start; min-width: 0; }
   .study-index { margin-left: auto; }
   .study-index { font-size: 3rem; }
+  .visual-empty-state { min-height: 320px; }
   .mode-control { width: 100%; justify-content: space-between; }
   .mode-button { flex: 1; text-align: left; }
   .layer-control { width: 100%; margin-left: 0; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 0.55rem; }
@@ -728,7 +742,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-header-actions,
   .site-footer,
   .compare-view,
-  .method-view { display: none !important; }
+  .method-view,
+  .visual-empty-state { display: none !important; }
   .site-header, main, .site-footer { width: 100%; }
   #atlas { display: block !important; }
   .hero { display: block; min-height: 0; padding: 0 0 1.1rem; }

@@ -277,6 +277,10 @@
       clearCatalogFilters({ resetSort: true });
       if (event.detail === 0) focusCatalogControl("query");
     });
+    $("#clearVisualFilters").addEventListener("click", (event) => {
+      clearCatalogFilters({ resetSort: true });
+      if (event.detail === 0) focusCatalogControl("query");
+    });
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
@@ -599,6 +603,7 @@
     if (resultCount) resultCount.textContent = resultCountText(visible.length);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
     if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
+    renderVisualState(visible);
     renderActiveFilters();
     updateSearchClear();
     renderStudyNav();
@@ -629,6 +634,17 @@
     if (state.filterStatus === "measured") return "No measured studies are in the atlas yet.";
     if (hasCatalogFilters) return "No studies match the selected catalog filters.";
     return "No studies are available in the current catalog view.";
+  }
+
+  function renderVisualState(visible) {
+    const visualColumn = $(".visual-column");
+    const emptyState = $("#visualEmptyState");
+    if (!visualColumn || !emptyState) return;
+    const isEmpty = visible.length === 0;
+    visualColumn.classList.toggle("is-empty", isEmpty);
+    emptyState.hidden = !isEmpty;
+    const message = $("#visualEmptyMessage");
+    if (message && isEmpty) message.textContent = `${emptyCatalogMessage()} Clear filters to restore a study drawing.`;
   }
 
   function renderStudy() {

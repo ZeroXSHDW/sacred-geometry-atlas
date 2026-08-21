@@ -17,6 +17,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Reading-profile bars expose their 0–100 scores as accessible meters as well as visual guides.
 - Search across study names, references, notes, and detail vocabulary, plus typology, location, and measured/schematic status filtering.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
+- Contextual empty states keep filtered-out catalog views understandable and recoverable.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.

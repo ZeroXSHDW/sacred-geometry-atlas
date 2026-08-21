@@ -226,6 +226,13 @@
           </aside>
 
           <div class="visual-column">
+            <div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>
+              <span class="empty-mark" aria-hidden="true">∅</span>
+              <p class="visual-empty-kicker">Current catalog view</p>
+              <h3 id="visualEmptyHeading">No study matches this view.</h3>
+              <p id="visualEmptyMessage">Clear the catalog filters to restore a drawing.</p>
+              <button class="visual-empty-action" id="clearVisualFilters" type="button">Clear filters</button>
+            </div>
             <div class="study-header">
               <div>
                 <p class="study-kicker" id="activeKicker">Study 01 / Basilica</p>

@@ -112,6 +112,8 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing navigation relationship: ' + token);
           }
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
+          if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>')) throw new Error('Missing visual empty state');
+          if (!html.includes('id="clearVisualFilters" type="button"')) throw new Error('Missing visual empty-state recovery action');
           if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('id="activeReference"')) throw new Error('Missing visible study reference');
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
@@ -164,6 +166,7 @@ jobs:
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
+          if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
           if (!app.includes('function downloadStudy()') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing active-study JSON export');
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
@@ -177,6 +180,7 @@ jobs:
           }
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
           if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;')) throw new Error('Missing narrow study-header layout');
+          if (!styles.includes('.visual-column.is-empty > .drawing-card') || !styles.includes('.visual-empty-action')) throw new Error('Missing visual empty-state styling');
           if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
           const png = fs.readFileSync('og.png');
