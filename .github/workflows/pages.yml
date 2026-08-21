@@ -28,6 +28,7 @@ jobs:
           node --check app.js
           node --check data/geometry.js
           test -s index.html
+          test -s 404.html
           test -s styles.css
           test -s data/geometry.json
           test -s og.png
@@ -69,6 +70,7 @@ jobs:
           });
           console.log(`Geometry schema validation passed: ${source.studies.length} records.`);
           const html = fs.readFileSync('index.html', 'utf8');
+          const notFound = fs.readFileSync('404.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
           const requiredMetadata = [
@@ -82,6 +84,10 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
+          if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
+          if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
+          if (!notFound.includes('data-site-root')) throw new Error('Missing GitHub Pages root navigation');
+          if (!notFound.includes("hostname.endsWith('.github.io')")) throw new Error('Missing project-site root resolver');
           if (!html.includes('<div class="data-error" id="dataError" role="alert" hidden>')) throw new Error('Missing data-load recovery state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');

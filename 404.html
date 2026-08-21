@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111817" />
+    <meta name="color-scheme" content="dark" />
+    <title>Page not found · Sacred Geometry Atlas</title>
+    <style>
+      :root {
+        --ink: #eef2e9;
+        --ink-soft: #aebbb1;
+        --ink-muted: #84948a;
+        --bg: #111817;
+        --amber: #e9b36c;
+        --amber-soft: rgba(233, 179, 108, 0.14);
+        --coral: #e77f62;
+        --teal: #88c6ba;
+        --mono: 'SFMono-Regular', Consolas, monospace;
+        --serif: Georgia, serif;
+      }
+
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; color: var(--ink); background: radial-gradient(circle at 82% 14%, rgba(136, 198, 186, 0.1), transparent 25rem), var(--bg); font-family: Arial, sans-serif; }
+      body::before { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(213, 229, 214, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(213, 229, 214, 0.04) 1px, transparent 1px); background-size: 32px 32px; content: ''; mask-image: linear-gradient(to bottom, black, transparent 75%); }
+      .error-page { display: grid; align-content: center; width: min(100% - 48px, 900px); min-height: calc(100vh - 96px); margin: auto; padding: 4rem 0; }
+      .eyebrow { display: flex; align-items: center; gap: 0.7rem; margin: 0 0 1.8rem; color: var(--coral); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; }
+      .eyebrow-line { width: 30px; height: 1px; background: currentColor; }
+      .error-code { margin: 0; color: var(--amber); font-family: var(--serif); font-size: clamp(7rem, 25vw, 15rem); font-weight: 400; letter-spacing: -0.12em; line-height: 0.72; }
+      h1 { max-width: 15ch; margin: 2rem 0 1rem; color: var(--ink); font-size: clamp(2.2rem, 6vw, 5.2rem); letter-spacing: -0.07em; line-height: 0.98; }
+      .error-copy { max-width: 34rem; margin: 0; color: var(--ink-soft); font-size: 1rem; line-height: 1.8; }
+      .home-link { display: inline-flex; align-items: center; gap: 0.6rem; width: fit-content; margin-top: 2rem; padding: 0.75rem 0.95rem; border: 1px solid var(--amber); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+      .home-link:hover, .home-link:focus-visible { color: var(--bg); background: var(--amber); }
+      .home-link:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
+      .home-link span { font-size: 1rem; line-height: 0; }
+      .error-footer { display: flex; justify-content: space-between; width: min(100% - 48px, 900px); margin: auto; padding: 1.25rem 0; border-top: 1px solid rgba(213, 229, 214, 0.14); color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; }
+      .error-footer p { margin: 0; }
+      .error-footer strong { color: var(--teal); font-weight: 400; }
+      @media (max-width: 600px) {
+        .error-page { width: min(100% - 32px, 520px); min-height: calc(100vh - 80px); padding: 3rem 0; }
+        .error-footer { display: block; width: min(100% - 32px, 520px); line-height: 1.7; }
+        .error-footer p + p { margin-top: 0.3rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="error-page" aria-labelledby="error-title">
+      <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Field note / 404</p>
+      <p class="error-code" aria-hidden="true">404</p>
+      <h1 id="error-title">This path has left the atlas.</h1>
+      <p class="error-copy">The geometry study you were looking for is not on this sheet. Return to the collection and choose another point of entry.</p>
+      <a class="home-link" data-site-root href="../">Return to the atlas <span aria-hidden="true">↗</span></a>
+    </main>
+    <footer class="error-footer">
+      <p><strong>Sacred Geometry Atlas</strong></p>
+      <p>Static, responsive, and GitHub Pages ready</p>
+    </footer>
+    <script>
+      (() => {
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        const isGitHubPages = window.location.hostname.endsWith('.github.io');
+        const siteRoot = isGitHubPages && segments.length > 1 ? `/${segments[0]}/` : '/';
+        document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
+      })();
+    </script>
+  </body>
+</html>

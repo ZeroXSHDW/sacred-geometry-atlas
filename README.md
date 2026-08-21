@@ -27,6 +27,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
+- A branded `404.html` recovery page for missing GitHub Pages paths.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a useful no-script study index.
 
@@ -52,7 +53,7 @@ Then open <http://localhost:8000>.
 
 ```bash
 git init
-git add index.html styles.css app.js data .github .nojekyll .gitignore og.png README.md
+git add index.html styles.css app.js 404.html data .github .nojekyll .gitignore og.png README.md
 git commit -m "Build Sacred Geometry Atlas"
 git branch -M main
 git remote add origin https://github.com/YOUR-ACCOUNT/YOUR-REPOSITORY.git
