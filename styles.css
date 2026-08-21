@@ -335,7 +335,7 @@ h3 { letter-spacing: -0.04em; }
 
 .catalog-list { display: grid; margin: 0; padding: 0; list-style: none; }
 .catalog-entry { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); }
-.catalog-card { display: grid; grid-template-columns: 37px 1fr 42px; gap: 0.7rem; align-items: center; width: 100%; padding: 1.15rem 0; border-bottom: 1px solid var(--line); text-align: left; transition: 180ms ease; }
+.catalog-card { display: grid; grid-template-columns: 37px 1fr 42px; gap: 0.7rem; align-items: center; width: 100%; padding: 1.15rem 0; border-bottom: 1px solid var(--line); color: inherit; text-align: left; text-decoration: none; transition: 180ms ease; }
 .catalog-entry .catalog-card { flex: 1; border-bottom: 0; }
 .catalog-card:hover { padding-left: 0.35rem; background: linear-gradient(90deg, var(--amber-soft), transparent 78%); }
 .catalog-card.is-active { background: linear-gradient(90deg, var(--amber-soft), transparent 80%); }

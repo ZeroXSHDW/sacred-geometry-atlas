@@ -250,10 +250,10 @@
     return url;
   }
 
-  function routeHash(page, includeStudy) {
-    if (page === "atlas" && includeStudy && state.activeId) {
+  function routeHash(page, includeStudy, studyId = state.activeId) {
+    if (page === "atlas" && includeStudy && studyId) {
       const zoomSegment = state.zoom === 1 ? "" : `/${Number(state.zoom.toFixed(2))}`;
-      return `#atlas/${encodeURIComponent(state.activeId)}/${state.mode}/${state.surface}/${state.layer}${zoomSegment}`;
+      return `#atlas/${encodeURIComponent(studyId)}/${state.mode}/${state.surface}/${state.layer}${zoomSegment}`;
     }
     if (page === "compare" && state.compareIds.length >= 2) {
       return `#compare/${state.compareIds.map((id) => encodeURIComponent(id)).join(",")}`;
@@ -398,6 +398,10 @@
       }
       const card = event.target.closest("[data-study-id]");
       if (!card) return;
+      if (card.tagName.toLowerCase() === "a") {
+        if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+      }
       selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true });
     });
     $$("[data-surface]").forEach((button) => button.addEventListener("click", () => {
@@ -832,14 +836,14 @@
       const currentAttribute = isActive ? ' aria-current="true"' : "";
       return `
         <li class="catalog-entry">
-          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
+          <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(navigationUrl(routeHash("atlas", true, study.id)))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${escapeHtml(study.name)}</span>
               <span class="catalog-card-meta">${escapeHtml(study.typology)} · ${escapeHtml(study.emphasis)} · ${escapeHtml(studyStatus(study))}</span>
             </span>
             ${catalogGlyph(study)}
-          </button>
+          </a>
           <button class="compare-toggle ${isCompared ? "is-selected" : ""}" data-compare-id="${escapeHtml(study.id)}" type="button" aria-pressed="${isCompared}" aria-label="${isCompared ? "Remove" : "Add"} ${escapeHtml(study.name)} ${isCompared ? "from" : "to"} comparison">${isCompared ? "✓" : "+"}</button>
         </li>
       `;
