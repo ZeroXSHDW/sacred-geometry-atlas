@@ -153,19 +153,7 @@
       state.sort = event.target.value;
       refreshCatalog();
     });
-    $("#clearSearch").addEventListener("click", () => {
-      state.query = "";
-      state.filter = "all";
-      state.filterPlace = "all";
-      state.filterStatus = "all";
-      $("#searchInput").value = "";
-      $("#filterSelect").value = "all";
-      $("#filterPlace").value = "all";
-      $("#filterStatus").value = "all";
-      $("#sortSelect").value = "index";
-      state.sort = "index";
-      refreshCatalog();
-    });
+    $("#clearSearch").addEventListener("click", () => clearCatalogFilters({ resetSort: true }));
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
@@ -225,10 +213,30 @@
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
+      if (event.target.closest("[data-clear-filters]")) {
+        clearCatalogFilters();
+        return;
+      }
       const chip = event.target.closest("[data-clear-filter]");
       if (chip) clearFilter(chip.dataset.clearFilter);
     });
     window.addEventListener("keydown", handleKeyboard);
+  }
+
+  function clearCatalogFilters({ resetSort = false } = {}) {
+    state.query = "";
+    state.filter = "all";
+    state.filterPlace = "all";
+    state.filterStatus = "all";
+    $("#searchInput").value = "";
+    $("#filterSelect").value = "all";
+    $("#filterPlace").value = "all";
+    $("#filterStatus").value = "all";
+    if (resetSort) {
+      $("#sortSelect").value = "index";
+      state.sort = "index";
+    }
+    refreshCatalog();
   }
 
   function selectStudy(id, options = {}) {
@@ -253,11 +261,14 @@
     if (state.filterPlace !== "all") filters.push({ key: "place", label: $("#filterPlace").selectedOptions[0].textContent });
     if (state.filterStatus !== "all") filters.push({ key: "status", label: $("#filterStatus").selectedOptions[0].textContent });
     target.hidden = filters.length === 0;
-    target.innerHTML = filters.map(({ key, label }) => `
-      <button class="filter-chip" type="button" data-clear-filter="${key}">
-        <span>${escapeHtml(label)}</span><span aria-hidden="true">×</span>
-      </button>
-    `).join("");
+    target.innerHTML = filters.length
+      ? `${filters.map(({ key, label }) => `
+          <button class="filter-chip" type="button" data-clear-filter="${key}" aria-label="Clear ${escapeHtml(label)}">
+            <span>${escapeHtml(label)}</span><span aria-hidden="true">×</span>
+          </button>
+        `).join("")}
+        <button class="filter-clear-all" type="button" data-clear-filters aria-label="Clear all active filters">Clear all</button>`
+      : "";
   }
 
   function clearFilter(key) {
@@ -417,19 +428,20 @@
     updateSearchClear();
     renderStudyNav();
     list.innerHTML = visible.map((study) => {
+      const isActive = study.id === state.activeId;
       const isCompared = state.compareIds.includes(study.id);
       return `
-        <div class="catalog-entry">
-          <button class="catalog-card ${study.id === state.activeId ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-pressed="${study.id === state.activeId}" aria-label="Open ${escapeHtml(study.name)}">
+        <li class="catalog-entry">
+          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${isActive ? "Selected study: " : "Open "}${escapeHtml(study.name)}">
             <span class="catalog-number">${escapeHtml(study.index)}</span>
-            <span>
-              <h3>${escapeHtml(study.name)}</h3>
-              <p>${escapeHtml(study.typology)} · ${escapeHtml(study.emphasis)} · ${escapeHtml(studyStatus(study))}</p>
+            <span class="catalog-card-copy">
+              <span class="catalog-card-title">${escapeHtml(study.name)}</span>
+              <span class="catalog-card-meta">${escapeHtml(study.typology)} · ${escapeHtml(study.emphasis)} · ${escapeHtml(studyStatus(study))}</span>
             </span>
             ${catalogGlyph(study)}
           </button>
           <button class="compare-toggle ${isCompared ? "is-selected" : ""}" data-compare-id="${escapeHtml(study.id)}" type="button" aria-pressed="${isCompared}" aria-label="${isCompared ? "Remove" : "Add"} ${escapeHtml(study.name)} ${isCompared ? "from" : "to"} comparison">${isCompared ? "✓" : "+"}</button>
-        </div>
+        </li>
       `;
     }).join("");
     empty.hidden = visible.length !== 0;
@@ -734,8 +746,8 @@
       <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-label="Open ${escapeHtml(study.name)} in the Atlas">
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
-        <h4>${escapeHtml(study.name)}</h4>
-        <p>${number(study.length / study.span, 2)} ratio · ${number(study.height / study.span, 2)} section</p>
+        <span class="compare-study-title">${escapeHtml(study.name)}</span>
+        <span class="compare-study-meta">${number(study.length / study.span, 2)} ratio · ${number(study.height / study.span, 2)} section</span>
       </button>
     `).join("");
   }

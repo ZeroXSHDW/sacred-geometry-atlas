@@ -44,14 +44,19 @@ jobs:
           const exported = JSON.parse(fs.readFileSync('data/geometry.json', 'utf8'));
           if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
           const html = fs.readFileSync('index.html', 'utf8');
-          const required = [
+          const app = fs.readFileSync('app.js', 'utf8');
+          const requiredMetadata = [
             'property="og:image" content="og.png"',
             'name="twitter:image" content="og.png"',
             'property="og:image:width" content="1200"',
             'property="og:image:height" content="630"'
           ];
-          for (const token of required) {
+          for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
+          }
+          if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
+          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title']) {
+            if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');

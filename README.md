@@ -13,7 +13,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Zoom and reset controls for the SVG drawing instrument.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Search, typology, location, and measured/schematic status filtering.
-- Visible filter chips with one-click clearing for each active catalog filter.
+- Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, provenance, drawing state, and shareable route.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
