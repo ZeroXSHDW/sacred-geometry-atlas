@@ -122,12 +122,24 @@
       }
       return;
     }
-    $("#studyCount").textContent = String(studies.length).padStart(2, "0");
+    renderHeroStats();
     populateFilter();
     bindEvents();
     window.addEventListener("hashchange", syncFromHash);
     window.addEventListener("popstate", syncFromHash);
     syncFromHash();
+  }
+
+  function renderHeroStats() {
+    const values = {
+      studyCount: studies.length,
+      modeCount: validModes.size,
+      profileCount: activeStudy() ? profileScores(activeStudy()).length : 0
+    };
+    Object.entries(values).forEach(([id, value]) => {
+      const target = $(`#${id}`);
+      if (target) target.textContent = String(value).padStart(2, "0");
+    });
   }
 
   function parseRoute() {

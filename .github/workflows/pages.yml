@@ -93,6 +93,12 @@ jobs:
           if (!html.includes('<a class="skip-link skip-link-noscript" href="#noscript-heading">Skip to collection</a>')) throw new Error('Missing no-JS skip link');
           if (!html.includes('<main id="main-content" tabindex="-1">') || !html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('Skip-link destinations must be focusable');
           if (!html.includes('<div class="hero-stats" role="group" aria-label="Atlas statistics">')) throw new Error('Hero statistics must expose a named group');
+          for (const token of ['id="studyCount"', 'id="modeCount"', 'id="profileCount"']) {
+            if (!html.includes(token)) throw new Error('Hero statistics must expose a dynamic target: ' + token);
+          }
+          for (const token of ['function renderHeroStats()', 'studyCount: studies.length', 'modeCount: validModes.size', 'profileCount: activeStudy() ? profileScores(activeStudy()).length : 0', 'renderHeroStats();']) {
+            if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
+          }
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root')) throw new Error('Missing GitHub Pages root navigation');
