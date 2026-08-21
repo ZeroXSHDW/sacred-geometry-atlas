@@ -24,7 +24,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - An expandable semantic comparison table with recorded model lengths, spans, ratios, heights, bays, modules, and symmetry values, with keyboard-accessible horizontal scrolling on narrow screens.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
-- Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; browser history restores the selected context. Partial or malformed study links are canonicalized to plan, outside, and all-geometry defaults.
+- Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; browser history restores the selected context. Partial or malformed study links and catalog parameters are canonicalized to valid defaults.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
 - Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.

@@ -277,6 +277,7 @@
       normalizedPageRoute = window.location.hash.length > 0 && window.location.hash !== routeHash(route.page, false);
     }
     showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
+    replaceCatalogRoute();
     renderAll();
     if (normalizedStudyRoute) {
       replaceRoute("atlas", includeStudyInNormalizedRoute);
