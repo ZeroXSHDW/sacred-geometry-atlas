@@ -738,6 +738,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .hero-stats { justify-content: space-between; gap: 0.75rem; }
   .share-button { padding: 0.5rem; }
   .share-button span:last-child { display: none; }
+  .compare-tray { align-items: start; flex-direction: column; }
+  .compare-tray-actions { width: 100%; justify-content: space-between; }
+  .compare-tray-summary { max-width: min(100%, 32ch); }
   .tool-row { grid-template-columns: 1fr; }
   .catalog-list { display: block; }
   .catalog-entry:nth-child(n) { border-right: 0; padding-inline: 0; }
