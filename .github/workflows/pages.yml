@@ -191,8 +191,8 @@ jobs:
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
           if (!html.includes('<button class="share-button compare-edit-button" id="editCompare" type="button" aria-controls="atlas" aria-label="Edit comparison selection in Atlas"') || !app.includes('$("#editCompare").addEventListener("click", () => showPage("atlas"));') || !app.includes('const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";') || !app.includes('editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";')) throw new Error('Comparison view must provide a context-aware Atlas edit action');
           if (!html.includes('<div class="compare-selection" id="compareSelection" role="group" aria-labelledby="compareSelectionHeading" hidden>') || !html.includes('id="clearCompareView" type="button"') || !app.includes('function renderCompareSelection()') || !app.includes('data-remove-compare-id') || !app.includes('function removeComparisonStudy(id)') || !app.includes('clearComparisonSelection({ focus: true })') || !app.includes('const control = state.page === "compare" ? $("#editCompare") : $("#searchInput");') || !app.includes('next.focus({ preventScroll: true })') || !styles.includes('.compare-selection-chip')) throw new Error('Focused comparison selection controls are incomplete');
-          if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="C" aria-label="Compare selected studies (select at least two)"') || !html.includes('<span class="compare-tray-summary" id="compareSummary" aria-hidden="true"></span>')) throw new Error('Comparison tray controls must have useful initial labels');
-          for (const token of ['const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;', 'const selectedStudies = state.compareIds', 'count.setAttribute("aria-label", selectedNames.length ? `${selectedLabel}: ${selectedNames.join(", ")}` : selectedLabel);', 'summary.textContent = preview + extra;', 'open.setAttribute("aria-label", compareLabel);', 'clear.setAttribute("aria-label", clearLabel);']) {
+          if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="C" aria-label="Compare selected studies (select at least two)"') || !html.includes('<span class="compare-action-label">Compare selected</span>') || !html.includes('<span class="compare-tray-summary" id="compareSummary" aria-hidden="true"></span>')) throw new Error('Comparison tray controls must have useful initial labels');
+          for (const token of ['const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;', 'const selectedStudies = state.compareIds', 'count.setAttribute("aria-label", selectedNames.length ? `${selectedLabel}: ${selectedNames.join(", ")}` : selectedLabel);', 'summary.textContent = preview + extra;', 'selectedCount === 1', 'const openText = open.querySelector(".compare-action-label");', 'openText.textContent = selectedCount === 1 ? "Select one more" : "Compare selected";', 'open.setAttribute("aria-label", compareLabel);', 'clear.setAttribute("aria-label", clearLabel);']) {
             if (!app.includes(token)) throw new Error('Comparison tray labels must reflect selection state: ' + token);
           }
           if (!styles.includes('.compare-tray-readout {') || !styles.includes('.compare-tray-summary {')) throw new Error('Comparison tray must provide a bounded selected-study preview');
@@ -515,7 +515,8 @@ jobs:
           const tray = element();
           const count = element();
           const summary = element();
-          const open = element();
+          const openLabel = element();
+          const open = element({ querySelector(selector) { return selector === '.compare-action-label' ? openLabel : null; } });
           const clear = element();
           elements.set('#compareTray', tray);
           elements.set('#compareCount', count);
@@ -541,12 +542,17 @@ jobs:
           const { state, updateCompareTray } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic', 'byzantine'];
           updateCompareTray();
-          if (tray.hidden || count.textContent !== '3 selected' || count['aria-label'] !== '3 selected studies: Longitudinal basilica, High gothic cathedral, Cross-in-square' || summary.textContent !== 'Longitudinal basilica · High gothic cathedral · +1 more' || open.disabled) {
+          if (tray.hidden || count.textContent !== '3 selected' || count['aria-label'] !== '3 selected studies: Longitudinal basilica, High gothic cathedral, Cross-in-square' || summary.textContent !== 'Longitudinal basilica · High gothic cathedral · +1 more' || openLabel.textContent !== 'Compare selected' || open.disabled) {
             throw new Error('Comparison tray did not expose its selected-study preview');
+          }
+          state.compareIds = ['basilica'];
+          updateCompareTray();
+          if (openLabel.textContent !== 'Select one more' || !open.disabled || open['aria-label'] !== 'Select one more study to compare') {
+            throw new Error('Comparison tray did not explain its one-selection state');
           }
           state.compareIds = [];
           updateCompareTray();
-          if (!tray.hidden || summary.textContent !== '' || !summary.hidden || !open.disabled || count['aria-label'] !== '0 selected studies') {
+          if (!tray.hidden || summary.textContent !== '' || !summary.hidden || openLabel.textContent !== 'Compare selected' || !open.disabled || count['aria-label'] !== '0 selected studies') {
             throw new Error('Comparison tray did not clear its selected-study preview');
           }
           console.log('Comparison tray preview smoke test passed.');

@@ -1554,7 +1554,9 @@
     const extra = selectedNames.length > 2 ? ` · +${selectedNames.length - 2} more` : "";
     const compareLabel = selectedCount >= 2
       ? `Compare ${selectedLabel}`
-      : "Compare selected studies (select at least two)";
+      : selectedCount === 1
+        ? "Select one more study to compare"
+        : "Compare selected studies (select at least two)";
     tray.hidden = selectedCount === 0;
     count.textContent = `${selectedCount} selected`;
     count.setAttribute("aria-label", selectedNames.length ? `${selectedLabel}: ${selectedNames.join(", ")}` : selectedLabel);
@@ -1564,6 +1566,8 @@
       summary.hidden = !preview;
     }
     open.disabled = selectedCount < 2;
+    const openText = open.querySelector(".compare-action-label");
+    if (openText) openText.textContent = selectedCount === 1 ? "Select one more" : "Compare selected";
     open.setAttribute("aria-label", compareLabel);
     open.title = compareLabel;
     if (clear) {
