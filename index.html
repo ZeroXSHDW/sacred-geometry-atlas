@@ -249,21 +249,21 @@
 
             <div class="drawing-controls" role="group" aria-label="Drawing controls">
               <div class="segmented-control" role="group" aria-label="Inside or outside">
-                <button class="segment-button is-active" data-surface="exterior" type="button" aria-keyshortcuts="O">Outside</button>
-                <button class="segment-button" data-surface="interior" type="button" aria-keyshortcuts="I">Inside</button>
+                <button class="segment-button is-active" data-surface="exterior" type="button" aria-pressed="true" aria-keyshortcuts="O">Outside</button>
+                <button class="segment-button" data-surface="interior" type="button" aria-pressed="false" aria-keyshortcuts="I">Inside</button>
               </div>
               <div class="mode-control" role="group" aria-label="Drawing mode">
-                <button class="mode-button is-active" data-mode="plan" type="button" aria-keyshortcuts="1">Plan</button>
-                <button class="mode-button" data-mode="elevation" type="button" aria-keyshortcuts="2">Elevation</button>
-                <button class="mode-button" data-mode="section" type="button" aria-keyshortcuts="3">Section</button>
+                <button class="mode-button is-active" data-mode="plan" type="button" aria-pressed="true" aria-keyshortcuts="1">Plan</button>
+                <button class="mode-button" data-mode="elevation" type="button" aria-pressed="false" aria-keyshortcuts="2">Elevation</button>
+                <button class="mode-button" data-mode="section" type="button" aria-pressed="false" aria-keyshortcuts="3">Section</button>
               </div>
               <div class="layer-control" role="group" aria-label="Geometry layer focus">
                 <span class="layer-label">Focus</span>
-                <button class="layer-button is-active" data-layer="all" type="button">All</button>
-                <button class="layer-button" data-layer="envelope" type="button">Envelope</button>
-                <button class="layer-button" data-layer="rhythm" type="button">Rhythm</button>
-                <button class="layer-button" data-layer="axis" type="button">Axis</button>
-                <button class="layer-button" data-layer="measure" type="button">Measure</button>
+                <button class="layer-button is-active" data-layer="all" type="button" aria-pressed="true">All</button>
+                <button class="layer-button" data-layer="envelope" type="button" aria-pressed="false">Envelope</button>
+                <button class="layer-button" data-layer="rhythm" type="button" aria-pressed="false">Rhythm</button>
+                <button class="layer-button" data-layer="axis" type="button" aria-pressed="false">Axis</button>
+                <button class="layer-button" data-layer="measure" type="button" aria-pressed="false">Measure</button>
               </div>
             </div>
 

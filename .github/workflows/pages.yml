@@ -69,6 +69,9 @@ jobs:
           }
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
           if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');
+          for (const token of ['data-surface="exterior" type="button" aria-pressed="true"', 'data-mode="plan" type="button" aria-pressed="true"', 'data-layer="all" type="button" aria-pressed="true"']) {
+            if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
+          }
           if (!html.includes('aria-keyshortcuts="J"')) throw new Error('Missing keyboard shortcut metadata');
           for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
