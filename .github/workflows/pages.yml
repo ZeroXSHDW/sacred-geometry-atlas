@@ -58,9 +58,11 @@ jobs:
           for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%"', 'id="zoomReadout" role="status" aria-live="polite"']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
+          if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
           for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
+          if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
           if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');

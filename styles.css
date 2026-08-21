@@ -49,7 +49,8 @@ select:focus-visible {
 }
 
 #atlas-heading:focus-visible,
-.page-view h2:focus-visible {
+.page-view h2:focus-visible,
+#activeName:focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 6px;
 }

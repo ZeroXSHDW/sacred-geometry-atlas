@@ -55,6 +55,7 @@
     populateFilter();
     bindEvents();
     window.addEventListener("hashchange", syncFromHash);
+    window.addEventListener("popstate", syncFromHash);
     syncFromHash();
   }
 
@@ -107,6 +108,12 @@
     if (route.layer) state.layer = route.layer;
     showPage(route.page, { updateHash: false, scroll: false });
     renderAll();
+    if (route.page === "atlas" && route.studyId) {
+      announceStudy(activeStudy(), visibleStudies().length);
+      announceDrawingState();
+      const heading = $("#activeName");
+      if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: false });
+    }
   }
 
   function populateFilter() {
