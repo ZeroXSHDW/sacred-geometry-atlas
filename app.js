@@ -397,6 +397,14 @@
     return `${count} of ${studies.length} studies`;
   }
 
+  function renderCatalogResultCount(count) {
+    const resultCount = $("#catalogResultCount");
+    if (!resultCount) return;
+    const text = resultCountText(count);
+    resultCount.textContent = text;
+    resultCount.setAttribute("aria-label", `${text}; ${catalogScopeLabel()}.`);
+  }
+
   function renderActiveFilters() {
     const target = $("#activeFilters");
     if (!target) return;
@@ -572,8 +580,7 @@
     const previousId = state.activeId;
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
     renderList();
-    const resultCount = $("#catalogResultCount");
-    if (resultCount) resultCount.textContent = resultCountText(visible.length);
+    renderCatalogResultCount(visible.length);
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();
@@ -598,9 +605,8 @@
     const empty = $("#emptyState");
     const emptyMessage = $("#emptyStateMessage");
     const visible = visibleStudies();
-    const resultCount = $("#catalogResultCount");
     const catalogExport = $("#downloadCatalogView");
-    if (resultCount) resultCount.textContent = resultCountText(visible.length);
+    renderCatalogResultCount(visible.length);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
     if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
     renderVisualState(visible);
