@@ -217,6 +217,10 @@ jobs:
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
           if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
           if (!app.includes('function downloadStudy()') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing active-study JSON export');
+          const catalogExportStart = app.indexOf('function downloadCatalogView()');
+          const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
+          const catalogExport = app.slice(catalogExportStart, catalogExportEnd);
+          if (catalogExportStart < 0 || catalogExportEnd < 0 || !catalogExport.includes('const shareUrl = new URL(window.location.href);') || !catalogExport.includes('route: shareUrl.href')) throw new Error('Catalog export must include a reproducible route');
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');

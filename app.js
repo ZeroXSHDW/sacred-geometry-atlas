@@ -1149,11 +1149,14 @@
       return;
     }
     const filename = "sacred-geometry-atlas-view.json";
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = routeHash("atlas", false);
     const payload = JSON.stringify({
       title: "Sacred Geometry Atlas · catalog view",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
       view: {
         scope: catalogScopeLabel(),
+        route: shareUrl.href,
         query: state.query || null,
         typology: state.filter,
         place: state.filterPlace,
