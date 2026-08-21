@@ -92,7 +92,8 @@ jobs:
             'property="og:image:width" content="1200"',
             'property="og:image:height" content="630"',
             'name="robots" content="index, follow"',
-            'rel="canonical" href="./"'
+            'rel="canonical" href="./"',
+            'rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json"'
           ];
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
@@ -126,6 +127,7 @@ jobs:
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
           if (!html.includes('<div class="data-error" id="dataError" role="alert" aria-labelledby="dataErrorHeading" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">')) throw new Error('Missing focusable data-load recovery heading');
           if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="status" aria-live="polite" aria-atomic="true" aria-labelledby="runtimeFallbackHeading">') || !html.includes('<p id="runtimeFallbackHeading"><strong>The atlas is still loading.</strong>')) throw new Error('Missing polite runtime script-failure recovery panel');
+          if (!html.includes('<a class="hero-action" href="data/geometry.json">Open the static JSON dataset') || !html.includes('<a class="noscript-link" href="data/geometry.json">Open the JSON dataset') || html.includes('href="data/geometry.json" download=')) throw new Error('Static recovery links must open the JSON artifact without forcing a download');
           const initStart = app.indexOf('function init()');
           const initEnd = app.indexOf('\n  function renderHeroStats()', initStart);
           const syncStart = app.indexOf('function syncFromHash()');
