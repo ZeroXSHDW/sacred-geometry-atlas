@@ -14,6 +14,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Search, typology, location, and measured/schematic status filtering.
 - Visible filter chips with one-click clearing for each active catalog filter.
+- Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - Shareable hash routes such as `#atlas/gothic`, plus Compare and Method views.

@@ -110,6 +110,7 @@
                 <span class="sr-only">Search geometry studies</span>
                 <span class="search-icon" aria-hidden="true"></span>
                 <input id="searchInput" type="search" placeholder="Search the atlas" autocomplete="off" />
+                <button class="search-clear" id="clearSearchInput" type="button" aria-label="Clear search" hidden>×</button>
               </label>
               <div class="tool-row">
                 <label class="select-wrap">
@@ -181,6 +182,10 @@
                 <p class="study-source" id="activeSource">Sacred Geometry Atlas proportional model · illustrative proportions</p>
               </div>
               <div class="study-header-actions">
+                <div class="study-nav" role="group" aria-label="Move between studies">
+                  <button id="prevStudy" type="button" aria-label="Previous study" title="Previous study">←</button>
+                  <button id="nextStudy" type="button" aria-label="Next study" title="Next study">→</button>
+                </div>
                 <button class="share-button" id="shareStudy" type="button">
                   <span aria-hidden="true">↗</span>
                   <span>Share study</span>
@@ -189,6 +194,7 @@
               </div>
             </div>
             <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite"></span>
 
             <div class="drawing-controls" aria-label="Drawing controls">
               <div class="segmented-control" role="group" aria-label="Inside or outside">
@@ -212,12 +218,12 @@
 
             <div class="drawing-card">
               <div class="drawing-toolbar">
-              <div class="drawing-legend" aria-label="Drawing legend">
-                <span><i class="legend-swatch swatch-primary"></i> primary form</span>
-                <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
-                <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
-                <span class="drawing-shortcuts">J / K studies · 1 / 2 / 3 views</span>
-              </div>
+                <div class="drawing-legend" aria-label="Drawing legend">
+                  <span><i class="legend-swatch swatch-primary"></i> primary form</span>
+                  <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
+                  <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
+                  <span class="drawing-shortcuts">J / K studies · 1 / 2 / 3 views</span>
+                </div>
                 <div class="drawing-tools">
                   <span class="drawing-scale" id="drawingScale">Scale 1 : 200</span>
                   <div class="zoom-control" role="group" aria-label="Drawing zoom">

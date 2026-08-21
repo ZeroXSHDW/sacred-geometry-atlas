@@ -65,6 +65,12 @@
     window.history.pushState({ page, studyId: includeStudy ? state.activeId : null }, "", nextHash);
   }
 
+  function replaceRoute(page, includeStudy = page === "atlas") {
+    const nextHash = routeHash(page, includeStudy);
+    if (window.location.hash === nextHash) return;
+    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null }, "", nextHash);
+  }
+
   function syncFromHash() {
     const route = parseRoute();
     if (route.studyId) state.activeId = route.studyId;
@@ -100,6 +106,7 @@
       state.query = event.target.value.trim().toLowerCase();
       refreshCatalog();
     });
+    $("#clearSearchInput").addEventListener("click", () => clearFilter("query"));
     $("#filterSelect").addEventListener("change", (event) => {
       state.filter = event.target.value;
       refreshCatalog();
@@ -177,6 +184,8 @@
     });
     $("#downloadData").addEventListener("click", downloadData);
     $("#shareStudy").addEventListener("click", shareStudy);
+    $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
+    $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
       const chip = event.target.closest("[data-clear-filter]");
       if (chip) clearFilter(chip.dataset.clearFilter);
@@ -190,6 +199,7 @@
     state.activeId = id;
     showPage("atlas", { scroll });
     renderAll();
+    announceStudy(activeStudy(), visibleStudies().length);
   }
 
   function resultCountText(count) {
@@ -237,14 +247,42 @@
     if (status) status.textContent = message;
   }
 
-  function cycleStudy(direction) {
+  function announceStudy(study, visibleCount) {
+    const status = $("#studyLiveStatus");
+    if (status && study) status.textContent = `Study ${study.index}, ${study.name} selected. ${visibleCount} ${visibleCount === 1 ? "study" : "studies"} visible.`;
+  }
+
+  function updateSearchClear() {
+    const clearButton = $("#clearSearchInput");
+    if (clearButton) clearButton.hidden = !state.query;
+  }
+
+  function renderStudyNav() {
+    const previous = $("#prevStudy");
+    const next = $("#nextStudy");
+    if (!previous || !next) return;
+    const visible = visibleStudies();
+    const currentIndex = visible.findIndex((study) => study.id === state.activeId);
+    const canNavigate = visible.length > 1 && currentIndex >= 0;
+    const previousStudy = canNavigate ? visible[(currentIndex - 1 + visible.length) % visible.length] : null;
+    const nextStudy = canNavigate ? visible[(currentIndex + 1) % visible.length] : null;
+    previous.disabled = !canNavigate;
+    next.disabled = !canNavigate;
+    previous.setAttribute("aria-label", previousStudy ? `Previous study: ${previousStudy.name}` : "Previous study");
+    next.setAttribute("aria-label", nextStudy ? `Next study: ${nextStudy.name}` : "Next study");
+    previous.title = previousStudy ? `Previous: ${previousStudy.name}` : "Previous study";
+    next.title = nextStudy ? `Next: ${nextStudy.name}` : "Next study";
+  }
+
+  function cycleStudy(direction, options = {}) {
+    const { scroll = true } = options;
     const visible = visibleStudies();
     if (!visible.length) return;
     const currentIndex = visible.findIndex((study) => study.id === state.activeId);
-    const nextIndex = (currentIndex + direction + visible.length) % visible.length;
+    const baseIndex = currentIndex >= 0 ? currentIndex : direction > 0 ? -1 : 0;
+    const nextIndex = (baseIndex + direction + visible.length) % visible.length;
     const nextStudy = visible[nextIndex];
-    selectStudy(nextStudy.id, { scroll: false });
-    announceKeyboard(`${nextStudy.name} selected.`);
+    selectStudy(nextStudy.id, { scroll });
   }
 
   function handleKeyboard(event) {
@@ -254,7 +292,7 @@
     const key = event.key.toLowerCase();
     if (key === "j" || key === "k") {
       event.preventDefault();
-      cycleStudy(key === "j" ? 1 : -1);
+      cycleStudy(key === "j" ? 1 : -1, { scroll: false });
       return;
     }
     if (["1", "2", "3"].includes(key)) {
@@ -310,6 +348,7 @@
       renderStudy();
       renderDrawing();
       document.title = `${studyShortName(activeStudy())} · Sacred Geometry Atlas`;
+      if (state.page === "atlas") replaceRoute("atlas");
     }
     updateCompareTray();
   }
@@ -330,6 +369,8 @@
     const resultCount = $("#catalogResultCount");
     if (resultCount) resultCount.textContent = resultCountText(visible.length);
     renderActiveFilters();
+    updateSearchClear();
+    renderStudyNav();
     list.innerHTML = visible.map((study) => {
       const isCompared = state.compareIds.includes(study.id);
       return `

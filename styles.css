@@ -242,7 +242,7 @@ h3 { letter-spacing: -0.04em; }
 .search-field { position: relative; display: block; }
 .search-field input {
   width: 100%;
-  padding: 0.78rem 0.8rem 0.78rem 2.1rem;
+  padding: 0.78rem 2.1rem 0.78rem 2.1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   outline: none;
@@ -256,6 +256,8 @@ h3 { letter-spacing: -0.04em; }
 .search-field input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px var(--amber-soft); }
 .search-icon { position: absolute; top: 0.87rem; left: 0.8rem; width: 0.78rem; height: 0.78rem; border: 1px solid var(--ink-muted); border-radius: 50%; }
 .search-icon::after { position: absolute; right: -0.25rem; bottom: -0.16rem; width: 0.32rem; height: 1px; background: var(--ink-muted); content: ''; transform: rotate(45deg); }
+.search-clear { position: absolute; top: 50%; right: 0.55rem; display: grid; width: 1.3rem; height: 1.3rem; place-items: center; padding: 0; border: 1px solid transparent; border-radius: 50%; color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.9rem; line-height: 1; transform: translateY(-50%); transition: 180ms ease; }
+.search-clear:hover { border-color: var(--line-strong); color: var(--amber); background: var(--amber-soft); }
 
 .tool-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.65rem; }
 .tool-row-secondary { margin-top: 0.45rem; }
@@ -315,6 +317,10 @@ h3 { letter-spacing: -0.04em; }
 .study-meta { margin: 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.63rem; }
 .study-source { margin: 0.35rem 0 0; color: var(--ink-muted); font-size: 0.62rem; }
 .study-header-actions { display: flex; flex-direction: column; align-items: end; gap: 1.25rem; }
+.study-nav { display: inline-flex; gap: 0.35rem; }
+.study-nav button { display: grid; width: 29px; height: 25px; place-items: center; padding: 0; border: 1px solid var(--line-strong); color: var(--ink-soft); background: transparent; font-family: var(--mono); font-size: 0.85rem; line-height: 1; transition: 180ms ease; }
+.study-nav button:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
+.study-nav button:disabled { cursor: not-allowed; border-color: var(--line); color: var(--ink-muted); opacity: 0.42; }
 .share-button { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.62rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.03em; text-transform: uppercase; transition: 180ms ease; }
 .share-button span:first-child { color: var(--teal); font-size: 0.85rem; line-height: 0; }
 .share-button:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
