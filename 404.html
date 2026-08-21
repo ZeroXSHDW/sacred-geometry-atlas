@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#111817" />
     <meta name="color-scheme" content="dark" />
+    <link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />
     <title>Page not found · Sacred Geometry Atlas</title>
     <style>
       :root {
@@ -63,6 +64,8 @@
         const segments = window.location.pathname.split('/').filter(Boolean);
         const isGitHubPages = window.location.hostname.endsWith('.github.io');
         const siteRoot = isGitHubPages && segments.length > 1 ? `/${segments[0]}/` : '/';
+        const favicon = document.querySelector('#site-favicon');
+        if (favicon) favicon.href = `${siteRoot}favicon.svg`;
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
       })();
     </script>

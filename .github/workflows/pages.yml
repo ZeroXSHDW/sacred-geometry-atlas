@@ -91,6 +91,8 @@ jobs:
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root')) throw new Error('Missing GitHub Pages root navigation');
           if (!notFound.includes("hostname.endsWith('.github.io')")) throw new Error('Missing project-site root resolver');
+          if (!notFound.includes('<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing 404 favicon link');
+          if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
           if (!html.includes('<div class="data-error" id="dataError" role="alert" hidden>')) throw new Error('Missing data-load recovery state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');
