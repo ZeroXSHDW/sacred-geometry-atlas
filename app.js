@@ -245,7 +245,10 @@
       refreshCatalog();
       replaceCatalogRoute();
     });
-    $("#clearSearch").addEventListener("click", () => clearCatalogFilters({ resetSort: true }));
+    $("#clearSearch").addEventListener("click", (event) => {
+      clearCatalogFilters({ resetSort: true });
+      if (event.detail === 0) focusCatalogControl("query");
+    });
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
