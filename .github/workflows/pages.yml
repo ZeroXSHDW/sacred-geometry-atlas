@@ -106,7 +106,7 @@ jobs:
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
-          if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
+          if (!html.includes('<body class="no-js">') || !html.includes('<script>document.body.classList.add("js-runtime");</script>')) throw new Error('Missing no-JS/runtime fallback markers');
           if (!html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('No-JS fallback must provide the page heading');
           if (!html.includes('<a class="skip-link skip-link-app" href="#main-content">Skip to content</a>')) throw new Error('Missing interactive skip link');
           if (!html.includes('<a class="skip-link skip-link-noscript" href="#noscript-heading">Skip to collection</a>')) throw new Error('Missing no-JS skip link');
@@ -135,7 +135,7 @@ jobs:
           const syncBody = app.slice(syncStart, syncEnd);
           if (initStart < 0 || initEnd < 0 || syncStart < 0 || syncEnd < 0 || app.slice(0, initStart).includes('document.body.classList.remove("no-js");') || syncBody.lastIndexOf('document.body.classList.remove("no-js");') < syncBody.lastIndexOf('renderAll();')) throw new Error('App must remain gated until its first successful render');
           if (!app.includes('const revealPending = document.body.classList.contains("no-js");') || !app.includes('previousPage === route.page || revealPending') || !app.includes('pageChanged && !document.body.classList.contains("no-js")')) throw new Error('Initial deep-link focus must wait until the app is visible');
-          if (!styles.includes('.no-js .runtime-fallback { display: block; }') || !styles.includes('.data-error-state .runtime-fallback { display: none; }')) throw new Error('Runtime recovery panel must not compete with the data-error state');
+          if (!styles.includes('.no-js .runtime-fallback { display: none; }') || !styles.includes('.js-runtime.no-js .runtime-fallback { display: block; }') || !styles.includes('.data-error-state .runtime-fallback { display: none; }')) throw new Error('Runtime recovery panel must not compete with no-script or data-error states');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Dimensions are shown as length × span × height in meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey.')) throw new Error('Missing no-script dimensions or provenance note');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
