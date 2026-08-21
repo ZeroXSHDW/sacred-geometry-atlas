@@ -626,9 +626,11 @@
     $("#activeName").textContent = study.name;
     $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
     $("#activeStatus").textContent = studyStatus(study);
-    $("#activeSource").textContent = `${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
+    $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
+    $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
     $("#activeDescription").textContent = state.surface === "interior" ? study.interiorNote : study.exteriorNote;
+    $("#analysisReading").textContent = study.surfaceNote || study.exteriorNote || "No interpretive note supplied.";
     $("#metricSpan").textContent = `${number(study.span)} m`;
     $("#metricHeight").textContent = `${number(study.height)} m`;
     $("#metricRatio").textContent = `${number(ratio, 2)} : 1`;

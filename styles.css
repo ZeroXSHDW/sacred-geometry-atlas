@@ -362,7 +362,8 @@ h3 { letter-spacing: -0.04em; }
 .study-header h3 { margin-bottom: 0.35rem; font-size: clamp(1.45rem, 3vw, 2.6rem); line-height: 1.06; }
 .study-status { display: inline-flex; align-items: center; align-self: center; padding: 0.32rem 0.42rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); font-family: var(--mono); font-size: 0.49rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
 .study-meta { margin: 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.63rem; }
-.study-source { margin: 0.35rem 0 0; color: var(--ink-muted); font-size: 0.62rem; }
+.study-reference { margin: 0.35rem 0 0; color: var(--ink-soft); font-family: var(--serif); font-size: 0.72rem; font-style: italic; }
+.study-source { margin: 0.18rem 0 0; color: var(--ink-muted); font-size: 0.62rem; }
 .study-header-actions { display: flex; flex-direction: column; align-items: end; gap: 1.25rem; }
 .study-nav { display: inline-flex; gap: 0.35rem; }
 .study-nav button { display: grid; width: 29px; height: 25px; place-items: center; padding: 0; border: 1px solid var(--line-strong); color: var(--ink-soft); background: transparent; font-family: var(--mono); font-size: 0.85rem; line-height: 1; transition: 180ms ease; }
@@ -480,6 +481,7 @@ h3 { letter-spacing: -0.04em; }
 .analysis-kicker { margin-bottom: 0.35rem; color: var(--amber); font-size: 0.55rem; letter-spacing: 0.08em; }
 .analysis-heading h4 { margin: 0; color: var(--ink); font-size: 1rem; letter-spacing: -0.03em; }
 .equation { padding: 0.52rem 0.65rem; border: 1px solid rgba(233, 179, 108, 0.36); color: var(--amber); font-family: var(--mono); font-size: 0.62rem; white-space: nowrap; }
+.analysis-reading { max-width: 58rem; margin: 0 0 1rem; padding: 0.72rem 0.85rem; border-left: 2px solid var(--teal); color: var(--ink-soft); font-family: var(--serif); font-size: 0.85rem; line-height: 1.65; }
 .analysis-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-block: 1px solid var(--line); }
 .analysis-cell { min-height: 83px; padding: 0.85rem 0.75rem 0.7rem; border-right: 1px solid var(--line); }
 .analysis-cell:first-child { padding-left: 0; }
