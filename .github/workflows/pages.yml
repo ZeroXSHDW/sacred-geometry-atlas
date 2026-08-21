@@ -231,7 +231,7 @@ jobs:
           for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete']) {
             if (!styles.includes(token)) throw new Error('Download completion state is missing styling: ' + token);
           }
-          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}"']) {
+          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${studyDataLabel(study)} record"', 'module ${number(study.module)} meters; ${studyDataLabel(study)} record']) {
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
