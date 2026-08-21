@@ -1145,12 +1145,12 @@
 
   function catalogGlyph(study) {
     const glyphs = {
-      basilica: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="10" width="30" height="20"/><path d="M8 10V6h24v4M12 15h16M12 20h16M12 25h16"/><line class="soft" x1="20" y1="5" x2="20" y2="35"/></svg>',
-      gothic: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 30V15l5-5 5 5v15M23 30V15l5-5 5 5v15M5 30h30M12 10V5M28 10V5"/><path class="soft" d="M20 30V7M16 12h8"/></svg>',
-      central: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="12"/><path d="M20 4v32M4 20h32M12 12l16 16M28 12L12 28"/><circle class="soft" cx="20" cy="20" r="5"/></svg>',
-      baroque: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="20" rx="14" ry="10"/><rect x="8" y="14" width="24" height="12" rx="6"/><path class="soft" d="M20 6v28M6 20h28"/></svg>',
-      stave: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 31V13l6-6 7 6 7-6 6 6v18M5 31h30M10 13v18M20 13v18M30 13v18"/><path class="soft" d="M8 22h24"/></svg>',
-      modern: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 29L11 9l15 3 8 17H6Z"/><path class="soft" d="M11 9v20M18 11l4 18M26 12v17M6 25h28"/></svg>'
+      basilica: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect x="5" y="10" width="30" height="20"/><path d="M8 10V6h24v4M12 15h16M12 20h16M12 25h16"/><line class="soft" x1="20" y1="5" x2="20" y2="35"/></svg>',
+      gothic: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M7 30V15l5-5 5 5v15M23 30V15l5-5 5 5v15M5 30h30M12 10V5M28 10V5"/><path class="soft" d="M20 30V7M16 12h8"/></svg>',
+      central: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="12"/><path d="M20 4v32M4 20h32M12 12l16 16M28 12L12 28"/><circle class="soft" cx="20" cy="20" r="5"/></svg>',
+      baroque: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><ellipse cx="20" cy="20" rx="14" ry="10"/><rect x="8" y="14" width="24" height="12" rx="6"/><path class="soft" d="M20 6v28M6 20h28"/></svg>',
+      stave: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M7 31V13l6-6 7 6 7-6 6 6v18M5 31h30M10 13v18M20 13v18M30 13v18"/><path class="soft" d="M8 22h24"/></svg>',
+      modern: '<svg class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M6 29L11 9l15 3 8 17H6Z"/><path class="soft" d="M11 9v20M18 11l4 18M26 12v17M6 25h28"/></svg>'
     };
     return glyphs[study.type] || glyphs.basilica;
   }
