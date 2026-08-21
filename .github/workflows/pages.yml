@@ -172,6 +172,8 @@ jobs:
             if (!app.includes(token)) throw new Error('Missing human-readable geometry layer label: ' + token);
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
+          if (!html.includes('id="downloadComparison" type="button" aria-label="Download comparison data as CSV"') || !html.includes('id="comparisonDownloadStatus" role="status" aria-live="polite"')) throw new Error('Missing accessible comparison CSV export');
+          if (!app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing comparison CSV export behavior');
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }

@@ -457,6 +457,14 @@
 
         <details class="comparison-table-panel">
           <summary>Read dataset values as a table</summary>
+          <div class="comparison-table-actions">
+            <p>Export the current comparison scope for further analysis.</p>
+            <button class="share-button comparison-export" id="downloadComparison" type="button" aria-label="Download comparison data as CSV" title="Download comparison data as CSV">
+              <span aria-hidden="true">↓</span>
+              <span>CSV</span>
+            </button>
+          </div>
+          <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite"></span>
           <span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>
           <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table" aria-describedby="comparisonTableHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable">

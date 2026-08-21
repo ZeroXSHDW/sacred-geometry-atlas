@@ -415,6 +415,7 @@
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadStudy").addEventListener("click", downloadStudy);
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
+    $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
@@ -1301,6 +1302,61 @@
     anchor.remove();
     if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}.`;
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
+    window.setTimeout(() => URL.revokeObjectURL(url), 500);
+  }
+
+  function csvCell(value) {
+    return `"${String(value ?? "").replace(/"/g, '""')}"`;
+  }
+
+  function comparisonCsvPayload(comparison) {
+    const headers = [
+      "ID", "Study", "Typology", "Place", "Era", "Status", "Reference", "Source", "Source note",
+      "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
+      "Bay count", "Module (m)", "Radius (m)", "Symmetry index"
+    ];
+    const rows = comparison.map((study) => [
+      study.id,
+      studyShortName(study),
+      study.typology,
+      study.place,
+      study.era,
+      studyStatus(study),
+      study.churchName || study.name,
+      studySource(study),
+      studySourceNote(study),
+      number(study.length),
+      number(study.span),
+      number(study.length / study.span, 2),
+      number(study.height),
+      number(study.height / study.span, 2),
+      study.bayCount,
+      number(study.module),
+      number(study.radius),
+      number(study.symmetry, 2)
+    ]);
+    return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
+  }
+
+  function downloadComparisonCsv() {
+    const comparison = comparisonStudies();
+    const status = $("#comparisonDownloadStatus");
+    const button = $("#downloadComparison");
+    if (!comparison.length) {
+      if (status) status.textContent = "There are no comparison records to export.";
+      return;
+    }
+    const filename = "sacred-geometry-comparison.csv";
+    const blob = new Blob([`\uFEFF${comparisonCsvPayload(comparison)}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}.`;
+    temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 
