@@ -380,7 +380,7 @@
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
       if (event.target.closest("[data-clear-filters]")) {
-        clearCatalogFilters({ focus: true });
+        clearCatalogFilters({ resetSort: true, focus: true });
         return;
       }
       const chip = event.target.closest("[data-clear-filter]");
@@ -444,6 +444,7 @@
     if (state.filter !== "all") filters.push({ key: "filter", label: $("#filterSelect").selectedOptions[0].textContent });
     if (state.filterPlace !== "all") filters.push({ key: "place", label: $("#filterPlace").selectedOptions[0].textContent });
     if (state.filterStatus !== "all") filters.push({ key: "status", label: $("#filterStatus").selectedOptions[0].textContent });
+    if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });
     target.hidden = filters.length === 0;
     target.innerHTML = filters.length
       ? `${filters.map(({ key, label }) => `
@@ -460,7 +461,8 @@
       query: "#searchInput",
       filter: "#filterSelect",
       place: "#filterPlace",
-      status: "#filterStatus"
+      status: "#filterStatus",
+      sort: "#sortSelect"
     };
     const control = $(selectors[key] || selectors.query);
     if (control && typeof control.focus === "function") control.focus({ preventScroll: true });
@@ -493,6 +495,10 @@
     if (key === "status") {
       state.filterStatus = "all";
       $("#filterStatus").value = "all";
+    }
+    if (key === "sort") {
+      state.sort = "index";
+      $("#sortSelect").value = "index";
     }
     refreshCatalog();
     replaceCatalogRoute();
