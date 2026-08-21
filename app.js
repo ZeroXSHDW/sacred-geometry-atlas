@@ -698,7 +698,7 @@
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
     $("#activeDescription").textContent = studySurfaceReading(study) || "No interpretive reading supplied.";
-    $("#analysisReading").textContent = study.surfaceNote || study.exteriorNote || "No interpretive note supplied.";
+    $("#analysisReading").textContent = studySurfaceReading(study) || "No interpretive note supplied.";
     $("#metricLength").textContent = `${number(study.length)} m`;
     $("#metricSpan").textContent = `${number(study.span)} m`;
     $("#metricHeight").textContent = `${number(study.height)} m`;

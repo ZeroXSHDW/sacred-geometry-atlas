@@ -160,7 +160,7 @@ jobs:
           for (const token of ['role="img" aria-labelledby="drawing-title drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Reference:']) {
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
-          for (const token of ['const studySurfaceReading = (study) =>', '$("#activeDescription").textContent = studySurfaceReading(study)', 'const reading = studySurfaceReading(study);', 'Reading: ${reading || "No interpretive reading supplied."}']) {
+          for (const token of ['const studySurfaceReading = (study) =>', '$("#activeDescription").textContent = studySurfaceReading(study)', '$("#analysisReading").textContent = studySurfaceReading(study)', 'const reading = studySurfaceReading(study);', 'Reading: ${reading || "No interpretive reading supplied."}']) {
             if (!app.includes(token)) throw new Error('Drawing caption and SVG description must share the active surface reading: ' + token);
           }
           for (const token of ['const layerDisplayNames = {', 'measure: "dimensions"', 'const layerDisplayName = (layer) =>', 'const layerFocusLabel = () =>', 'layerFocusLabel()', 'layerDisplayName(state.layer)']) {
