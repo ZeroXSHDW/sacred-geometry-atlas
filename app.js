@@ -281,7 +281,7 @@
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
-        toggleCompare(compareToggle.dataset.compareId, { focus: event.detail === 0 });
+        toggleCompare(compareToggle.dataset.compareId, { focus: true });
         return;
       }
       const card = event.target.closest("[data-study-id]");
@@ -329,6 +329,7 @@
       renderCompare();
       if (state.page === "compare") replaceRoute("compare", false);
       if (hadSelection) announceKeyboard("Comparison selection cleared.");
+      focusCatalogControl("query");
     });
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#geometryCompare").addEventListener("click", (event) => {
