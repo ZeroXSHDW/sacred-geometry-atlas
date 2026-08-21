@@ -442,6 +442,7 @@
       renderCompare();
       if (state.page === "compare") replaceRoute("compare", false);
       commitComparisonRoute();
+      updateDocumentTitle(state.page);
       if (hadSelection) announceKeyboard("Comparison selection cleared.");
       focusCatalogControl("query");
     });
@@ -1446,6 +1447,7 @@
     renderCompare();
     if (state.page === "compare") replaceRoute("compare", false);
     commitComparisonRoute();
+    updateDocumentTitle(state.page);
     if (study) announceKeyboard(`${study.name} ${wasSelected ? "removed from" : "added to"} comparison. ${state.compareIds.length} selected.`);
     if (focus) focusCompareToggle(id);
   }
