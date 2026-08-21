@@ -1089,6 +1089,7 @@
 
     const nativeShareResult = await attemptNativeShare(sharePayload);
     if (nativeShareResult === "shared") {
+      temporaryButtonFeedback(button, "Shared", "Study shared", "Share study", "Share current study", "share-study");
       status.textContent = `${study.name} shared.`;
       return;
     }
@@ -1145,6 +1146,7 @@
 
     const nativeShareResult = await attemptNativeShare(sharePayload);
     if (nativeShareResult === "shared") {
+      temporaryButtonFeedback(button, "Shared", "Catalog view shared", "Share view", "Share current catalog view", "share-catalog");
       status.textContent = "Catalog view shared.";
       return;
     }
@@ -1183,6 +1185,7 @@
 
     const nativeShareResult = await attemptNativeShare(sharePayload);
     if (nativeShareResult === "shared") {
+      temporaryButtonFeedback(button, "Shared", "Comparison shared", "Share comparison", "Share this comparison", "share-comparison");
       status.textContent = "Comparison shared.";
       return;
     }

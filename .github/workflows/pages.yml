@@ -273,8 +273,8 @@ jobs:
             if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
           }
           if (!app.includes('try {\n        await navigator.clipboard.writeText(value);\n        return true;\n      } catch (error) {\n        // Continue with the textarea fallback if the permissioned API rejects.') || !app.includes('const previousFocus = document.activeElement;') || !app.includes('previousFocus.focus({ preventScroll: true });')) throw new Error('Copy fallback must handle clipboard rejection and restore initiating focus');
-          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"']) {
-            if (!app.includes(token)) throw new Error('Download actions must expose completion feedback: ' + token);
+          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
+            if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
           for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete']) {
             if (!styles.includes(token)) throw new Error('Download completion state is missing styling: ' + token);
@@ -564,6 +564,54 @@ jobs:
             throw new Error('Comparison tray did not clear its selected-study preview');
           }
           console.log('Comparison tray preview smoke test passed.');
+          NODE
+
+      - name: Smoke-test native share feedback
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const visibleLabel = { textContent: 'Share study' };
+          const classes = new Set();
+          const button = {
+            classList: {
+              add(name) { classes.add(name); },
+              remove(name) { classes.delete(name); }
+            },
+            querySelector(selector) { return selector === 'span:last-child' ? visibleLabel : null; },
+            setAttribute(name, value) { this[name] = value; }
+          };
+          const status = { textContent: '' };
+          elements.set('#shareStudy', button);
+          elements.set('#shareStatus', status);
+          const timers = [];
+          const context = {
+            URL,
+            navigator: { share: async () => {} },
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
+              clearTimeout() {},
+              setTimeout(callback) { timers.push(callback); return timers.length; },
+              addEventListener() {}
+            },
+            document: {
+              title: '',
+              body: { classList: { contains() { return false; } } },
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { shareStudy };\n})();');
+          vm.runInNewContext(app, context);
+          (async () => {
+            await context.window.__atlasTest.shareStudy();
+            if (status.textContent !== 'The longitudinal basilica shared.' || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared' || !classes.has('is-complete') || timers.length !== 1) {
+              throw new Error('Native share did not expose visible completion feedback');
+            }
+            console.log('Native share feedback smoke test passed.');
+          })().catch((error) => { throw error; });
           NODE
 
   deploy:
