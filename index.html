@@ -315,41 +315,41 @@
             Compare the studies by the relationships that make a room feel directional, centered,
             compressed, or immense. The values are normalized from each schematic model.
           </p>
-          <div class="compare-callout"><span id="compareScope">Full collection</span><strong>R = L ÷ W</strong><small>length-to-width ratio</small></div>
+          <div class="compare-callout"><span id="compareScope" role="status" aria-live="polite">Full collection</span><strong>R = L ÷ W</strong><small>length-to-width ratio</small></div>
         </div>
 
-        <p class="compare-helper" id="compareHelper">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
+        <p class="compare-helper" id="compareHelper" role="status" aria-live="polite">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
 
         <div class="comparison-grid">
-          <div class="comparison-card wide-card geometry-compare-card">
+          <div class="comparison-card wide-card geometry-compare-card" role="region" aria-labelledby="geometry-compare-heading">
             <div class="card-heading">
-              <div><span class="card-kicker">00 / selected geometry</span><h3>Side-by-side envelopes</h3></div>
+              <div><span class="card-kicker">00 / selected geometry</span><h3 id="geometry-compare-heading">Side-by-side envelopes</h3></div>
               <span class="card-symbol">□</span>
             </div>
-            <div class="geometry-compare-grid" id="geometryCompare"></div>
+            <div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Schematic study envelopes"></div>
           </div>
-          <div class="comparison-card">
+          <div class="comparison-card" role="region" aria-labelledby="ratio-chart-heading">
             <div class="card-heading">
-              <div><span class="card-kicker">01 / linearity</span><h3>Length : span</h3></div>
+              <div><span class="card-kicker">01 / linearity</span><h3 id="ratio-chart-heading">Length : span</h3></div>
               <span class="card-symbol">↔</span>
             </div>
-            <div class="bar-chart" id="ratioChart"></div>
+            <div class="bar-chart" id="ratioChart" role="list" aria-label="Length to span ratios"></div>
             <p class="chart-note">A higher ratio reinforces a long processional reading.</p>
           </div>
-          <div class="comparison-card">
+          <div class="comparison-card" role="region" aria-labelledby="height-chart-heading">
             <div class="card-heading">
-              <div><span class="card-kicker">02 / verticality</span><h3>Height : span</h3></div>
+              <div><span class="card-kicker">02 / verticality</span><h3 id="height-chart-heading">Height : span</h3></div>
               <span class="card-symbol">↕</span>
             </div>
-            <div class="bar-chart" id="heightChart"></div>
+            <div class="bar-chart" id="heightChart" role="list" aria-label="Height to span ratios"></div>
             <p class="chart-note">Vertical emphasis is measured against the widest enclosing dimension.</p>
           </div>
-          <div class="comparison-card wide-card">
+          <div class="comparison-card wide-card" role="region" aria-labelledby="module-chart-heading">
             <div class="card-heading">
-              <div><span class="card-kicker">03 / repetition</span><h3>Module and bay rhythm</h3></div>
+              <div><span class="card-kicker">03 / repetition</span><h3 id="module-chart-heading">Module and bay rhythm</h3></div>
               <span class="card-symbol">∷</span>
             </div>
-            <div class="module-chart" id="moduleChart"></div>
+            <div class="module-chart" id="moduleChart" role="list" aria-label="Bay rhythm and module sizes"></div>
             <p class="chart-note">Each line is one notional bay; length shows its module in meters.</p>
           </div>
         </div>

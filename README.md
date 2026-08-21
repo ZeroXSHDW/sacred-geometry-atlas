@@ -23,7 +23,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Print-friendly atlas output for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static validation before GitHub Pages deployment.
-- Responsive layout, keyboard focus states, view-change focus management, skip navigation, live status feedback, and a no-script message.
+- Responsive layout, keyboard focus states, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script message.
 
 ### Keyboard shortcuts
 
