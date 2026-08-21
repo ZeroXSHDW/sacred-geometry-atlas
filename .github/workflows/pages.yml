@@ -30,6 +30,7 @@ jobs:
           test -s 404.html
           test -s styles.css
           test -s data/geometry.json
+          test -f .nojekyll
           test -s og.png
           test -s favicon.svg
           node - <<'NODE'
@@ -88,7 +89,7 @@ jobs:
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
-          for (const token of ['From this already initialized checkout', 'git add .', 'favicon.svg', 'The `git add .` command includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');

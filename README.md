@@ -55,14 +55,19 @@ Then open <http://localhost:8000>.
 ## Publish on GitHub Pages
 
 1. Create an empty repository on GitHub.
-2. From this already initialized checkout, stage and push the project:
+2. From this already initialized checkout, point the existing history at the new repository and push it:
 
 ```bash
-git add .
-git commit -m "Build Sacred Geometry Atlas"
 git branch -M main
 git remote add origin https://github.com/YOUR-ACCOUNT/YOUR-REPOSITORY.git
 git push -u origin main
+```
+
+If `git status` shows local changes you want to publish first, commit them before the push:
+
+```bash
+git add .
+git commit -m "Update Sacred Geometry Atlas"
 ```
 
 3. In the repository, open **Settings → Pages** and set the source to **GitHub Actions** if GitHub has not enabled it automatically.
@@ -70,7 +75,7 @@ git push -u origin main
 
 The included `og.png` is referenced with a same-site relative path so it works from a repository subpath. If a social crawler requires an absolute image URL, replace the `og:image` and `twitter:image` values in `index.html` with the final GitHub Pages URL after publishing.
 
-The `git add .` command includes the Pages workflow, `.nojekyll`, `favicon.svg`, the social preview, and the committed data artifacts required by the site.
+The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, the social preview, and the data artifacts required by the site.
 
 ## Add real churches
 
