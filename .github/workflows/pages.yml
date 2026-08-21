@@ -155,7 +155,7 @@ jobs:
           for (const token of ['data-surface="exterior" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-mode="plan" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-layer="all" type="button" aria-pressed="true" aria-controls="geometryCanvas"']) {
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
           }
-          if (!html.includes('aria-keyshortcuts="J"')) throw new Error('Missing keyboard shortcut metadata');
+          if (!html.includes('aria-keyshortcuts="J"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="C"') || !html.includes('<kbd>C</kbd>') || !html.includes('Open focused comparison') || !app.includes('if (key === "c")') || !app.includes('showPage("compare");') || !app.includes('Select at least two studies to open comparison.')) throw new Error('Missing comparison keyboard shortcut guidance');
           for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom" aria-controls="geometryCanvas"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true" aria-label="06 of 06 studies; the full collection."']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
@@ -177,7 +177,7 @@ jobs:
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
           if (!html.includes('<button class="share-button compare-edit-button" id="editCompare" type="button" aria-controls="atlas" aria-label="Edit comparison selection in Atlas"') || !app.includes('$("#editCompare").addEventListener("click", () => showPage("atlas"));') || !app.includes('const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";') || !app.includes('editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";')) throw new Error('Comparison view must provide a context-aware Atlas edit action');
           if (!html.includes('<div class="compare-selection" id="compareSelection" role="group" aria-labelledby="compareSelectionHeading" hidden>') || !html.includes('id="clearCompareView" type="button"') || !app.includes('function renderCompareSelection()') || !app.includes('data-remove-compare-id') || !app.includes('function removeComparisonStudy(id)') || !app.includes('clearComparisonSelection({ focus: true })') || !app.includes('const control = state.page === "compare" ? $("#editCompare") : $("#searchInput");') || !app.includes('next.focus({ preventScroll: true })') || !styles.includes('.compare-selection-chip')) throw new Error('Focused comparison selection controls are incomplete');
-          if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-label="Compare selected studies (select at least two)"')) throw new Error('Comparison tray controls must have useful initial labels');
+          if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="C" aria-label="Compare selected studies (select at least two)"')) throw new Error('Comparison tray controls must have useful initial labels');
           for (const token of ['const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;', 'open.setAttribute("aria-label", compareLabel);', 'clear.setAttribute("aria-label", clearLabel);']) {
             if (!app.includes(token)) throw new Error('Comparison tray labels must reflect selection state: ' + token);
           }
@@ -382,17 +382,26 @@ jobs:
           node - <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
+          const keyboardStatus = { textContent: '' };
           const context = {
             URL,
             window: {
               location: { href: 'https://example.test/atlas/?q=central%20plan#atlas/basilica/plan/exterior/all' }
             },
-            document: { body: { classList: { remove() {} } } }
+            document: {
+              body: { classList: { remove() {} } },
+              querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : null; }
+            }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, handleKeyboard } = context.window.__atlasTest;
+          let prevented = false;
+          state.page = 'atlas';
+          state.compareIds = [];
+          handleKeyboard({ key: 'c', target: { tagName: 'body', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+          if (!prevented || keyboardStatus.textContent !== 'Select at least two studies to open comparison.') throw new Error('Comparison shortcut must explain when more selection is needed');
           state.mode = 'section';
           state.surface = 'interior';
           state.layer = 'axis';

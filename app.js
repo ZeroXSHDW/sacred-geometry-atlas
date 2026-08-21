@@ -680,6 +680,12 @@
       focusCatalogControl("query", { preventScroll: false });
       return;
     }
+    if (key === "c") {
+      event.preventDefault();
+      if (state.compareIds.length >= 2) showPage("compare");
+      else announceKeyboard("Select at least two studies to open comparison.");
+      return;
+    }
     if (key === "j" || key === "k") {
       event.preventDefault();
       cycleStudy(key === "j" ? 1 : -1, { scroll: false, focus: true });
