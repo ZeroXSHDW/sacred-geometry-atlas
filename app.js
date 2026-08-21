@@ -37,7 +37,7 @@
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.emphasis}; ${studyStatus(study)}.`;
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.emphasis}; ${studyStatusDescription(study)}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1502,7 +1502,7 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}; ${escapeHtml(studyStatus(study))}. Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}; ${studyStatusDescription(study)} Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
@@ -1555,7 +1555,7 @@
     const surface = state.surface === "interior" ? "Interior" : "Exterior";
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const reading = studySurfaceReading(study);
-    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name}. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatus(study)}. Reference: ${study.churchName || study.name}.`;
+    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name}. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>

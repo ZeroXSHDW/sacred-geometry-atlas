@@ -166,12 +166,12 @@ jobs:
           if (!html.includes('<svg viewBox="0 0 360 260" role="img" focusable="false">')) throw new Error('Missing decorative method SVG focus guard');
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');
           if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
-          for (const token of ['function comparisonStudyAriaLabel', 'Dimensions:', 'study.typology)} study at', 'studyStatus(study))}.', 'with a span of ${number(study.span)} meters']) {
+          for (const token of ['function comparisonStudyAriaLabel', 'Dimensions:', 'study.typology)} study at', 'studyStatusDescription(study)', 'with a span of ${number(study.span)} meters']) {
             if (!app.includes(token)) throw new Error('Comparison study labels must retain context: ' + token);
           }
           if (app.includes('meters wide')) throw new Error('Comparison study labels must use span terminology');
           if (!app.includes('role="img" aria-labelledby="drawing-title drawing-description" focusable="false"')) throw new Error('Drawing SVG must not become keyboard focusable');
-          for (const token of ['role="img" aria-labelledby="drawing-title drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Reference:']) {
+          for (const token of ['role="img" aria-labelledby="drawing-title drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Status: ${studyStatusDescription(study)}', 'Reference:']) {
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
           for (const token of ['const studySurfaceReading = (study) =>', '$("#activeDescription").textContent = studySurfaceReading(study)', '$("#analysisReading").textContent = studySurfaceReading(study)', 'const reading = studySurfaceReading(study);', 'Reading: ${reading || "No interpretive reading supplied."}']) {
