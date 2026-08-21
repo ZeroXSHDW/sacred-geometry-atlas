@@ -137,6 +137,8 @@
       : [];
     return {
       page,
+      requestedPage,
+      requestedStudy,
       studyId,
       mode: validModes.has(requestedMode) ? requestedMode : null,
       surface: validSurfaces.has(requestedSurface) ? requestedSurface : null,
@@ -242,6 +244,7 @@
     let normalizedStudyRoute = false;
     let includeStudyInNormalizedRoute = true;
     let normalizedCompareRoute = false;
+    let normalizedPageRoute = false;
     if (route.studyId) {
       state.activeId = route.studyId;
       state.mode = route.mode || "plan";
@@ -254,13 +257,24 @@
     }
     if (route.page === "atlas") {
       const visible = visibleStudies();
-      if (!visible.length && route.studyId) {
+      const hasRequestedStudy = Boolean(route.requestedStudy);
+      if (route.requestedPage !== route.page || (hasRequestedStudy && !route.studyId)) {
+        normalizedStudyRoute = window.location.hash.length > 0;
+        includeStudyInNormalizedRoute = false;
+      } else if (!visible.length && route.studyId) {
         normalizedStudyRoute = true;
         includeStudyInNormalizedRoute = false;
       } else if (visible.length && !visible.some((study) => study.id === state.activeId)) {
         state.activeId = visible[0].id;
         normalizedStudyRoute = Boolean(route.studyId);
+      } else if (route.studyId && window.location.hash !== routeHash("atlas", true)) {
+        normalizedStudyRoute = true;
+      } else if (!route.requestedStudy && window.location.hash.length > 0 && window.location.hash !== routeHash("atlas", false)) {
+        normalizedStudyRoute = true;
+        includeStudyInNormalizedRoute = false;
       }
+    } else if (route.page !== "compare") {
+      normalizedPageRoute = window.location.hash.length > 0 && window.location.hash !== routeHash(route.page, false);
     }
     showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
     renderAll();
@@ -271,6 +285,10 @@
     if (normalizedCompareRoute) {
       replaceRoute("compare", false);
       updateDocumentTitle("compare");
+    }
+    if (normalizedPageRoute) {
+      replaceRoute(route.page, false);
+      updateDocumentTitle(route.page);
     }
     if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute) {
       announceStudy(activeStudy(), visibleStudies().length);
