@@ -307,7 +307,7 @@ jobs:
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
           if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
-          if (!app.includes('function downloadStudy()') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing active-study JSON export');
+          if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware active-study JSON export');
           const catalogExportStart = app.indexOf('function downloadCatalogView()');
           const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
           const catalogExport = app.slice(catalogExportStart, catalogExportEnd);
@@ -598,9 +598,9 @@ jobs:
             navigator: {}
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCsvPayload };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCsvPayload, activeStudyExportPayload };\n})();');
           vm.runInNewContext(app, context);
-          const { state, comparisonStudies, comparisonCsvPayload } = context.window.__atlasTest;
+          const { state, comparisonStudies, comparisonCsvPayload, activeStudyExportPayload } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic'];
           const focusedCsv = comparisonCsvPayload(comparisonStudies());
           if (!focusedCsv.includes('"Floor area estimate (m²)","Volume estimate (m³)","Volume basis","Symmetry index","Scope","Route"') || !focusedCsv.includes('"1276","14239","Bounding area × height × 0.62"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic"')) {
@@ -612,6 +612,15 @@ jobs:
           const missingEstimateStudy = { ...context.window.CHURCH_GEOMETRY[0], floorAreaEstimate: undefined, volumeEstimate: undefined, volumeBasis: undefined };
           const missingEstimateCsv = comparisonCsvPayload([missingEstimateStudy]);
           if (!missingEstimateCsv.includes('"11.0","","","","1.00"')) throw new Error('Comparison CSV did not leave optional estimate fields explicitly blank');
+          state.activeId = 'basilica';
+          state.mode = 'section';
+          state.surface = 'interior';
+          state.layer = 'axis';
+          state.zoom = 1.3;
+          const studyExport = activeStudyExportPayload(context.window.CHURCH_GEOMETRY[0]);
+          if (studyExport.view.route !== 'https://example.test/atlas/#atlas/basilica/section/interior/axis/1.3' || studyExport.derived.boundingArea !== 1276 || studyExport.derived.volumeEstimate !== 14239 || studyExport.derived.ratios.lengthToSpan !== 58 / 22 || studyExport.derived.readingProfile.radiality !== 48) throw new Error('Active-study JSON did not preserve view state and derived readings');
+          const missingStudyExport = activeStudyExportPayload(missingEstimateStudy);
+          if (missingStudyExport.derived.floorAreaEstimate !== null || missingStudyExport.derived.volumeEstimate !== null || missingStudyExport.derived.volumeBasis !== 'No estimate supplied') throw new Error('Active-study JSON did not make missing estimates explicit');
           console.log('Comparison export context smoke test passed.');
           NODE
 

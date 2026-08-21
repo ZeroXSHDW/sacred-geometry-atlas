@@ -33,7 +33,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis/1.3` (the optional final segment restores 130% drawing zoom), focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; selected comparison studies persist in the Atlas URL and browser history restores the selected context. Partial or malformed study links and catalog parameters are canonicalized to valid defaults.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
-- Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
+- Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state and derived readings, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.

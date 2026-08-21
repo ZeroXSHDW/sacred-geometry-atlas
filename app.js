@@ -980,6 +980,26 @@
     ];
   }
 
+  function derivedStudyReadings(study) {
+    const hasFloorAreaEstimate = Number.isFinite(study.floorAreaEstimate) && study.floorAreaEstimate > 0;
+    const hasVolumeEstimate = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0;
+    const volume = volumeReading(study);
+    return {
+      floorAreaEstimate: hasFloorAreaEstimate ? study.floorAreaEstimate : null,
+      boundingArea: study.floorAreaEstimate || study.length * study.span,
+      ratios: {
+        lengthToSpan: study.length / study.span,
+        heightToSpan: study.height / study.span,
+        moduleToSpan: study.module / study.span
+      },
+      radialReach: study.radius,
+      symmetryIndex: study.symmetry,
+      volumeEstimate: hasVolumeEstimate ? study.volumeEstimate : null,
+      volumeBasis: volume.basis,
+      readingProfile: Object.fromEntries(profileScores(study).map(([label, score]) => [label, score]))
+    };
+  }
+
   function renderControls() {
     $$('[data-surface]').forEach((button) => {
       const selected = button.dataset.surface === state.surface;
@@ -1341,22 +1361,8 @@
     const status = $("#studyDownloadStatus");
     const button = $("#downloadStudy");
     if (!study) return;
-    const shareUrl = clearCatalogParams(new URL(window.location.href));
-    shareUrl.hash = routeHash("atlas", true);
     const filename = `${study.id}-sacred-geometry-study.json`;
-    const payload = JSON.stringify({
-      title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
-      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
-      view: {
-        studyId: study.id,
-        surface: state.surface,
-        mode: state.mode,
-        layer: state.layer,
-        zoom: state.zoom,
-        route: shareUrl.href
-      },
-      study
-    }, null, 2);
+    const payload = JSON.stringify(activeStudyExportPayload(study), null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -1368,6 +1374,25 @@
     if (status) status.textContent = `Active study exported as ${filename}.`;
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
+  }
+
+  function activeStudyExportPayload(study) {
+    const shareUrl = clearCatalogParams(new URL(window.location.href));
+    shareUrl.hash = routeHash("atlas", true);
+    return {
+      title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
+      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      view: {
+        studyId: study.id,
+        surface: state.surface,
+        mode: state.mode,
+        layer: state.layer,
+        zoom: state.zoom,
+        route: shareUrl.href
+      },
+      derived: derivedStudyReadings(study),
+      study
+    };
   }
 
   function downloadData() {
