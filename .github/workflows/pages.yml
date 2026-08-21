@@ -160,6 +160,7 @@ jobs:
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
+          if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');

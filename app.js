@@ -573,10 +573,10 @@
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();
-      updateDocumentTitle("atlas");
       if (state.page === "atlas") replaceRoute("atlas");
       announceStudy(activeStudy(), visible.length);
     }
+    updateDocumentTitle("atlas");
     updateCompareTray();
   }
 
