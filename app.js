@@ -30,6 +30,7 @@
   const validSurfaces = new Set(["exterior", "interior"]);
   const validLayers = new Set(["all", "envelope", "rhythm", "axis", "measure"]);
   let shareResetTimer;
+  let compareShareResetTimer;
   let citationResetTimer;
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
@@ -72,12 +73,17 @@
     const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
       : null;
+    const requestedCompareIds = requestedStudy ? requestedStudy.split(",") : [];
+    const compareIds = page === "compare"
+      ? [...new Set(requestedCompareIds.filter((id) => studies.some((study) => study.id === id)))]
+      : [];
     return {
       page,
       studyId,
       mode: validModes.has(requestedMode) ? requestedMode : null,
       surface: validSurfaces.has(requestedSurface) ? requestedSurface : null,
-      layer: validLayers.has(requestedLayer) ? requestedLayer : null
+      layer: validLayers.has(requestedLayer) ? requestedLayer : null,
+      compareIds: compareIds.length >= 2 ? compareIds : []
     };
   }
 
@@ -85,19 +91,22 @@
     if (page === "atlas" && includeStudy && state.activeId) {
       return `#atlas/${encodeURIComponent(state.activeId)}/${state.mode}/${state.surface}/${state.layer}`;
     }
+    if (page === "compare" && state.compareIds.length >= 2) {
+      return `#compare/${state.compareIds.map((id) => encodeURIComponent(id)).join(",")}`;
+    }
     return `#${page}`;
   }
 
   function updateRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     if (window.location.hash === nextHash) return;
-    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null }, "", nextHash);
+    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", nextHash);
   }
 
   function replaceRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     if (window.location.hash === nextHash) return;
-    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null }, "", nextHash);
+    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", nextHash);
   }
 
   function syncFromHash() {
@@ -106,6 +115,7 @@
     if (route.mode) state.mode = route.mode;
     if (route.surface) state.surface = route.surface;
     if (route.layer) state.layer = route.layer;
+    if (route.page === "compare") state.compareIds = route.compareIds;
     showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
     renderAll();
     if (route.page === "atlas" && route.studyId) {
@@ -208,6 +218,7 @@
       renderList();
       updateCompareTray();
       renderCompare();
+      if (state.page === "compare") replaceRoute("compare", false);
     });
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#geometryCompare").addEventListener("click", (event) => {
@@ -218,6 +229,7 @@
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
+    $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
@@ -619,6 +631,48 @@
     }
   }
 
+  async function shareComparison() {
+    const button = $("#shareCompare");
+    const status = $("#compareShareStatus");
+    if (!button || !status) return;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = routeHash("compare", false);
+    const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
+    const selectionLabel = selected.length
+      ? selected.map((study) => studyShortName(study)).join(", ")
+      : "the full collection";
+    const sharePayload = {
+      title: "Sacred Geometry Atlas comparison",
+      text: `Compare ${selectionLabel} in the Sacred Geometry Atlas.`,
+      url: shareUrl.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(sharePayload);
+        status.textContent = "Comparison shared.";
+      } catch (error) {
+        if (error.name !== "AbortError") status.textContent = "Sharing was unavailable. You can copy the comparison URL from the address bar.";
+      }
+      return;
+    }
+
+    const copied = await copyText(shareUrl.href);
+    if (copied) {
+      const label = button.querySelector("span:last-child");
+      button.classList.add("is-copied");
+      if (label) label.textContent = "Link copied";
+      status.textContent = "A shareable comparison link was copied.";
+      window.clearTimeout(compareShareResetTimer);
+      compareShareResetTimer = window.setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (label) label.textContent = "Share comparison";
+      }, 2200);
+    } else {
+      status.textContent = "Copying was unavailable. You can copy the comparison URL from the address bar.";
+    }
+  }
+
   function citationText(study) {
     const citationUrl = new URL(window.location.href);
     citationUrl.hash = routeHash("atlas", true);
@@ -730,6 +784,7 @@
     renderList();
     updateCompareTray();
     renderCompare();
+    if (state.page === "compare") replaceRoute("compare", false);
   }
 
   function updateCompareTray() {

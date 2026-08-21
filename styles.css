@@ -478,6 +478,7 @@ h3 { letter-spacing: -0.04em; }
 .page-view { border-top: 1px solid var(--line); }
 .compare-intro { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; }
 .compare-intro > p { max-width: 39rem; margin-bottom: 0; color: var(--ink-soft); line-height: 1.75; }
+.compare-intro-side { display: grid; justify-items: end; gap: 0.7rem; }
 .compare-callout { display: grid; min-width: 150px; padding: 0.9rem 1rem; border: 1px solid var(--amber); background: var(--amber-soft); }
 .compare-callout span, .compare-callout small { color: var(--amber); font-family: var(--mono); font-size: 0.54rem; text-transform: uppercase; }
 .compare-callout strong { margin: 0.2rem 0; color: var(--ink); font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
@@ -600,7 +601,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .analysis-cell:nth-child(5) { padding-left: 0; }
   .profile-row { grid-template-columns: repeat(2, 1fr); gap: 0.8rem 1rem; }
   .compare-intro { display: block; }
-  .compare-callout { width: fit-content; margin-top: 1.3rem; }
+  .compare-intro-side { justify-items: start; margin-top: 1.3rem; }
+  .compare-callout { width: fit-content; margin-top: 0; }
   .compare-helper { margin-top: -0.4rem; }
   .comparison-grid { grid-template-columns: 1fr; }
   .wide-card { grid-column: auto; }

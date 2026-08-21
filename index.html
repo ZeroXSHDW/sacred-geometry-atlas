@@ -340,7 +340,14 @@
             Compare the studies by the relationships that make a room feel directional, centered,
             compressed, or immense. The values are normalized from each schematic model.
           </p>
-          <div class="compare-callout"><span id="compareScope" role="status" aria-live="polite">Full collection</span><strong>R = L ÷ W</strong><small>length-to-width ratio</small></div>
+          <div class="compare-intro-side">
+            <div class="compare-callout"><span id="compareScope" role="status" aria-live="polite">Full collection</span><strong>R = L ÷ W</strong><small>length-to-width ratio</small></div>
+            <button class="share-button compare-share-button" id="shareCompare" type="button" aria-label="Share this comparison" title="Share this comparison">
+              <span aria-hidden="true">↗</span>
+              <span>Share comparison</span>
+            </button>
+            <span class="sr-only" id="compareShareStatus" role="status" aria-live="polite"></span>
+          </div>
         </div>
 
         <p class="compare-helper" id="compareHelper" role="status" aria-live="polite">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
