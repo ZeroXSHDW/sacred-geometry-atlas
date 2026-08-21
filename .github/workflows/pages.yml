@@ -127,6 +127,7 @@ jobs:
           if (!html.includes('<span class="metric-label">overall length</span>') || !html.includes('id="metricLength"')) throw new Error('Primary dimension group must expose overall length');
           if (!html.includes('<option value="length">Length · longest first</option>') || !html.includes('<option value="name">Name · A–Z</option>')) throw new Error('Catalog must expose direction-aware sorting');
           if (!html.includes('id="activeReference"')) throw new Error('Missing visible study reference');
+          if (!html.includes('<span class="study-status" id="activeStatus" aria-describedby="activeStatusHelp" title="Schematic data uses illustrative proportions.">SCHEMATIC</span><span class="sr-only" id="activeStatusHelp">Schematic data uses illustrative proportions.</span>') || !app.includes('const studyStatusDescription = (study) =>') || !app.includes('activeStatusHelp.textContent = studyStatusDescription(study);') || !app.includes('activeStatus.title = studyStatusDescription(study);')) throw new Error('Active study status must explain its provenance');
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
           if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
           if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');

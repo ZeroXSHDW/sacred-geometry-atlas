@@ -25,6 +25,9 @@
   const MAX_ZOOM = 1.6;
   const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
   const studyStatus = (study) => study.status || "schematic";
+  const studyStatusDescription = (study) => studyStatus(study) === "measured"
+    ? "Measured data uses source-supported dimensions."
+    : "Schematic data uses illustrative proportions.";
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
@@ -840,7 +843,13 @@
     $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
     $("#activeName").textContent = study.name;
     $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
-    $("#activeStatus").textContent = studyStatus(study);
+    const activeStatus = $("#activeStatus");
+    if (activeStatus) {
+      activeStatus.textContent = studyStatus(study);
+      activeStatus.title = studyStatusDescription(study);
+    }
+    const activeStatusHelp = $("#activeStatusHelp");
+    if (activeStatusHelp) activeStatusHelp.textContent = studyStatusDescription(study);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
