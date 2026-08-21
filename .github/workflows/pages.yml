@@ -85,6 +85,8 @@ jobs:
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
           if (!html.includes('<h1 id="noscript-heading">')) throw new Error('No-JS fallback must provide the page heading');
+          if (!html.includes('<a class="skip-link skip-link-app" href="#main-content">Skip to content</a>')) throw new Error('Missing interactive skip link');
+          if (!html.includes('<a class="skip-link skip-link-noscript" href="#noscript-heading">Skip to collection</a>')) throw new Error('Missing no-JS skip link');
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root')) throw new Error('Missing GitHub Pages root navigation');
@@ -140,6 +142,7 @@ jobs:
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
+          if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
           if (!styles.includes('.analysis-reading')) throw new Error('Missing interpretive reading style');
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {

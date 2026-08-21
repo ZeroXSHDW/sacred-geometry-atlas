@@ -121,6 +121,9 @@ summary:focus-visible {
   transform: translateY(-150%);
 }
 
+.skip-link-noscript { display: none; }
+.no-js .skip-link-app { display: none; }
+.no-js .skip-link-noscript { display: block; }
 .skip-link:focus { transform: translateY(0); }
 
 .site-header,
