@@ -165,6 +165,7 @@ jobs:
           if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>')) throw new Error('Missing visual empty state');
           if (!html.includes('id="clearVisualFilters" type="button"')) throw new Error('Missing visual empty-state recovery action');
           if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
+          if (!html.includes('<section class="method-readings" aria-labelledby="derived-readings-heading">') || !html.includes('id="derived-readings-heading"') || !html.includes('Bounding area') || !html.includes('Reading profile') || !styles.includes('.method-readings-grid')) throw new Error('Method view must explain derived readings');
           if (!html.includes('data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Dimensions</button>')) throw new Error('Dimension layer must use clear schematic terminology');
           if (!html.includes('<div class="metric-strip" role="group" aria-label="Primary dimensions">')) throw new Error('Primary dimension group must use clear schematic terminology');
           if (!html.includes('<span class="metric-label">overall length</span>') || !html.includes('id="metricLength"')) throw new Error('Primary dimension group must expose overall length');

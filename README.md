@@ -36,6 +36,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state and derived readings, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
+- A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with a direct route to the static dataset.
