@@ -646,10 +646,11 @@
   }
 
   function emptyCatalogMessage() {
-    const hasCatalogFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterStatus !== "all";
+    const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all";
+    const hasCatalogFilters = hasSecondaryFilters || state.filterStatus !== "all";
     if (state.query && hasCatalogFilters) return `No studies match “${state.query}” within the selected catalog filters.`;
     if (state.query) return `No studies match “${state.query}”.`;
-    if (state.filterStatus === "measured") return "No measured studies are in the atlas yet.";
+    if (state.filterStatus === "measured" && !hasSecondaryFilters) return "No measured studies are in the atlas yet.";
     if (hasCatalogFilters) return "No studies match the selected catalog filters.";
     return "No studies are available in the current catalog view.";
   }
