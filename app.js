@@ -31,6 +31,9 @@
   const validModes = new Set(["plan", "elevation", "section"]);
   const validSurfaces = new Set(["exterior", "interior"]);
   const validLayers = new Set(["all", "envelope", "rhythm", "axis", "measure"]);
+  const validStatuses = new Set(["all", "schematic", "measured"]);
+  const validSorts = new Set(["index", "height", "span", "ratio", "symmetry", "name"]);
+  const catalogParamKeys = ["q", "typology", "place", "status", "sort"];
   let shareResetTimer;
   let compareShareResetTimer;
   let citationResetTimer;
@@ -89,6 +92,66 @@
     };
   }
 
+  function syncCatalogControls() {
+    $("#searchInput").value = state.query;
+    $("#filterSelect").value = state.filter;
+    $("#filterPlace").value = state.filterPlace;
+    $("#filterStatus").value = state.filterStatus;
+    $("#sortSelect").value = state.sort;
+  }
+
+  function syncCatalogFromUrl() {
+    const params = new URL(window.location.href).searchParams;
+    const typologies = new Set(studies.map((study) => study.typology));
+    const places = new Set(studies.map((study) => study.place));
+    const requestedQuery = params.get("q");
+    const requestedTypology = params.get("typology");
+    const requestedPlace = params.get("place");
+    const requestedStatus = params.get("status");
+    const requestedSort = params.get("sort");
+    state.query = requestedQuery ? requestedQuery.trim().toLowerCase() : "";
+    state.filter = typologies.has(requestedTypology) ? requestedTypology : "all";
+    state.filterPlace = places.has(requestedPlace) ? requestedPlace : "all";
+    state.filterStatus = validStatuses.has(requestedStatus) ? requestedStatus : "all";
+    state.sort = validSorts.has(requestedSort) ? requestedSort : "index";
+    syncCatalogControls();
+  }
+
+  function navigationUrl(nextHash) {
+    const url = new URL(window.location.href);
+    url.hash = nextHash;
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  function replaceCatalogRoute() {
+    const current = new URL(window.location.href);
+    const url = new URL(current.href);
+    const values = {
+      q: state.query,
+      typology: state.filter === "all" ? "" : state.filter,
+      place: state.filterPlace === "all" ? "" : state.filterPlace,
+      status: state.filterStatus === "all" ? "" : state.filterStatus,
+      sort: state.sort === "index" ? "" : state.sort
+    };
+    catalogParamKeys.forEach((key) => {
+      if (values[key]) url.searchParams.set(key, values[key]);
+      else url.searchParams.delete(key);
+    });
+    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+    const currentUrl = `${current.pathname}${current.search}${current.hash}`;
+    if (nextUrl === currentUrl) return;
+    window.history.replaceState({
+      page: state.page,
+      studyId: state.page === "atlas" ? state.activeId : null,
+      compareIds: state.page === "compare" ? [...state.compareIds] : []
+    }, "", nextUrl);
+  }
+
+  function clearCatalogParams(url) {
+    catalogParamKeys.forEach((key) => url.searchParams.delete(key));
+    return url;
+  }
+
   function routeHash(page, includeStudy) {
     if (page === "atlas" && includeStudy && state.activeId) {
       return `#atlas/${encodeURIComponent(state.activeId)}/${state.mode}/${state.surface}/${state.layer}`;
@@ -102,22 +165,27 @@
   function updateRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     if (window.location.hash === nextHash) return;
-    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", nextHash);
+    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", navigationUrl(nextHash));
   }
 
   function replaceRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     if (window.location.hash === nextHash) return;
-    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", nextHash);
+    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", navigationUrl(nextHash));
   }
 
   function syncFromHash() {
+    syncCatalogFromUrl();
     const route = parseRoute();
     if (route.studyId) state.activeId = route.studyId;
     if (route.mode) state.mode = route.mode;
     if (route.surface) state.surface = route.surface;
     if (route.layer) state.layer = route.layer;
     if (route.page === "compare") state.compareIds = route.compareIds;
+    if (route.page === "atlas" && !route.studyId) {
+      const visible = visibleStudies();
+      if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
+    }
     showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
     renderAll();
     if (route.page === "atlas" && route.studyId) {
@@ -154,23 +222,28 @@
     $("#searchInput").addEventListener("input", (event) => {
       state.query = event.target.value.trim().toLowerCase();
       refreshCatalog();
+      replaceCatalogRoute();
     });
     $("#clearSearchInput").addEventListener("click", () => clearFilter("query"));
     $("#filterSelect").addEventListener("change", (event) => {
       state.filter = event.target.value;
       refreshCatalog();
+      replaceCatalogRoute();
     });
     $("#filterPlace").addEventListener("change", (event) => {
       state.filterPlace = event.target.value;
       refreshCatalog();
+      replaceCatalogRoute();
     });
     $("#filterStatus").addEventListener("change", (event) => {
       state.filterStatus = event.target.value;
       refreshCatalog();
+      replaceCatalogRoute();
     });
     $("#sortSelect").addEventListener("change", (event) => {
       state.sort = event.target.value;
       refreshCatalog();
+      replaceCatalogRoute();
     });
     $("#clearSearch").addEventListener("click", () => clearCatalogFilters({ resetSort: true }));
     $("#churchList").addEventListener("click", (event) => {
@@ -264,6 +337,7 @@
       state.sort = "index";
     }
     refreshCatalog();
+    replaceCatalogRoute();
   }
 
   function selectStudy(id, options = {}) {
@@ -332,6 +406,7 @@
       $("#filterStatus").value = "all";
     }
     refreshCatalog();
+    replaceCatalogRoute();
     if (focus) focusCatalogControl(key);
   }
 
@@ -620,7 +695,7 @@
     const button = $("#shareStudy");
     const status = $("#shareStatus");
     if (!study || !button || !status) return;
-    const shareUrl = new URL(window.location.href);
+    const shareUrl = clearCatalogParams(new URL(window.location.href));
     shareUrl.hash = routeHash("atlas", true);
     const sharePayload = {
       title: `${studyShortName(study)} · Sacred Geometry Atlas`,
@@ -659,7 +734,7 @@
     const button = $("#shareCompare");
     const status = $("#compareShareStatus");
     if (!button || !status) return;
-    const shareUrl = new URL(window.location.href);
+    const shareUrl = clearCatalogParams(new URL(window.location.href));
     shareUrl.hash = routeHash("compare", false);
     const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
     const selectionLabel = selected.length
@@ -698,7 +773,7 @@
   }
 
   function citationText(study) {
-    const citationUrl = new URL(window.location.href);
+    const citationUrl = clearCatalogParams(new URL(window.location.href));
     citationUrl.hash = routeHash("atlas", true);
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = state.layer === "all" ? "all geometry" : `${state.layer} focus`;

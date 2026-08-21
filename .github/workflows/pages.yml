@@ -68,8 +68,8 @@ jobs:
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
-          for (const token of ['document.body.classList.remove("no-js")', 'page === "compare" && state.compareIds.length >= 2', 'route.page === "compare"', 'function shareComparison()']) {
-            if (!app.includes(token)) throw new Error(`Missing comparison sharing support: ${token}`);
+          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'page === "compare" && state.compareIds.length >= 2', 'route.page === "compare"', 'function shareComparison()']) {
+            if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
           const png = fs.readFileSync('og.png');
