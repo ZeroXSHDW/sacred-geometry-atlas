@@ -813,11 +813,15 @@
   }
 
   async function copyText(value) {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
         await navigator.clipboard.writeText(value);
         return true;
+      } catch (error) {
+        // Continue with the textarea fallback if the permissioned API rejects.
       }
+    }
+    try {
       const previousFocus = document.activeElement;
       const copyField = document.createElement("textarea");
       copyField.value = value;
