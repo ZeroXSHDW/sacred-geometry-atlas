@@ -76,10 +76,12 @@ Each record should include:
   id: "unique-id",
   index: "07",
   name: "Display name",
+  shortName: "Short display name",
   churchName: "Actual building name, or a clearly labelled representative study",
   typology: "Basilica",
   place: "Region or location",
   era: "Date or period",
+  emphasis: "Processional axis",
   status: "schematic", // use "measured" when supported by a source
   source: "Survey, archive, publication, or atlas model",
   sourceNote: "Short provenance note",
@@ -96,7 +98,11 @@ Each record should include:
   envelope: "Rectangle + semicircle",
   axis: "Longitudinal",
   type: "basilica",
-  details: [],
+  details: [
+    ["primary figure", "rectangle + semicircle"],
+    ["structural rhythm", "7 bays"]
+  ],
+  surfaceNote: "Short interpretive reading of the geometry.",
   exteriorNote: "...",
   interiorNote: "..."
 }
