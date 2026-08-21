@@ -63,7 +63,8 @@
       }
       const surface = state.surface === "interior" ? "Inside" : "Outside";
       const mode = state.mode[0].toUpperCase() + state.mode.slice(1);
-      document.title = studyShortName(activeStudy()) + " · " + surface + " " + mode + " · Sacred Geometry Atlas";
+      const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";
+      document.title = studyShortName(activeStudy()) + " · " + surface + " " + mode + catalogSuffix + " · Sacred Geometry Atlas";
       return;
     }
     if (page === "compare" && state.compareIds.length >= 2) {
