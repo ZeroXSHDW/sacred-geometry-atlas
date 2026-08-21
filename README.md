@@ -22,7 +22,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Shareable hash routes such as `#atlas/gothic/section/interior/axis` and focused comparisons such as `#compare/basilica,gothic`, plus bookmarkable catalog query/filter/sort state; browser history restores the selected context.
 - Downloadable JSON data from the site, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
-- Print-friendly atlas output for turning the active study into a readable research sheet.
+- Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static validation before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a useful no-script study index.

@@ -311,6 +311,7 @@
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
+    $("#printStudy").addEventListener("click", printStudy);
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
@@ -807,6 +808,17 @@
     } else {
       status.textContent = "Copying was unavailable. You can copy the citation from the study details.";
     }
+  }
+
+  function printStudy() {
+    const study = activeStudy();
+    if (!study) return;
+    if (typeof window.print !== "function") {
+      announceKeyboard("Printing is unavailable in this browser.");
+      return;
+    }
+    announceKeyboard(`Printing ${study.name} study sheet.`);
+    window.print();
   }
 
   function downloadDrawing() {
