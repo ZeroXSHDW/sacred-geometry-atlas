@@ -699,10 +699,29 @@
 
   function studySearchText(study) {
     const details = Array.isArray(study.details) ? study.details.flat() : [];
+    const dimensions = [
+      `length ${study.length} m`,
+      `length ${number(study.length)} m`,
+      `span ${study.span} m`,
+      `span ${number(study.span)} m`,
+      `height ${study.height} m`,
+      `height ${number(study.height)} m`,
+      `${study.bayCount} bays`,
+      `module ${study.module} m`,
+      `module ${number(study.module)} m`,
+      `radius ${study.radius} m`,
+      `radius ${number(study.radius)} m`,
+      `symmetry ${number(study.symmetry, 2)}`,
+      Number.isFinite(study.floorAreaEstimate) ? `floor area ${study.floorAreaEstimate} m²` : "",
+      Number.isFinite(study.floorAreaEstimate) ? `floor area ${number(study.floorAreaEstimate, 0)} m²` : "",
+      Number.isFinite(study.volumeEstimate) ? `volume ${study.volumeEstimate} m³` : "",
+      Number.isFinite(study.volumeEstimate) ? `volume ${Number(study.volumeEstimate).toLocaleString()} m³` : ""
+    ];
     return [
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
       study.emphasis, study.axis, study.envelope, studySource(study), studySourceNote(study),
       study.surfaceNote, study.exteriorNote, study.interiorNote, study.volumeBasis, studyStatus(study),
+      ...dimensions,
       ...details
     ].filter(Boolean).join(" ").toLowerCase();
   }
