@@ -637,7 +637,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-entry:nth-child(even) .catalog-card:hover { padding-left: 0.35rem; }
   .compare-toggle { flex-basis: 22px; width: 22px; height: 22px; margin-right: 0; }
   .drawing-controls { align-items: start; flex-direction: column; }
-  .study-header-actions { gap: 0.8rem; }
+  .study-header { flex-direction: column; gap: 1.2rem; }
+  .study-header-actions { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.8rem; }
+  .study-share-actions { justify-content: start; min-width: 0; }
+  .study-index { margin-left: auto; }
   .study-index { font-size: 3rem; }
   .mode-control { width: 100%; justify-content: space-between; }
   .mode-button { flex: 1; text-align: left; }

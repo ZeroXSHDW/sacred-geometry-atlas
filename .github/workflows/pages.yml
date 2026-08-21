@@ -117,11 +117,11 @@ jobs:
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
           if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
           if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');
-          for (const token of ['data-surface="exterior" type="button" aria-pressed="true"', 'data-mode="plan" type="button" aria-pressed="true"', 'data-layer="all" type="button" aria-pressed="true"']) {
+          for (const token of ['data-surface="exterior" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-mode="plan" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-layer="all" type="button" aria-pressed="true" aria-controls="geometryCanvas"']) {
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
           }
           if (!html.includes('aria-keyshortcuts="J"')) throw new Error('Missing keyboard shortcut metadata');
-          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
+          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
@@ -172,6 +172,7 @@ jobs:
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
+          if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;')) throw new Error('Missing narrow study-header layout');
           if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
           const png = fs.readFileSync('og.png');
