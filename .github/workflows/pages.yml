@@ -56,6 +56,9 @@ jobs:
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
           if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
+          for (const token of ['data-view="atlas" type="button" aria-controls="atlas" aria-current="page"', 'data-view="compare" type="button" aria-controls="compareView"', 'data-view="method" type="button" aria-controls="methodView"']) {
+            if (!html.includes(token)) throw new Error('Missing navigation relationship: ' + token);
+          }
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
           if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');
           if (!html.includes('aria-keyshortcuts="J"')) throw new Error('Missing keyboard shortcut metadata');
