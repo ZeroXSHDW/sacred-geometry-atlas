@@ -524,7 +524,7 @@ h3 { letter-spacing: -0.04em; }
 .profile-track { height: 4px; background: rgba(213, 229, 214, 0.11); }
 .profile-fill { display: block; width: var(--profile); height: 100%; background: linear-gradient(90deg, var(--teal), var(--amber)); transition: width 420ms ease; }
 
-.metric-strip { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 1.25rem; border-block: 1px solid var(--line); }
+.metric-strip { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 1.25rem; border-block: 1px solid var(--line); }
 .metric-cell { min-height: 88px; padding: 1.1rem 1rem 0.9rem; border-right: 1px solid var(--line); }
 .metric-cell:first-child { padding-left: 0; }
 .metric-cell-last { border-right: 0; }
