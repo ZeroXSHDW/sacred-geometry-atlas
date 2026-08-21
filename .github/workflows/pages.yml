@@ -86,7 +86,8 @@ jobs:
             'name="twitter:card" content="summary_large_image"',
             'property="og:image:width" content="1200"',
             'property="og:image:height" content="630"',
-            'name="robots" content="index, follow"'
+            'name="robots" content="index, follow"',
+            'rel="canonical" href="./"'
           ];
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
