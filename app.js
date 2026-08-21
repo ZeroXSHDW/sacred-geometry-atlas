@@ -53,6 +53,13 @@
       document.title = studyShortName(activeStudy()) + " · " + surface + " " + mode + " · Sacred Geometry Atlas";
       return;
     }
+    if (page === "compare" && state.compareIds.length >= 2) {
+      const selected = comparisonStudies();
+      const label = selected.slice(0, 2).map(studyShortName).join(" + ");
+      const extra = selected.length > 2 ? ` +${selected.length - 2}` : "";
+      document.title = `Compare ${label}${extra} · Sacred Geometry Atlas`;
+      return;
+    }
     document.title = page[0].toUpperCase() + page.slice(1) + " · Sacred Geometry Atlas";
   }
 
@@ -1042,6 +1049,7 @@
     $("#compareHelper").textContent = selected >= 2
       ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
       : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
+    if (state.page === "compare") updateDocumentTitle("compare");
   }
 
   function renderComparisonTable() {
