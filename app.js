@@ -50,6 +50,7 @@
   let compareShareResetTimer;
   let catalogShareResetTimer;
   let citationResetTimer;
+  const actionFeedbackTimers = new Map();
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -513,6 +514,18 @@
     const label = button.querySelector("span:last-child");
     if (label) label.textContent = visibleLabel;
     button.setAttribute("aria-label", accessibleLabel);
+  }
+
+  function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key) {
+    if (!button) return;
+    button.classList.add("is-complete");
+    setButtonFeedback(button, visibleLabel, accessibleLabel);
+    window.clearTimeout(actionFeedbackTimers.get(key));
+    actionFeedbackTimers.set(key, window.setTimeout(() => {
+      button.classList.remove("is-complete");
+      setButtonFeedback(button, resetVisibleLabel, resetAccessibleLabel);
+      actionFeedbackTimers.delete(key);
+    }, 2200));
   }
 
   function renderStudyNav() {
@@ -1028,6 +1041,7 @@
     const study = activeStudy();
     const svgElement = $("#geometryCanvas svg");
     const status = $("#downloadStatus");
+    const button = $("#downloadDrawing");
     if (!study || !svgElement) return;
     const exportStyles = `
       .geometry-svg { background: #0c1110; color: #eef2e9; }
@@ -1073,12 +1087,14 @@
     anchor.click();
     anchor.remove();
     if (status) status.textContent = `Current drawing exported as ${filename}.`;
+    temporaryButtonFeedback(button, "Exported", "Drawing exported", "SVG", "Export the current drawing as SVG", "drawing-export");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 
   function downloadStudy() {
     const study = activeStudy();
     const status = $("#studyDownloadStatus");
+    const button = $("#downloadStudy");
     if (!study) return;
     const shareUrl = clearCatalogParams(new URL(window.location.href));
     shareUrl.hash = routeHash("atlas", true);
@@ -1104,10 +1120,12 @@
     anchor.click();
     anchor.remove();
     if (status) status.textContent = `Active study exported as ${filename}.`;
+    temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 
   function downloadData() {
+    const button = $("#downloadData");
     const payload = JSON.stringify({ title: "Sacred Geometry Atlas", schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" }, studies }, null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -1118,12 +1136,14 @@
     anchor.click();
     anchor.remove();
     $("#downloadStatus").textContent = "Atlas data downloaded as sacred-geometry-atlas.json.";
+    temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 
   function downloadCatalogView() {
     const visible = visibleStudies();
     const status = $("#catalogDownloadStatus");
+    const button = $("#downloadCatalogView");
     if (!visible.length) {
       if (status) status.textContent = "There are no studies in the current catalog view to export.";
       return;
@@ -1151,6 +1171,7 @@
     anchor.click();
     anchor.remove();
     if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}.`;
+    temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 

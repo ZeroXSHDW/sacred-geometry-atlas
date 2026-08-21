@@ -396,6 +396,7 @@ h3 { letter-spacing: -0.04em; }
 .share-button span:first-child { color: var(--teal); font-size: 0.85rem; line-height: 0; }
 .share-button:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
 .share-button.is-copied { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.download-button.is-complete, .drawing-export.is-complete, .share-button.is-complete { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .study-index { color: var(--amber); font-family: var(--serif); font-size: 3.5rem; line-height: 0.85; opacity: 0.85; }
 
 .drawing-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.7rem; }
