@@ -31,7 +31,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A branded `404.html` recovery page for missing GitHub Pages paths.
-- A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation before GitHub Pages deployment.
+- A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference and interpretive context.
 
 ### Keyboard shortcuts
