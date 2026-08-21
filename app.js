@@ -183,6 +183,7 @@
       selectStudy(studyCard.dataset.compareStudy);
     });
     $("#downloadData").addEventListener("click", downloadData);
+    $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
@@ -534,6 +535,58 @@
     } else {
       status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
     }
+  }
+
+  function downloadDrawing() {
+    const study = activeStudy();
+    const svgElement = $("#geometryCanvas svg");
+    const status = $("#downloadStatus");
+    if (!study || !svgElement) return;
+    const exportStyles = `
+      .geometry-svg { background: #0c1110; color: #eef2e9; }
+      .geometry-svg text { font-family: 'DM Mono', 'SFMono-Regular', Consolas, monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+      .geometry-svg .grid-line { stroke: rgba(213, 229, 214, .08); stroke-width: 1; }
+      .geometry-svg .axis-line { stroke: #88c6ba; stroke-dasharray: 5 6; stroke-width: 1; opacity: .75; }
+      .geometry-svg .primary-line { stroke: #e9b36c; stroke-width: 2; }
+      .geometry-svg .primary-fill { fill: rgba(233, 179, 108, .1); stroke: #e9b36c; stroke-width: 2; }
+      .geometry-svg .interior-fill { fill: rgba(136, 198, 186, .11); stroke: #88c6ba; stroke-width: 2; }
+      .geometry-svg .secondary-line { stroke: #88c6ba; stroke-width: 1.2; }
+      .geometry-svg .tertiary-line { stroke: #e77f62; stroke-width: 1; }
+      .geometry-svg .faint-line { stroke: rgba(213, 229, 214, .27); stroke-width: 1; fill: none; }
+      .geometry-svg .dim-text { fill: #e77f62; font-size: 9px; }
+      .geometry-svg .label-text { fill: #aebbb1; font-size: 9px; }
+      .geometry-svg .small-label { fill: #76847c; font-size: 8px; }
+      .geometry-svg .watermark { fill: rgba(233, 179, 108, .12); font-family: 'Playfair Display', Georgia, serif; font-size: 42px; letter-spacing: -.04em; }
+      .geometry-svg .stone-dot { fill: #e9b36c; }
+      .geometry-svg .column { fill: #0c1110; stroke: #e9b36c; stroke-width: 1.5; }
+      .geometry-svg .crosshair { stroke: #e77f62; stroke-width: 1; }
+      .geometry-svg .dimension-bracket { stroke: #e77f62; stroke-width: 1; }
+      .geometry-svg.focus-envelope .axis-line, .geometry-svg.focus-envelope .secondary-line, .geometry-svg.focus-envelope .column, .geometry-svg.focus-envelope .stone-dot { opacity: .13; }
+      .geometry-svg.focus-envelope .tertiary-line { opacity: .75; }
+      .geometry-svg.focus-rhythm .primary-line, .geometry-svg.focus-rhythm .primary-fill, .geometry-svg.focus-rhythm .interior-fill, .geometry-svg.focus-rhythm .dimension-bracket { opacity: .15; }
+      .geometry-svg.focus-axis .primary-line, .geometry-svg.focus-axis .primary-fill, .geometry-svg.focus-axis .interior-fill, .geometry-svg.focus-axis .secondary-line, .geometry-svg.focus-axis .column { opacity: .12; }
+      .geometry-svg.focus-axis .axis-line, .geometry-svg.focus-axis .stone-dot, .geometry-svg.focus-axis .tertiary-line { opacity: 1; }
+      .geometry-svg.focus-measure .primary-line, .geometry-svg.focus-measure .primary-fill, .geometry-svg.focus-measure .interior-fill, .geometry-svg.focus-measure .axis-line, .geometry-svg.focus-measure .secondary-line, .geometry-svg.focus-measure .column, .geometry-svg.focus-measure .stone-dot { opacity: .1; }
+      .geometry-svg.focus-measure .dimension-bracket, .geometry-svg.focus-measure .dim-text, .geometry-svg.focus-measure .tertiary-line, .geometry-svg.focus-measure .faint-line { opacity: 1; }
+    `;
+    const rawSource = typeof XMLSerializer === "function"
+      ? new XMLSerializer().serializeToString(svgElement)
+      : svgElement.outerHTML;
+    const source = rawSource.replace(/<svg([^>]*)>/, (opening, attributes) => {
+      const namespace = attributes.includes("xmlns=") ? "" : ' xmlns="http://www.w3.org/2000/svg"';
+      return `<svg${attributes}${namespace}><style>${exportStyles}</style>`;
+    });
+    const filename = `${study.id}-${state.surface}-${state.mode}.svg`;
+    const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${source}`], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    if (status) status.textContent = `Current drawing exported as ${filename}.`;
+    window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 
   function downloadData() {

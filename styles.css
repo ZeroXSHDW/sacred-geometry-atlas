@@ -354,6 +354,9 @@ h3 { letter-spacing: -0.04em; }
 .swatch-tertiary { background: var(--coral); }
 .drawing-scale { color: var(--ink-muted); font-size: 0.52rem; white-space: nowrap; }
 .drawing-tools { display: flex; align-items: center; gap: 0.7rem; }
+.drawing-export { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.5rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.drawing-export span:first-child { color: var(--teal); font-size: 0.86rem; line-height: 0; }
+.drawing-export:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
 .zoom-control { display: inline-flex; align-items: center; border: 1px solid var(--line); }
 .zoom-control button { width: 25px; height: 24px; padding: 0; border: 0; border-right: 1px solid var(--line); color: var(--ink-soft); background: transparent; font-family: var(--mono); font-size: 0.75rem; line-height: 1; }
 .zoom-control button:last-child { border-right: 0; }
@@ -599,4 +602,80 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+@media print {
+  @page { margin: 14mm; }
+
+  :root {
+    --ink: #111817;
+    --ink-soft: #343b38;
+    --ink-muted: #5d6862;
+    --bg: #ffffff;
+    --bg-deep: #ffffff;
+    --panel: #ffffff;
+    --panel-bright: #f4f6f2;
+    --line: rgba(17, 24, 23, 0.2);
+    --line-strong: rgba(17, 24, 23, 0.42);
+    --amber: #965b18;
+    --amber-soft: rgba(150, 91, 24, 0.1);
+    --teal: #23665d;
+    --teal-soft: rgba(35, 102, 93, 0.08);
+    --coral: #93412d;
+  }
+
+  html { scroll-behavior: auto; }
+  body { background: #fff; color: var(--ink); font-size: 10.5pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .site-header,
+  .hero-actions,
+  .hero-stats,
+  .catalog-panel,
+  .drawing-controls,
+  .drawing-toolbar,
+  .study-header-actions,
+  .site-footer,
+  .compare-view,
+  .method-view { display: none !important; }
+  .site-header, main, .site-footer { width: 100%; }
+  #atlas { display: block !important; }
+  .hero { display: block; min-height: 0; padding: 0 0 1.1rem; }
+  .hero-intro { max-width: 40rem; color: var(--ink-soft); }
+  h1 { margin-bottom: 0.9rem; color: var(--ink); font-size: 3.8rem; }
+  h1 em { color: var(--amber); }
+  .workspace { padding: 1.4rem 0 0; }
+  .section-heading { margin-bottom: 1.2rem; }
+  .section-heading .eyebrow { color: var(--amber); }
+  .section-note { color: var(--ink-muted); }
+  .atlas-layout { display: block; }
+  .visual-column { width: 100%; }
+  .study-header { margin-bottom: 1rem; }
+  .study-kicker { color: var(--amber); }
+  .study-header h3 { color: var(--ink); }
+  .study-meta, .study-source { color: var(--ink-muted); }
+  .drawing-card { border-color: var(--ink); background: #fff; }
+  .svg-wrap { min-height: 0; background: #fff; }
+  .geometry-svg { min-height: 0; color: var(--ink); background: #fff; }
+  .geometry-svg .grid-line { stroke: rgba(17, 24, 23, 0.14); }
+  .geometry-svg .axis-line { stroke: var(--teal); opacity: 0.9; }
+  .geometry-svg .primary-line { stroke: var(--amber); }
+  .geometry-svg .primary-fill { fill: rgba(150, 91, 24, 0.1); stroke: var(--amber); }
+  .geometry-svg .interior-fill { fill: rgba(35, 102, 93, 0.08); stroke: var(--teal); }
+  .geometry-svg .secondary-line { stroke: var(--teal); }
+  .geometry-svg .tertiary-line,
+  .geometry-svg .crosshair,
+  .geometry-svg .dimension-bracket { stroke: var(--coral); }
+  .geometry-svg .faint-line { stroke: rgba(17, 24, 23, 0.34); }
+  .geometry-svg .dim-text { fill: var(--coral); }
+  .geometry-svg .label-text { fill: var(--ink-soft); }
+  .geometry-svg .small-label { fill: var(--ink-muted); }
+  .geometry-svg .watermark { fill: rgba(150, 91, 24, 0.12); }
+  .geometry-svg .stone-dot { fill: var(--amber); }
+  .geometry-svg .column { fill: #fff; stroke: var(--amber); }
+  .drawing-caption { border-top-color: var(--ink); }
+  .drawing-caption p { color: var(--ink-soft); }
+  .analysis-panel,
+  .metric-strip,
+  .detail-grid { break-inside: avoid; }
+  .analysis-panel { background: #fff; }
+  .detail-item { background: #fff; }
 }

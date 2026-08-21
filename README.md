@@ -19,6 +19,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - Shareable hash routes such as `#atlas/gothic`, plus Compare and Method views.
 - Downloadable JSON data from the site.
+- Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
+- Print-friendly atlas output for turning the active study into a readable research sheet.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` for automatic GitHub Pages deployment.
 - Responsive layout, keyboard focus states, skip navigation, live status feedback, and a no-script message.
 
@@ -106,4 +108,4 @@ python3 -m http.server 8000
 The site has no build step and keeps all navigation client-side with hash URLs, so it works on a
 repository subpath without special server rewrites.
 
-The browser QA checklist is: test desktop and approximately 390px phone width; verify no horizontal overflow; test every study in plan/elevation/section and outside/inside modes; test filters, sorting, zoom, layer focus, comparison, method navigation, and JSON export; and check for console errors.
+The browser QA checklist is: test desktop and approximately 390px phone width; verify no horizontal overflow; test every study in plan/elevation/section and outside/inside modes; test filters, sorting, zoom, layer focus, comparison, method navigation, JSON export, SVG drawing export, and print output; and check for console errors.
