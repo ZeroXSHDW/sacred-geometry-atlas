@@ -48,6 +48,18 @@
 
   function updateDocumentTitle(page = state.page) {
     if (page === "atlas" && activeStudy()) {
+      const route = parseRoute();
+      const hasCatalogScope = Boolean(
+        state.query
+        || state.filter !== "all"
+        || state.filterPlace !== "all"
+        || state.filterStatus !== "all"
+        || state.sort !== "index"
+      );
+      if (!route.studyId && hasCatalogScope) {
+        document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;
+        return;
+      }
       const surface = state.surface === "interior" ? "Inside" : "Outside";
       const mode = state.mode[0].toUpperCase() + state.mode.slice(1);
       document.title = studyShortName(activeStudy()) + " · " + surface + " " + mode + " · Sacred Geometry Atlas";
