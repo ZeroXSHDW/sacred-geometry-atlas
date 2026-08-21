@@ -148,6 +148,7 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing decorative marker guard: ' + token);
           }
           if (!app.includes('<span class="catalog-number" aria-hidden="true">')) throw new Error('Missing catalog number guard');
+          if (!app.includes('function studySearchText(study)') || !app.includes('study.details.flat()')) throw new Error('Catalog search must cover full study text');
           for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title', 'Length to span ratio', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0 })', 'toggleCompare(compareToggle.dataset.compareId, { focus: event.detail === 0 })', 'announceStudy(activeStudy(), visible.length)', 'focusCatalogControl(key)', 'clearFilter(chip.dataset.clearFilter, { focus: keyboardActivation })', 'if (event.detail === 0) focusCatalogControl("query")', 'focusCompareToggle(id)']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }

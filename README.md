@@ -14,7 +14,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
 - Reading-profile bars expose their 0–100 scores as accessible meters as well as visual guides.
-- Search, typology, location, and measured/schematic status filtering.
+- Search across study names, references, notes, and detail vocabulary, plus typology, location, and measured/schematic status filtering.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.

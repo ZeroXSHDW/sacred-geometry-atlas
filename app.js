@@ -532,9 +532,19 @@
     }
   }
 
+  function studySearchText(study) {
+    const details = Array.isArray(study.details) ? study.details.flat() : [];
+    return [
+      study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
+      study.emphasis, study.axis, study.envelope, studySource(study), studySourceNote(study),
+      study.surfaceNote, study.exteriorNote, study.interiorNote, study.volumeBasis, studyStatus(study),
+      ...details
+    ].filter(Boolean).join(" ").toLowerCase();
+  }
+
   function visibleStudies() {
     const result = studies.filter((study) => {
-      const haystack = [study.name, study.churchName, study.typology, study.place, study.era, study.emphasis, study.axis, study.envelope, studyStatus(study)].join(" ").toLowerCase();
+      const haystack = studySearchText(study);
       const matchesQuery = !state.query || haystack.includes(state.query);
       const matchesFilter = state.filter === "all" || study.typology === state.filter;
       const matchesPlace = state.filterPlace === "all" || study.place === state.filterPlace;
