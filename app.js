@@ -240,6 +240,11 @@
     updateCatalogRoute("pushState");
   }
 
+  function commitComparisonRoute() {
+    if (state.page === "atlas") pushCatalogRoute();
+    else replaceCatalogRoute();
+  }
+
   function clearCatalogParams(url) {
     catalogParamKeys.forEach((key) => url.searchParams.delete(key));
     return url;
@@ -436,7 +441,7 @@
       updateCompareTray();
       renderCompare();
       if (state.page === "compare") replaceRoute("compare", false);
-      replaceCatalogRoute();
+      commitComparisonRoute();
       if (hadSelection) announceKeyboard("Comparison selection cleared.");
       focusCatalogControl("query");
     });
@@ -1440,7 +1445,7 @@
     updateCompareTray();
     renderCompare();
     if (state.page === "compare") replaceRoute("compare", false);
-    replaceCatalogRoute();
+    commitComparisonRoute();
     if (study) announceKeyboard(`${study.name} ${wasSelected ? "removed from" : "added to"} comparison. ${state.compareIds.length} selected.`);
     if (focus) focusCompareToggle(id);
   }
