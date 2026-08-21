@@ -189,6 +189,7 @@ jobs:
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
+          if (!app.includes('function volumeReading(study)') || !app.includes('value: hasEstimate ? `${Number(study.volumeEstimate).toLocaleString()} m³` : "Not supplied"') || !app.includes('basis: hasEstimate ? study.volumeBasis || "schematic estimate" : "No estimate supplied"')) throw new Error('Optional volume estimates must have an explicit missing-data state');
           if (!styles.includes('.analysis-reading')) throw new Error('Missing interpretive reading style');
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
             if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);

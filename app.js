@@ -692,16 +692,25 @@
     const area = study.floorAreaEstimate || study.length * study.span;
     const sectionRatio = study.height / study.span;
     const moduleRatio = study.module / study.span;
+    const volume = volumeReading(study);
     $("#analysisArea").textContent = `${number(area, 0)} m²`;
     $("#analysisSection").textContent = number(sectionRatio, 2);
     $("#analysisModule").textContent = number(moduleRatio, 2);
     $("#analysisRadius").textContent = `${number(study.radius)} m`;
-    $("#analysisVolume").textContent = `${Number(study.volumeEstimate || 0).toLocaleString()} m³`;
-    $("#analysisVolumeBasis").textContent = study.volumeBasis || "schematic estimate";
+    $("#analysisVolume").textContent = volume.value;
+    $("#analysisVolumeBasis").textContent = volume.basis;
     $("#activeEquation").textContent = `R = L ÷ W = ${number(ratio, 2)}`;
     $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
       <div class="profile-item" role="listitem"><div class="profile-label"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
     `).join("");
+  }
+
+  function volumeReading(study) {
+    const hasEstimate = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0;
+    return {
+      value: hasEstimate ? `${Number(study.volumeEstimate).toLocaleString()} m³` : "Not supplied",
+      basis: hasEstimate ? study.volumeBasis || "schematic estimate" : "No estimate supplied"
+    };
   }
 
   function profileScores(study) {
