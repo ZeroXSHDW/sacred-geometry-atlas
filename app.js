@@ -233,13 +233,17 @@
     const previousPage = state.page;
     let normalizedStudyRoute = false;
     let includeStudyInNormalizedRoute = true;
+    let normalizedCompareRoute = false;
     if (route.studyId) {
       state.activeId = route.studyId;
       state.mode = route.mode || "plan";
       state.surface = route.surface || "exterior";
       state.layer = route.layer || "all";
     }
-    if (route.page === "compare") state.compareIds = route.compareIds;
+    if (route.page === "compare") {
+      state.compareIds = route.compareIds;
+      normalizedCompareRoute = window.location.hash !== routeHash("compare", false);
+    }
     if (route.page === "atlas") {
       const visible = visibleStudies();
       if (!visible.length && route.studyId) {
@@ -255,6 +259,10 @@
     if (normalizedStudyRoute) {
       replaceRoute("atlas", includeStudyInNormalizedRoute);
       updateDocumentTitle("atlas");
+    }
+    if (normalizedCompareRoute) {
+      replaceRoute("compare", false);
+      updateDocumentTitle("compare");
     }
     if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute) {
       announceStudy(activeStudy(), visibleStudies().length);
