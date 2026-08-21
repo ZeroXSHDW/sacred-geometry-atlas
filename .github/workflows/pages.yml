@@ -80,8 +80,10 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
           const readme = fs.readFileSync('README.md', 'utf8');
+          const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
+            'property="og:url" content="./"',
             'name="twitter:image" content="og.png"',
             'name="twitter:card" content="summary_large_image"',
             'property="og:image:width" content="1200"',
@@ -93,8 +95,11 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'robots.txt', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'robots.txt', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
+          }
+          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}']) {
+            if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
           if (!html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('No-JS fallback must provide the page heading');
@@ -495,7 +500,54 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
       - name: Configure Pages
+        id: pages
         uses: actions/configure-pages@v5
+      - name: Stamp deployed site metadata
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          python3 - <<'PY'
+          import html
+          import os
+          from pathlib import Path
+
+          base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
+          page = Path("index.html")
+          source = page.read_text()
+          replacements = {
+              '<link rel="canonical" href="./" />': f'<link rel="canonical" href="{html.escape(base_url, quote=True)}" />',
+              '<meta property="og:url" content="./" />': f'<meta property="og:url" content="{html.escape(base_url, quote=True)}" />',
+              '<meta property="og:image" content="og.png" />': f'<meta property="og:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
+              '<meta name="twitter:image" content="og.png" />': f'<meta name="twitter:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
+          }
+          for old, new in replacements.items():
+              if old not in source:
+                  raise SystemExit(f"Missing repository-relative metadata: {old}")
+              source = source.replace(old, new)
+          page.write_text(source)
+          print(f"Stamped absolute Pages metadata for {base_url}")
+          PY
+      - name: Verify deployed site metadata
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
+          page = Path("index.html").read_text()
+          expected = [
+              f'<link rel="canonical" href="{base_url}" />',
+              f'<meta property="og:url" content="{base_url}" />',
+              f'<meta property="og:image" content="{base_url}og.png" />',
+              f'<meta name="twitter:image" content="{base_url}og.png" />',
+          ]
+          missing = [token for token in expected if token not in page]
+          if missing:
+              raise SystemExit("Deployed metadata is incomplete: " + ", ".join(missing))
+          print("Absolute Pages metadata verified.")
+          PY
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -78,7 +78,7 @@ git commit -m "Update Sacred Geometry Atlas"
 3. In the repository, open **Settings → Pages** and set the source to **GitHub Actions** if GitHub has not enabled it automatically.
 4. Push to `main` or run the **Deploy static site to GitHub Pages** workflow manually.
 
-The included `og.png` is referenced with a same-site relative path so it works from a repository subpath. If a social crawler requires an absolute image URL, replace the `og:image` and `twitter:image` values in `index.html` with the final GitHub Pages URL after publishing.
+The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, and `twitter:image` metadata before uploading the site artifact.
 
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `robots.txt`, the social preview, and the data artifacts required by the site.
 
