@@ -77,6 +77,7 @@ jobs:
           const notFound = fs.readFileSync('404.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
+          const readme = fs.readFileSync('README.md', 'utf8');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
             'name="twitter:image" content="og.png"',
@@ -86,6 +87,9 @@ jobs:
           ];
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
+          }
+          for (const token of ['From this already initialized checkout', 'git add .', 'favicon.svg', 'The `git add .` command includes the Pages workflow']) {
+            if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
           if (!html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('No-JS fallback must provide the page heading');
