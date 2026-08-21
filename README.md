@@ -22,7 +22,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
 - Print-friendly atlas output for turning the active study into a readable research sheet.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` for automatic GitHub Pages deployment.
-- Responsive layout, keyboard focus states, skip navigation, live status feedback, and a no-script message.
+- Responsive layout, keyboard focus states, view-change focus management, skip navigation, live status feedback, and a no-script message.
 
 ### Keyboard shortcuts
 

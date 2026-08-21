@@ -38,6 +38,16 @@
     '"': "&quot;"
   }[character]));
 
+  function updateDocumentTitle(page = state.page) {
+    if (page === "atlas" && activeStudy()) {
+      const surface = state.surface === "interior" ? "Inside" : "Outside";
+      const mode = state.mode[0].toUpperCase() + state.mode.slice(1);
+      document.title = studyShortName(activeStudy()) + " · " + surface + " " + mode + " · Sacred Geometry Atlas";
+      return;
+    }
+    document.title = page[0].toUpperCase() + page.slice(1) + " · Sacred Geometry Atlas";
+  }
+
   function init() {
     if (!studies.length) return;
     $("#studyCount").textContent = String(studies.length).padStart(2, "0");
@@ -94,7 +104,6 @@
     if (route.mode) state.mode = route.mode;
     if (route.surface) state.surface = route.surface;
     if (route.layer) state.layer = route.layer;
-    state.page = route.page;
     showPage(route.page, { updateHash: false, scroll: false });
     renderAll();
   }
@@ -381,7 +390,7 @@
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();
-      document.title = `${studyShortName(activeStudy())} · Sacred Geometry Atlas`;
+      updateDocumentTitle("atlas");
       if (state.page === "atlas") replaceRoute("atlas");
     }
     updateCompareTray();
@@ -490,7 +499,9 @@
 
   function showPage(page, options = {}) {
     const { updateHash: shouldUpdateHash = true, routeStudy = page === "atlas", scroll = true } = options;
+    const previousPage = state.page;
     if (!validPages.has(page)) page = "atlas";
+    const pageChanged = previousPage !== page;
     state.page = page;
     const atlas = $("#atlas");
     const compare = $("#compareView");
@@ -507,9 +518,11 @@
     if (page === "compare") renderCompare();
     if (shouldUpdateHash) updateRoute(page, routeStudy);
     if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
-    document.title = page === "atlas" && activeStudy()
-      ? `${studyShortName(activeStudy())} · Sacred Geometry Atlas`
-      : `${page[0].toUpperCase()}${page.slice(1)} · Sacred Geometry Atlas`;
+    if (pageChanged) {
+      const heading = $(page === "atlas" ? "#atlas-heading" : page === "compare" ? "#compare-heading" : "#method-heading");
+      if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
+    }
+    updateDocumentTitle(page);
   }
 
   async function shareStudy() {
@@ -756,6 +769,7 @@
     $("#geometryCanvas").innerHTML = svg;
     $("#drawingScale").textContent = `Scale 1 : ${state.mode === "section" ? "120" : "200"}`;
     renderStudy();
+    if (state.page === "atlas") updateDocumentTitle("atlas");
   }
 
   function drawingFrame(label, subtitle) {

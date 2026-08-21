@@ -48,6 +48,12 @@ select:focus-visible {
   outline-offset: 3px;
 }
 
+#atlas-heading:focus-visible,
+.page-view h2:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 6px;
+}
+
 .noscript-message {
   padding: 0.8rem 1rem;
   border-bottom: 1px solid var(--coral);
