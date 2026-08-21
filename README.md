@@ -18,6 +18,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Copyable citations that include the active study, provenance, drawing state, and shareable route.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
+- An expandable semantic comparison table with exact lengths, spans, ratios, heights, bays, modules, and symmetry values.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; browser history restores the selected context.
 - Downloadable full-atlas JSON and filtered catalog-view JSON, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.

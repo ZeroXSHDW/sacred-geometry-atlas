@@ -1025,11 +1025,40 @@
   function renderCompare() {
     renderCharts();
     renderGeometryCompare();
+    renderComparisonTable();
     const selected = state.compareIds.length;
     $("#compareScope").textContent = selected >= 2 ? `${selected} selected` : "Full collection";
     $("#compareHelper").textContent = selected >= 2
       ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
       : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
+  }
+
+  function renderComparisonTable() {
+    const body = $("#comparisonTableBody");
+    const caption = $("#comparisonTableCaption");
+    if (!body) return;
+    const comparison = comparisonStudies();
+    const isFocused = state.compareIds.length >= 2;
+    if (caption) caption.textContent = isFocused
+      ? `Exact values for ${comparison.length} selected studies.`
+      : "Exact values for the full collection.";
+    body.innerHTML = comparison.map((study) => {
+      const ratio = study.length / study.span;
+      const section = study.height / study.span;
+      return `
+        <tr>
+          <th scope="row">${escapeHtml(studyShortName(study))}</th>
+          <td>${number(study.length)} m</td>
+          <td>${number(study.span)} m</td>
+          <td>${number(ratio, 2)}</td>
+          <td>${number(study.height)} m</td>
+          <td>${number(section, 2)}</td>
+          <td>${study.bayCount}</td>
+          <td>${number(study.module)} m</td>
+          <td>${number(study.symmetry, 2)}</td>
+        </tr>
+      `;
+    }).join("");
   }
 
   function renderGeometryCompare() {

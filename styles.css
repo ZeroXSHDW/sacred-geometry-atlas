@@ -47,7 +47,8 @@ a { color: inherit; }
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+summary:focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 3px;
 }
@@ -524,6 +525,21 @@ h3 { letter-spacing: -0.04em; }
 .module-bars { display: flex; align-items: end; gap: 3px; height: 22px; }
 .module-bar { flex: 1; min-width: 2px; background: var(--teal); opacity: 0.72; }
 .module-value { color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; text-align: right; }
+.comparison-table-panel { margin-top: 1rem; border: 1px solid var(--line); background: var(--panel); }
+.comparison-table-panel summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.95rem 1.15rem; color: var(--teal); cursor: pointer; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.04em; list-style: none; text-transform: uppercase; }
+.comparison-table-panel summary::-webkit-details-marker { display: none; }
+.comparison-table-panel summary::after { color: var(--amber); content: '+'; font-size: 1rem; line-height: 1; }
+.comparison-table-panel[open] summary { border-bottom: 1px solid var(--line); }
+.comparison-table-panel[open] summary::after { content: '−'; }
+.comparison-table-wrap { overflow-x: auto; }
+.comparison-table { width: 100%; min-width: 760px; border-collapse: collapse; font-family: var(--mono); font-size: 0.58rem; }
+.comparison-table caption { padding: 0.9rem 1.15rem 0.65rem; color: var(--ink-muted); text-align: left; }
+.comparison-table th, .comparison-table td { padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.comparison-table thead th { color: var(--amber); font-size: 0.52rem; font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; }
+.comparison-table thead th:first-child, .comparison-table tbody th { text-align: left; }
+.comparison-table tbody th { color: var(--ink-soft); font-family: var(--sans); font-size: 0.68rem; font-weight: 600; }
+.comparison-table tbody td { color: var(--teal); }
+.comparison-table tbody tr:last-child th, .comparison-table tbody tr:last-child td { border-bottom: 0; }
 
 .method-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 420px); align-items: stretch; gap: 2.5rem; margin-bottom: 1rem; padding: 2.4rem; border: 1px solid var(--line); background: var(--panel); }
 .method-copy { display: flex; flex-direction: column; justify-content: center; max-width: 36rem; }
