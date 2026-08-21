@@ -56,14 +56,14 @@ jobs:
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
           if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
-          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%"', 'id="zoomReadout" role="status" aria-live="polite"']) {
+          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
-          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title', 'Length to span ratio']) {
+          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title', 'Length to span ratio', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0 })', 'announceStudy(activeStudy(), visible.length)']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');

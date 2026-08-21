@@ -181,7 +181,7 @@
       }
       const card = event.target.closest("[data-study-id]");
       if (!card) return;
-      selectStudy(card.dataset.studyId);
+      selectStudy(card.dataset.studyId, { focus: event.detail === 0 });
     });
     $$("[data-surface]").forEach((button) => button.addEventListener("click", () => {
       state.surface = button.dataset.surface;
@@ -228,7 +228,7 @@
     $("#geometryCompare").addEventListener("click", (event) => {
       const studyCard = event.target.closest("[data-compare-study]");
       if (!studyCard) return;
-      selectStudy(studyCard.dataset.compareStudy);
+      selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0 });
     });
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
@@ -265,12 +265,16 @@
   }
 
   function selectStudy(id, options = {}) {
-    const { scroll = true } = options;
+    const { scroll = true, focus = false } = options;
     if (!studies.some((study) => study.id === id)) return;
     state.activeId = id;
     showPage("atlas", { scroll });
     renderAll();
     announceStudy(activeStudy(), visibleStudies().length);
+    if (focus) {
+      const heading = $("#activeName");
+      if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: !scroll });
+    }
   }
 
   function resultCountText(count) {
@@ -354,14 +358,14 @@
   }
 
   function cycleStudy(direction, options = {}) {
-    const { scroll = true } = options;
+    const { scroll = true, focus = false } = options;
     const visible = visibleStudies();
     if (!visible.length) return;
     const currentIndex = visible.findIndex((study) => study.id === state.activeId);
     const baseIndex = currentIndex >= 0 ? currentIndex : direction > 0 ? -1 : 0;
     const nextIndex = (baseIndex + direction + visible.length) % visible.length;
     const nextStudy = visible[nextIndex];
-    selectStudy(nextStudy.id, { scroll });
+    selectStudy(nextStudy.id, { scroll, focus });
   }
 
   function handleKeyboard(event) {
@@ -371,7 +375,7 @@
     const key = event.key.toLowerCase();
     if (key === "j" || key === "k") {
       event.preventDefault();
-      cycleStudy(key === "j" ? 1 : -1, { scroll: false });
+      cycleStudy(key === "j" ? 1 : -1, { scroll: false, focus: true });
       return;
     }
     if (["1", "2", "3"].includes(key)) {
@@ -430,6 +434,7 @@
       renderDrawing();
       updateDocumentTitle("atlas");
       if (state.page === "atlas") replaceRoute("atlas");
+      announceStudy(activeStudy(), visible.length);
     }
     updateCompareTray();
   }
