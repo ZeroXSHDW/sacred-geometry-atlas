@@ -730,7 +730,7 @@
     $("#analysisRadius").textContent = `${number(study.radius)} m`;
     $("#analysisVolume").textContent = volume.value;
     $("#analysisVolumeBasis").textContent = volume.basis;
-    $("#activeEquation").textContent = `R = L ÷ W = ${number(ratio, 2)}`;
+    $("#activeEquation").textContent = `R = L ÷ span = ${number(ratio, 2)}`;
     $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
       <div class="profile-item" role="listitem"><div class="profile-label"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
     `).join("");

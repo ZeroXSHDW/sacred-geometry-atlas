@@ -170,6 +170,12 @@ jobs:
             if (!app.includes(token)) throw new Error('Missing human-readable geometry layer label: ' + token);
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
+          for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
+            if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
+          }
+          for (const token of ['R = L ÷ W', 'length-to-width ratio', 'L × W', 'H ÷ W', 'M ÷ W']) {
+            if (html.includes(token) || app.includes(token)) throw new Error('Stale width-based proportion notation remains: ' + token);
+          }
           for (const token of ['<th scope="col">Length (m)</th>', '<th scope="col">Length ÷ span</th>', '<th scope="col">Height ÷ span</th>', '<th scope="col">Bay count</th>', '<th scope="col">Module (m)</th>', '<th scope="col">Symmetry index</th>']) {
             if (!html.includes(token)) throw new Error('Comparison table header is missing clear units or meaning: ' + token);
           }
