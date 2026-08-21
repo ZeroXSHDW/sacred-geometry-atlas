@@ -51,12 +51,12 @@
         <h2 id="noscript-heading">The collection</h2>
         <p class="noscript-intro">Six schematic studies of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Measurements are shown as length × span × height in meters.</p>
         <ol class="noscript-list">
-          <li><span class="noscript-number">01</span><span><strong>The longitudinal basilica</strong><small>Basilica · Mediterranean · schematic · 58 × 22 × 18 m</small></span></li>
-          <li><span class="noscript-number">02</span><span><strong>The high gothic cathedral</strong><small>Gothic · Northern Europe · schematic · 92 × 34 × 38 m</small></span></li>
-          <li><span class="noscript-number">03</span><span><strong>The cross-in-square</strong><small>Central plan · Eastern Mediterranean · schematic · 34 × 34 × 31 m</small></span></li>
-          <li><span class="noscript-number">04</span><span><strong>The baroque oval church</strong><small>Baroque · Central Europe · schematic · 46 × 32 × 26 m</small></span></li>
-          <li><span class="noscript-number">05</span><span><strong>The timber stave church</strong><small>Timber · Scandinavia · schematic · 28 × 15 × 23 m</small></span></li>
-          <li><span class="noscript-number">06</span><span><strong>The modern concrete nave</strong><small>Modern · Western Europe · schematic · 44 × 18 × 17 m</small></span></li>
+          <li><span class="noscript-number" aria-hidden="true">01</span><span><strong>The longitudinal basilica</strong><small>Basilica · Mediterranean · schematic · 58 × 22 × 18 m</small></span></li>
+          <li><span class="noscript-number" aria-hidden="true">02</span><span><strong>The high gothic cathedral</strong><small>Gothic · Northern Europe · schematic · 92 × 34 × 38 m</small></span></li>
+          <li><span class="noscript-number" aria-hidden="true">03</span><span><strong>The cross-in-square</strong><small>Central plan · Eastern Mediterranean · schematic · 34 × 34 × 31 m</small></span></li>
+          <li><span class="noscript-number" aria-hidden="true">04</span><span><strong>The baroque oval church</strong><small>Baroque · Central Europe · schematic · 46 × 32 × 26 m</small></span></li>
+          <li><span class="noscript-number" aria-hidden="true">05</span><span><strong>The timber stave church</strong><small>Timber · Scandinavia · schematic · 28 × 15 × 23 m</small></span></li>
+          <li><span class="noscript-number" aria-hidden="true">06</span><span><strong>The modern concrete nave</strong><small>Modern · Western Europe · schematic · 44 × 18 × 17 m</small></span></li>
         </ol>
         <p class="noscript-note">The collection is illustrative rather than a measured survey. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.</p>
       </section>
@@ -240,7 +240,7 @@
                     <span>Print sheet</span>
                   </button>
                 </div>
-                <div class="study-index" id="activeIndex">01</div>
+                <div class="study-index" id="activeIndex" aria-hidden="true">01</div>
               </div>
             </div>
             <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
@@ -478,25 +478,25 @@
 
         <div class="method-grid">
           <article class="method-card">
-            <span class="method-card-index">A</span>
+            <span class="method-card-index" aria-hidden="true">A</span>
             <h3>Axis</h3>
             <p>The dominant directional line. It can be longitudinal, radial, or crossed by a transept.</p>
             <code>A = {p₁ → p₂}</code>
           </article>
           <article class="method-card">
-            <span class="method-card-index">B</span>
+            <span class="method-card-index" aria-hidden="true">B</span>
             <h3>Module</h3>
             <p>A repeatable unit that sets the pace of bays, columns, windows, and structural spans.</p>
             <code>M = L ÷ n</code>
           </article>
           <article class="method-card">
-            <span class="method-card-index">C</span>
+            <span class="method-card-index" aria-hidden="true">C</span>
             <h3>Envelope</h3>
             <p>The enclosing figure: rectangle, cross, ellipse, polygon, or a compound of simple forms.</p>
             <code>E = {x, y, r, θ}</code>
           </article>
           <article class="method-card">
-            <span class="method-card-index">D</span>
+            <span class="method-card-index" aria-hidden="true">D</span>
             <h3>Symmetry</h3>
             <p>A reading of how closely the plan mirrors itself across its principal axes.</p>
             <code>S = 1 − (Δ ÷ P)</code>
@@ -504,7 +504,7 @@
         </div>
 
         <div class="method-note">
-          <span class="note-icon">i</span>
+          <span class="note-icon" aria-hidden="true">i</span>
           <p><strong>Important:</strong> the current collection is a schematic proportional study, not a measured survey or a claim about every church. Replace the values in <code>data/geometry.js</code> with your own measured dataset to expand the atlas.</p>
         </div>
       </section>

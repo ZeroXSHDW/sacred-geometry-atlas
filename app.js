@@ -588,7 +588,7 @@
       return `
         <li class="catalog-entry">
           <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${isActive ? "Selected study: " : "Open "}${escapeHtml(study.name)}; ${escapeHtml(study.typology)}; ${escapeHtml(study.emphasis)}; ${escapeHtml(studyStatus(study))}">
-            <span class="catalog-number">${escapeHtml(study.index)}</span>
+            <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${escapeHtml(study.name)}</span>
               <span class="catalog-card-meta">${escapeHtml(study.typology)} · ${escapeHtml(study.emphasis)} · ${escapeHtml(studyStatus(study))}</span>
