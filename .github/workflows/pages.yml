@@ -175,6 +175,7 @@ jobs:
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
+          if (!html.includes('<button class="share-button compare-edit-button" id="editCompare" type="button" aria-controls="atlas" aria-label="Edit comparison selection in Atlas"') || !app.includes('$("#editCompare").addEventListener("click", () => showPage("atlas"));') || !app.includes('const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";') || !app.includes('editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";')) throw new Error('Comparison view must provide a context-aware Atlas edit action');
           if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-label="Compare selected studies (select at least two)"')) throw new Error('Comparison tray controls must have useful initial labels');
           for (const token of ['const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;', 'open.setAttribute("aria-label", compareLabel);', 'clear.setAttribute("aria-label", clearLabel);']) {
             if (!app.includes(token)) throw new Error('Comparison tray labels must reflect selection state: ' + token);
@@ -400,6 +401,60 @@ jobs:
           if (hash !== '#atlas/gothic/section/interior/axis/1.3') throw new Error(`Unexpected study route: ${hash}`);
           if (href !== '/atlas/?q=central%20plan#atlas/gothic/section/interior/axis/1.3') throw new Error(`Catalog scope was not preserved: ${href}`);
           console.log('Route-native catalog link smoke test passed.');
+          NODE
+      - name: Smoke-test comparison edit handoff
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const location = { href: 'https://example.test/atlas/?q=central%20plan#compare/basilica,gothic', hash: '#compare/basilica,gothic' };
+          const historyCalls = [];
+          const elements = new Map([
+            ['#atlas', { hidden: false }],
+            ['#compareView', { hidden: false }],
+            ['#methodView', { hidden: false }]
+          ]);
+          const move = (url) => {
+            const next = new URL(url, location.href);
+            location.href = next.href;
+            location.hash = next.hash;
+          };
+          const context = {
+            URL,
+            window: {
+              location,
+              history: {
+                pushState(state, title, url) {
+                  historyCalls.push(['pushState', state, url]);
+                  move(url);
+                },
+                replaceState(state, title, url) {
+                  historyCalls.push(['replaceState', state, url]);
+                  move(url);
+                }
+              },
+              addEventListener() {}
+            },
+            document: {
+              title: '',
+              body: { classList: { contains() { return false; } } },
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, showPage } = context.window.__atlasTest;
+          state.page = 'compare';
+          state.activeId = 'basilica';
+          state.compareIds = ['basilica', 'gothic'];
+          showPage('atlas', { scroll: false });
+          const finalUrl = new URL(location.href);
+          if (finalUrl.hash !== '#atlas/basilica/plan/exterior/all') throw new Error(`Unexpected Atlas return route: ${finalUrl.hash}`);
+          if (finalUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Comparison selection was not preserved: ${finalUrl.search}`);
+          if (historyCalls.length !== 2 || historyCalls[0][0] !== 'pushState' || historyCalls[1][0] !== 'replaceState') throw new Error(`Unexpected handoff history sequence: ${JSON.stringify(historyCalls)}`);
+          console.log('Comparison edit handoff smoke test passed.');
           NODE
 
   deploy:

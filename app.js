@@ -451,6 +451,7 @@
       focusCatalogControl("query");
     });
     $("#openCompare").addEventListener("click", () => showPage("compare"));
+    $("#editCompare").addEventListener("click", () => showPage("atlas"));
     $("#geometryCompare").addEventListener("click", (event) => {
       const studyCard = event.target.closest("[data-compare-study]");
       if (!studyCard) return;
@@ -1489,6 +1490,14 @@
     renderGeometryCompare();
     renderComparisonTable();
     const selected = state.compareIds.length;
+    const edit = $("#editCompare");
+    if (edit) {
+      const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";
+      edit.setAttribute("aria-label", editLabel);
+      edit.title = editLabel;
+      const editText = edit.querySelector("span:last-child");
+      if (editText) editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";
+    }
     $("#compareScope").textContent = selected >= 2 ? `${selected} selected` : "Full collection";
     $("#compareHelper").textContent = selected >= 2
       ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
