@@ -13,12 +13,18 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Zoom and reset controls for the SVG drawing instrument.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Search, typology, location, and measured/schematic status filtering.
+- Visible filter chips with one-click clearing for each active catalog filter.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - Shareable hash routes such as `#atlas/gothic`, plus Compare and Method views.
 - Downloadable JSON data from the site.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` for automatic GitHub Pages deployment.
 - Responsive layout, keyboard focus states, skip navigation, live status feedback, and a no-script message.
+
+### Keyboard shortcuts
+
+When the Atlas view is active, press `J` / `K` to move through the visible studies, `1` / `2` / `3`
+to switch between plan, elevation, and section, `I` / `O` to switch inside/outside, and `R` to reset zoom.
 
 ## Run locally
 

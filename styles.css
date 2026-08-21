@@ -267,6 +267,11 @@ h3 { letter-spacing: -0.04em; }
 .catalog-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.78rem 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.04em; text-transform: uppercase; }
 .catalog-summary-label { color: var(--ink-muted); }
 .catalog-summary #catalogResultCount { color: var(--teal); }
+.active-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; padding-bottom: 0.85rem; }
+.filter-chip { display: inline-flex; align-items: center; gap: 0.45rem; max-width: 100%; padding: 0.38rem 0.5rem; border: 1px solid rgba(136, 198, 186, 0.34); color: var(--teal); background: var(--teal-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.2; text-align: left; transition: 180ms ease; }
+.filter-chip span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.filter-chip span:last-child { color: var(--ink-soft); font-size: 0.8rem; line-height: 0.7; }
+.filter-chip:hover { border-color: var(--teal); color: var(--ink); background: rgba(136, 198, 186, 0.2); }
 
 .catalog-list { display: grid; }
 .catalog-entry { display: flex; align-items: stretch; border-bottom: 1px solid var(--line); }
@@ -336,6 +341,7 @@ h3 { letter-spacing: -0.04em; }
 .drawing-toolbar { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--line); }
 .drawing-legend { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--ink-muted); font-size: 0.52rem; letter-spacing: 0.025em; }
 .drawing-legend span { display: inline-flex; align-items: center; gap: 0.38rem; }
+.drawing-legend .drawing-shortcuts { color: var(--ink-soft); }
 .legend-swatch { display: inline-block; width: 12px; height: 2px; }
 .swatch-primary { background: var(--amber); }
 .swatch-secondary { background: var(--teal); }
@@ -539,6 +545,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .layer-control { width: 100%; margin-left: 0; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 0.55rem; }
   .layer-button { flex: 1; }
   .drawing-toolbar { align-items: start; flex-direction: column; }
+  .drawing-shortcuts { display: none !important; }
   .drawing-tools { width: 100%; justify-content: space-between; }
   .svg-wrap, .geometry-svg { min-height: 320px; }
   .metric-strip { grid-template-columns: repeat(2, 1fr); }

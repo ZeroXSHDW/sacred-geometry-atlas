@@ -88,8 +88,8 @@
             <span class="stat-label">drawing modes</span>
           </div>
           <div class="hero-stat">
-            <span class="stat-number">∞</span>
-            <span class="stat-label">relationships</span>
+            <span class="stat-number">04</span>
+            <span class="stat-label">reading profiles</span>
           </div>
         </div>
       </section>
@@ -150,8 +150,9 @@
 
             <div class="catalog-summary">
               <span class="catalog-summary-label">Showing</span>
-              <span id="catalogResultCount" role="status" aria-live="polite">06 studies</span>
+              <span id="catalogResultCount" role="status" aria-live="polite">06 of 06 studies</span>
             </div>
+            <div class="active-filters" id="activeFilters" aria-label="Active filters" hidden></div>
             <div class="catalog-list" id="churchList" role="group" aria-label="Geometry study choices"></div>
             <div class="empty-state" id="emptyState" hidden>
               <span class="empty-mark" aria-hidden="true">∅</span>
@@ -211,11 +212,12 @@
 
             <div class="drawing-card">
               <div class="drawing-toolbar">
-                <div class="drawing-legend" aria-label="Drawing legend">
-                  <span><i class="legend-swatch swatch-primary"></i> primary form</span>
-                  <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
-                  <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
-                </div>
+              <div class="drawing-legend" aria-label="Drawing legend">
+                <span><i class="legend-swatch swatch-primary"></i> primary form</span>
+                <span><i class="legend-swatch swatch-secondary"></i> axis / module</span>
+                <span><i class="legend-swatch swatch-tertiary"></i> measured line</span>
+                <span class="drawing-shortcuts">J / K studies · 1 / 2 / 3 views</span>
+              </div>
                 <div class="drawing-tools">
                   <span class="drawing-scale" id="drawingScale">Scale 1 : 200</span>
                   <div class="zoom-control" role="group" aria-label="Drawing zoom">
@@ -235,6 +237,7 @@
                 </p>
               </div>
             </div>
+            <span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>
 
             <div class="metric-strip" aria-label="Primary measurements">
               <div class="metric-cell">

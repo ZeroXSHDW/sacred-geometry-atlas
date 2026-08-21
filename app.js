@@ -177,13 +177,107 @@
     });
     $("#downloadData").addEventListener("click", downloadData);
     $("#shareStudy").addEventListener("click", shareStudy);
+    $("#activeFilters").addEventListener("click", (event) => {
+      const chip = event.target.closest("[data-clear-filter]");
+      if (chip) clearFilter(chip.dataset.clearFilter);
+    });
+    window.addEventListener("keydown", handleKeyboard);
   }
 
-  function selectStudy(id) {
+  function selectStudy(id, options = {}) {
+    const { scroll = true } = options;
     if (!studies.some((study) => study.id === id)) return;
     state.activeId = id;
-    showPage("atlas");
+    showPage("atlas", { scroll });
     renderAll();
+  }
+
+  function resultCountText(count) {
+    return `${count} of ${studies.length} studies`;
+  }
+
+  function renderActiveFilters() {
+    const target = $("#activeFilters");
+    if (!target) return;
+    const filters = [];
+    if (state.query) filters.push({ key: "query", label: `Search: “${state.query}”` });
+    if (state.filter !== "all") filters.push({ key: "filter", label: $("#filterSelect").selectedOptions[0].textContent });
+    if (state.filterPlace !== "all") filters.push({ key: "place", label: $("#filterPlace").selectedOptions[0].textContent });
+    if (state.filterStatus !== "all") filters.push({ key: "status", label: $("#filterStatus").selectedOptions[0].textContent });
+    target.hidden = filters.length === 0;
+    target.innerHTML = filters.map(({ key, label }) => `
+      <button class="filter-chip" type="button" data-clear-filter="${key}">
+        <span>${escapeHtml(label)}</span><span aria-hidden="true">×</span>
+      </button>
+    `).join("");
+  }
+
+  function clearFilter(key) {
+    if (key === "query") {
+      state.query = "";
+      $("#searchInput").value = "";
+    }
+    if (key === "filter") {
+      state.filter = "all";
+      $("#filterSelect").value = "all";
+    }
+    if (key === "place") {
+      state.filterPlace = "all";
+      $("#filterPlace").value = "all";
+    }
+    if (key === "status") {
+      state.filterStatus = "all";
+      $("#filterStatus").value = "all";
+    }
+    refreshCatalog();
+  }
+
+  function announceKeyboard(message) {
+    const status = $("#keyboardStatus");
+    if (status) status.textContent = message;
+  }
+
+  function cycleStudy(direction) {
+    const visible = visibleStudies();
+    if (!visible.length) return;
+    const currentIndex = visible.findIndex((study) => study.id === state.activeId);
+    const nextIndex = (currentIndex + direction + visible.length) % visible.length;
+    const nextStudy = visible[nextIndex];
+    selectStudy(nextStudy.id, { scroll: false });
+    announceKeyboard(`${nextStudy.name} selected.`);
+  }
+
+  function handleKeyboard(event) {
+    const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
+    if (["input", "select", "textarea", "button"].includes(tagName) || event.target.isContentEditable) return;
+    if (event.metaKey || event.ctrlKey || event.altKey || state.page !== "atlas") return;
+    const key = event.key.toLowerCase();
+    if (key === "j" || key === "k") {
+      event.preventDefault();
+      cycleStudy(key === "j" ? 1 : -1);
+      return;
+    }
+    if (["1", "2", "3"].includes(key)) {
+      const modes = { "1": "plan", "2": "elevation", "3": "section" };
+      state.mode = modes[key];
+      renderControls();
+      renderDrawing();
+      announceKeyboard(`${state.mode} view selected.`);
+      return;
+    }
+    if (key === "i" || key === "o") {
+      state.surface = key === "i" ? "interior" : "exterior";
+      renderControls();
+      renderDrawing();
+      announceKeyboard(`${state.surface} geometry selected.`);
+      return;
+    }
+    if (key === "r") {
+      state.zoom = 1;
+      renderControls();
+      renderDrawing();
+      announceKeyboard("Drawing zoom reset.");
+    }
   }
 
   function visibleStudies() {
@@ -211,7 +305,7 @@
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
     renderList();
     const resultCount = $("#catalogResultCount");
-    if (resultCount) resultCount.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} / ${studies.length}`;
+    if (resultCount) resultCount.textContent = resultCountText(visible.length);
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();
@@ -234,7 +328,8 @@
     const empty = $("#emptyState");
     const visible = visibleStudies();
     const resultCount = $("#catalogResultCount");
-    if (resultCount) resultCount.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} / ${studies.length}`;
+    if (resultCount) resultCount.textContent = resultCountText(visible.length);
+    renderActiveFilters();
     list.innerHTML = visible.map((study) => {
       const isCompared = state.compareIds.includes(study.id);
       return `
