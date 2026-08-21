@@ -456,9 +456,9 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation } = context.window.__atlasTest;
           let prevented = false;
           state.page = 'atlas';
           state.compareIds = [];
@@ -488,6 +488,9 @@ jobs:
           state.activeId = 'gothic';
           renderStudyNav();
           if (position.textContent !== '01 / 01 visible' || navigation['aria-label'] !== 'Move between studies; showing study 1 of 1 visible studies' || !previous.disabled || !next.disabled) throw new Error('Filtered study navigation position did not render');
+          const specialCharacterStudy = { ...context.window.CHURCH_GEOMETRY[0], emphasis: 'Light & <line>' };
+          const elevation = drawElevation(specialCharacterStudy);
+          if (!elevation.includes('light &amp; &lt;line&gt;') || elevation.includes('Light & <line>')) throw new Error('Dynamic SVG labels must escape study text');
           console.log('Route-native catalog link smoke test passed.');
           NODE
       - name: Smoke-test comparison edit handoff

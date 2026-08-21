@@ -1992,7 +1992,7 @@
       }
     content += dimensionLine(x, ground + 30, x + width, ground + 30, `${study.length} m`, x + width / 2, ground + 47);
     content += dimensionLine(x + width + 28, ground, x + width + 28, top, `${study.height} m`, x + width + 42, (ground + top) / 2);
-    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">${study.emphasis.toLowerCase()} · height / span ${number(study.height / study.span, 2)}</text>`;
+    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">${escapeHtml(study.emphasis.toLowerCase())} · height / span ${number(study.height / study.span, 2)}</text>`;
     return content;
   }
 
