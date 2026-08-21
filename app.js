@@ -232,6 +232,7 @@
     const route = parseRoute();
     const previousPage = state.page;
     let normalizedStudyRoute = false;
+    let includeStudyInNormalizedRoute = true;
     if (route.studyId) {
       state.activeId = route.studyId;
       state.mode = route.mode || "plan";
@@ -241,15 +242,21 @@
     if (route.page === "compare") state.compareIds = route.compareIds;
     if (route.page === "atlas") {
       const visible = visibleStudies();
-      if (visible.length && !visible.some((study) => study.id === state.activeId)) {
+      if (!visible.length && route.studyId) {
+        normalizedStudyRoute = true;
+        includeStudyInNormalizedRoute = false;
+      } else if (visible.length && !visible.some((study) => study.id === state.activeId)) {
         state.activeId = visible[0].id;
         normalizedStudyRoute = Boolean(route.studyId);
       }
     }
     showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
     renderAll();
-    if (normalizedStudyRoute) replaceRoute("atlas");
-    if (route.page === "atlas" && route.studyId) {
+    if (normalizedStudyRoute) {
+      replaceRoute("atlas", includeStudyInNormalizedRoute);
+      updateDocumentTitle("atlas");
+    }
+    if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute) {
       announceStudy(activeStudy(), visibleStudies().length);
       announceDrawingState();
       const heading = $("#activeName");
@@ -654,6 +661,7 @@
     const previousId = state.activeId;
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
     renderList();
+    if (state.page === "atlas" && !visible.length) replaceRoute("atlas", false);
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();

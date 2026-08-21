@@ -217,7 +217,7 @@ jobs:
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog scope');
-          for (const token of ['state.mode = route.mode || "plan";', 'state.surface = route.surface || "exterior";', 'state.layer = route.layer || "all";', 'let normalizedStudyRoute = false;', 'normalizedStudyRoute = Boolean(route.studyId);', 'if (normalizedStudyRoute) replaceRoute("atlas");']) {
+          for (const token of ['state.mode = route.mode || "plan";', 'state.surface = route.surface || "exterior";', 'state.layer = route.layer || "all";', 'let normalizedStudyRoute = false;', 'let includeStudyInNormalizedRoute = true;', 'includeStudyInNormalizedRoute = false;', 'if (normalizedStudyRoute) {', 'replaceRoute("atlas", includeStudyInNormalizedRoute);', 'updateDocumentTitle("atlas");', 'if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute)', 'if (state.page === "atlas" && !visible.length) replaceRoute("atlas", false);']) {
             if (!app.includes(token)) throw new Error('Partial study routes must restore drawing defaults: ' + token);
           }
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
