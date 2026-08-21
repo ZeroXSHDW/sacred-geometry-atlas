@@ -679,7 +679,7 @@
       const namespace = attributes.includes("xmlns=") ? "" : ' xmlns="http://www.w3.org/2000/svg"';
       return `<svg${attributes}${namespace}><style>${exportStyles}</style>`;
     });
-    const filename = `${study.id}-${state.surface}-${state.mode}.svg`;
+    const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;
     const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${source}`], { type: "image/svg+xml;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
