@@ -135,6 +135,9 @@ jobs:
           }
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');
           if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
+          for (const token of ['role="img" aria-labelledby="drawing-title drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Reference:']) {
+            if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
+          }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
