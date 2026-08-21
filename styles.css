@@ -21,6 +21,10 @@
 
 * { box-sizing: border-box; }
 
+.no-js .site-header,
+.no-js main,
+.no-js .site-footer { display: none; }
+
 html { scroll-behavior: smooth; }
 
 body {

@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  document.body.classList.remove("no-js");
+
   const studies = Array.isArray(window.CHURCH_GEOMETRY) ? window.CHURCH_GEOMETRY : [];
   const state = {
     activeId: studies[0] ? studies[0].id : null,
