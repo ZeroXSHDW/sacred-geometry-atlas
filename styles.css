@@ -555,6 +555,16 @@ h3 { letter-spacing: -0.04em; }
 .compare-callout span, .compare-callout small { color: var(--amber); font-family: var(--mono); font-size: 0.54rem; text-transform: uppercase; }
 .compare-callout strong { margin: 0.2rem 0; color: var(--ink); font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
 .compare-helper { margin: -1rem 0 0.65rem; color: var(--ink-muted); font-size: 0.7rem; }
+.compare-selection { margin: 0 0 1.5rem; padding: 0.85rem 1rem; border: 1px solid var(--line); background: rgba(24, 33, 31, 0.58); }
+.compare-selection-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.65rem; }
+.compare-selection-label { margin: 0; color: var(--amber); font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.compare-selection-clear { padding: 0.32rem 0.48rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.compare-selection-clear:hover { border-color: var(--coral); color: var(--coral); background: rgba(231, 127, 98, 0.08); }
+.compare-selection-list { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.compare-selection-chip { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.42rem 0.55rem 0.42rem 0.65rem; border: 1px solid var(--line-strong); color: var(--ink-soft); background: var(--panel); font-family: var(--mono); font-size: 0.57rem; text-align: left; transition: 180ms ease; }
+.compare-selection-chip:hover { border-color: var(--coral); color: var(--ink); background: rgba(231, 127, 98, 0.08); }
+.compare-selection-chip span:first-child { overflow: hidden; max-width: 22ch; text-overflow: ellipsis; white-space: nowrap; }
+.compare-selection-chip span:last-child { color: var(--coral); font-size: 0.9rem; line-height: 0.8; }
 .compare-status-note { margin: 0 0 2rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.5; }
 .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .comparison-card { min-height: 340px; padding: 1.35rem; border: 1px solid var(--line); background: var(--panel); }
@@ -704,6 +714,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-intro-side { justify-items: start; margin-top: 1.3rem; }
   .compare-callout { width: fit-content; margin-top: 0; }
   .compare-helper { margin-top: -0.4rem; }
+  .compare-selection-heading { align-items: start; flex-direction: column; gap: 0.55rem; }
   .comparison-table-actions { align-items: start; flex-direction: column; }
   .comparison-grid { grid-template-columns: 1fr; }
   .wide-card { grid-column: auto; }
@@ -743,6 +754,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .drawing-export,
   .drawing-reset { min-height: 36px; }
   .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }
+  .compare-selection-clear, .compare-selection-chip { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
@@ -770,6 +782,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }
   .catalog-card.is-active .catalog-number { color: Highlight; }
   .compare-toggle.is-selected { border-color: Highlight; color: HighlightText; background: Highlight; }
+  .compare-selection-clear,
+  .compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .compare-selection-chip span:last-child { color: ButtonText; }
   .filter-chip,
   .filter-clear-all,
   .share-button.is-copied,

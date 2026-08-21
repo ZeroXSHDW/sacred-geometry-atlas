@@ -176,6 +176,7 @@ jobs:
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
           if (!html.includes('<button class="share-button compare-edit-button" id="editCompare" type="button" aria-controls="atlas" aria-label="Edit comparison selection in Atlas"') || !app.includes('$("#editCompare").addEventListener("click", () => showPage("atlas"));') || !app.includes('const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";') || !app.includes('editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";')) throw new Error('Comparison view must provide a context-aware Atlas edit action');
+          if (!html.includes('<div class="compare-selection" id="compareSelection" role="group" aria-labelledby="compareSelectionHeading" hidden>') || !html.includes('id="clearCompareView" type="button"') || !app.includes('function renderCompareSelection()') || !app.includes('data-remove-compare-id') || !app.includes('function removeComparisonStudy(id)') || !app.includes('clearComparisonSelection({ focus: true })') || !app.includes('const control = state.page === "compare" ? $("#editCompare") : $("#searchInput");') || !app.includes('next.focus({ preventScroll: true })') || !styles.includes('.compare-selection-chip')) throw new Error('Focused comparison selection controls are incomplete');
           if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-label="Compare selected studies (select at least two)"')) throw new Error('Comparison tray controls must have useful initial labels');
           for (const token of ['const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;', 'open.setAttribute("aria-label", compareLabel);', 'clear.setAttribute("aria-label", clearLabel);']) {
             if (!app.includes(token)) throw new Error('Comparison tray labels must reflect selection state: ' + token);
@@ -302,12 +303,12 @@ jobs:
           }
           const comparisonTitleUpdate = app.slice(app.indexOf('function toggleCompare(id, options = {})'), app.indexOf('\n  function updateCompareTray()', app.indexOf('function toggleCompare(id, options = {})')));
           if (!comparisonTitleUpdate.includes('updateDocumentTitle(state.page);')) throw new Error('Comparison selection changes must refresh the browser title');
-          const clearComparisonStart = app.indexOf('$("#clearCompare").addEventListener("click"');
-          const clearComparisonEnd = app.indexOf('\n    $("#openCompare")', clearComparisonStart);
+          const clearComparisonStart = app.indexOf('function clearComparisonSelection(');
+          const clearComparisonEnd = app.indexOf('\n  function removeComparisonStudy', clearComparisonStart);
           if (clearComparisonStart < 0 || clearComparisonEnd < 0 || !app.slice(clearComparisonStart, clearComparisonEnd).includes('updateDocumentTitle(state.page);')) throw new Error('Clearing comparison selection must refresh the browser title');
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
           if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;')) throw new Error('Missing narrow study-header layout');
-          if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }')) throw new Error('Forced-colors mode must preserve focus and selected-state affordances');
+          if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }') || !styles.includes('.compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }')) throw new Error('Forced-colors mode must preserve focus and selected-state affordances');
           for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }', '.search-field input, .select-wrap select { min-height: 40px; }', '.filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }']) {
             if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
           }
@@ -443,11 +444,23 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage, renderCompareSelection };\n})();');
           vm.runInNewContext(app, context);
-          const { state, showPage } = context.window.__atlasTest;
+          const { state, showPage, renderCompareSelection } = context.window.__atlasTest;
           state.page = 'compare';
           state.activeId = 'basilica';
+          state.compareIds = ['basilica', 'gothic'];
+          const selection = { hidden: true };
+          const selectionList = { innerHTML: '' };
+          const clearSelection = { setAttribute(name, value) { this[name] = value; } };
+          elements.set('#compareSelection', selection);
+          elements.set('#compareSelectionList', selectionList);
+          elements.set('#clearCompareView', clearSelection);
+          renderCompareSelection();
+          if (selection.hidden || !selectionList.innerHTML.includes('data-remove-compare-id="basilica"') || !selectionList.innerHTML.includes('The longitudinal basilica') || clearSelection['aria-label'] !== 'Clear 2 selected studies') throw new Error('Focused selection did not render its removable study list');
+          state.compareIds = [];
+          renderCompareSelection();
+          if (!selection.hidden || selectionList.innerHTML !== '') throw new Error('Focused selection did not hide after clearing its scope');
           state.compareIds = ['basilica', 'gothic'];
           showPage('atlas', { scroll: false });
           const finalUrl = new URL(location.href);

@@ -23,6 +23,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, and proportional charts.
+- Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
 - An expandable semantic comparison table with recorded study status, lengths, spans, ratios, heights, bays, modules, and symmetry values, with keyboard-accessible horizontal scrolling on narrow screens.
 - CSV export for the active comparison scope, alongside the full-atlas and filtered-view JSON downloads.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.

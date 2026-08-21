@@ -438,20 +438,14 @@
     $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
       showPage(button.dataset.view, { routeStudy: false });
     }));
-    $("#clearCompare").addEventListener("click", () => {
-      const hadSelection = state.compareIds.length > 0;
-      state.compareIds = [];
-      renderList();
-      updateCompareTray();
-      renderCompare();
-      if (state.page === "compare") replaceRoute("compare", false);
-      commitComparisonRoute();
-      updateDocumentTitle(state.page);
-      if (hadSelection) announceKeyboard("Comparison selection cleared.");
-      focusCatalogControl("query");
-    });
+    $("#clearCompare").addEventListener("click", () => clearComparisonSelection({ focus: true }));
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#editCompare").addEventListener("click", () => showPage("atlas"));
+    $("#clearCompareView").addEventListener("click", () => clearComparisonSelection({ focus: true }));
+    $("#compareSelection").addEventListener("click", (event) => {
+      const remove = event.target.closest("[data-remove-compare-id]");
+      if (remove) removeComparisonStudy(remove.dataset.removeCompareId);
+    });
     $("#geometryCompare").addEventListener("click", (event) => {
       const studyCard = event.target.closest("[data-compare-study]");
       if (!studyCard) return;
@@ -1438,6 +1432,39 @@
     if (state.page === "atlas") replaceRoute("atlas");
   }
 
+  function clearComparisonSelection({ focus = false } = {}) {
+    const hadSelection = state.compareIds.length > 0;
+    state.compareIds = [];
+    renderList();
+    updateCompareTray();
+    renderCompare();
+    if (state.page === "compare") replaceRoute("compare", false);
+    commitComparisonRoute();
+    updateDocumentTitle(state.page);
+    if (hadSelection) announceKeyboard("Comparison selection cleared.");
+    if (focus) {
+      const control = state.page === "compare" ? $("#editCompare") : $("#searchInput");
+      if (control && typeof control.focus === "function") control.focus({ preventScroll: true });
+    }
+  }
+
+  function removeComparisonStudy(id) {
+    const index = state.compareIds.indexOf(id);
+    if (index < 0) return;
+    const study = studies.find((candidate) => candidate.id === id);
+    state.compareIds = state.compareIds.filter((compareId) => compareId !== id);
+    renderList();
+    updateCompareTray();
+    renderCompare();
+    if (state.page === "compare") replaceRoute("compare", false);
+    commitComparisonRoute();
+    updateDocumentTitle(state.page);
+    if (study) announceKeyboard(`${study.name} removed from comparison. ${state.compareIds.length} selected.`);
+    const remaining = $$('[data-remove-compare-id]');
+    const next = remaining.length ? remaining[Math.min(index, remaining.length - 1)] : $("#editCompare");
+    if (next && typeof next.focus === "function") next.focus({ preventScroll: true });
+  }
+
   function toggleCompare(id, options = {}) {
     const { focus = false } = options;
     const study = studies.find((candidate) => candidate.id === id);
@@ -1489,6 +1516,7 @@
     renderCharts();
     renderGeometryCompare();
     renderComparisonTable();
+    renderCompareSelection();
     const selected = state.compareIds.length;
     const edit = $("#editCompare");
     if (edit) {
@@ -1503,6 +1531,25 @@
       ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
       : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
     if (state.page === "compare") updateDocumentTitle("compare");
+  }
+
+  function renderCompareSelection() {
+    const selection = $("#compareSelection");
+    const list = $("#compareSelectionList");
+    const clear = $("#clearCompareView");
+    if (!selection || !list) return;
+    const focused = state.compareIds.length >= 2;
+    const comparison = focused ? comparisonStudies() : [];
+    selection.hidden = !focused;
+    list.innerHTML = focused ? comparison.map((study) => {
+      const label = `Remove ${study.name} from comparison`;
+      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span aria-hidden="true">×</span></button>`;
+    }).join("") : "";
+    if (clear && focused) {
+      const clearLabel = `Clear ${comparison.length} selected ${comparison.length === 1 ? "study" : "studies"}`;
+      clear.setAttribute("aria-label", clearLabel);
+      clear.title = clearLabel;
+    }
   }
 
   function renderComparisonTable() {
