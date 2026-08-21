@@ -96,6 +96,7 @@ jobs:
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
           if (!html.includes('id="activeReference"')) throw new Error('Missing visible study reference');
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
+          if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
           if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');
           for (const token of ['data-surface="exterior" type="button" aria-pressed="true"', 'data-mode="plan" type="button" aria-pressed="true"', 'data-layer="all" type="button" aria-pressed="true"']) {
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
@@ -134,6 +135,9 @@ jobs:
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
           if (!styles.includes('.analysis-reading')) throw new Error('Missing interpretive reading style');
+          for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
+            if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);
+          }
           for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', '\"summary\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
