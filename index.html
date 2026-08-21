@@ -211,14 +211,21 @@
                   <button id="prevStudy" type="button" aria-label="Previous study" title="Previous study">←</button>
                   <button id="nextStudy" type="button" aria-label="Next study" title="Next study">→</button>
                 </div>
-                <button class="share-button" id="shareStudy" type="button">
-                  <span aria-hidden="true">↗</span>
-                  <span>Share study</span>
-                </button>
+                <div class="study-share-actions">
+                  <button class="share-button" id="shareStudy" type="button">
+                    <span aria-hidden="true">↗</span>
+                    <span>Share study</span>
+                  </button>
+                  <button class="share-button citation-button" id="copyCitation" type="button" title="Copy a citation for the active study">
+                    <span aria-hidden="true">⧉</span>
+                    <span>Copy citation</span>
+                  </button>
+                </div>
                 <div class="study-index" id="activeIndex">01</div>
               </div>
             </div>
             <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="citationStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite"></span>
 
             <div class="drawing-controls" role="group" aria-label="Drawing controls">

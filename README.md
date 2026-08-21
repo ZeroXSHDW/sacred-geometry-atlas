@@ -15,6 +15,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search, typology, location, and measured/schematic status filtering.
 - Visible filter chips with one-click clearing for each active catalog filter.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
+- Copyable citations that include the active study, provenance, drawing state, and shareable route.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - Shareable hash routes such as `#atlas/gothic/section/interior/axis`, plus Compare and Method views; the optional segments preserve the selected mode, surface, and geometry focus.
@@ -112,4 +113,4 @@ The site has no build step and keeps all navigation client-side with hash URLs, 
 repository subpath without special server rewrites. The Pages workflow repeats the syntax, required-file,
 social-metadata, and social-card dimension checks before publishing.
 
-The browser QA checklist is: test desktop and approximately 390px phone width; verify no horizontal overflow; test every study in plan/elevation/section and outside/inside modes; test filters, sorting, zoom, layer focus, comparison, method navigation, JSON export, SVG drawing export, and print output; and check for console errors.
+The browser QA checklist is: test desktop and approximately 390px phone width; verify no horizontal overflow; test every study in plan/elevation/section and outside/inside modes; test filters, sorting, zoom, layer focus, comparison, method navigation, citation copying, JSON export, SVG drawing export, and print output; and check for console errors.

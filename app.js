@@ -30,6 +30,7 @@
   const validSurfaces = new Set(["exterior", "interior"]);
   const validLayers = new Set(["all", "envelope", "rhythm", "axis", "measure"]);
   let shareResetTimer;
+  let citationResetTimer;
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -220,6 +221,7 @@
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
+    $("#copyCitation").addEventListener("click", copyCitation);
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
@@ -525,6 +527,29 @@
     updateDocumentTitle(page);
   }
 
+  async function copyText(value) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+      const copyField = document.createElement("textarea");
+      copyField.value = value;
+      copyField.setAttribute("readonly", "");
+      copyField.style.position = "fixed";
+      copyField.style.opacity = "0";
+      document.body.appendChild(copyField);
+      try {
+        copyField.select();
+        return document.execCommand("copy");
+      } finally {
+        copyField.remove();
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
   async function shareStudy() {
     const study = activeStudy();
     const button = $("#shareStudy");
@@ -548,25 +573,7 @@
       return;
     }
 
-    let copied = false;
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(shareUrl.href);
-        copied = true;
-      } else {
-        const copyField = document.createElement("textarea");
-        copyField.value = shareUrl.href;
-        copyField.setAttribute("readonly", "");
-        copyField.style.position = "fixed";
-        copyField.style.opacity = "0";
-        document.body.appendChild(copyField);
-        copyField.select();
-        copied = document.execCommand("copy");
-        copyField.remove();
-      }
-    } catch (error) {
-      copied = false;
-    }
+    const copied = await copyText(shareUrl.href);
 
     if (copied) {
       const label = button.querySelector("span:last-child");
@@ -580,6 +587,35 @@
       }, 2200);
     } else {
       status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
+    }
+  }
+
+  function citationText(study) {
+    const citationUrl = new URL(window.location.href);
+    citationUrl.hash = routeHash("atlas", true);
+    const surface = state.surface === "interior" ? "inside" : "outside";
+    const focus = state.layer === "all" ? "all geometry" : `${state.layer} focus`;
+    return `${study.name}. ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}. Sacred Geometry Atlas. ${citationUrl.href}`;
+  }
+
+  async function copyCitation() {
+    const study = activeStudy();
+    const button = $("#copyCitation");
+    const status = $("#citationStatus");
+    if (!study || !button || !status) return;
+    const copied = await copyText(citationText(study));
+    const label = button.querySelector("span:last-child");
+    if (copied) {
+      button.classList.add("is-copied");
+      if (label) label.textContent = "Citation copied";
+      status.textContent = `Citation for ${study.name} copied.`;
+      window.clearTimeout(citationResetTimer);
+      citationResetTimer = window.setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (label) label.textContent = "Copy citation";
+      }, 2200);
+    } else {
+      status.textContent = "Copying was unavailable. You can copy the citation from the study details.";
     }
   }
 
