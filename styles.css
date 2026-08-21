@@ -79,7 +79,7 @@ summary:focus-visible {
 .noscript-link:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
 .noscript-index { width: min(1440px, calc(100% - 96px)); margin: 2rem auto 0; padding: 2rem; border: 1px solid var(--line); background: var(--panel); }
 .noscript-index .eyebrow { margin-bottom: 0.85rem; }
-.noscript-index h2 { margin-bottom: 0.8rem; }
+.noscript-index h1 { margin: 0 0 0.8rem; font-size: clamp(1.7rem, 3vw, 2.9rem); letter-spacing: -0.06em; line-height: 1.05; }
 .noscript-intro { max-width: 42rem; color: var(--ink-soft); }
 .noscript-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 2rem 0 1.2rem; padding: 0; list-style: none; }
 .noscript-list li { display: grid; grid-template-columns: 32px 1fr; gap: 0.7rem; padding: 1rem 0; border-top: 1px solid var(--line); }

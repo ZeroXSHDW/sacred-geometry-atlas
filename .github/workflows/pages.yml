@@ -84,6 +84,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
+          if (!html.includes('<h1 id="noscript-heading">')) throw new Error('No-JS fallback must provide the page heading');
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root')) throw new Error('Missing GitHub Pages root navigation');
