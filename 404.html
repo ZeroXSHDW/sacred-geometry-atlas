@@ -31,9 +31,12 @@
       .error-code { margin: 0; color: var(--amber); font-family: var(--serif); font-size: clamp(7rem, 25vw, 15rem); font-weight: 400; letter-spacing: -0.12em; line-height: 0.72; }
       h1 { max-width: 15ch; margin: 2rem 0 1rem; color: var(--ink); font-size: clamp(2.2rem, 6vw, 5.2rem); letter-spacing: -0.07em; line-height: 0.98; }
       .error-copy { max-width: 34rem; margin: 0; color: var(--ink-soft); font-size: 1rem; line-height: 1.8; }
-      .home-link { display: inline-flex; align-items: center; gap: 0.6rem; width: fit-content; margin-top: 2rem; padding: 0.75rem 0.95rem; border: 1px solid var(--amber); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+      .error-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+      .home-link { display: inline-flex; align-items: center; gap: 0.6rem; width: fit-content; padding: 0.75rem 0.95rem; border: 1px solid var(--amber); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
       .home-link:hover, .home-link:focus-visible { color: var(--bg); background: var(--amber); }
       .home-link:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
+      .home-link-secondary { border-color: var(--teal); color: var(--teal); background: rgba(136, 198, 186, 0.08); }
+      .home-link-secondary:hover, .home-link-secondary:focus-visible { color: var(--bg); background: var(--teal); }
       .home-link span { font-size: 1rem; line-height: 0; }
       .error-footer { display: flex; justify-content: space-between; width: min(100% - 48px, 900px); margin: auto; padding: 1.25rem 0; border-top: 1px solid rgba(213, 229, 214, 0.14); color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; }
       .error-footer p { margin: 0; }
@@ -54,7 +57,10 @@
       <p class="error-code" aria-hidden="true">404</p>
       <h1 id="error-title">This path has left the atlas.</h1>
       <p class="error-copy">The geometry study you were looking for is not on this sheet. Return to the collection and choose another point of entry.</p>
-      <a class="home-link" data-site-root href="../">Return to the atlas <span aria-hidden="true">↗</span></a>
+      <div class="error-actions">
+        <a class="home-link" data-site-root href="../">Return to the atlas <span aria-hidden="true">↗</span></a>
+        <a class="home-link home-link-secondary" data-site-dataset href="data/geometry.json">Open the static dataset <span aria-hidden="true">↗</span></a>
+      </div>
     </main>
     <footer class="error-footer">
       <p><strong>Sacred Geometry Atlas</strong></p>
@@ -64,10 +70,15 @@
       (() => {
         const segments = window.location.pathname.split('/').filter(Boolean);
         const isGitHubPages = window.location.hostname.endsWith('.github.io');
-        const siteRoot = isGitHubPages && segments.length > 1 ? `/${segments[0]}/` : '/';
+        const rootLink = document.querySelector('[data-site-root]');
+        const configuredRoot = rootLink && typeof rootLink.getAttribute === 'function' ? rootLink.getAttribute('href') : '';
+        const siteRoot = /^(?:[a-z]+:)?\/\//i.test(configuredRoot)
+          ? configuredRoot
+          : isGitHubPages && segments.length > 1 ? `/${segments[0]}/` : '/';
         const favicon = document.querySelector('#site-favicon');
         if (favicon) favicon.href = `${siteRoot}favicon.svg`;
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
+        document.querySelectorAll('[data-site-dataset]').forEach((link) => { link.href = `${siteRoot}data/geometry.json`; });
       })();
     </script>
   </body>
