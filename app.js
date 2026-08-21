@@ -1202,8 +1202,7 @@
     const status = $("#compareShareStatus");
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
-      const shareUrl = clearCatalogParams(new URL(window.location.href));
-      shareUrl.hash = routeHash("compare", false);
+      const shareUrl = comparisonRouteUrl();
       const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
       const selectionLabel = selected.length
         ? selected.map((study) => studyShortName(study)).join(", ")
@@ -1431,10 +1430,12 @@
   }
 
   function comparisonCsvPayload(comparison) {
+    const route = comparisonRouteUrl().href;
+    const scope = comparisonScopeLabel(comparison);
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Status", "Reference", "Source", "Source note",
       "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
-      "Bay count", "Module (m)", "Radius (m)", "Symmetry index"
+      "Bay count", "Module (m)", "Radius (m)", "Symmetry index", "Scope", "Route"
     ];
     const rows = comparison.map((study) => [
       study.id,
@@ -1454,7 +1455,9 @@
       study.bayCount,
       number(study.module),
       number(study.radius),
-      number(study.symmetry, 2)
+      number(study.symmetry, 2),
+      scope,
+      route
     ]);
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
   }
@@ -1636,6 +1639,18 @@
   function comparisonStudies() {
     if (state.compareIds.length >= 2) return studies.filter((study) => state.compareIds.includes(study.id));
     return studies;
+  }
+
+  function comparisonScopeLabel(comparison = comparisonStudies()) {
+    return state.compareIds.length >= 2
+      ? `${comparison.length} selected studies`
+      : "full collection";
+  }
+
+  function comparisonRouteUrl() {
+    const url = clearCatalogParams(new URL(window.location.href));
+    url.hash = routeHash("compare", false);
+    return url;
   }
 
   function renderCompare() {

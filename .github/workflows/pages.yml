@@ -226,7 +226,7 @@ jobs:
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="downloadComparison" type="button" aria-label="Download comparison data as CSV"') || !html.includes('id="comparisonDownloadStatus" role="status" aria-live="polite"')) throw new Error('Missing accessible comparison CSV export');
-          if (!app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing comparison CSV export behavior');
+          if (!html.includes('The CSV keeps its scope and route metadata.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('"Symmetry index", "Scope", "Route"') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }
@@ -548,6 +548,34 @@ jobs:
           if (finalUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Comparison selection was not preserved: ${finalUrl.search}`);
           if (historyCalls.length !== 2 || historyCalls[0][0] !== 'pushState' || historyCalls[1][0] !== 'replaceState') throw new Error(`Unexpected handoff history sequence: ${JSON.stringify(historyCalls)}`);
           console.log('Comparison edit handoff smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison export context
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/?q=central%20plan#compare/basilica,gothic' }
+            },
+            document: {},
+            navigator: {}
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCsvPayload };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, comparisonStudies, comparisonCsvPayload } = context.window.__atlasTest;
+          state.compareIds = ['basilica', 'gothic'];
+          const focusedCsv = comparisonCsvPayload(comparisonStudies());
+          if (!focusedCsv.includes('"Symmetry index","Scope","Route"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic"')) {
+            throw new Error('Focused comparison CSV did not preserve its scope and route');
+          }
+          state.compareIds = [];
+          const fullCsv = comparisonCsvPayload(comparisonStudies());
+          if (!fullCsv.includes('"full collection","https://example.test/atlas/#compare"')) throw new Error('Full comparison CSV did not preserve its route');
+          console.log('Comparison export context smoke test passed.');
           NODE
 
       - name: Smoke-test comparison tray preview
