@@ -255,7 +255,7 @@
       refreshCatalog();
       replaceCatalogRoute();
     });
-    $("#clearSearchInput").addEventListener("click", () => clearFilter("query"));
+    $("#clearSearchInput").addEventListener("click", () => clearFilter("query", { focus: true }));
     $("#filterSelect").addEventListener("change", (event) => {
       state.filter = event.target.value;
       refreshCatalog();
@@ -276,14 +276,8 @@
       refreshCatalog();
       replaceCatalogRoute();
     });
-    $("#clearSearch").addEventListener("click", (event) => {
-      clearCatalogFilters({ resetSort: true });
-      if (event.detail === 0) focusCatalogControl("query");
-    });
-    $("#clearVisualFilters").addEventListener("click", (event) => {
-      clearCatalogFilters({ resetSort: true });
-      if (event.detail === 0) focusCatalogControl("query");
-    });
+    $("#clearSearch").addEventListener("click", () => clearCatalogFilters({ resetSort: true, focus: true }));
+    $("#clearVisualFilters").addEventListener("click", () => clearCatalogFilters({ resetSort: true, focus: true }));
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
@@ -354,19 +348,17 @@
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
     $("#activeFilters").addEventListener("click", (event) => {
-      const keyboardActivation = event.detail === 0;
       if (event.target.closest("[data-clear-filters]")) {
-        clearCatalogFilters();
-        if (keyboardActivation) focusCatalogControl("query");
+        clearCatalogFilters({ focus: true });
         return;
       }
       const chip = event.target.closest("[data-clear-filter]");
-      if (chip) clearFilter(chip.dataset.clearFilter, { focus: keyboardActivation });
+      if (chip) clearFilter(chip.dataset.clearFilter, { focus: true });
     });
     window.addEventListener("keydown", handleKeyboard);
   }
 
-  function clearCatalogFilters({ resetSort = false } = {}) {
+  function clearCatalogFilters({ resetSort = false, focus = false } = {}) {
     state.query = "";
     state.filter = "all";
     state.filterPlace = "all";
@@ -381,6 +373,7 @@
     }
     refreshCatalog();
     replaceCatalogRoute();
+    if (focus) focusCatalogControl("query");
   }
 
   function selectStudy(id, options = {}) {
