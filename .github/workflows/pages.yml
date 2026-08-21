@@ -60,7 +60,7 @@ jobs:
           }
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
-          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title']) {
+          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'compare-study-title', 'Length to span ratio']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');

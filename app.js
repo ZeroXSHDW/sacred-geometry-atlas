@@ -441,7 +441,7 @@
       const isCompared = state.compareIds.includes(study.id);
       return `
         <li class="catalog-entry">
-          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${isActive ? "Selected study: " : "Open "}${escapeHtml(study.name)}">
+          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${isActive ? "Selected study: " : "Open "}${escapeHtml(study.name)}; ${escapeHtml(study.typology)}; ${escapeHtml(study.emphasis)}; ${escapeHtml(studyStatus(study))}">
             <span class="catalog-number">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${escapeHtml(study.name)}</span>
@@ -752,14 +752,18 @@
   function renderGeometryCompare() {
     const target = $("#geometryCompare");
     if (!target) return;
-    target.innerHTML = comparisonStudies().map((study) => `
-      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-label="Open ${escapeHtml(study.name)} in the Atlas">
+    target.innerHTML = comparisonStudies().map((study) => {
+      const ratio = number(study.length / study.span, 2);
+      const section = number(study.height / study.span, 2);
+      return `
+      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-label="Open ${escapeHtml(study.name)} in the Atlas. Length to span ratio ${ratio}; height to span ratio ${section}.">
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
-        <span class="compare-study-meta">${number(study.length / study.span, 2)} ratio · ${number(study.height / study.span, 2)} section</span>
+        <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
       </button>
-    `).join("");
+    `;
+    }).join("");
   }
 
   function miniPlan(study) {
