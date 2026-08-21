@@ -29,7 +29,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A branded `404.html` recovery page for missing GitHub Pages paths.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation before GitHub Pages deployment.
-- Responsive layout, keyboard focus states, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a useful no-script study index.
+- Responsive layout, keyboard focus states, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference and interpretive context.
 
 ### Keyboard shortcuts
 

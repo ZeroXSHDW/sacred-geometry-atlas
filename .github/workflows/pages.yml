@@ -45,7 +45,7 @@ jobs:
           };
           const exported = JSON.parse(fs.readFileSync('data/geometry.json', 'utf8'));
           if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
-          const requiredTextFields = ['id', 'index', 'name', 'shortName', 'typology', 'place', 'era', 'emphasis', 'type', 'churchName', 'status', 'source', 'sourceNote', 'envelope', 'axis', 'exteriorNote', 'interiorNote'];
+          const requiredTextFields = ['id', 'index', 'name', 'shortName', 'typology', 'place', 'era', 'emphasis', 'type', 'churchName', 'status', 'source', 'sourceNote', 'envelope', 'axis', 'surfaceNote', 'exteriorNote', 'interiorNote'];
           const requiredNumericFields = ['length', 'span', 'height', 'bayCount', 'module', 'radius', 'symmetry'];
           const statusValues = new Set((source.schema && source.schema.statusValues) || []);
           const ids = new Set();
@@ -94,10 +94,15 @@ jobs:
           if (!html.includes('<div class="data-error" id="dataError" role="alert" hidden>')) throw new Error('Missing data-load recovery state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');
+          const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
+          if (!noScriptList) throw new Error('Missing no-script study list');
+          const noScriptEntries = [...noScriptList[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1]);
+          if (noScriptEntries.length !== source.studies.length) throw new Error(`No-script fallback has ${noScriptEntries.length} entries; expected ${source.studies.length}`);
           for (const study of source.studies) {
             const dimensions = [study.length, study.span, study.height].join(' × ') + ' m';
-            if (!html.includes(study.name) || !html.includes(dimensions) || !html.includes(study.churchName)) {
-              throw new Error('No-script fallback is missing ' + study.id + ': ' + dimensions + ' / ' + study.churchName);
+            const entry = noScriptEntries.find((candidate) => candidate.includes(study.name));
+            if (!entry || [study.name, dimensions, study.churchName, study.surfaceNote].some((value) => !entry.includes(value))) {
+              throw new Error('No-script fallback is missing ' + study.id + ': ' + dimensions + ' / ' + study.churchName + ' / reading');
             }
           }
           if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
