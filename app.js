@@ -272,6 +272,7 @@
   }
 
   function syncFromHash() {
+    const revealPending = document.body.classList.contains("no-js");
     syncCatalogFromUrl();
     const route = parseRoute();
     const previousPage = state.page;
@@ -332,7 +333,7 @@
       announceDrawingState();
       const heading = $("#activeName");
       if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: false });
-    } else if (window.location.hash.length > 0 && previousPage === route.page) {
+    } else if (window.location.hash.length > 0 && (previousPage === route.page || revealPending)) {
       focusPageHeading(route.page);
     }
   }
@@ -995,7 +996,7 @@
         window.scrollTo({ top: 0, behavior });
       }
     }
-    if (pageChanged) {
+    if (pageChanged && !document.body.classList.contains("no-js")) {
       focusPageHeading(page);
     }
     updateDocumentTitle(page);

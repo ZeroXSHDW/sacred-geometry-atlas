@@ -114,11 +114,11 @@ jobs:
           if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="status" aria-live="polite" aria-atomic="true" aria-labelledby="runtimeFallbackHeading">') || !html.includes('<p id="runtimeFallbackHeading"><strong>The atlas is still loading.</strong>')) throw new Error('Missing polite runtime script-failure recovery panel');
           const initStart = app.indexOf('function init()');
           const initEnd = app.indexOf('\n  function renderHeroStats()', initStart);
-          const initBody = app.slice(initStart, initEnd);
           const syncStart = app.indexOf('function syncFromHash()');
           const syncEnd = app.indexOf('\n\n  function populateFilter()', syncStart);
           const syncBody = app.slice(syncStart, syncEnd);
           if (initStart < 0 || initEnd < 0 || syncStart < 0 || syncEnd < 0 || app.slice(0, initStart).includes('document.body.classList.remove("no-js");') || syncBody.lastIndexOf('document.body.classList.remove("no-js");') < syncBody.lastIndexOf('renderAll();')) throw new Error('App must remain gated until its first successful render');
+          if (!app.includes('const revealPending = document.body.classList.contains("no-js");') || !app.includes('previousPage === route.page || revealPending') || !app.includes('pageChanged && !document.body.classList.contains("no-js")')) throw new Error('Initial deep-link focus must wait until the app is visible');
           if (!styles.includes('.no-js .runtime-fallback { display: block; }') || !styles.includes('.data-error-state .runtime-fallback { display: none; }')) throw new Error('Runtime recovery panel must not compete with the data-error state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Dimensions are shown as length × span × height in meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey.')) throw new Error('Missing no-script dimensions or provenance note');
@@ -242,7 +242,7 @@ jobs:
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
-          if (!app.includes('const previousPage = state.page;') || !app.includes('else if (window.location.hash.length > 0 && previousPage === route.page)') || !app.includes('function focusPageHeading(page, preventScroll = true)')) throw new Error('Same-view hash navigation must restore heading focus');
+          if (!app.includes('const previousPage = state.page;') || !app.includes('else if (window.location.hash.length > 0 && (previousPage === route.page || revealPending))') || !app.includes('function focusPageHeading(page, preventScroll = true)')) throw new Error('Same-view and startup hash navigation must restore heading focus');
           if (!app.includes('const visibleCount = String(count).padStart(2, "0");') || !app.includes('const totalCount = String(studies.length).padStart(2, "0");')) throw new Error('Catalog result counts must preserve two-digit formatting');
           if (!app.includes('function renderCatalogResultCount(count)') || !app.includes('renderCatalogResultCount(visible.length);') || !app.includes('let lastCatalogStatus = "";') || !app.includes('let lastCatalogResultCount = "";') || !app.includes('const scopeLabel = `${text}; ${catalogScopeLabel()}.`;') || !app.includes('lastCatalogResultCount === text') || !app.includes('liveStatus.textContent = "";') || !app.includes('Catalog updated: ${scopeLabel}')) throw new Error('Catalog scope changes must be announced without duplicating count updates');
           const refreshStart = app.indexOf('function refreshCatalog()');
