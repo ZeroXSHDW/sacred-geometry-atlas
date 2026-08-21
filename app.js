@@ -286,7 +286,7 @@
       }
       const card = event.target.closest("[data-study-id]");
       if (!card) return;
-      selectStudy(card.dataset.studyId, { focus: event.detail === 0 });
+      selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true });
     });
     $$("[data-surface]").forEach((button) => button.addEventListener("click", () => {
       state.surface = button.dataset.surface;
@@ -335,7 +335,7 @@
     $("#geometryCompare").addEventListener("click", (event) => {
       const studyCard = event.target.closest("[data-compare-study]");
       if (!studyCard) return;
-      selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0 });
+      selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true });
     });
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadStudy").addEventListener("click", downloadStudy);
@@ -378,7 +378,7 @@
   }
 
   function selectStudy(id, options = {}) {
-    const { scroll = true, focus = false } = options;
+    const { scroll = true, focus = false, restoreCardFocus = false } = options;
     if (!studies.some((study) => study.id === id)) return;
     state.activeId = id;
     showPage("atlas", { scroll });
@@ -387,6 +387,8 @@
     if (focus) {
       const heading = $("#activeName");
       if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: !scroll });
+    } else if (restoreCardFocus) {
+      focusStudyCard(id);
     }
   }
 
@@ -437,6 +439,11 @@
   function focusCompareToggle(id) {
     const toggle = $$("[data-compare-id]").find((button) => button.dataset.compareId === id);
     if (toggle && typeof toggle.focus === "function") toggle.focus({ preventScroll: true });
+  }
+
+  function focusStudyCard(id) {
+    const card = $$(`[data-study-id]`).find((button) => button.dataset.studyId === id);
+    if (card && typeof card.focus === "function") card.focus({ preventScroll: true });
   }
 
   function clearFilter(key, options = {}) {
