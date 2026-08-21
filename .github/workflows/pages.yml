@@ -31,6 +31,7 @@ jobs:
           test -s styles.css
           test -s data/geometry.json
           test -s og.png
+          test -s favicon.svg
           node - <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
@@ -55,6 +56,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
+          if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');
           for (const study of source.studies) {
             const dimensions = [study.length, study.span, study.height].join(' × ') + ' m';
