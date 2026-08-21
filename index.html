@@ -159,17 +159,18 @@
                 </label>
                 <label class="select-wrap sort-select">
                   <span class="sr-only">Sort studies</span>
-                  <select id="sortSelect">
+                  <select id="sortSelect" aria-describedby="sortHelp">
                     <option value="index">Curated order</option>
-                    <option value="length">Length</option>
-                    <option value="height">Height</option>
-                    <option value="span">Span</option>
-                    <option value="ratio">Length / span</option>
-                    <option value="symmetry">Symmetry</option>
-                    <option value="name">Name</option>
+                    <option value="length">Length · longest first</option>
+                    <option value="height">Height · tallest first</option>
+                    <option value="span">Span · widest first</option>
+                    <option value="ratio">Length / span · highest first</option>
+                    <option value="symmetry">Symmetry · highest first</option>
+                    <option value="name">Name · A–Z</option>
                   </select>
                 </label>
               </div>
+              <span class="sr-only" id="sortHelp">Numeric measures sort from largest to smallest; name sorts A–Z.</span>
               <div class="tool-row tool-row-secondary">
                 <label class="select-wrap">
                   <span class="sr-only">Filter by location</span>

@@ -923,12 +923,12 @@
     if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
     if (state.sort !== "index") {
       const sortLabels = {
-        length: "length",
-        height: "height",
-        span: "span",
-        ratio: "length-to-span ratio",
-        symmetry: "symmetry",
-        name: "name"
+        length: "length (longest first)",
+        height: "height (tallest first)",
+        span: "span (widest first)",
+        ratio: "length-to-span ratio (highest first)",
+        symmetry: "symmetry (highest first)",
+        name: "name (A–Z)"
       };
       parts.push(`sorted by ${sortLabels[state.sort] || state.sort}`);
     }
