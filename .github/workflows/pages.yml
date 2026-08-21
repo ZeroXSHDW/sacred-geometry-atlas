@@ -111,6 +111,15 @@ jobs:
           if (!notFound.includes('<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing 404 favicon link');
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
           if (!html.includes('<div class="data-error" id="dataError" role="alert" aria-labelledby="dataErrorHeading" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">')) throw new Error('Missing focusable data-load recovery heading');
+          if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="alert" aria-labelledby="runtimeFallbackHeading">') || !html.includes('<p id="runtimeFallbackHeading"><strong>The atlas is still loading.</strong>')) throw new Error('Missing runtime script-failure recovery panel');
+          const initStart = app.indexOf('function init()');
+          const initEnd = app.indexOf('\n  function renderHeroStats()', initStart);
+          const initBody = app.slice(initStart, initEnd);
+          const syncStart = app.indexOf('function syncFromHash()');
+          const syncEnd = app.indexOf('\n\n  function populateFilter()', syncStart);
+          const syncBody = app.slice(syncStart, syncEnd);
+          if (initStart < 0 || initEnd < 0 || syncStart < 0 || syncEnd < 0 || app.slice(0, initStart).includes('document.body.classList.remove("no-js");') || syncBody.lastIndexOf('document.body.classList.remove("no-js");') < syncBody.lastIndexOf('renderAll();')) throw new Error('App must remain gated until its first successful render');
+          if (!styles.includes('.no-js .runtime-fallback { display: block; }') || !styles.includes('.data-error-state .runtime-fallback { display: none; }')) throw new Error('Runtime recovery panel must not compete with the data-error state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Dimensions are shown as length × span × height in meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey.')) throw new Error('Missing no-script dimensions or provenance note');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
@@ -338,6 +347,34 @@ jobs:
               raise SystemExit("Missing ARIA references: " + ", ".join(missing))
           print(f"Accessibility reference audit passed: {len(parser.ids)} unique IDs.")
           PY
+      - name: Smoke-test data-load recovery
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const events = [];
+          const dataError = { hidden: true };
+          const heading = { focus(options) { events.push(['focus', options]); } };
+          const context = {
+            window: { CHURCH_GEOMETRY: [], location: { href: 'https://example.test/' } },
+            document: {
+              title: 'Sacred Geometry Atlas',
+              body: {
+                classList: {
+                  remove(name) { events.push(['remove', name]); },
+                  add(name) { events.push(['add', name]); }
+                }
+              },
+              querySelector(selector) {
+                return selector === '#dataError' ? dataError : selector === '#dataErrorHeading' ? heading : null;
+              }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('app.js', 'utf8'), context);
+          if (dataError.hidden || context.document.title !== 'Atlas unavailable · Sacred Geometry Atlas') throw new Error('Data-load recovery did not activate');
+          if (JSON.stringify(events) !== JSON.stringify([['remove', 'no-js'], ['add', 'data-error-state'], ['focus', { preventScroll: true }]])) throw new Error(`Unexpected recovery sequence: ${JSON.stringify(events)}`);
+          console.log('Data-load recovery smoke test passed.');
+          NODE
       - name: Smoke-test route-native catalog links
         run: |
           node - <<'NODE'

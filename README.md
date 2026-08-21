@@ -18,6 +18,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search across study names, references, notes, detail vocabulary, and numeric geometry dimensions, plus typology, location, and measured/schematic status filtering with an explicit provenance key.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
+- A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
