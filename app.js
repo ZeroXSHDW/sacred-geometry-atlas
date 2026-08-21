@@ -28,6 +28,7 @@
   const studyShortName = (study) => study.shortName || study.name;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const validPages = new Set(["atlas", "compare", "method"]);
+  const pageAliases = new Map([["methodView", "method"]]);
   const validModes = new Set(["plan", "elevation", "section"]);
   const validSurfaces = new Set(["exterior", "interior"]);
   const validLayers = new Set(["all", "envelope", "rhythm", "axis", "measure"]);
@@ -101,7 +102,7 @@
       }
     });
     const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer] = segments;
-    const page = validPages.has(requestedPage) ? requestedPage : "atlas";
+    const page = validPages.has(requestedPage) ? requestedPage : pageAliases.get(requestedPage) || "atlas";
     const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
       : null;

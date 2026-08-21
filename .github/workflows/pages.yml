@@ -112,6 +112,7 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing navigation relationship: ' + token);
           }
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
+          if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('id="activeReference"')) throw new Error('Missing visible study reference');
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
           if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
@@ -155,6 +156,7 @@ jobs:
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
+          if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
           if (!app.includes('function downloadStudy()') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing active-study JSON export');
