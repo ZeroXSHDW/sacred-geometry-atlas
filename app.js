@@ -1540,16 +1540,29 @@
   function updateCompareTray() {
     const tray = $("#compareTray");
     const count = $("#compareCount");
+    const summary = $("#compareSummary");
     const open = $("#openCompare");
     const clear = $("#clearCompare");
     if (!tray || !count || !open) return;
     const selectedCount = state.compareIds.length;
     const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;
+    const selectedStudies = state.compareIds
+      .map((id) => studies.find((study) => study.id === id))
+      .filter(Boolean);
+    const selectedNames = selectedStudies.map(studyShortName);
+    const preview = selectedNames.slice(0, 2).join(" · ");
+    const extra = selectedNames.length > 2 ? ` · +${selectedNames.length - 2} more` : "";
     const compareLabel = selectedCount >= 2
       ? `Compare ${selectedLabel}`
       : "Compare selected studies (select at least two)";
     tray.hidden = selectedCount === 0;
     count.textContent = `${selectedCount} selected`;
+    count.setAttribute("aria-label", selectedNames.length ? `${selectedLabel}: ${selectedNames.join(", ")}` : selectedLabel);
+    if (summary) {
+      summary.textContent = preview + extra;
+      summary.title = selectedNames.join(" · ");
+      summary.hidden = !preview;
+    }
     open.disabled = selectedCount < 2;
     open.setAttribute("aria-label", compareLabel);
     open.title = compareLabel;

@@ -18,6 +18,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search across study names, references, notes, detail vocabulary, and numeric geometry dimensions, plus typology, location, and measured/schematic status filtering with an explicit provenance key.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
+- The Atlas comparison tray previews selected study names, including selections outside the current filter view.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
 - A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.

@@ -364,8 +364,10 @@ h3 { letter-spacing: -0.04em; }
 .compare-toggle.is-selected { border-color: var(--amber); color: var(--bg); background: var(--amber); }
 .filter-clear-all:focus-visible, .compare-toggle:focus-visible, .layer-button:focus-visible, .zoom-control button:focus-visible, .nav-button:focus-visible, .segment-button:focus-visible, .mode-button:focus-visible, .catalog-card:focus-visible, .compare-tray button:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 .compare-tray { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; margin-top: 0.8rem; padding: 0.7rem 0.75rem; border: 1px solid rgba(233, 179, 108, 0.42); background: var(--amber-soft); }
+.compare-tray-readout { min-width: 0; }
 .compare-tray-label { display: block; color: var(--amber); font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .compare-tray strong { display: block; margin-top: 0.2rem; color: var(--ink); font-family: var(--serif); font-size: 0.9rem; font-weight: 500; }
+.compare-tray-summary { display: block; overflow: hidden; max-width: 22ch; margin-top: 0.18rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.49rem; text-overflow: ellipsis; white-space: nowrap; }
 .compare-tray-actions { display: flex; align-items: center; gap: 0.7rem; }
 .compare-tray button { border: 0; background: transparent; color: var(--ink-muted); font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase; }
 .compare-tray button:hover { color: var(--ink); }
@@ -790,6 +792,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-selection-clear,
   .compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip span:last-child { color: ButtonText; }
+  .compare-tray-summary { color: ButtonText; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
   .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }
