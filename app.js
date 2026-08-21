@@ -818,6 +818,7 @@
         await navigator.clipboard.writeText(value);
         return true;
       }
+      const previousFocus = document.activeElement;
       const copyField = document.createElement("textarea");
       copyField.value = value;
       copyField.setAttribute("readonly", "");
@@ -829,6 +830,13 @@
         return document.execCommand("copy");
       } finally {
         copyField.remove();
+        if (previousFocus && previousFocus !== document.body && typeof previousFocus.focus === "function") {
+          try {
+            previousFocus.focus({ preventScroll: true });
+          } catch (error) {
+            // Focus restoration is best-effort; preserve the copy result.
+          }
+        }
       }
     } catch (error) {
       return false;
