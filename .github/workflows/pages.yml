@@ -154,6 +154,9 @@ jobs:
             if (!app.includes(token)) throw new Error('Comparison tray labels must reflect selection state: ' + token);
           }
           if (!html.includes('<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">')) throw new Error('Brand mark must be hidden from assistive technology');
+          for (const token of ['<span class="card-symbol" aria-hidden="true">□</span>', '<span class="card-symbol" aria-hidden="true">↔</span>', '<span class="card-symbol" aria-hidden="true">↕</span>', '<span class="card-symbol" aria-hidden="true">∷</span>', '<span class="footer-mark" aria-hidden="true">✳</span>']) {
+            if (!html.includes(token)) throw new Error('Decorative symbol must be hidden from assistive technology: ' + token);
+          }
           if (!html.includes('<svg viewBox="0 0 360 260" role="img" focusable="false">')) throw new Error('Missing decorative method SVG focus guard');
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');
           if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
