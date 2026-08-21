@@ -206,10 +206,12 @@
   function syncFromHash() {
     syncCatalogFromUrl();
     const route = parseRoute();
-    if (route.studyId) state.activeId = route.studyId;
-    if (route.mode) state.mode = route.mode;
-    if (route.surface) state.surface = route.surface;
-    if (route.layer) state.layer = route.layer;
+    if (route.studyId) {
+      state.activeId = route.studyId;
+      state.mode = route.mode || "plan";
+      state.surface = route.surface || "exterior";
+      state.layer = route.layer || "all";
+    }
     if (route.page === "compare") state.compareIds = route.compareIds;
     if (route.page === "atlas" && !route.studyId) {
       const visible = visibleStudies();
