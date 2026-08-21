@@ -148,7 +148,10 @@ jobs:
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
-          if (!html.includes('id="openCompare" type="button" aria-controls="compareView"')) throw new Error('Missing compare destination relationship');
+          if (!html.includes('id="clearCompare" type="button" aria-label="Clear comparison selection"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-label="Compare selected studies (select at least two)"')) throw new Error('Comparison tray controls must have useful initial labels');
+          for (const token of ['const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;', 'open.setAttribute("aria-label", compareLabel);', 'clear.setAttribute("aria-label", clearLabel);']) {
+            if (!app.includes(token)) throw new Error('Comparison tray labels must reflect selection state: ' + token);
+          }
           if (!html.includes('<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">')) throw new Error('Brand mark must be hidden from assistive technology');
           if (!html.includes('<svg viewBox="0 0 360 260" role="img" focusable="false">')) throw new Error('Missing decorative method SVG focus guard');
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');

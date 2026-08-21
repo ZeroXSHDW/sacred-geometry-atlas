@@ -1217,10 +1217,23 @@
     const tray = $("#compareTray");
     const count = $("#compareCount");
     const open = $("#openCompare");
+    const clear = $("#clearCompare");
     if (!tray || !count || !open) return;
-    tray.hidden = state.compareIds.length === 0;
-    count.textContent = `${state.compareIds.length} selected`;
-    open.disabled = state.compareIds.length < 2;
+    const selectedCount = state.compareIds.length;
+    const selectedLabel = `${selectedCount} selected ${selectedCount === 1 ? "study" : "studies"}`;
+    const compareLabel = selectedCount >= 2
+      ? `Compare ${selectedLabel}`
+      : "Compare selected studies (select at least two)";
+    tray.hidden = selectedCount === 0;
+    count.textContent = `${selectedCount} selected`;
+    open.disabled = selectedCount < 2;
+    open.setAttribute("aria-label", compareLabel);
+    open.title = compareLabel;
+    if (clear) {
+      const clearLabel = selectedCount ? `Clear ${selectedLabel}` : "Clear comparison selection";
+      clear.setAttribute("aria-label", clearLabel);
+      clear.title = clearLabel;
+    }
   }
 
   function comparisonStudies() {
