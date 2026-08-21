@@ -492,7 +492,8 @@
       : "";
   }
 
-  function focusCatalogControl(key) {
+  function focusCatalogControl(key, options = {}) {
+    const { preventScroll = true } = options;
     const selectors = {
       query: "#searchInput",
       filter: "#filterSelect",
@@ -501,7 +502,7 @@
       sort: "#sortSelect"
     };
     const control = $(selectors[key] || selectors.query);
-    if (control && typeof control.focus === "function") control.focus({ preventScroll: true });
+    if (control && typeof control.focus === "function") control.focus({ preventScroll });
   }
 
   function focusCompareToggle(id) {
@@ -614,7 +615,7 @@
     const key = event.key.toLowerCase();
     if (key === "/") {
       event.preventDefault();
-      focusCatalogControl("query");
+      focusCatalogControl("query", { preventScroll: false });
       return;
     }
     if (key === "j" || key === "k") {
