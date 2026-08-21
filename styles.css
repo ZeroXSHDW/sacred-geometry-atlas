@@ -714,6 +714,20 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .module-row { grid-template-columns: 108px 1fr 43px; gap: 0.45rem; }
 }
 
+@media (pointer: coarse) {
+  .nav-button,
+  .segment-button,
+  .mode-button,
+  .layer-button,
+  .share-button,
+  .drawing-export,
+  .drawing-reset { min-height: 36px; }
+  .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
+  .study-nav button { width: 40px; height: 40px; }
+  .zoom-control button { width: 36px; height: 36px; }
+  .search-clear { width: 32px; height: 32px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

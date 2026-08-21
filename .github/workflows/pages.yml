@@ -245,6 +245,9 @@ jobs:
           }
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
           if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;')) throw new Error('Missing narrow study-header layout');
+          for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }']) {
+            if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
+          }
           if (!styles.includes('.visual-column.is-empty > .drawing-card') || !styles.includes('.visual-empty-action')) throw new Error('Missing visual empty-state styling');
           if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
