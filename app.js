@@ -249,7 +249,7 @@
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
-        toggleCompare(compareToggle.dataset.compareId);
+        toggleCompare(compareToggle.dataset.compareId, { focus: event.detail === 0 });
         return;
       }
       const card = event.target.closest("[data-study-id]");
@@ -385,6 +385,11 @@
     };
     const control = $(selectors[key] || selectors.query);
     if (control && typeof control.focus === "function") control.focus({ preventScroll: true });
+  }
+
+  function focusCompareToggle(id) {
+    const toggle = $$("[data-compare-id]").find((button) => button.dataset.compareId === id);
+    if (toggle && typeof toggle.focus === "function") toggle.focus({ preventScroll: true });
   }
 
   function clearFilter(key, options = {}) {
@@ -874,7 +879,8 @@
     announceKeyboard(`Drawing zoom ${Math.round(state.zoom * 100)}%.`);
   }
 
-  function toggleCompare(id) {
+  function toggleCompare(id, options = {}) {
+    const { focus = false } = options;
     const study = studies.find((candidate) => candidate.id === id);
     const wasSelected = state.compareIds.includes(id);
     if (state.compareIds.includes(id)) {
@@ -887,6 +893,7 @@
     renderCompare();
     if (state.page === "compare") replaceRoute("compare", false);
     if (study) announceKeyboard(`${study.name} ${wasSelected ? "removed from" : "added to"} comparison. ${state.compareIds.length} selected.`);
+    if (focus) focusCompareToggle(id);
   }
 
   function updateCompareTray() {
