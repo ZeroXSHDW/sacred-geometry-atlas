@@ -23,6 +23,29 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
+      - name: Validate static site
+        run: |
+          node --check app.js
+          node --check data/geometry.js
+          test -s index.html
+          test -s styles.css
+          test -s og.png
+          node - <<'NODE'
+          const fs = require('fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const required = [
+            'property="og:image" content="og.png"',
+            'name="twitter:image" content="og.png"',
+            'property="og:image:width" content="1200"',
+            'property="og:image:height" content="630"'
+          ];
+          for (const token of required) {
+            if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
+          }
+          const png = fs.readFileSync('og.png');
+          if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
+          if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');
+          NODE
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site artifact
