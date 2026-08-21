@@ -47,6 +47,7 @@ jobs:
           if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
           const requiredTextFields = ['id', 'index', 'name', 'shortName', 'typology', 'place', 'era', 'emphasis', 'type', 'churchName', 'status', 'source', 'sourceNote', 'envelope', 'axis', 'surfaceNote', 'exteriorNote', 'interiorNote'];
           const requiredNumericFields = ['length', 'span', 'height', 'bayCount', 'module', 'radius', 'symmetry'];
+          const optionalNumericFields = ['floorAreaEstimate', 'volumeEstimate'];
           const statusValues = new Set((source.schema && source.schema.statusValues) || []);
           const ids = new Set();
           const indexes = new Set();
@@ -57,6 +58,10 @@ jobs:
             for (const field of requiredNumericFields) {
               if (!Number.isFinite(study[field]) || study[field] <= 0) throw new Error(`Study ${study.id || index + 1} has invalid numeric field: ${field}`);
             }
+            for (const field of optionalNumericFields) {
+              if (study[field] !== undefined && (!Number.isFinite(study[field]) || study[field] <= 0)) throw new Error(`Study ${study.id || index + 1} has invalid optional numeric field: ${field}`);
+            }
+            if (study.volumeBasis !== undefined && (typeof study.volumeBasis !== 'string' || !study.volumeBasis.trim())) throw new Error(`Study ${study.id || index + 1} has invalid volume basis`);
             if (ids.has(study.id)) throw new Error(`Duplicate study id: ${study.id}`);
             if (indexes.has(study.index)) throw new Error(`Duplicate study index: ${study.index}`);
             if (!statusValues.has(study.status)) throw new Error(`Study ${study.id} has unsupported status: ${study.status}`);
