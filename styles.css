@@ -726,6 +726,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .share-button,
   .drawing-export,
   .drawing-reset { min-height: 36px; }
+  .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
