@@ -55,6 +55,7 @@
   let catalogShareResetTimer;
   let citationResetTimer;
   let lastCatalogStatus = "";
+  let lastCatalogResultCount = "";
   const actionFeedbackTimers = new Map();
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
@@ -437,7 +438,14 @@
     resultCount.textContent = text;
     resultCount.setAttribute("aria-label", scopeLabel);
     const liveStatus = $("#catalogLiveStatus");
-    if (liveStatus && lastCatalogStatus && lastCatalogStatus !== scopeLabel) liveStatus.textContent = `Catalog updated: ${scopeLabel}`;
+    if (liveStatus) {
+      if (lastCatalogStatus && lastCatalogStatus !== scopeLabel && lastCatalogResultCount === text) {
+        liveStatus.textContent = `Catalog updated: ${scopeLabel}`;
+      } else if (lastCatalogResultCount !== text) {
+        liveStatus.textContent = "";
+      }
+    }
+    lastCatalogResultCount = text;
     lastCatalogStatus = scopeLabel;
   }
 
