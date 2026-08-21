@@ -21,6 +21,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Downloadable JSON data from the site.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
 - Print-friendly atlas output for turning the active study into a readable research sheet.
+- Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` for automatic GitHub Pages deployment.
 - Responsive layout, keyboard focus states, view-change focus management, skip navigation, live status feedback, and a no-script message.
 
@@ -46,7 +47,7 @@ Then open <http://localhost:8000>.
 
 ```bash
 git init
-git add index.html styles.css app.js data .github .nojekyll .gitignore README.md
+git add index.html styles.css app.js data .github .nojekyll .gitignore og.png README.md
 git commit -m "Build Sacred Geometry Atlas"
 git branch -M main
 git remote add origin https://github.com/YOUR-ACCOUNT/YOUR-REPOSITORY.git
@@ -55,6 +56,8 @@ git push -u origin main
 
 3. In the repository, open **Settings → Pages** and set the source to **GitHub Actions** if GitHub has not enabled it automatically.
 4. Push to `main` or run the **Deploy static site to GitHub Pages** workflow manually.
+
+The included `og.png` is referenced with a same-site relative path so it works from a repository subpath. If a social crawler requires an absolute image URL, replace the `og:image` and `twitter:image` values in `index.html` with the final GitHub Pages URL after publishing.
 
 ## Add real churches
 
