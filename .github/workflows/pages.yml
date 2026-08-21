@@ -73,6 +73,7 @@ jobs:
           for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === "compare" && state.compareIds.length >= 2', 'route.page === "compare"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
+          if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');

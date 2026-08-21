@@ -898,7 +898,7 @@
       .geometry-svg .faint-line { stroke: rgba(213, 229, 214, .27); stroke-width: 1; fill: none; }
       .geometry-svg .dim-text { fill: #e77f62; font-size: 9px; }
       .geometry-svg .label-text { fill: #aebbb1; font-size: 9px; }
-      .geometry-svg .small-label { fill: #76847c; font-size: 8px; }
+      .geometry-svg .small-label { fill: #84948a; font-size: 8px; }
       .geometry-svg .watermark { fill: rgba(233, 179, 108, .12); font-family: 'Playfair Display', Georgia, serif; font-size: 42px; letter-spacing: -.04em; }
       .geometry-svg .stone-dot { fill: #e9b36c; }
       .geometry-svg .column { fill: #0c1110; stroke: #e9b36c; stroke-width: 1.5; }
@@ -1021,7 +1021,7 @@
       stave: '<rect class="mini-primary" x="54" y="32" width="112" height="76"/><rect class="mini-primary" x="76" y="18" width="68" height="104"/><path class="mini-secondary" d="M76 18V122M110 18V122M144 18V122"/>',
       modern: '<polygon class="mini-primary" points="28,98 48,28 132,18 190,48 170,108"/><path class="mini-secondary" d="M55 30L72 105M108 22L120 106M155 34L150 106"/>'
     };
-    return `<svg class="compare-mini" viewBox="0 0 220 140" role="img" aria-label="Schematic plan of ${escapeHtml(study.name)}"><path class="mini-detail" d="M18 124H202M110 10V130"/>${shapes[study.type] || shapes.basilica}</svg>`;
+    return `<svg class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"><path class="mini-detail" d="M18 124H202M110 10V130"/>${shapes[study.type] || shapes.basilica}</svg>`;
   }
 
   function renderCharts() {
