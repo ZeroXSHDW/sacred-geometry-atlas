@@ -811,9 +811,10 @@
     list.innerHTML = visible.map((study) => {
       const isActive = study.id === state.activeId;
       const isCompared = state.compareIds.includes(study.id);
+      const currentAttribute = isActive ? ' aria-current="true"' : "";
       return `
         <li class="catalog-entry">
-          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
+          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${escapeHtml(study.name)}</span>

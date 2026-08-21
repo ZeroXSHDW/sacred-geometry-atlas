@@ -101,7 +101,7 @@ jobs:
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
           if (!html.includes('<div class="data-error" id="dataError" role="alert" aria-labelledby="dataErrorHeading" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">')) throw new Error('Missing focusable data-load recovery heading');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
-          if (!html.includes('Dimensions are shown as length × span × height in meters.')) throw new Error('Missing no-script dimension legend');
+          if (!html.includes('Dimensions are shown as length × span × height in meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey.')) throw new Error('Missing no-script dimensions or provenance note');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
           if (!noScriptList) throw new Error('Missing no-script study list');
           const noScriptEntries = [...noScriptList[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1]);
@@ -206,6 +206,7 @@ jobs:
           }
           if (!app.includes('<span class="catalog-number" aria-hidden="true">')) throw new Error('Missing catalog number guard');
           if (!app.includes('function studySearchText(study)') || !app.includes('study.details.flat()')) throw new Error('Catalog search must cover full study text');
+          if (!app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || app.includes('aria-current="${isActive ? "true" : "false"}"')) throw new Error('Inactive catalog cards must omit aria-current');
           if (!html.includes('<label class="sr-only" for="searchInput">Search geometry studies</label>') || !html.includes('id="searchHelp"') || !html.includes('geometry dimensions') || !html.includes('Press Escape to clear the current search.') || !html.includes('aria-describedby="searchHelp"') || !html.includes('aria-keyshortcuts="/ Escape"') || !html.includes('spellcheck="false"') || !html.includes('autocapitalize="none"')) throw new Error('Missing catalog search instructions');
           if (!html.includes('<kbd>/</kbd>') || !html.includes('Focus study search') || !html.includes('<kbd>Esc</kbd>') || !html.includes('Clear search when focused')) throw new Error('Missing search keyboard shortcut guidance');
           if (!app.includes('function handleSearchKeydown(event)') || !app.includes('$("#searchInput").addEventListener("keydown", handleSearchKeydown)') || !app.includes('event.key !== "Escape"') || !app.includes('clearButton.click()')) throw new Error('Missing Escape-to-clear search behavior');
