@@ -44,7 +44,7 @@
     measure: "dimensions"
   };
   const validStatuses = new Set(["all", "schematic", "measured"]);
-  const validSorts = new Set(["index", "height", "span", "ratio", "symmetry", "name"]);
+  const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);
   const catalogParamKeys = ["q", "typology", "place", "status", "sort"];
   let shareResetTimer;
   let compareShareResetTimer;
@@ -598,6 +598,7 @@
       return matchesQuery && matchesFilter && matchesPlace && matchesStatus;
     });
     return result.sort((a, b) => {
+      if (state.sort === "length") return b.length - a.length;
       if (state.sort === "height") return b.height - a.height;
       if (state.sort === "span") return b.span - a.span;
       if (state.sort === "ratio") return (b.length / b.span) - (a.length / a.span);
@@ -888,6 +889,7 @@
     if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
     if (state.sort !== "index") {
       const sortLabels = {
+        length: "length",
         height: "height",
         span: "span",
         ratio: "length-to-span ratio",

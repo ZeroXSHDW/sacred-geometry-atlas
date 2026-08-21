@@ -20,7 +20,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.
-- Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
+- Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - An expandable semantic comparison table with recorded model lengths, spans, ratios, heights, bays, modules, and symmetry values, with keyboard-accessible horizontal scrolling on narrow screens.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
