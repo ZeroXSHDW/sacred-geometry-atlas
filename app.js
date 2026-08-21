@@ -701,6 +701,16 @@
     }
   }
 
+  async function attemptNativeShare(payload) {
+    if (typeof navigator.share !== "function") return "unavailable";
+    try {
+      await navigator.share(payload);
+      return "shared";
+    } catch (error) {
+      return error.name === "AbortError" ? "cancelled" : "unavailable";
+    }
+  }
+
   async function shareStudy() {
     const study = activeStudy();
     const button = $("#shareStudy");
@@ -714,15 +724,12 @@
       url: shareUrl.href
     };
 
-    if (navigator.share) {
-      try {
-        await navigator.share(sharePayload);
-        status.textContent = `${study.name} shared.`;
-      } catch (error) {
-        if (error.name !== "AbortError") status.textContent = "Sharing was unavailable. You can copy the page URL from the address bar.";
-      }
+    const nativeShareResult = await attemptNativeShare(sharePayload);
+    if (nativeShareResult === "shared") {
+      status.textContent = `${study.name} shared.`;
       return;
     }
+    if (nativeShareResult === "cancelled") return;
 
     const copied = await copyText(shareUrl.href);
 
@@ -772,15 +779,12 @@
       url: shareUrl.href
     };
 
-    if (navigator.share) {
-      try {
-        await navigator.share(sharePayload);
-        status.textContent = "Catalog view shared.";
-      } catch (error) {
-        if (error.name !== "AbortError") status.textContent = "Sharing was unavailable. You can copy the catalog URL from the address bar.";
-      }
+    const nativeShareResult = await attemptNativeShare(sharePayload);
+    if (nativeShareResult === "shared") {
+      status.textContent = "Catalog view shared.";
       return;
     }
+    if (nativeShareResult === "cancelled") return;
 
     const copied = await copyText(shareUrl.href);
     if (copied) {
@@ -814,15 +818,12 @@
       url: shareUrl.href
     };
 
-    if (navigator.share) {
-      try {
-        await navigator.share(sharePayload);
-        status.textContent = "Comparison shared.";
-      } catch (error) {
-        if (error.name !== "AbortError") status.textContent = "Sharing was unavailable. You can copy the comparison URL from the address bar.";
-      }
+    const nativeShareResult = await attemptNativeShare(sharePayload);
+    if (nativeShareResult === "shared") {
+      status.textContent = "Comparison shared.";
       return;
     }
+    if (nativeShareResult === "cancelled") return;
 
     const copied = await copyText(shareUrl.href);
     if (copied) {
