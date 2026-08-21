@@ -46,6 +46,7 @@ jobs:
           if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
           const html = fs.readFileSync('index.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
+          const styles = fs.readFileSync('styles.css', 'utf8');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
             'name="twitter:image" content="og.png"',
@@ -104,6 +105,7 @@ jobs:
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
+          if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', '\"summary\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }

@@ -91,6 +91,7 @@ summary:focus-visible {
 .data-error-state .site-header,
 .data-error-state main,
 .data-error-state .site-footer { display: none; }
+.data-error-state .skip-link { display: none; }
 .data-error { width: min(820px, calc(100% - 96px)); min-height: min(560px, 70vh); margin: 4rem auto; padding: clamp(2rem, 6vw, 5rem); border: 1px solid rgba(231, 127, 98, 0.42); background: linear-gradient(135deg, rgba(231, 127, 98, 0.09), rgba(24, 33, 31, 0.76)); }
 .data-error .eyebrow { margin-bottom: 1.5rem; color: var(--coral); }
 .data-error h1 { max-width: 17ch; margin-bottom: 1.1rem; font-size: clamp(2.8rem, 7vw, 5.8rem); }
