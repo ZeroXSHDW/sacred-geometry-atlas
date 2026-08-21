@@ -32,6 +32,10 @@
     ? study.interiorNote || study.surfaceNote || study.exteriorNote
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
+  function catalogStudyAriaLabel(study, isActive) {
+    const stateLabel = isActive ? "Selected study" : "Open study";
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.emphasis}; ${studyStatus(study)}.`;
+  }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
   const validModes = new Set(["plan", "elevation", "section"]);
@@ -668,7 +672,7 @@
       const isCompared = state.compareIds.includes(study.id);
       return `
         <li class="catalog-entry">
-          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${isActive ? "Selected study: " : "Open "}${escapeHtml(study.name)}; ${escapeHtml(study.typology)}; ${escapeHtml(study.emphasis)}; ${escapeHtml(studyStatus(study))}">
+          <button class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" type="button" aria-current="${isActive ? "true" : "false"}" aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${escapeHtml(study.name)}</span>
