@@ -36,6 +36,7 @@
   const catalogParamKeys = ["q", "typology", "place", "status", "sort"];
   let shareResetTimer;
   let compareShareResetTimer;
+  let catalogShareResetTimer;
   let citationResetTimer;
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
@@ -309,6 +310,7 @@
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
+    $("#shareCatalog").addEventListener("click", shareCatalog);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
     $("#printStudy").addEventListener("click", printStudy);
@@ -736,6 +738,63 @@
       }, 2200);
     } else {
       status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
+    }
+  }
+
+  function catalogScopeLabel() {
+    const parts = [];
+    if (state.query) parts.push(`results matching “${state.query}”`);
+    if (state.filter !== "all") parts.push(state.filter);
+    if (state.filterPlace !== "all") parts.push(state.filterPlace);
+    if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
+    if (state.sort !== "index") {
+      const sortLabels = {
+        height: "height",
+        span: "span",
+        ratio: "length-to-span ratio",
+        symmetry: "symmetry",
+        name: "name"
+      };
+      parts.push(`sorted by ${sortLabels[state.sort] || state.sort}`);
+    }
+    return parts.length ? parts.join(", ") : "the full collection";
+  }
+
+  async function shareCatalog() {
+    const button = $("#shareCatalog");
+    const status = $("#catalogShareStatus");
+    if (!button || !status) return;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = routeHash("atlas", false);
+    const sharePayload = {
+      title: "Sacred Geometry Atlas · catalog view",
+      text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.`,
+      url: shareUrl.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(sharePayload);
+        status.textContent = "Catalog view shared.";
+      } catch (error) {
+        if (error.name !== "AbortError") status.textContent = "Sharing was unavailable. You can copy the catalog URL from the address bar.";
+      }
+      return;
+    }
+
+    const copied = await copyText(shareUrl.href);
+    if (copied) {
+      const label = button.querySelector("span:last-child");
+      button.classList.add("is-copied");
+      if (label) label.textContent = "Link copied";
+      status.textContent = "A shareable catalog view link was copied.";
+      window.clearTimeout(catalogShareResetTimer);
+      catalogShareResetTimer = window.setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (label) label.textContent = "Share view";
+      }, 2200);
+    } else {
+      status.textContent = "Copying was unavailable. You can copy the catalog URL from the address bar.";
     }
   }
 
