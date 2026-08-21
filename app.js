@@ -1246,8 +1246,9 @@
     target.innerHTML = comparisonStudies().map((study) => {
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
+      const label = comparisonStudyAriaLabel(study, ratio, section);
       return `
-      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas" aria-label="Open ${escapeHtml(study.name)} in the Atlas. Length to span ratio ${ratio}; height to span ratio ${section}.">
+      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas" aria-label="${label}">
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
@@ -1255,6 +1256,10 @@
       </button>
     `;
     }).join("");
+  }
+
+  function comparisonStudyAriaLabel(study, ratio, section) {
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}; ${escapeHtml(studyStatus(study))}. Dimensions: ${number(study.length)} meters long, ${number(study.span)} meters wide, and ${number(study.height)} meters high. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
