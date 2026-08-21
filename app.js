@@ -189,7 +189,9 @@
     $("#zoomIn").addEventListener("click", () => changeZoom(0.15));
     $("#zoomReset").addEventListener("click", () => {
       state.zoom = 1;
+      renderControls();
       renderDrawing();
+      announceKeyboard("Drawing zoom reset to 100%.");
     });
     $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
       showPage(button.dataset.view, { routeStudy: false });
@@ -701,6 +703,7 @@
     state.zoom = Math.min(1.6, Math.max(0.7, Number((state.zoom + delta).toFixed(2))));
     renderControls();
     renderDrawing();
+    announceKeyboard(`Drawing zoom ${Math.round(state.zoom * 100)}%.`);
   }
 
   function toggleCompare(id) {
