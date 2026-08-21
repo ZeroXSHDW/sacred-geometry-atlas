@@ -109,7 +109,7 @@ jobs:
           for (const study of source.studies) {
             const dimensions = [study.length, study.span, study.height].join(' × ') + ' m';
             const entry = noScriptEntries.find((candidate) => candidate.includes(study.name));
-            if (!entry || [study.name, dimensions, study.churchName, study.surfaceNote].some((value) => !entry.includes(value))) {
+            if (!entry || [study.name, study.typology, study.place, study.era, study.emphasis, study.status, dimensions, study.churchName, study.surfaceNote].some((value) => !entry.includes(value))) {
               throw new Error('No-script fallback is missing ' + study.id + ': ' + dimensions + ' / ' + study.churchName + ' / reading');
             }
           }
