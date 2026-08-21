@@ -422,6 +422,9 @@ h3 { letter-spacing: -0.04em; }
 .drawing-export { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.5rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
 .drawing-export span:first-child { color: var(--teal); font-size: 0.86rem; line-height: 0; }
 .drawing-export:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
+.drawing-reset { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.5rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.drawing-reset span:first-child { color: var(--amber); font-size: 0.86rem; line-height: 0; }
+.drawing-reset:hover { border-color: var(--amber); color: var(--ink); background: var(--amber-soft); }
 .zoom-control { display: inline-flex; align-items: center; border: 1px solid var(--line); }
 .zoom-control button { width: 25px; height: 24px; padding: 0; border: 0; border-right: 1px solid var(--line); color: var(--ink-soft); background: transparent; font-family: var(--mono); font-size: 0.75rem; line-height: 1; }
 .zoom-control button:last-child { border-right: 0; }

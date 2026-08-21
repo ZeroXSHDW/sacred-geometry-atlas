@@ -316,6 +316,7 @@
       renderDrawing();
       announceKeyboard("Drawing zoom reset to 100%.");
     });
+    $("#resetDrawing").addEventListener("click", resetDrawingView);
     $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
       showPage(button.dataset.view, { routeStudy: false });
     }));
@@ -1070,6 +1071,17 @@
     renderControls();
     renderDrawing();
     announceKeyboard(`Drawing zoom ${Math.round(state.zoom * 100)}%.`);
+  }
+
+  function resetDrawingView() {
+    state.surface = "exterior";
+    state.mode = "plan";
+    state.layer = "all";
+    state.zoom = 1;
+    renderControls();
+    renderDrawing();
+    announceKeyboard("Drawing view reset to outside plan, all geometry, 100% zoom.");
+    if (state.page === "atlas") replaceRoute("atlas");
   }
 
   function toggleCompare(id, options = {}) {

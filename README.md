@@ -11,6 +11,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Outside / inside surface switch.
 - Geometry layer focus for isolating envelope, rhythm, axis, or measured dimensions.
 - Zoom and reset controls for the SVG drawing instrument.
+- One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
 - Reading-profile bars expose their 0–100 scores as accessible meters as well as visual guides.
