@@ -276,11 +276,14 @@ jobs:
             if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
           }
           if (!app.includes('try {\n        await navigator.clipboard.writeText(value);\n        return true;\n      } catch (error) {\n        // Continue with the textarea fallback if the permissioned API rejects.') || !app.includes('const previousFocus = document.activeElement;') || !app.includes('previousFocus.focus({ preventScroll: true });')) throw new Error('Copy fallback must handle clipboard rejection and restore initiating focus');
-          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
+          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'function endAsyncAction(button)', 'button.setAttribute("aria-busy", "false");', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
             if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
-          for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete']) {
+          for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete', '.share-button[aria-busy="true"]']) {
             if (!styles.includes(token)) throw new Error('Download completion state is missing styling: ' + token);
+          }
+          for (const token of ['if (!study || !button || !status || !beginAsyncAction(button)) return;', 'if (!button || !status || !beginAsyncAction(button)) return;', 'endAsyncAction(button);']) {
+            if (!app.includes(token)) throw new Error('Async share and citation actions must use the busy-state guard: ' + token);
           }
           for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${studyDataLabel(study)} record"', 'module ${number(study.module)} meters; ${studyDataLabel(study)} record']) {
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
@@ -627,12 +630,15 @@ jobs:
             setAttribute(name, value) { this[name] = value; }
           };
           const status = { textContent: '' };
+          let resolveShare;
+          let shareCalls = 0;
+          const pendingShare = new Promise((resolve) => { resolveShare = resolve; });
           elements.set('#shareStudy', button);
           elements.set('#shareStatus', status);
           const timers = [];
           const context = {
             URL,
-            navigator: { share: async () => {} },
+            navigator: { share: async () => { shareCalls += 1; await pendingShare; } },
             window: {
               location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
               clearTimeout() {},
@@ -650,9 +656,14 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { shareStudy };\n})();');
           vm.runInNewContext(app, context);
           (async () => {
+            const first = context.window.__atlasTest.shareStudy();
+            if (!button.disabled || button['aria-busy'] !== 'true' || shareCalls !== 1) throw new Error('Native share did not enter its guarded busy state');
             await context.window.__atlasTest.shareStudy();
-            if (status.textContent !== 'The longitudinal basilica shared.' || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared' || !classes.has('is-complete') || timers.length !== 1) {
-              throw new Error('Native share did not expose visible completion feedback');
+            if (shareCalls !== 1) throw new Error('Native share accepted a duplicate activation while busy');
+            resolveShare();
+            await first;
+            if (status.textContent !== 'The longitudinal basilica shared.' || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared' || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-complete') || timers.length !== 1) {
+              throw new Error('Native share did not expose visible completion feedback or restore its state');
             }
             console.log('Native share feedback smoke test passed.');
           })().catch((error) => { throw error; });

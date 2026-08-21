@@ -643,6 +643,19 @@
     }, 2200));
   }
 
+  function beginAsyncAction(button) {
+    if (!button || button.disabled) return false;
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
+    return true;
+  }
+
+  function endAsyncAction(button) {
+    if (!button) return;
+    button.disabled = false;
+    button.setAttribute("aria-busy", "false");
+  }
+
   function renderStudyNav() {
     const navigation = $("#studyNav");
     const position = $("#studyNavPosition");
@@ -1087,36 +1100,40 @@
     const study = activeStudy();
     const button = $("#shareStudy");
     const status = $("#shareStatus");
-    if (!study || !button || !status) return;
-    const shareUrl = clearCatalogParams(new URL(window.location.href));
-    shareUrl.hash = routeHash("atlas", true);
-    const sharePayload = {
-      title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-      text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
-      url: shareUrl.href
-    };
+    if (!study || !button || !status || !beginAsyncAction(button)) return;
+    try {
+      const shareUrl = clearCatalogParams(new URL(window.location.href));
+      shareUrl.hash = routeHash("atlas", true);
+      const sharePayload = {
+        title: `${studyShortName(study)} · Sacred Geometry Atlas`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
+        url: shareUrl.href
+      };
 
-    const nativeShareResult = await attemptNativeShare(sharePayload);
-    if (nativeShareResult === "shared") {
-      temporaryButtonFeedback(button, "Shared", "Study shared", "Share study", "Share current study", "share-study");
-      status.textContent = `${study.name} shared.`;
-      return;
-    }
-    if (nativeShareResult === "cancelled") return;
+      const nativeShareResult = await attemptNativeShare(sharePayload);
+      if (nativeShareResult === "shared") {
+        temporaryButtonFeedback(button, "Shared", "Study shared", "Share study", "Share current study", "share-study");
+        status.textContent = `${study.name} shared.`;
+        return;
+      }
+      if (nativeShareResult === "cancelled") return;
 
-    const copied = await copyText(shareUrl.href);
+      const copied = await copyText(shareUrl.href);
 
-    if (copied) {
-      button.classList.add("is-copied");
-      setButtonFeedback(button, "Link copied", "Share link copied");
-      status.textContent = `A shareable link for ${study.name} was copied.`;
-      window.clearTimeout(shareResetTimer);
-      shareResetTimer = window.setTimeout(() => {
-        button.classList.remove("is-copied");
-        setButtonFeedback(button, "Share study", "Share current study");
-      }, 2200);
-    } else {
-      status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Link copied", "Share link copied");
+        status.textContent = `A shareable link for ${study.name} was copied.`;
+        window.clearTimeout(shareResetTimer);
+        shareResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Share study", "Share current study");
+        }, 2200);
+      } else {
+        status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
+      }
+    } finally {
+      endAsyncAction(button);
     }
   }
 
@@ -1144,74 +1161,82 @@
   async function shareCatalog() {
     const button = $("#shareCatalog");
     const status = $("#catalogShareStatus");
-    if (!button || !status) return;
-    const shareUrl = new URL(window.location.href);
-    shareUrl.hash = routeHash("atlas", false);
-    const sharePayload = {
-      title: "Sacred Geometry Atlas · catalog view",
-      text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.`,
-      url: shareUrl.href
-    };
+    if (!button || !status || !beginAsyncAction(button)) return;
+    try {
+      const shareUrl = new URL(window.location.href);
+      shareUrl.hash = routeHash("atlas", false);
+      const sharePayload = {
+        title: "Sacred Geometry Atlas · catalog view",
+        text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.`,
+        url: shareUrl.href
+      };
 
-    const nativeShareResult = await attemptNativeShare(sharePayload);
-    if (nativeShareResult === "shared") {
-      temporaryButtonFeedback(button, "Shared", "Catalog view shared", "Share view", "Share current catalog view", "share-catalog");
-      status.textContent = "Catalog view shared.";
-      return;
-    }
-    if (nativeShareResult === "cancelled") return;
+      const nativeShareResult = await attemptNativeShare(sharePayload);
+      if (nativeShareResult === "shared") {
+        temporaryButtonFeedback(button, "Shared", "Catalog view shared", "Share view", "Share current catalog view", "share-catalog");
+        status.textContent = "Catalog view shared.";
+        return;
+      }
+      if (nativeShareResult === "cancelled") return;
 
-    const copied = await copyText(shareUrl.href);
-    if (copied) {
-      button.classList.add("is-copied");
-      setButtonFeedback(button, "Link copied", "Catalog view link copied");
-      status.textContent = "A shareable catalog view link was copied.";
-      window.clearTimeout(catalogShareResetTimer);
-      catalogShareResetTimer = window.setTimeout(() => {
-        button.classList.remove("is-copied");
-        setButtonFeedback(button, "Share view", "Share current catalog view");
-      }, 2200);
-    } else {
-      status.textContent = "Copying was unavailable. You can copy the catalog URL from the address bar.";
+      const copied = await copyText(shareUrl.href);
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Link copied", "Catalog view link copied");
+        status.textContent = "A shareable catalog view link was copied.";
+        window.clearTimeout(catalogShareResetTimer);
+        catalogShareResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Share view", "Share current catalog view");
+        }, 2200);
+      } else {
+        status.textContent = "Copying was unavailable. You can copy the catalog URL from the address bar.";
+      }
+    } finally {
+      endAsyncAction(button);
     }
   }
 
   async function shareComparison() {
     const button = $("#shareCompare");
     const status = $("#compareShareStatus");
-    if (!button || !status) return;
-    const shareUrl = clearCatalogParams(new URL(window.location.href));
-    shareUrl.hash = routeHash("compare", false);
-    const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
-    const selectionLabel = selected.length
-      ? selected.map((study) => studyShortName(study)).join(", ")
-      : "the full collection";
-    const sharePayload = {
-      title: "Sacred Geometry Atlas comparison",
-      text: `Compare ${selectionLabel} in the Sacred Geometry Atlas.`,
-      url: shareUrl.href
-    };
+    if (!button || !status || !beginAsyncAction(button)) return;
+    try {
+      const shareUrl = clearCatalogParams(new URL(window.location.href));
+      shareUrl.hash = routeHash("compare", false);
+      const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
+      const selectionLabel = selected.length
+        ? selected.map((study) => studyShortName(study)).join(", ")
+        : "the full collection";
+      const sharePayload = {
+        title: "Sacred Geometry Atlas comparison",
+        text: `Compare ${selectionLabel} in the Sacred Geometry Atlas.`,
+        url: shareUrl.href
+      };
 
-    const nativeShareResult = await attemptNativeShare(sharePayload);
-    if (nativeShareResult === "shared") {
-      temporaryButtonFeedback(button, "Shared", "Comparison shared", "Share comparison", "Share this comparison", "share-comparison");
-      status.textContent = "Comparison shared.";
-      return;
-    }
-    if (nativeShareResult === "cancelled") return;
+      const nativeShareResult = await attemptNativeShare(sharePayload);
+      if (nativeShareResult === "shared") {
+        temporaryButtonFeedback(button, "Shared", "Comparison shared", "Share comparison", "Share this comparison", "share-comparison");
+        status.textContent = "Comparison shared.";
+        return;
+      }
+      if (nativeShareResult === "cancelled") return;
 
-    const copied = await copyText(shareUrl.href);
-    if (copied) {
-      button.classList.add("is-copied");
-      setButtonFeedback(button, "Link copied", "Comparison link copied");
-      status.textContent = "A shareable comparison link was copied.";
-      window.clearTimeout(compareShareResetTimer);
-      compareShareResetTimer = window.setTimeout(() => {
-        button.classList.remove("is-copied");
-        setButtonFeedback(button, "Share comparison", "Share this comparison");
-      }, 2200);
-    } else {
-      status.textContent = "Copying was unavailable. You can copy the comparison URL from the address bar.";
+      const copied = await copyText(shareUrl.href);
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Link copied", "Comparison link copied");
+        status.textContent = "A shareable comparison link was copied.";
+        window.clearTimeout(compareShareResetTimer);
+        compareShareResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Share comparison", "Share this comparison");
+        }, 2200);
+      } else {
+        status.textContent = "Copying was unavailable. You can copy the comparison URL from the address bar.";
+      }
+    } finally {
+      endAsyncAction(button);
     }
   }
 
@@ -1227,19 +1252,23 @@
     const study = activeStudy();
     const button = $("#copyCitation");
     const status = $("#citationStatus");
-    if (!study || !button || !status) return;
-    const copied = await copyText(citationText(study));
-    if (copied) {
-      button.classList.add("is-copied");
-      setButtonFeedback(button, "Citation copied", "Citation copied");
-      status.textContent = `Citation for ${study.name} copied.`;
-      window.clearTimeout(citationResetTimer);
-      citationResetTimer = window.setTimeout(() => {
-        button.classList.remove("is-copied");
-        setButtonFeedback(button, "Copy citation", "Copy a citation for the active study");
-      }, 2200);
-    } else {
-      status.textContent = "Copying was unavailable. You can copy the citation from the study details.";
+    if (!study || !button || !status || !beginAsyncAction(button)) return;
+    try {
+      const copied = await copyText(citationText(study));
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Citation copied", "Citation copied");
+        status.textContent = `Citation for ${study.name} copied.`;
+        window.clearTimeout(citationResetTimer);
+        citationResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Copy citation", "Copy a citation for the active study");
+        }, 2200);
+      } else {
+        status.textContent = "Copying was unavailable. You can copy the citation from the study details.";
+      }
+    } finally {
+      endAsyncAction(button);
     }
   }
 
