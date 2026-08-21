@@ -139,12 +139,15 @@ jobs:
           }
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');
           if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
+          if (!app.includes('role="img" aria-labelledby="drawing-title drawing-description" focusable="false"')) throw new Error('Drawing SVG must not become keyboard focusable');
           for (const token of ['role="img" aria-labelledby="drawing-title drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Reference:']) {
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable exact comparison table">')) throw new Error('Comparison table must expose a keyboard-scrollable region');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
+          if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
+          if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>')) throw new Error('Missing drawing status channel');
           if (!styles.includes('.comparison-table-wrap:focus-visible')) throw new Error('Comparison table region must have a visible focus state');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
           for (const token of ['class="noscript-number" aria-hidden="true"', 'class="study-index" id="activeIndex" aria-hidden="true"', 'class="method-card-index" aria-hidden="true"', 'class="note-icon" aria-hidden="true"']) {
