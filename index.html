@@ -409,7 +409,7 @@
         <div class="compare-intro">
           <p>
             Compare the studies by the relationships that make a room feel directional, centered,
-            compressed, or immense. The values are normalized from each schematic model.
+            compressed, or immense. The values are normalized from each study record; each row and envelope identifies whether its dimensions are schematic or measured.
           </p>
           <div class="compare-intro-side">
             <div class="compare-callout"><span id="compareScope" role="status" aria-live="polite">Full collection</span><strong>R = L ÷ span</strong><small>length-to-span ratio</small></div>
@@ -429,7 +429,7 @@
               <div><span class="card-kicker">00 / selected geometry</span><h3 id="geometry-compare-heading">Side-by-side envelopes</h3></div>
               <span class="card-symbol" aria-hidden="true">□</span>
             </div>
-            <div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Schematic study envelopes"></div>
+            <div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Study envelopes; each card identifies whether its data is schematic or measured."></div>
           </div>
           <div class="comparison-card" role="region" aria-labelledby="ratio-chart-heading">
             <div class="card-heading">
@@ -468,12 +468,13 @@
           </div>
           <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite"></span>
           <span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>
-          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table" aria-describedby="comparisonTableHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
+          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable">
-              <caption id="comparisonTableCaption">Recorded model values for the full collection.</caption>
+              <caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status.</caption>
               <thead>
                 <tr>
                   <th scope="col">Study</th>
+                  <th scope="col">Status</th>
                   <th scope="col">Length (m)</th>
                   <th scope="col">Span (m)</th>
                   <th scope="col">Length ÷ span</th>
@@ -555,7 +556,7 @@
 
         <div class="method-note">
           <span class="note-icon" aria-hidden="true">i</span>
-          <p><strong>Important:</strong> the current collection is a schematic proportional study, not a measured survey or a claim about every church. Replace the values in <code>data/geometry.js</code> with your own measured dataset to expand the atlas.</p>
+          <p><strong>Important:</strong> the current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status so source-supported dimensions can be identified when you add them. Replace the values in <code>data/geometry.js</code> with your own measured dataset to expand the atlas.</p>
         </div>
       </section>
     </main>

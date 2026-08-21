@@ -32,6 +32,7 @@
   };
   const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
   const studyStatus = (study) => study.status || "schematic";
+  const studyDataLabel = (study) => studyStatus(study) === "measured" ? "measured" : "schematic";
   const studyStatusDescription = (study) => studyStatus(study) === "measured"
     ? "Measured data uses source-supported dimensions."
     : "Schematic data uses illustrative proportions.";
@@ -895,7 +896,9 @@
     const hasEstimate = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0;
     return {
       value: hasEstimate ? `${Number(study.volumeEstimate).toLocaleString()} m³` : "Not supplied",
-      basis: hasEstimate ? study.volumeBasis || "schematic estimate" : "No estimate supplied"
+      basis: hasEstimate
+        ? study.volumeBasis || (studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate")
+        : "No estimate supplied"
     };
   }
 
@@ -1476,14 +1479,15 @@
     const comparison = comparisonStudies();
     const isFocused = state.compareIds.length >= 2;
     if (caption) caption.textContent = isFocused
-      ? `Recorded model values for ${comparison.length} selected studies.`
-      : "Recorded model values for the full collection.";
+      ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status.`
+      : "Recorded study values for the full collection; each row includes its data status.";
     body.innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const section = study.height / study.span;
       return `
         <tr>
           <th scope="row">${escapeHtml(studyShortName(study))}</th>
+          <td class="comparison-status">${escapeHtml(studyStatus(study))}</td>
           <td>${number(study.length)} m</td>
           <td>${number(study.span)} m</td>
           <td>${number(ratio, 2)}</td>
@@ -1500,6 +1504,7 @@
   function renderGeometryCompare() {
     const target = $("#geometryCompare");
     if (!target) return;
+    target.setAttribute("aria-label", "Study envelopes; each card identifies whether its data is schematic or measured.");
     target.innerHTML = comparisonStudies().map((study) => {
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
@@ -1569,7 +1574,7 @@
     const surface = state.surface === "interior" ? "Interior" : "Exterior";
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const reading = studySurfaceReading(study);
-    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
+    const description = `${surface} ${state.mode} ${studyDataLabel(study)} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
