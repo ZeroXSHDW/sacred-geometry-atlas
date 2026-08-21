@@ -99,7 +99,7 @@ jobs:
           if (!notFound.includes("hostname.endsWith('.github.io')")) throw new Error('Missing project-site root resolver');
           if (!notFound.includes('<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing 404 favicon link');
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
-          if (!html.includes('<div class="data-error" id="dataError" role="alert" hidden>')) throw new Error('Missing data-load recovery state');
+          if (!html.includes('<div class="data-error" id="dataError" role="alert" aria-labelledby="dataErrorHeading" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">')) throw new Error('Missing focusable data-load recovery heading');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Dimensions are shown as length × span × height in meters.')) throw new Error('Missing no-script dimension legend');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
@@ -121,6 +121,8 @@ jobs:
           if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>')) throw new Error('Missing visual empty state');
           if (!html.includes('id="clearVisualFilters" type="button"')) throw new Error('Missing visual empty-state recovery action');
           if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
+          if (!html.includes('data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Dimensions</button>')) throw new Error('Dimension layer must use clear schematic terminology');
+          if (!html.includes('<div class="metric-strip" role="group" aria-label="Primary dimensions">')) throw new Error('Primary dimension group must use clear schematic terminology');
           if (!html.includes('id="activeReference"')) throw new Error('Missing visible study reference');
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
           if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
@@ -153,7 +155,7 @@ jobs:
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
-          if (!html.includes('<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable exact comparison table">')) throw new Error('Comparison table must expose a keyboard-scrollable region');
+          if (!html.includes('<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table">')) throw new Error('Comparison table must expose a keyboard-scrollable region');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
           if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>')) throw new Error('Missing drawing status channel');
@@ -188,7 +190,7 @@ jobs:
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
-          if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
+          if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
           if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
           if (!app.includes('function downloadStudy()') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing active-study JSON export');
@@ -200,7 +202,7 @@ jobs:
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
             if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);
           }
-          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', '\"summary\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
+          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', '\"a\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');

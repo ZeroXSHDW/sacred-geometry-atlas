@@ -85,7 +85,11 @@
       document.body.classList.add("data-error-state");
       document.title = "Atlas unavailable · Sacred Geometry Atlas";
       const dataError = $("#dataError");
-      if (dataError) dataError.hidden = false;
+      if (dataError) {
+        dataError.hidden = false;
+        const heading = $("#dataErrorHeading");
+        if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
+      }
       return;
     }
     $("#studyCount").textContent = String(studies.length).padStart(2, "0");
@@ -531,7 +535,7 @@
 
   function handleKeyboard(event) {
     const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
-    if (["input", "select", "textarea", "button", "summary"].includes(tagName) || event.target.isContentEditable) return;
+    if (["input", "select", "textarea", "button", "summary", "a"].includes(tagName) || event.target.isContentEditable) return;
     if (event.metaKey || event.ctrlKey || event.altKey || state.page !== "atlas") return;
     const key = event.key.toLowerCase();
     if (key === "j" || key === "k") {
@@ -1194,8 +1198,8 @@
     const comparison = comparisonStudies();
     const isFocused = state.compareIds.length >= 2;
     if (caption) caption.textContent = isFocused
-      ? `Exact values for ${comparison.length} selected studies.`
-      : "Exact values for the full collection.";
+      ? `Recorded model values for ${comparison.length} selected studies.`
+      : "Recorded model values for the full collection.";
     body.innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const section = study.height / study.span;

@@ -9,7 +9,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Six representative church typologies with schematic proportional studies.
 - Interactive plan, elevation, and section drawings.
 - Outside / inside surface switch.
-- Geometry layer focus for isolating envelope, rhythm, axis, or measured dimensions.
+- Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
 - Zoom and reset controls for the SVG drawing instrument.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
@@ -22,7 +22,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
-- An expandable semantic comparison table with exact lengths, spans, ratios, heights, bays, modules, and symmetry values, with keyboard-accessible horizontal scrolling on narrow screens.
+- An expandable semantic comparison table with recorded model lengths, spans, ratios, heights, bays, modules, and symmetry values, with keyboard-accessible horizontal scrolling on narrow screens.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; browser history restores the selected context. Partial study links use plan, outside, and all-geometry defaults.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.

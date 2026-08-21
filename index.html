@@ -63,9 +63,9 @@
       </section>
     </noscript>
 
-    <div class="data-error" id="dataError" role="alert" hidden>
+    <div class="data-error" id="dataError" role="alert" aria-labelledby="dataErrorHeading" hidden>
       <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Atlas unavailable</p>
-      <h1>Geometry data could not be loaded.</h1>
+      <h1 id="dataErrorHeading" tabindex="-1">Geometry data could not be loaded.</h1>
       <p>The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.</p>
       <div class="data-error-actions">
         <a class="hero-action hero-action-primary" href="./">Reload the atlas <span aria-hidden="true">↻</span></a>
@@ -288,7 +288,7 @@
                 <button class="layer-button" data-layer="envelope" type="button" aria-pressed="false" aria-controls="geometryCanvas">Envelope</button>
                 <button class="layer-button" data-layer="rhythm" type="button" aria-pressed="false" aria-controls="geometryCanvas">Rhythm</button>
                 <button class="layer-button" data-layer="axis" type="button" aria-pressed="false" aria-controls="geometryCanvas">Axis</button>
-                <button class="layer-button" data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Measure</button>
+                <button class="layer-button" data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Dimensions</button>
               </div>
             </div>
 
@@ -340,7 +340,7 @@
             </div>
             <span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>
 
-            <div class="metric-strip" role="group" aria-label="Primary measurements">
+            <div class="metric-strip" role="group" aria-label="Primary dimensions">
               <div class="metric-cell">
                 <span class="metric-label">overall span</span>
                 <strong id="metricSpan">22.0 m</strong>
@@ -434,7 +434,7 @@
               <span class="card-symbol">↕</span>
             </div>
             <div class="bar-chart" id="heightChart" role="list" aria-label="Height to span ratios"></div>
-            <p class="chart-note">Vertical emphasis is measured against the widest enclosing dimension.</p>
+            <p class="chart-note">Vertical emphasis is compared with the widest enclosing dimension.</p>
           </div>
           <div class="comparison-card wide-card" role="region" aria-labelledby="module-chart-heading">
             <div class="card-heading">
@@ -447,10 +447,10 @@
         </div>
 
         <details class="comparison-table-panel">
-          <summary>Read exact values as a table</summary>
-          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable exact comparison table">
+          <summary>Read dataset values as a table</summary>
+          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table">
             <table class="comparison-table" id="comparisonDataTable">
-              <caption id="comparisonTableCaption">Exact values for the full collection.</caption>
+              <caption id="comparisonTableCaption">Recorded model values for the full collection.</caption>
               <thead>
                 <tr>
                   <th scope="col">Study</th>
@@ -484,7 +484,7 @@
             <p class="method-number">01 — 04</p>
             <h3>Every church is an argument between the line and the circle.</h3>
             <p>
-              This atlas translates a building into a small vocabulary of measurable relationships:
+              This atlas translates a building into a small vocabulary of geometric relationships:
               axes, modules, radii, envelopes, and proportions. Switch between outside and inside
               to see how the structural shell becomes a spatial sequence.
             </p>
