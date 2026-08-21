@@ -34,6 +34,12 @@
   const validModes = new Set(["plan", "elevation", "section"]);
   const validSurfaces = new Set(["exterior", "interior"]);
   const validLayers = new Set(["all", "envelope", "rhythm", "axis", "measure"]);
+  const layerDisplayNames = {
+    envelope: "envelope",
+    rhythm: "rhythm",
+    axis: "axis",
+    measure: "dimensions"
+  };
   const validStatuses = new Set(["all", "schematic", "measured"]);
   const validSorts = new Set(["index", "height", "span", "ratio", "symmetry", "name"]);
   const catalogParamKeys = ["q", "typology", "place", "status", "sort"];
@@ -48,6 +54,8 @@
     "'": "&#39;",
     '"': "&quot;"
   }[character]));
+  const layerDisplayName = (layer) => layerDisplayNames[layer] || layer;
+  const layerFocusLabel = () => state.layer === "all" ? "all geometry" : `${layerDisplayName(state.layer)} focus`;
 
   function updateDocumentTitle(page = state.page) {
     if (page === "atlas" && activeStudy()) {
@@ -489,8 +497,7 @@
   }
 
   function announceDrawingState() {
-    const focus = state.layer === "all" ? "all geometry" : `${state.layer} focus`;
-    announceKeyboard(`${state.surface} ${state.mode} view selected, ${focus}.`);
+    announceKeyboard(`${state.surface} ${state.mode} view selected, ${layerFocusLabel()}.`);
   }
 
   function updateSearchClear() {
@@ -842,7 +849,7 @@
     shareUrl.hash = routeHash("atlas", true);
     const sharePayload = {
       title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-      text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${state.layer === "all" ? "all geometry" : `${state.layer} focus`}.`,
+      text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}.`,
       url: shareUrl.href
     };
 
@@ -964,7 +971,7 @@
     const citationUrl = clearCatalogParams(new URL(window.location.href));
     citationUrl.hash = routeHash("atlas", true);
     const surface = state.surface === "interior" ? "inside" : "outside";
-    const focus = state.layer === "all" ? "all geometry" : `${state.layer} focus`;
+    const focus = layerFocusLabel();
     return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
@@ -1284,7 +1291,7 @@
 
   function svgBase(study, title) {
     const surface = state.surface === "interior" ? "Interior" : "Exterior";
-    const layer = state.layer === "all" ? "complete geometry study" : `${state.layer} layer focus`;
+    const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name}. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${study.surfaceNote || "No interpretive reading supplied."} Status: ${studyStatus(study)}. Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
