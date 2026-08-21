@@ -49,7 +49,7 @@
   };
   const validStatuses = new Set(["all", "schematic", "measured"]);
   const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);
-  const catalogParamKeys = ["q", "typology", "place", "status", "sort"];
+  const catalogParamKeys = ["q", "typology", "place", "status", "sort", "compare"];
   let shareResetTimer;
   let compareShareResetTimer;
   let catalogShareResetTimer;
@@ -76,6 +76,7 @@
         || state.filterPlace !== "all"
         || state.filterStatus !== "all"
         || state.sort !== "index"
+        || state.compareIds.length > 0
       );
       if (!route.studyId && hasCatalogScope) {
         document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;
@@ -164,11 +165,15 @@
     const requestedPlace = params.get("place");
     const requestedStatus = params.get("status");
     const requestedSort = params.get("sort");
+    const requestedCompare = params.get("compare");
     state.query = requestedQuery ? requestedQuery.trim().toLowerCase() : "";
     state.filter = typologies.has(requestedTypology) ? requestedTypology : "all";
     state.filterPlace = places.has(requestedPlace) ? requestedPlace : "all";
     state.filterStatus = validStatuses.has(requestedStatus) ? requestedStatus : "all";
     state.sort = validSorts.has(requestedSort) ? requestedSort : "index";
+    state.compareIds = requestedCompare
+      ? [...new Set(requestedCompare.split(",").map((id) => id.trim()).filter((id) => studies.some((study) => study.id === id)))]
+      : [];
     syncCatalogControls();
   }
 
@@ -186,7 +191,8 @@
       typology: state.filter === "all" ? "" : state.filter,
       place: state.filterPlace === "all" ? "" : state.filterPlace,
       status: state.filterStatus === "all" ? "" : state.filterStatus,
-      sort: state.sort === "index" ? "" : state.sort
+      sort: state.sort === "index" ? "" : state.sort,
+      compare: state.page === "atlas" && state.compareIds.length ? state.compareIds.join(",") : ""
     };
     catalogParamKeys.forEach((key) => {
       if (values[key]) url.searchParams.set(key, values[key]);
@@ -403,6 +409,7 @@
       updateCompareTray();
       renderCompare();
       if (state.page === "compare") replaceRoute("compare", false);
+      replaceCatalogRoute();
       if (hadSelection) announceKeyboard("Comparison selection cleared.");
       focusCatalogControl("query");
     });
@@ -932,6 +939,7 @@
     });
     if (page === "compare") renderCompare();
     if (shouldUpdateHash) updateRoute(page, routeStudy);
+    if (shouldUpdateHash) replaceCatalogRoute();
     if (scroll) {
       const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
       const pageTarget = page === "atlas" ? atlas : page === "compare" ? compare : method;
@@ -1039,6 +1047,7 @@
     if (state.filter !== "all") parts.push(state.filter);
     if (state.filterPlace !== "all") parts.push(state.filterPlace);
     if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
+    if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);
     if (state.sort !== "index") {
       const sortLabels = {
         length: "length (longest first)",
@@ -1288,7 +1297,8 @@
         typology: state.filter,
         place: state.filterPlace,
         status: state.filterStatus,
-        sort: state.sort
+        sort: state.sort,
+        compareIds: [...state.compareIds]
       },
       studies: visible
     }, null, 2);
@@ -1391,6 +1401,7 @@
     updateCompareTray();
     renderCompare();
     if (state.page === "compare") replaceRoute("compare", false);
+    replaceCatalogRoute();
     if (study) announceKeyboard(`${study.name} ${wasSelected ? "removed from" : "added to"} comparison. ${state.compareIds.length} selected.`);
     if (focus) focusCompareToggle(id);
   }
