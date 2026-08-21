@@ -585,7 +585,6 @@
     const previousId = state.activeId;
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
     renderList();
-    renderCatalogResultCount(visible.length);
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();
