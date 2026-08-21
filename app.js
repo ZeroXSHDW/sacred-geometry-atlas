@@ -1656,9 +1656,13 @@
   function renderComparisonTable() {
     const body = $("#comparisonTableBody");
     const caption = $("#comparisonTableCaption");
+    const summary = $("#comparisonTableSummary");
     if (!body) return;
     const comparison = comparisonStudies();
     const isFocused = state.compareIds.length >= 2;
+    if (summary) summary.textContent = isFocused
+      ? `Read the ${comparison.length} selected study records as a table`
+      : `Read the ${comparison.length} study records as a table`;
     if (caption) caption.textContent = isFocused
       ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status.`
       : "Recorded study values for the full collection; each row includes its data status.";

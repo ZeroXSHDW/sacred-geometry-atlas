@@ -151,6 +151,7 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing navigation relationship: ' + token);
           }
           if (!html.includes('<p class="section-note" id="compareSectionNote">Relative readings · full collection</p>') || !html.includes('<span class="card-kicker" id="geometryCompareKicker">00 / collection geometry</span>') || !app.includes('function renderCompareContext()') || !app.includes('const compareScopeLabel = focused ? "selected collection" : "full collection";') || !app.includes('sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;') || !app.includes('geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";')) throw new Error('Comparison copy must identify the active full or focused collection');
+          if (!html.includes('<summary id="comparisonTableSummary">Read the 6 study records as a table</summary>') || !app.includes('const summary = $("#comparisonTableSummary");') || !app.includes('Read the ${comparison.length} selected study records as a table') || !app.includes('Read the ${comparison.length} study records as a table')) throw new Error('Comparison table trigger must identify its active record scope');
           for (const token of ['function updateCompareNavigation()', 'const label = selectedCount ? `Compare (${selectedCount} selected)` : "Compare";', 'button.setAttribute("aria-label", label);', 'count.hidden = selectedCount === 0;', 'updateCompareNavigation();']) {
             if (!app.includes(token)) throw new Error('Compare navigation state must reflect the active selection: ' + token);
           }
@@ -478,9 +479,9 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage, renderCompareSelection, renderCompareContext };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage, renderCompareSelection, renderCompareContext, renderComparisonTable };\n})();');
           vm.runInNewContext(app, context);
-          const { state, showPage, renderCompareSelection, renderCompareContext } = context.window.__atlasTest;
+          const { state, showPage, renderCompareSelection, renderCompareContext, renderComparisonTable } = context.window.__atlasTest;
           state.page = 'compare';
           state.activeId = 'basilica';
           state.compareIds = ['basilica', 'gothic'];
@@ -504,11 +505,21 @@ jobs:
           elements.set('#geometryCompareKicker', geometryKicker);
           elements.set('#compareScope', compareScope);
           elements.set('#compareHelper', compareHelper);
+          const tableBody = { innerHTML: '' };
+          const tableCaption = { textContent: '' };
+          const tableSummary = { textContent: '' };
+          elements.set('#comparisonTableBody', tableBody);
+          elements.set('#comparisonTableCaption', tableCaption);
+          elements.set('#comparisonTableSummary', tableSummary);
           renderCompareContext();
           if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison')) throw new Error('Focused comparison scope copy did not update');
+          renderComparisonTable();
+          if (tableSummary.textContent !== 'Read the 2 selected study records as a table' || !tableCaption.textContent.includes('2 selected studies')) throw new Error('Focused comparison table scope copy did not update');
           state.compareIds = [];
           renderCompareContext();
           if (sectionNote.textContent !== 'Relative readings · full collection' || geometryKicker.textContent !== '00 / collection geometry' || compareScope.textContent !== 'Full collection' || !compareHelper.textContent.includes('full collection')) throw new Error('Full collection scope copy did not update');
+          renderComparisonTable();
+          if (tableSummary.textContent !== 'Read the 6 study records as a table' || !tableCaption.textContent.includes('full collection')) throw new Error('Full collection table scope copy did not update');
           state.compareIds = ['basilica', 'gothic'];
           showPage('atlas', { scroll: false });
           const finalUrl = new URL(location.href);
