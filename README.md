@@ -17,13 +17,13 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search, typology, location, and measured/schematic status filtering.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
-- Copyable citations that include the active study, provenance, drawing state, and shareable route.
+- Copyable citations that include the active study, reference, provenance, drawing state, and shareable route.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - An expandable semantic comparison table with exact lengths, spans, ratios, heights, bays, modules, and symmetry values.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; browser history restores the selected context.
-- Downloadable full-atlas JSON and filtered catalog-view JSON, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
+- Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.

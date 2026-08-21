@@ -334,6 +334,7 @@
       selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0 });
     });
     $("#downloadData").addEventListener("click", downloadData);
+    $("#downloadStudy").addEventListener("click", downloadStudy);
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
@@ -888,7 +889,7 @@
     citationUrl.hash = routeHash("atlas", true);
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = state.layer === "all" ? "all geometry" : `${state.layer} focus`;
-    return `${study.name}. ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
@@ -972,6 +973,37 @@
     anchor.click();
     anchor.remove();
     if (status) status.textContent = `Current drawing exported as ${filename}.`;
+    window.setTimeout(() => URL.revokeObjectURL(url), 500);
+  }
+
+  function downloadStudy() {
+    const study = activeStudy();
+    const status = $("#studyDownloadStatus");
+    if (!study) return;
+    const shareUrl = clearCatalogParams(new URL(window.location.href));
+    shareUrl.hash = routeHash("atlas", true);
+    const filename = `${study.id}-sacred-geometry-study.json`;
+    const payload = JSON.stringify({
+      title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
+      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      view: {
+        studyId: study.id,
+        surface: state.surface,
+        mode: state.mode,
+        layer: state.layer,
+        route: shareUrl.href
+      },
+      study
+    }, null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    if (status) status.textContent = `Active study exported as ${filename}.`;
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 

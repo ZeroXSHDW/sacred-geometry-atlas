@@ -123,6 +123,7 @@ jobs:
           }
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
           if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
+          if (!html.includes('id="downloadStudy" type="button" aria-label="Download active study as JSON"')) throw new Error('Missing accessible study-data download label');
           if (!html.includes('id="shareStudy" type="button" aria-label="Share current study"')) throw new Error('Missing accessible study share label');
           if (!html.includes('id="copyCitation" type="button" aria-label="Copy a citation for the active study"')) throw new Error('Missing accessible citation label');
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"')) throw new Error('Missing accessible print control');
@@ -151,6 +152,7 @@ jobs:
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
+          if (!app.includes('function downloadStudy()') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing active-study JSON export');
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');

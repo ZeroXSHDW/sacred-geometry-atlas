@@ -247,6 +247,10 @@
                     <span aria-hidden="true">⧉</span>
                     <span>Copy citation</span>
                   </button>
+                  <button class="share-button study-download-button" id="downloadStudy" type="button" aria-label="Download active study as JSON" title="Download active study as JSON">
+                    <span aria-hidden="true">↓</span>
+                    <span>Study JSON</span>
+                  </button>
                   <button class="share-button print-button" id="printStudy" type="button" aria-label="Print active study sheet" title="Print active study sheet">
                     <span aria-hidden="true">⎙</span>
                     <span>Print sheet</span>
@@ -257,6 +261,7 @@
             </div>
             <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="citationStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="studyDownloadStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite"></span>
 
             <div class="drawing-controls" role="group" aria-label="Drawing controls">
