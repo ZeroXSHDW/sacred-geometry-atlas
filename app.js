@@ -28,6 +28,9 @@
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
+  const studySurfaceReading = (study) => state.surface === "interior"
+    ? study.interiorNote || study.surfaceNote || study.exteriorNote
+    : study.exteriorNote || study.surfaceNote || study.interiorNote;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -693,7 +696,7 @@
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
-    $("#activeDescription").textContent = state.surface === "interior" ? study.interiorNote : study.exteriorNote;
+    $("#activeDescription").textContent = studySurfaceReading(study) || "No interpretive reading supplied.";
     $("#analysisReading").textContent = study.surfaceNote || study.exteriorNote || "No interpretive note supplied.";
     $("#metricLength").textContent = `${number(study.length)} m`;
     $("#metricSpan").textContent = `${number(study.span)} m`;
@@ -1293,7 +1296,8 @@
   function svgBase(study, title) {
     const surface = state.surface === "interior" ? "Interior" : "Exterior";
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
-    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name}. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${study.surfaceNote || "No interpretive reading supplied."} Status: ${studyStatus(study)}. Reference: ${study.churchName || study.name}.`;
+    const reading = studySurfaceReading(study);
+    const description = `${surface} ${state.mode} schematic showing the ${layer} for ${study.name}. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatus(study)}. Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
