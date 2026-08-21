@@ -618,7 +618,9 @@ h3 { letter-spacing: -0.04em; }
 .comparison-table-panel[open] summary { border-bottom: 1px solid var(--line); }
 .comparison-table-panel[open] summary::after { content: '−'; }
 .comparison-table-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1.15rem; border-bottom: 1px solid var(--line); }
+.comparison-table-copy { min-width: 0; }
 .comparison-table-actions p { margin: 0; color: var(--ink-muted); font-size: 0.65rem; }
+.comparison-table-actions .comparison-table-hint { margin-top: 0.28rem; color: var(--teal); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; }
 .comparison-table-actions .share-button { flex: 0 0 auto; }
 .comparison-table-wrap { overflow-x: auto; }
 .comparison-table-wrap:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
