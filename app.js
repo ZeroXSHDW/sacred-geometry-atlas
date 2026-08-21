@@ -76,7 +76,14 @@
   }
 
   function init() {
-    if (!studies.length) return;
+    if (!studies.length) {
+      document.body.classList.remove("no-js");
+      document.body.classList.add("data-error-state");
+      document.title = "Atlas unavailable · Sacred Geometry Atlas";
+      const dataError = $("#dataError");
+      if (dataError) dataError.hidden = false;
+      return;
+    }
     $("#studyCount").textContent = String(studies.length).padStart(2, "0");
     populateFilter();
     bindEvents();

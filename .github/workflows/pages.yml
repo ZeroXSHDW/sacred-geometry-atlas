@@ -57,6 +57,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
+          if (!html.includes('<div class="data-error" id="dataError" role="alert" hidden>')) throw new Error('Missing data-load recovery state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
           if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');
           for (const study of source.studies) {
@@ -102,6 +103,7 @@ jobs:
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
+          if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false')) throw new Error('Missing data-load recovery behavior');
           for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas" && !route.studyId)', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', '\"summary\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }

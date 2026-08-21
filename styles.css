@@ -88,6 +88,15 @@ summary:focus-visible {
 .noscript-list small { display: block; margin-top: 0.22rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.45; }
 .noscript-note { margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.59rem; }
 
+.data-error-state .site-header,
+.data-error-state main,
+.data-error-state .site-footer { display: none; }
+.data-error { width: min(820px, calc(100% - 96px)); min-height: min(560px, 70vh); margin: 4rem auto; padding: clamp(2rem, 6vw, 5rem); border: 1px solid rgba(231, 127, 98, 0.42); background: linear-gradient(135deg, rgba(231, 127, 98, 0.09), rgba(24, 33, 31, 0.76)); }
+.data-error .eyebrow { margin-bottom: 1.5rem; color: var(--coral); }
+.data-error h1 { max-width: 17ch; margin-bottom: 1.1rem; font-size: clamp(2.8rem, 7vw, 5.8rem); }
+.data-error > p:not(.eyebrow) { max-width: 36rem; margin-bottom: 0; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.8; }
+.data-error-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -592,6 +601,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 @media (max-width: 740px) {
   .site-header, main, .site-footer { width: min(100% - 32px, 600px); }
   .noscript-index { width: min(100% - 32px, 600px); padding: 1.3rem; }
+  .data-error { width: min(100% - 32px, 600px); min-height: auto; margin: 2rem auto; padding: 2rem 1.3rem; }
   .noscript-list { grid-template-columns: 1fr; margin-top: 1.3rem; }
   .site-header { flex-wrap: wrap; gap: 0.8rem; min-height: auto; padding: 1rem 0; }
   .main-nav { order: 3; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); }

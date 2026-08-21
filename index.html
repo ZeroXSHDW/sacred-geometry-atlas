@@ -62,6 +62,16 @@
       </section>
     </noscript>
 
+    <div class="data-error" id="dataError" role="alert" hidden>
+      <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Atlas unavailable</p>
+      <h1>Geometry data could not be loaded.</h1>
+      <p>The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.</p>
+      <div class="data-error-actions">
+        <a class="hero-action hero-action-primary" href="./">Reload the atlas <span aria-hidden="true">↻</span></a>
+        <a class="hero-action" href="data/geometry.json" download="sacred-geometry-atlas.json">Open the static dataset <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
     <header class="site-header">
       <a class="brand" href="#atlas" aria-label="Sacred Geometry Atlas home">
         <span class="brand-mark" aria-hidden="true">
