@@ -604,6 +604,11 @@
     if (["input", "select", "textarea", "button", "summary", "a"].includes(tagName) || event.target.isContentEditable) return;
     if (event.metaKey || event.ctrlKey || event.altKey || state.page !== "atlas") return;
     const key = event.key.toLowerCase();
+    if (key === "/") {
+      event.preventDefault();
+      focusCatalogControl("query");
+      return;
+    }
     if (key === "j" || key === "k") {
       event.preventDefault();
       cycleStudy(key === "j" ? 1 : -1, { scroll: false, focus: true });
