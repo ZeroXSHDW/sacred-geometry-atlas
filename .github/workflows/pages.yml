@@ -123,6 +123,7 @@ jobs:
           if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Dimensions</button>')) throw new Error('Dimension layer must use clear schematic terminology');
           if (!html.includes('<div class="metric-strip" role="group" aria-label="Primary dimensions">')) throw new Error('Primary dimension group must use clear schematic terminology');
+          if (!html.includes('<span class="metric-label">overall length</span>') || !html.includes('id="metricLength"')) throw new Error('Primary dimension group must expose overall length');
           if (!html.includes('id="activeReference"')) throw new Error('Missing visible study reference');
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
           if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
@@ -136,6 +137,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
           if (!app.includes('const MIN_ZOOM = 0.7;') || !app.includes('const MAX_ZOOM = 1.6;') || !app.includes('zoomOut.disabled = state.zoom <= MIN_ZOOM;') || !app.includes('zoomIn.disabled = state.zoom >= MAX_ZOOM;') || !app.includes('Zoom out (minimum 70%)') || !app.includes('Zoom in (maximum 160%)') || !styles.includes('.zoom-control button:disabled')) throw new Error('Zoom limits must expose disabled endpoint controls');
+          if (!app.includes('$("#metricLength").textContent = `${number(study.length)} m`;') || !styles.includes('.metric-cell:nth-child(even)') || !styles.includes('.metric-cell:nth-child(-n + 4)')) throw new Error('Overall length metric must render and reflow responsively');
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
           if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
           if (!html.includes('id="downloadStudy" type="button" aria-label="Download active study as JSON"')) throw new Error('Missing accessible study-data download label');

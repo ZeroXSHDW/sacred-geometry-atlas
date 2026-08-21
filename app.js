@@ -695,6 +695,7 @@
     $("#activeIndex").textContent = study.index;
     $("#activeDescription").textContent = state.surface === "interior" ? study.interiorNote : study.exteriorNote;
     $("#analysisReading").textContent = study.surfaceNote || study.exteriorNote || "No interpretive note supplied.";
+    $("#metricLength").textContent = `${number(study.length)} m`;
     $("#metricSpan").textContent = `${number(study.span)} m`;
     $("#metricHeight").textContent = `${number(study.height)} m`;
     $("#metricRatio").textContent = `${number(ratio, 2)} : 1`;

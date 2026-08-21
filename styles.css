@@ -671,10 +671,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .drawing-tools { width: 100%; justify-content: space-between; }
   .svg-wrap, .geometry-svg { min-height: 320px; }
   .metric-strip { grid-template-columns: repeat(2, 1fr); }
-  .metric-cell:nth-child(2) { border-right: 0; }
-  .metric-cell:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
-  .metric-cell:nth-child(3) { padding-left: 0; }
-  .metric-cell:nth-child(4) { border-right: 0; }
+  .metric-cell:nth-child(even) { border-right: 0; }
+  .metric-cell:nth-child(-n + 4) { border-bottom: 1px solid var(--line); }
+  .metric-cell:nth-child(odd) { padding-left: 0; }
   .analysis-grid { grid-template-columns: repeat(2, 1fr); }
   .analysis-cell:nth-child(2) { border-right: 0; }
   .analysis-cell:nth-child(even) { border-right: 0; }
