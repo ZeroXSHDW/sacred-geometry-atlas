@@ -64,6 +64,7 @@ jobs:
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
+          if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');

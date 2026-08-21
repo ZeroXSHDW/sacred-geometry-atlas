@@ -106,7 +106,7 @@
     if (route.mode) state.mode = route.mode;
     if (route.surface) state.surface = route.surface;
     if (route.layer) state.layer = route.layer;
-    showPage(route.page, { updateHash: false, scroll: false });
+    showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
     renderAll();
     if (route.page === "atlas" && route.studyId) {
       announceStudy(activeStudy(), visibleStudies().length);
@@ -540,7 +540,15 @@
     });
     if (page === "compare") renderCompare();
     if (shouldUpdateHash) updateRoute(page, routeStudy);
-    if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
+    if (scroll) {
+      const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+      const pageTarget = page === "atlas" ? atlas : page === "compare" ? compare : method;
+      if (pageTarget && typeof pageTarget.scrollIntoView === "function") {
+        pageTarget.scrollIntoView({ behavior, block: "start" });
+      } else {
+        window.scrollTo({ top: 0, behavior });
+      }
+    }
     if (pageChanged) {
       const heading = $(page === "atlas" ? "#atlas-heading" : page === "compare" ? "#compare-heading" : "#method-heading");
       if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
