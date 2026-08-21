@@ -746,8 +746,14 @@
     $("#zoomReset").textContent = `${Math.round(state.zoom * 100)}%`;
     const zoomOut = $("#zoomOut");
     const zoomIn = $("#zoomIn");
-    if (zoomOut) zoomOut.disabled = state.zoom <= MIN_ZOOM;
-    if (zoomIn) zoomIn.disabled = state.zoom >= MAX_ZOOM;
+    if (zoomOut) {
+      zoomOut.disabled = state.zoom <= MIN_ZOOM;
+      zoomOut.setAttribute("aria-label", zoomOut.disabled ? "Zoom out (minimum 70%)" : "Zoom out");
+    }
+    if (zoomIn) {
+      zoomIn.disabled = state.zoom >= MAX_ZOOM;
+      zoomIn.setAttribute("aria-label", zoomIn.disabled ? "Zoom in (maximum 160%)" : "Zoom in");
+    }
   }
 
   function showPage(page, options = {}) {
