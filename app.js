@@ -21,6 +21,8 @@
 
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+  const MIN_ZOOM = 0.7;
+  const MAX_ZOOM = 1.6;
   const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
   const studyStatus = (study) => study.status || "schematic";
   const studySource = (study) => study.source || "Unattributed proportional model";
@@ -742,6 +744,10 @@
     });
     $("#zoomReadout").textContent = `${Math.round(state.zoom * 100)}%`;
     $("#zoomReset").textContent = `${Math.round(state.zoom * 100)}%`;
+    const zoomOut = $("#zoomOut");
+    const zoomIn = $("#zoomIn");
+    if (zoomOut) zoomOut.disabled = state.zoom <= MIN_ZOOM;
+    if (zoomIn) zoomIn.disabled = state.zoom >= MAX_ZOOM;
   }
 
   function showPage(page, options = {}) {
@@ -1114,7 +1120,7 @@
   }
 
   function changeZoom(delta) {
-    state.zoom = Math.min(1.6, Math.max(0.7, Number((state.zoom + delta).toFixed(2))));
+    state.zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number((state.zoom + delta).toFixed(2))));
     renderControls();
     renderDrawing();
     announceKeyboard(`Drawing zoom ${Math.round(state.zoom * 100)}%.`);
