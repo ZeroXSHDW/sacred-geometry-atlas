@@ -397,7 +397,9 @@
   }
 
   function resultCountText(count) {
-    return `${count} of ${studies.length} studies`;
+    const visibleCount = String(count).padStart(2, "0");
+    const totalCount = String(studies.length).padStart(2, "0");
+    return `${visibleCount} of ${totalCount} studies`;
   }
 
   function renderCatalogResultCount(count) {
