@@ -234,6 +234,7 @@ jobs:
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction must be explained to assistive technology');
+          if (!html.includes('<select id="filterStatus" aria-describedby="statusHelp">') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative model · measured = source-supported dimensions.</p>') || !styles.includes('.catalog-data-note {')) throw new Error('Data status filter must explain schematic and measured provenance');
           if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('if (state.sort === "length") return b.length - a.length;') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
@@ -264,6 +265,7 @@ jobs:
           for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }', '.filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }']) {
             if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
           }
+          if (!styles.includes('@media (max-width: 430px)') || !styles.includes('  .tool-row { grid-template-columns: 1fr; }')) throw new Error('Catalog controls must stack on narrow screens');
           if (!styles.includes('.visual-column.is-empty > .drawing-card') || !styles.includes('.visual-empty-action')) throw new Error('Missing visual empty-state styling');
           if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
           if (!app.includes('const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;')) throw new Error('Drawing export filename must include geometry focus');
