@@ -20,7 +20,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; browser history restores the selected context.
-- Downloadable JSON data from the site, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
+- Downloadable full-atlas JSON and filtered catalog-view JSON, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.

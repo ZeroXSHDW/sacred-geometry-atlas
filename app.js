@@ -308,6 +308,7 @@
       selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0 });
     });
     $("#downloadData").addEventListener("click", downloadData);
+    $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
@@ -554,7 +555,9 @@
     const empty = $("#emptyState");
     const visible = visibleStudies();
     const resultCount = $("#catalogResultCount");
+    const catalogExport = $("#downloadCatalogView");
     if (resultCount) resultCount.textContent = resultCountText(visible.length);
+    if (catalogExport) catalogExport.disabled = visible.length === 0;
     renderActiveFilters();
     updateSearchClear();
     renderStudyNav();
@@ -944,6 +947,39 @@
     anchor.click();
     anchor.remove();
     $("#downloadStatus").textContent = "Atlas data downloaded as sacred-geometry-atlas.json.";
+    window.setTimeout(() => URL.revokeObjectURL(url), 500);
+  }
+
+  function downloadCatalogView() {
+    const visible = visibleStudies();
+    const status = $("#catalogDownloadStatus");
+    if (!visible.length) {
+      if (status) status.textContent = "There are no studies in the current catalog view to export.";
+      return;
+    }
+    const filename = "sacred-geometry-atlas-view.json";
+    const payload = JSON.stringify({
+      title: "Sacred Geometry Atlas · catalog view",
+      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      view: {
+        scope: catalogScopeLabel(),
+        query: state.query || null,
+        typology: state.filter,
+        place: state.filterPlace,
+        status: state.filterStatus,
+        sort: state.sort
+      },
+      studies: visible
+    }, null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}.`;
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
   }
 

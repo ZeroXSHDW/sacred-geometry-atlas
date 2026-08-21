@@ -179,11 +179,18 @@
                 <span class="catalog-summary-label">Showing</span>
                 <span id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true">06 of 06 studies</span>
               </div>
-              <button class="share-button catalog-share-button" id="shareCatalog" type="button" aria-label="Share current catalog view" title="Share current catalog view">
-                <span aria-hidden="true">↗</span>
-                <span>Share view</span>
-              </button>
+              <div class="catalog-summary-actions" role="group" aria-label="Catalog actions">
+                <button class="share-button catalog-action" id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON" title="Export current catalog view as JSON">
+                  <span aria-hidden="true">↓</span>
+                  <span>Export view</span>
+                </button>
+                <button class="share-button catalog-action catalog-share-button" id="shareCatalog" type="button" aria-label="Share current catalog view" title="Share current catalog view">
+                  <span aria-hidden="true">↗</span>
+                  <span>Share view</span>
+                </button>
+              </div>
             </div>
+            <span class="sr-only" id="catalogDownloadStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="catalogShareStatus" role="status" aria-live="polite"></span>
             <div class="active-filters" id="activeFilters" role="group" aria-label="Active filters" hidden></div>
             <ul class="catalog-list" id="churchList" aria-label="Geometry study choices"></ul>
