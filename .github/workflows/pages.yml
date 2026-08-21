@@ -29,9 +29,20 @@ jobs:
           node --check data/geometry.js
           test -s index.html
           test -s styles.css
+          test -s data/geometry.json
           test -s og.png
           node - <<'NODE'
           const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const source = {
+            title: 'Sacred Geometry Atlas',
+            schema: context.window.CHURCH_GEOMETRY_SCHEMA,
+            studies: context.window.CHURCH_GEOMETRY
+          };
+          const exported = JSON.parse(fs.readFileSync('data/geometry.json', 'utf8'));
+          if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
           const html = fs.readFileSync('index.html', 'utf8');
           const required = [
             'property="og:image" content="og.png"',

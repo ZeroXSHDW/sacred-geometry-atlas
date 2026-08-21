@@ -1,0 +1,302 @@
+{
+  "title": "Sacred Geometry Atlas",
+  "schema": {
+    "version": "1.1",
+    "units": "meters",
+    "statusValues": [
+      "schematic",
+      "measured"
+    ],
+    "note": "Schematic records are illustrative proportional models, not measured surveys."
+  },
+  "studies": [
+    {
+      "id": "basilica",
+      "index": "01",
+      "name": "The longitudinal basilica",
+      "shortName": "Longitudinal basilica",
+      "typology": "Basilica",
+      "place": "Mediterranean",
+      "era": "4th–6th century",
+      "emphasis": "Processional axis",
+      "type": "basilica",
+      "churchName": "Representative longitudinal basilica",
+      "status": "schematic",
+      "source": "Sacred Geometry Atlas proportional model",
+      "sourceNote": "Illustrative proportions; no measured source.",
+      "floorAreaEstimate": 1276,
+      "volumeEstimate": 14239,
+      "volumeBasis": "Bounding area × height × 0.62",
+      "envelope": "Rectangle + semicircle",
+      "axis": "Longitudinal",
+      "length": 58,
+      "span": 22,
+      "height": 18,
+      "bayCount": 7,
+      "module": 7.2,
+      "radius": 11,
+      "symmetry": 1,
+      "surfaceNote": "The nave is read as a repeated bay module: length is a sequence, while the apse closes the axis with a single primary radius.",
+      "exteriorNote": "A long rectangular envelope is extended by a half-circle apse; the side aisles keep the main axis legible from the outside.",
+      "interiorNote": "Inside, paired column lines turn the rectangle into a measured procession of bays, with the apse as the final radial room.",
+      "details": [
+        [
+          "primary figure",
+          "rectangle + semicircle"
+        ],
+        [
+          "structural rhythm",
+          "7 bays"
+        ],
+        [
+          "dominant axis",
+          "longitudinal"
+        ],
+        [
+          "enclosure",
+          "3 aisles"
+        ]
+      ]
+    },
+    {
+      "id": "gothic",
+      "index": "02",
+      "name": "The high gothic cathedral",
+      "shortName": "High gothic cathedral",
+      "typology": "Gothic",
+      "place": "Northern Europe",
+      "era": "12th–15th century",
+      "emphasis": "Vertical proportion",
+      "type": "gothic",
+      "churchName": "Representative high gothic cathedral",
+      "status": "schematic",
+      "source": "Sacred Geometry Atlas proportional model",
+      "sourceNote": "Illustrative proportions; no measured source.",
+      "floorAreaEstimate": 3128,
+      "volumeEstimate": 64187,
+      "volumeBasis": "Bounding area × height × 0.54",
+      "envelope": "Cross + polygon",
+      "axis": "Longitudinal",
+      "length": 92,
+      "span": 34,
+      "height": 38,
+      "bayCount": 8,
+      "module": 11.5,
+      "radius": 17,
+      "symmetry": 1,
+      "surfaceNote": "The pointed arch converts a regular bay into a vertical instrument: repeated modules rise toward a high, narrow crown.",
+      "exteriorNote": "A cruciform plan, flying-buttress rhythm, and faceted apse create a directional envelope with a strong vertical bias.",
+      "interiorNote": "Inside, pointed ribs resolve each bay into a self-similar frame; the eye follows the axis upward as much as forward.",
+      "details": [
+        [
+          "primary figure",
+          "cross + polygon"
+        ],
+        [
+          "structural rhythm",
+          "8 bays"
+        ],
+        [
+          "dominant axis",
+          "longitudinal"
+        ],
+        [
+          "enclosure",
+          "nave + aisles"
+        ]
+      ]
+    },
+    {
+      "id": "byzantine",
+      "index": "03",
+      "name": "The cross-in-square",
+      "shortName": "Cross-in-square",
+      "typology": "Central plan",
+      "place": "Eastern Mediterranean",
+      "era": "6th–12th century",
+      "emphasis": "Radial balance",
+      "type": "central",
+      "churchName": "Representative cross-in-square church",
+      "status": "schematic",
+      "source": "Sacred Geometry Atlas proportional model",
+      "sourceNote": "Illustrative proportions; no measured source.",
+      "floorAreaEstimate": 1156,
+      "volumeEstimate": 20755,
+      "volumeBasis": "Bounding area × height × 0.58",
+      "envelope": "Square + circle",
+      "axis": "Radial",
+      "length": 34,
+      "span": 34,
+      "height": 31,
+      "bayCount": 4,
+      "module": 8.5,
+      "radius": 17,
+      "symmetry": 0.95,
+      "surfaceNote": "Four equal arms lock into a square field, turning the central dome into the geometric and visual center of the room.",
+      "exteriorNote": "The exterior gathers around a compact square and a dominant central drum; secondary volumes register the cross beneath it.",
+      "interiorNote": "The inner geometry is a sequence of nested squares and arcs: a centered room where radial balance matters more than procession.",
+      "details": [
+        [
+          "primary figure",
+          "square + circle"
+        ],
+        [
+          "structural rhythm",
+          "4 arms"
+        ],
+        [
+          "dominant axis",
+          "radial"
+        ],
+        [
+          "enclosure",
+          "central dome"
+        ]
+      ]
+    },
+    {
+      "id": "baroque",
+      "index": "04",
+      "name": "The baroque oval church",
+      "shortName": "Baroque oval church",
+      "typology": "Baroque",
+      "place": "Central Europe",
+      "era": "17th–18th century",
+      "emphasis": "Spatial tension",
+      "type": "baroque",
+      "churchName": "Representative baroque oval church",
+      "status": "schematic",
+      "source": "Sacred Geometry Atlas proportional model",
+      "sourceNote": "Illustrative proportions; no measured source.",
+      "floorAreaEstimate": 1472,
+      "volumeEstimate": 24111,
+      "volumeBasis": "Bounding area × height × 0.63",
+      "envelope": "Ellipse + rectangle",
+      "axis": "Compressed axis",
+      "length": 46,
+      "span": 32,
+      "height": 26,
+      "bayCount": 4,
+      "module": 8,
+      "radius": 16,
+      "symmetry": 0.82,
+      "surfaceNote": "An ellipse replaces the static circle: its two radii pull the room between centered gathering and directional movement.",
+      "exteriorNote": "The outer wall reads as a sequence of convex and concave curves, held by a rectangular frontage and a shallow transept.",
+      "interiorNote": "Inside, the oval is a controlled distortion of the circle—compressing the sides while extending the ceremonial axis.",
+      "details": [
+        [
+          "primary figure",
+          "ellipse + rectangle"
+        ],
+        [
+          "structural rhythm",
+          "4 radial bays"
+        ],
+        [
+          "dominant axis",
+          "compressed axis"
+        ],
+        [
+          "enclosure",
+          "oval nave"
+        ]
+      ]
+    },
+    {
+      "id": "stave",
+      "index": "05",
+      "name": "The timber stave church",
+      "shortName": "Timber stave church",
+      "typology": "Timber",
+      "place": "Scandinavia",
+      "era": "11th–13th century",
+      "emphasis": "Layered verticality",
+      "type": "stave",
+      "churchName": "Representative timber stave church",
+      "status": "schematic",
+      "source": "Sacred Geometry Atlas proportional model",
+      "sourceNote": "Illustrative proportions; no measured source.",
+      "floorAreaEstimate": 420,
+      "volumeEstimate": 5603,
+      "volumeBasis": "Bounding area × height × 0.58",
+      "envelope": "Nested rectangles",
+      "axis": "Vertical stack",
+      "length": 28,
+      "span": 15,
+      "height": 23,
+      "bayCount": 5,
+      "module": 4,
+      "radius": 7.5,
+      "symmetry": 0.9,
+      "surfaceNote": "A small footprint becomes tall through stacked frames: the module is narrow, repeated, and pulled upward into the roof.",
+      "exteriorNote": "Nested rooflines create a stepped silhouette; the envelope is compact in plan but layered in section.",
+      "interiorNote": "Inside, a forest of posts makes the structural module visible, turning vertical repetition into the room’s ornament.",
+      "details": [
+        [
+          "primary figure",
+          "nested rectangles"
+        ],
+        [
+          "structural rhythm",
+          "5 post frames"
+        ],
+        [
+          "dominant axis",
+          "vertical stack"
+        ],
+        [
+          "enclosure",
+          "timber shell"
+        ]
+      ]
+    },
+    {
+      "id": "concrete",
+      "index": "06",
+      "name": "The modern concrete nave",
+      "shortName": "Modern concrete nave",
+      "typology": "Modern",
+      "place": "Western Europe",
+      "era": "20th century",
+      "emphasis": "Monolithic light",
+      "type": "modern",
+      "churchName": "Representative modern concrete nave",
+      "status": "schematic",
+      "source": "Sacred Geometry Atlas proportional model",
+      "sourceNote": "Illustrative proportions; no measured source.",
+      "floorAreaEstimate": 792,
+      "volumeEstimate": 9155,
+      "volumeBasis": "Bounding area × height × 0.68",
+      "envelope": "Folded polygon",
+      "axis": "Offset axis",
+      "length": 44,
+      "span": 18,
+      "height": 17,
+      "bayCount": 4,
+      "module": 11,
+      "radius": 9,
+      "symmetry": 0.76,
+      "surfaceNote": "The primary figure is a precise frame interrupted by light: a clear module with one deliberate asymmetry to admit the sky.",
+      "exteriorNote": "A folded, off-axis envelope makes the wall and roof read as one continuous geometric gesture.",
+      "interiorNote": "Inside, the room is reduced to a few planes and a measured opening; the section becomes the main ornament.",
+      "details": [
+        [
+          "primary figure",
+          "folded polygon"
+        ],
+        [
+          "structural rhythm",
+          "4 portal frames"
+        ],
+        [
+          "dominant axis",
+          "offset axis"
+        ],
+        [
+          "enclosure",
+          "concrete shell"
+        ]
+      ]
+    }
+  ]
+}

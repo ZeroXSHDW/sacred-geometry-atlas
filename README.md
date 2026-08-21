@@ -19,7 +19,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Sorting by curated order, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side schematic envelopes and proportional charts.
 - Shareable hash routes such as `#atlas/gothic/section/interior/axis`, plus Compare and Method views; the optional segments preserve the selected mode, surface, and geometry focus.
-- Downloadable JSON data from the site.
+- Downloadable JSON data from the site, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, and layer focus.
 - Print-friendly atlas output for turning the active study into a readable research sheet.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
@@ -97,7 +97,7 @@ Each record should include:
 }
 ```
 
-The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`. Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
+The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`. The committed [`data/geometry.json`](data/geometry.json) is generated from the same source and checked in CI so it cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
 
 ## Test locally
 
@@ -106,6 +106,7 @@ The project has no build step. Check JavaScript syntax, serve the files, and tes
 ```bash
 node --check app.js
 node --check data/geometry.js
+node -e "JSON.parse(require('fs').readFileSync('data/geometry.json', 'utf8'))"
 python3 -m http.server 8000
 ```
 
