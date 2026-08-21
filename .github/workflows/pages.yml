@@ -229,7 +229,7 @@ jobs:
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="downloadComparison" type="button" aria-label="Download comparison data as CSV"') || !html.includes('id="comparisonDownloadStatus" role="status" aria-live="polite"')) throw new Error('Missing accessible comparison CSV export');
-          if (!html.includes('The CSV keeps its scope, route, and estimate provenance.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('"Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis"') || !app.includes('Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
+          if (!html.includes('Recorded dimensions, derived ratios, and optional area/volume estimates are available here and in the CSV export.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('"Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis"') || !app.includes('Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }
@@ -316,6 +316,7 @@ jobs:
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
           if (!app.includes('function volumeReading(study)') || !app.includes('value: hasEstimate ? `${Number(study.volumeEstimate).toLocaleString()} m³` : "Not supplied"') || !app.includes('studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate"') || !app.includes(': "No estimate supplied"')) throw new Error('Optional volume estimates must have an explicit missing-data state');
+          if (!html.includes('<th scope="col">Floor area (m²)</th>') || !html.includes('<th scope="col">Est. volume (m³)</th>') || !html.includes('<th scope="col">Volume basis</th>') || !app.includes('function floorAreaReading(study)') || !app.includes('class="comparison-provenance"')) throw new Error('Comparison table must expose optional estimates and provenance');
           if (!styles.includes('.analysis-reading')) throw new Error('Missing interpretive reading style');
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
             if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);
@@ -598,9 +599,9 @@ jobs:
             navigator: {}
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCsvPayload, activeStudyExportPayload };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCsvPayload, activeStudyExportPayload, renderComparisonTable };\n})();');
           vm.runInNewContext(app, context);
-          const { state, comparisonStudies, comparisonCsvPayload, activeStudyExportPayload } = context.window.__atlasTest;
+          const { state, comparisonStudies, comparisonCsvPayload, activeStudyExportPayload, renderComparisonTable } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic'];
           const focusedCsv = comparisonCsvPayload(comparisonStudies());
           if (!focusedCsv.includes('"Floor area estimate (m²)","Volume estimate (m³)","Volume basis","Symmetry index","Scope","Route"') || !focusedCsv.includes('"1276","14239","Bounding area × height × 0.62"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic"')) {
@@ -621,6 +622,17 @@ jobs:
           if (studyExport.view.route !== 'https://example.test/atlas/#atlas/basilica/section/interior/axis/1.3' || studyExport.derived.boundingArea !== 1276 || studyExport.derived.volumeEstimate !== 14239 || studyExport.derived.ratios.lengthToSpan !== 58 / 22 || studyExport.derived.readingProfile.radiality !== 48) throw new Error('Active-study JSON did not preserve view state and derived readings');
           const missingStudyExport = activeStudyExportPayload(missingEstimateStudy);
           if (missingStudyExport.derived.floorAreaEstimate !== null || missingStudyExport.derived.volumeEstimate !== null || missingStudyExport.derived.volumeBasis !== 'No estimate supplied') throw new Error('Active-study JSON did not make missing estimates explicit');
+          const tableBody = { innerHTML: '' };
+          context.document.querySelector = (selector) => selector === '#comparisonTableBody' ? tableBody : null;
+          renderComparisonTable();
+          if (!tableBody.innerHTML.includes('1,276 m²') || !tableBody.innerHTML.includes('14,239 m³') || !tableBody.innerHTML.includes('Bounding area × height × 0.62')) throw new Error('Comparison table did not render estimate readings and provenance');
+          const originalFirstStudy = context.window.CHURCH_GEOMETRY[0];
+          context.window.CHURCH_GEOMETRY[0] = missingEstimateStudy;
+          const missingTableBody = { innerHTML: '' };
+          context.document.querySelector = (selector) => selector === '#comparisonTableBody' ? missingTableBody : null;
+          renderComparisonTable();
+          context.window.CHURCH_GEOMETRY[0] = originalFirstStudy;
+          if (!missingTableBody.innerHTML.includes('Not supplied') || !missingTableBody.innerHTML.includes('No estimate supplied')) throw new Error('Comparison table did not make missing estimates explicit');
           console.log('Comparison export context smoke test passed.');
           NODE
 

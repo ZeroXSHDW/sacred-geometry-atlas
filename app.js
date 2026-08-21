@@ -943,7 +943,8 @@
     $("#detailGrid").innerHTML = study.details.map(([label, value]) => `
       <div class="detail-item"><span class="detail-item-label">${escapeHtml(label)}</span><span class="detail-item-value">${escapeHtml(value)}</span></div>
     `).join("");
-    const area = study.floorAreaEstimate || study.length * study.span;
+    const floorArea = floorAreaReading(study);
+    const area = floorArea.numeric ?? study.length * study.span;
     const sectionRatio = study.height / study.span;
     const moduleRatio = study.module / study.span;
     const volume = volumeReading(study);
@@ -969,6 +970,14 @@
     };
   }
 
+  function floorAreaReading(study) {
+    const hasEstimate = Number.isFinite(study.floorAreaEstimate) && study.floorAreaEstimate > 0;
+    return {
+      numeric: hasEstimate ? study.floorAreaEstimate : null,
+      value: hasEstimate ? `${Number(study.floorAreaEstimate).toLocaleString()} m²` : "Not supplied"
+    };
+  }
+
   function profileScores(study) {
     const ratio = study.length / study.span;
     const radiality = { central: 100, baroque: 84, basilica: 48, gothic: 42, stave: 36, modern: 28 }[study.type] || 40;
@@ -981,12 +990,12 @@
   }
 
   function derivedStudyReadings(study) {
-    const hasFloorAreaEstimate = Number.isFinite(study.floorAreaEstimate) && study.floorAreaEstimate > 0;
     const hasVolumeEstimate = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0;
+    const floorArea = floorAreaReading(study);
     const volume = volumeReading(study);
     return {
-      floorAreaEstimate: hasFloorAreaEstimate ? study.floorAreaEstimate : null,
-      boundingArea: study.floorAreaEstimate || study.length * study.span,
+      floorAreaEstimate: floorArea.numeric,
+      boundingArea: floorArea.numeric ?? study.length * study.span,
       ratios: {
         lengthToSpan: study.length / study.span,
         heightToSpan: study.height / study.span,
@@ -1750,6 +1759,8 @@
     body.innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const section = study.height / study.span;
+      const floorArea = floorAreaReading(study);
+      const volume = volumeReading(study);
       return `
         <tr>
           <th scope="row">${escapeHtml(studyShortName(study))}</th>
@@ -1762,6 +1773,9 @@
           <td>${study.bayCount}</td>
           <td>${number(study.module)} m</td>
           <td>${number(study.symmetry, 2)}</td>
+          <td>${escapeHtml(floorArea.value)}</td>
+          <td>${escapeHtml(volume.value)}</td>
+          <td class="comparison-provenance">${escapeHtml(volume.basis)}</td>
         </tr>
       `;
     }).join("");
