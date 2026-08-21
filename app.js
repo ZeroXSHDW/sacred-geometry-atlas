@@ -214,11 +214,13 @@
       showPage(button.dataset.view, { routeStudy: false });
     }));
     $("#clearCompare").addEventListener("click", () => {
+      const hadSelection = state.compareIds.length > 0;
       state.compareIds = [];
       renderList();
       updateCompareTray();
       renderCompare();
       if (state.page === "compare") replaceRoute("compare", false);
+      if (hadSelection) announceKeyboard("Comparison selection cleared.");
     });
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#geometryCompare").addEventListener("click", (event) => {
@@ -776,6 +778,8 @@
   }
 
   function toggleCompare(id) {
+    const study = studies.find((candidate) => candidate.id === id);
+    const wasSelected = state.compareIds.includes(id);
     if (state.compareIds.includes(id)) {
       state.compareIds = state.compareIds.filter((compareId) => compareId !== id);
     } else {
@@ -785,6 +789,7 @@
     updateCompareTray();
     renderCompare();
     if (state.page === "compare") replaceRoute("compare", false);
+    if (study) announceKeyboard(`${study.name} ${wasSelected ? "removed from" : "added to"} comparison. ${state.compareIds.length} selected.`);
   }
 
   function updateCompareTray() {
