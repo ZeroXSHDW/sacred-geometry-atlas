@@ -301,6 +301,8 @@ h3 { letter-spacing: -0.04em; }
   font-size: 0.68rem;
   transition: 180ms ease;
 }
+.search-field input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.search-field input::-ms-clear { display: none; }
 .search-field input::placeholder { color: var(--ink-muted); }
 .search-field input:focus { border-color: var(--amber); box-shadow: 0 0 0 3px var(--amber-soft); }
 .search-icon { position: absolute; top: 0.87rem; left: 0.8rem; width: 0.78rem; height: 0.78rem; border: 1px solid var(--ink-muted); border-radius: 50%; }
