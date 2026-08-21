@@ -55,6 +55,10 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!html.includes('<body class="no-js">')) throw new Error('Missing no-JS fallback marker');
+          if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');
+          for (const token of ['58 × 22 × 18 m', '92 × 34 × 38 m', '34 × 34 × 31 m', '46 × 32 × 26 m', '28 × 15 × 23 m', '44 × 18 × 17 m']) {
+            if (!html.includes(token)) throw new Error('Missing no-script study measurement: ' + token);
+          }
           if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
           for (const token of ['data-view="atlas" type="button" aria-controls="atlas" aria-current="page"', 'data-view="compare" type="button" aria-controls="compareView"', 'data-view="method" type="button" aria-controls="methodView"']) {
             if (!html.includes(token)) throw new Error('Missing navigation relationship: ' + token);
