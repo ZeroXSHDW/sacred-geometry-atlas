@@ -167,6 +167,9 @@ jobs:
           const refreshStart = app.indexOf('function refreshCatalog()');
           const refreshEnd = app.indexOf('\n  function renderAll()', refreshStart);
           if (refreshStart < 0 || refreshEnd < 0 || app.slice(refreshStart, refreshEnd).includes('renderCatalogResultCount(')) throw new Error('Catalog refresh must announce its result count only through renderList');
+          for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Link copied", "Share link copied");', 'setButtonFeedback(button, "Link copied", "Catalog view link copied");', 'setButtonFeedback(button, "Link copied", "Comparison link copied");', 'setButtonFeedback(button, "Citation copied", "Citation copied");']) {
+            if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
+          }
           if (!app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog scope');
           for (const token of ['state.mode = route.mode || "plan";', 'state.surface = route.surface || "exterior";', 'state.layer = route.layer || "all";']) {
             if (!app.includes(token)) throw new Error('Partial study routes must restore drawing defaults: ' + token);

@@ -488,6 +488,13 @@
     if (clearButton) clearButton.hidden = !state.query;
   }
 
+  function setButtonFeedback(button, visibleLabel, accessibleLabel) {
+    if (!button) return;
+    const label = button.querySelector("span:last-child");
+    if (label) label.textContent = visibleLabel;
+    button.setAttribute("aria-label", accessibleLabel);
+  }
+
   function renderStudyNav() {
     const previous = $("#prevStudy");
     const next = $("#nextStudy");
@@ -815,14 +822,13 @@
     const copied = await copyText(shareUrl.href);
 
     if (copied) {
-      const label = button.querySelector("span:last-child");
       button.classList.add("is-copied");
-      if (label) label.textContent = "Link copied";
+      setButtonFeedback(button, "Link copied", "Share link copied");
       status.textContent = `A shareable link for ${study.name} was copied.`;
       window.clearTimeout(shareResetTimer);
       shareResetTimer = window.setTimeout(() => {
         button.classList.remove("is-copied");
-        if (label) label.textContent = "Share study";
+        setButtonFeedback(button, "Share study", "Share current study");
       }, 2200);
     } else {
       status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
@@ -869,14 +875,13 @@
 
     const copied = await copyText(shareUrl.href);
     if (copied) {
-      const label = button.querySelector("span:last-child");
       button.classList.add("is-copied");
-      if (label) label.textContent = "Link copied";
+      setButtonFeedback(button, "Link copied", "Catalog view link copied");
       status.textContent = "A shareable catalog view link was copied.";
       window.clearTimeout(catalogShareResetTimer);
       catalogShareResetTimer = window.setTimeout(() => {
         button.classList.remove("is-copied");
-        if (label) label.textContent = "Share view";
+        setButtonFeedback(button, "Share view", "Share current catalog view");
       }, 2200);
     } else {
       status.textContent = "Copying was unavailable. You can copy the catalog URL from the address bar.";
@@ -908,14 +913,13 @@
 
     const copied = await copyText(shareUrl.href);
     if (copied) {
-      const label = button.querySelector("span:last-child");
       button.classList.add("is-copied");
-      if (label) label.textContent = "Link copied";
+      setButtonFeedback(button, "Link copied", "Comparison link copied");
       status.textContent = "A shareable comparison link was copied.";
       window.clearTimeout(compareShareResetTimer);
       compareShareResetTimer = window.setTimeout(() => {
         button.classList.remove("is-copied");
-        if (label) label.textContent = "Share comparison";
+        setButtonFeedback(button, "Share comparison", "Share this comparison");
       }, 2200);
     } else {
       status.textContent = "Copying was unavailable. You can copy the comparison URL from the address bar.";
@@ -936,15 +940,14 @@
     const status = $("#citationStatus");
     if (!study || !button || !status) return;
     const copied = await copyText(citationText(study));
-    const label = button.querySelector("span:last-child");
     if (copied) {
       button.classList.add("is-copied");
-      if (label) label.textContent = "Citation copied";
+      setButtonFeedback(button, "Citation copied", "Citation copied");
       status.textContent = `Citation for ${study.name} copied.`;
       window.clearTimeout(citationResetTimer);
       citationResetTimer = window.setTimeout(() => {
         button.classList.remove("is-copied");
-        if (label) label.textContent = "Copy citation";
+        setButtonFeedback(button, "Copy citation", "Copy a citation for the active study");
       }, 2200);
     } else {
       status.textContent = "Copying was unavailable. You can copy the citation from the study details.";
