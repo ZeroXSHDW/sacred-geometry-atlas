@@ -332,6 +332,11 @@ h3 { letter-spacing: -0.04em; }
 .catalog-summary-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 0.35rem; }
 .catalog-summary .catalog-action { flex: 0 0 auto; padding: 0.32rem 0.42rem; font-size: 0.5rem; }
 .catalog-summary .catalog-action:disabled { cursor: not-allowed; border-color: var(--line); color: var(--ink-muted); opacity: 0.45; }
+.catalog-batch-actions { padding: 0 0 0.75rem; border-bottom: 1px solid var(--line); }
+.catalog-batch-action { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 0.6rem; padding: 0.48rem 0.58rem; border: 1px dashed rgba(136, 198, 186, 0.34); color: var(--teal); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-align: left; text-transform: uppercase; transition: 180ms ease; }
+.catalog-batch-action span:first-child { color: var(--amber); font-size: 0.9rem; line-height: 0.8; }
+.catalog-batch-action:hover:not(:disabled) { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
+.catalog-batch-action:disabled { cursor: not-allowed; border-color: var(--line); color: var(--ink-muted); opacity: 0.62; }
 .active-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; padding-bottom: 0.85rem; }
 .filter-chip { display: inline-flex; align-items: center; gap: 0.45rem; max-width: 100%; padding: 0.38rem 0.5rem; border: 1px solid rgba(136, 198, 186, 0.34); color: var(--teal); background: var(--teal-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.2; text-align: left; transition: 180ms ease; }
 .filter-chip span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -754,7 +759,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .drawing-export,
   .drawing-reset { min-height: 36px; }
   .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }
-  .compare-selection-clear, .compare-selection-chip { min-height: 36px; }
+  .compare-selection-clear, .compare-selection-chip, .catalog-batch-action { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
@@ -785,6 +790,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-selection-clear,
   .compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip span:last-child { color: ButtonText; }
+  .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .catalog-batch-action span:first-child { color: ButtonText; }
+  .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }
   .filter-chip,
   .filter-clear-all,
   .share-button.is-copied,

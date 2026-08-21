@@ -439,6 +439,7 @@
       showPage(button.dataset.view, { routeStudy: false });
     }));
     $("#clearCompare").addEventListener("click", () => clearComparisonSelection({ focus: true }));
+    $("#selectVisibleCompare").addEventListener("click", () => addVisibleToComparison({ focus: true }));
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#editCompare").addEventListener("click", () => showPage("atlas"));
     $("#clearCompareView").addEventListener("click", () => clearComparisonSelection({ focus: true }));
@@ -829,6 +830,7 @@
     if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
     renderVisualState(visible);
     renderActiveFilters();
+    renderVisibleComparisonAction(visible);
     updateSearchClear();
     renderStudyNav();
     list.innerHTML = visible.map((study) => {
@@ -850,6 +852,25 @@
       `;
     }).join("");
     empty.hidden = visible.length !== 0;
+  }
+
+  function renderVisibleComparisonAction(visible = visibleStudies()) {
+    const button = $("#selectVisibleCompare");
+    if (!button) return;
+    const additions = visible.filter((study) => !state.compareIds.includes(study.id));
+    const visibleCount = visible.length;
+    const additionCount = additions.length;
+    const isComplete = visibleCount > 0 && additionCount === 0;
+    const label = visibleCount === 0
+      ? "No visible studies to add to comparison"
+      : isComplete
+        ? `All ${visibleCount} visible ${visibleCount === 1 ? "study is" : "studies are"} already in comparison`
+        : `Add ${additionCount} visible ${additionCount === 1 ? "study" : "studies"} to comparison`;
+    button.disabled = visibleCount === 0 || isComplete;
+    button.setAttribute("aria-label", label);
+    button.title = label;
+    const text = button.querySelector("span:last-child");
+    if (text) text.textContent = visibleCount === 0 ? "No visible studies" : isComplete ? "Visible selected" : "Add visible to compare";
   }
 
   function emptyCatalogMessage() {
@@ -1451,6 +1472,32 @@
     if (focus) {
       const control = state.page === "compare" ? $("#editCompare") : $("#searchInput");
       if (control && typeof control.focus === "function") control.focus({ preventScroll: true });
+    }
+  }
+
+  function addVisibleToComparison({ focus = false } = {}) {
+    const visible = visibleStudies();
+    const additions = visible.filter((study) => !state.compareIds.includes(study.id));
+    if (!additions.length) {
+      announceKeyboard(visible.length ? "All visible studies are already in comparison." : "There are no visible studies to add to comparison.");
+      if (focus) {
+        const button = $("#selectVisibleCompare");
+        if (button && typeof button.focus === "function") button.focus({ preventScroll: true });
+      }
+      return;
+    }
+    state.compareIds = [...state.compareIds, ...additions.map((study) => study.id)];
+    renderList();
+    updateCompareTray();
+    renderCompare();
+    if (state.page === "compare") replaceRoute("compare", false);
+    commitComparisonRoute();
+    updateDocumentTitle(state.page);
+    const additionLabel = `${additions.length} ${additions.length === 1 ? "study" : "studies"}`;
+    announceKeyboard(`${additionLabel} added to comparison. ${state.compareIds.length} selected.`);
+    if (focus) {
+      const button = $("#selectVisibleCompare");
+      if (button && typeof button.focus === "function") button.focus({ preventScroll: true });
     }
   }
 
