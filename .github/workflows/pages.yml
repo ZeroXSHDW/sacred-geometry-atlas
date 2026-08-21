@@ -161,6 +161,7 @@ jobs:
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('window.addEventListener("popstate", syncFromHash)')) throw new Error('Missing browser history navigation support');
+          if (!app.includes('const previousPage = state.page;') || !app.includes('else if (window.location.hash.length > 0 && previousPage === route.page)') || !app.includes('function focusPageHeading(page, preventScroll = true)')) throw new Error('Same-view hash navigation must restore heading focus');
           if (!app.includes('const visibleCount = String(count).padStart(2, "0");') || !app.includes('const totalCount = String(studies.length).padStart(2, "0");')) throw new Error('Catalog result counts must preserve two-digit formatting');
           if (!app.includes('function renderCatalogResultCount(count)') || !app.includes('renderCatalogResultCount(visible.length);')) throw new Error('Catalog count must expose its active scope');
           const refreshStart = app.indexOf('function refreshCatalog()');

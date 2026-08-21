@@ -206,6 +206,7 @@
   function syncFromHash() {
     syncCatalogFromUrl();
     const route = parseRoute();
+    const previousPage = state.page;
     if (route.studyId) {
       state.activeId = route.studyId;
       state.mode = route.mode || "plan";
@@ -224,6 +225,8 @@
       announceDrawingState();
       const heading = $("#activeName");
       if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: false });
+    } else if (window.location.hash.length > 0 && previousPage === route.page) {
+      focusPageHeading(route.page);
     }
   }
 
@@ -762,10 +765,14 @@
       }
     }
     if (pageChanged) {
-      const heading = $(page === "atlas" ? "#atlas-heading" : page === "compare" ? "#compare-heading" : "#method-heading");
-      if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
+      focusPageHeading(page);
     }
     updateDocumentTitle(page);
+  }
+
+  function focusPageHeading(page, preventScroll = true) {
+    const heading = $(page === "atlas" ? "#atlas-heading" : page === "compare" ? "#compare-heading" : "#method-heading");
+    if (heading && typeof heading.focus === "function") heading.focus({ preventScroll });
   }
 
   async function copyText(value) {
