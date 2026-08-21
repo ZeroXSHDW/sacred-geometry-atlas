@@ -101,7 +101,7 @@ jobs:
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
           if (!html.includes('<div class="data-error" id="dataError" role="alert" hidden>')) throw new Error('Missing data-load recovery state');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
-          if (!html.includes('Measurements are shown as length × span × height in meters.')) throw new Error('Missing no-script measurement legend');
+          if (!html.includes('Dimensions are shown as length × span × height in meters.')) throw new Error('Missing no-script dimension legend');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
           if (!noScriptList) throw new Error('Missing no-script study list');
           const noScriptEntries = [...noScriptList[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1]);
@@ -125,6 +125,7 @@ jobs:
           if (!html.includes('id="analysisReading"')) throw new Error('Missing interpretive reading');
           if (!html.includes('id="profileRow" role="list" aria-label="Reading profile scores"')) throw new Error('Missing semantic reading-profile list');
           if (!html.includes('<details class="shortcut-guide">')) throw new Error('Missing keyboard shortcut guide');
+          if (!html.includes('dimension line')) throw new Error('Missing clear schematic dimension label');
           for (const token of ['data-surface="exterior" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-mode="plan" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-layer="all" type="button" aria-pressed="true" aria-controls="geometryCanvas"']) {
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
           }
