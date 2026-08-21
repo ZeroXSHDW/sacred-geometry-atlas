@@ -229,7 +229,7 @@ jobs:
           }
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="downloadComparison" type="button" aria-label="Download comparison data as CSV"') || !html.includes('id="comparisonDownloadStatus" role="status" aria-live="polite"')) throw new Error('Missing accessible comparison CSV export');
-          if (!html.includes('The CSV keeps its scope and route metadata.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('"Symmetry index", "Scope", "Route"') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
+          if (!html.includes('The CSV keeps its scope, route, and estimate provenance.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('"Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis"') || !app.includes('Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }
@@ -603,12 +603,15 @@ jobs:
           const { state, comparisonStudies, comparisonCsvPayload } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic'];
           const focusedCsv = comparisonCsvPayload(comparisonStudies());
-          if (!focusedCsv.includes('"Symmetry index","Scope","Route"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic"')) {
-            throw new Error('Focused comparison CSV did not preserve its scope and route');
+          if (!focusedCsv.includes('"Floor area estimate (m²)","Volume estimate (m³)","Volume basis","Symmetry index","Scope","Route"') || !focusedCsv.includes('"1276","14239","Bounding area × height × 0.62"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic"')) {
+            throw new Error('Focused comparison CSV did not preserve estimates, provenance, scope, and route');
           }
           state.compareIds = [];
           const fullCsv = comparisonCsvPayload(comparisonStudies());
           if (!fullCsv.includes('"full collection","https://example.test/atlas/#compare"')) throw new Error('Full comparison CSV did not preserve its route');
+          const missingEstimateStudy = { ...context.window.CHURCH_GEOMETRY[0], floorAreaEstimate: undefined, volumeEstimate: undefined, volumeBasis: undefined };
+          const missingEstimateCsv = comparisonCsvPayload([missingEstimateStudy]);
+          if (!missingEstimateCsv.includes('"11.0","","","","1.00"')) throw new Error('Comparison CSV did not leave optional estimate fields explicitly blank');
           console.log('Comparison export context smoke test passed.');
           NODE
 

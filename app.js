@@ -1435,7 +1435,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Status", "Reference", "Source", "Source note",
       "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
-      "Bay count", "Module (m)", "Radius (m)", "Symmetry index", "Scope", "Route"
+      "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route"
     ];
     const rows = comparison.map((study) => [
       study.id,
@@ -1455,6 +1455,9 @@
       study.bayCount,
       number(study.module),
       number(study.radius),
+      Number.isFinite(study.floorAreaEstimate) ? number(study.floorAreaEstimate, 0) : "",
+      Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : "",
+      study.volumeBasis || "",
       number(study.symmetry, 2),
       scope,
       route

@@ -28,7 +28,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, and proportional charts.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
 - An expandable semantic comparison table with recorded study status, lengths, spans, ratios, heights, bays, modules, and symmetry values, with keyboard-accessible horizontal scrolling on narrow screens.
-- Context-aware CSV export for the active comparison scope, including its scope and reproducible route, alongside the full-atlas and filtered-view JSON downloads.
+- Context-aware CSV export for the active comparison scope, including optional floor-area and volume estimates, estimate provenance, scope, and reproducible route, alongside the full-atlas and filtered-view JSON downloads.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis/1.3` (the optional final segment restores 130% drawing zoom), focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; selected comparison studies persist in the Atlas URL and browser history restores the selected context. Partial or malformed study links and catalog parameters are canonicalized to valid defaults.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
