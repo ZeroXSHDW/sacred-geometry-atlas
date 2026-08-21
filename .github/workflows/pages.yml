@@ -181,7 +181,8 @@ jobs:
           for (const token of ['<th scope="col">Length (m)</th>', '<th scope="col">Length ÷ span</th>', '<th scope="col">Height ÷ span</th>', '<th scope="col">Bay count</th>', '<th scope="col">Module (m)</th>', '<th scope="col">Symmetry index</th>']) {
             if (!html.includes(token)) throw new Error('Comparison table header is missing clear units or meaning: ' + token);
           }
-          if (!html.includes('<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table">')) throw new Error('Comparison table must expose a keyboard-scrollable region');
+          if (!html.includes('<span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>') || !html.includes('<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table" aria-describedby="comparisonTableHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">')) throw new Error('Comparison table must expose keyboard scrolling instructions');
+          if (!app.includes('function handleComparisonTableKey(event)') || !app.includes('comparisonTable.addEventListener("keydown", handleComparisonTableKey)') || !app.includes('target.scrollBy({ left: delta, behavior })') || !app.includes('target.scrollTo({ left, behavior })')) throw new Error('Comparison table keyboard scrolling behavior is missing');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
           if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>')) throw new Error('Missing drawing status channel');

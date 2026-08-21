@@ -456,7 +456,8 @@
 
         <details class="comparison-table-panel">
           <summary>Read dataset values as a table</summary>
-          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table">
+          <span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>
+          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable schematic comparison table" aria-describedby="comparisonTableHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable">
               <caption id="comparisonTableCaption">Recorded model values for the full collection.</caption>
               <thead>

@@ -430,6 +430,8 @@
       const chip = event.target.closest("[data-clear-filter]");
       if (chip) clearFilter(chip.dataset.clearFilter, { focus: true });
     });
+    const comparisonTable = $(".comparison-table-wrap");
+    if (comparisonTable) comparisonTable.addEventListener("keydown", handleComparisonTableKey);
     window.addEventListener("keydown", handleKeyboard);
   }
 
@@ -665,6 +667,26 @@
       renderDrawing();
       announceKeyboard("Drawing zoom reset.");
     }
+  }
+
+  function handleComparisonTableKey(event) {
+    const target = event.currentTarget;
+    if (!target || event.metaKey || event.ctrlKey || event.altKey) return;
+    const key = event.key;
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(key)) return;
+    const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    const maxScroll = Math.max(0, (target.scrollWidth || 0) - (target.clientWidth || 0));
+    if (key === "Home" || key === "End") {
+      const left = key === "End" ? maxScroll : 0;
+      if (typeof target.scrollTo === "function") target.scrollTo({ left, behavior });
+      else target.scrollLeft = left;
+    } else {
+      const amount = Math.max(120, Math.round((target.clientWidth || 0) * 0.8));
+      const delta = key === "ArrowRight" ? amount : -amount;
+      if (typeof target.scrollBy === "function") target.scrollBy({ left: delta, behavior });
+      else target.scrollLeft = Math.max(0, Math.min(maxScroll, (target.scrollLeft || 0) + delta));
+    }
+    event.preventDefault();
   }
 
   function studySearchText(study) {
