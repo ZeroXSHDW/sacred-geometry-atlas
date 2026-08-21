@@ -329,6 +329,7 @@
       refreshCatalog();
       replaceCatalogRoute();
     });
+    $("#searchInput").addEventListener("keydown", handleSearchKeydown);
     $("#clearSearchInput").addEventListener("click", () => clearFilter("query", { focus: true }));
     $("#filterSelect").addEventListener("change", (event) => {
       state.filter = event.target.value;
@@ -667,6 +668,13 @@
       renderDrawing();
       announceKeyboard("Drawing zoom reset.");
     }
+  }
+
+  function handleSearchKeydown(event) {
+    if (event.key !== "Escape" || !state.query) return;
+    event.preventDefault();
+    const clearButton = $("#clearSearchInput");
+    if (clearButton && typeof clearButton.click === "function") clearButton.click();
   }
 
   function handleComparisonTableKey(event) {

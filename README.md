@@ -36,9 +36,9 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 ### Keyboard shortcuts
 
-When the Atlas view is active, press `/` to focus study search, `J` / `K` to move through the visible
-studies, `1` / `2` / `3` to switch between plan, elevation, and section, `I` / `O` to switch
-inside/outside, and `R` to reset zoom.
+When the Atlas view is active, press `/` to focus study search, `Esc` to clear a focused search,
+`J` / `K` to move through the visible studies, `1` / `2` / `3` to switch between plan, elevation,
+and section, `I` / `O` to switch inside/outside, and `R` to reset zoom.
 
 ## Run locally
 
