@@ -1538,6 +1538,7 @@
   }
 
   function updateCompareTray() {
+    updateCompareNavigation();
     const tray = $("#compareTray");
     const count = $("#compareCount");
     const summary = $("#compareSummary");
@@ -1574,6 +1575,20 @@
       const clearLabel = selectedCount ? `Clear ${selectedLabel}` : "Clear comparison selection";
       clear.setAttribute("aria-label", clearLabel);
       clear.title = clearLabel;
+    }
+  }
+
+  function updateCompareNavigation() {
+    const button = $('[data-view="compare"]');
+    const count = $("#compareNavCount");
+    if (!button) return;
+    const selectedCount = state.compareIds.length;
+    const label = selectedCount ? `Compare (${selectedCount} selected)` : "Compare";
+    button.setAttribute("aria-label", label);
+    button.title = label;
+    if (count) {
+      count.textContent = selectedCount ? String(selectedCount) : "";
+      count.hidden = selectedCount === 0;
     }
   }
 

@@ -193,6 +193,9 @@ main,
 
 .nav-button {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
   padding: 0.8rem 0;
   color: var(--ink-muted);
   font-family: var(--mono);
@@ -217,6 +220,7 @@ main,
 .nav-button:hover,
 .nav-button.is-active { color: var(--ink); }
 .nav-button.is-active::after { opacity: 1; transform: scaleX(1); }
+.nav-count { display: inline-grid; min-width: 1.15rem; height: 1.15rem; padding: 0 0.22rem; place-items: center; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.5rem; letter-spacing: 0; line-height: 1; }
 
 .download-button {
   display: inline-flex;
@@ -787,6 +791,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .layer-button.is-active { color: Highlight; }
   .nav-button.is-active::after,
   .mode-button.is-active::after { background: Highlight; }
+  .nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }
   .segment-button.is-active { color: HighlightText; background: Highlight; }
   .layer-button.is-active { border-color: Highlight; background: Canvas; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }
