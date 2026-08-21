@@ -73,6 +73,8 @@ jobs:
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison"')) throw new Error('Missing comparison share control');
+          if (!html.includes('id="openCompare" type="button" aria-controls="compareView"')) throw new Error('Missing compare destination relationship');
+          if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');

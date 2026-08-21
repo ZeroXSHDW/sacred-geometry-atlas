@@ -1099,7 +1099,7 @@
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
       return `
-      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-label="Open ${escapeHtml(study.name)} in the Atlas. Length to span ratio ${ratio}; height to span ratio ${section}.">
+      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas" aria-label="Open ${escapeHtml(study.name)} in the Atlas. Length to span ratio ${ratio}; height to span ratio ${section}.">
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
