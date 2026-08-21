@@ -422,6 +422,7 @@
         </div>
 
         <p class="compare-helper" id="compareHelper" role="status" aria-live="polite">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
+        <p class="compare-status-note" id="comparisonStatusHelp">Schematic = illustrative proportions · measured = source-supported dimensions.</p>
 
         <div class="comparison-grid">
           <div class="comparison-card wide-card geometry-compare-card" role="region" aria-labelledby="geometry-compare-heading">
@@ -429,14 +430,14 @@
               <div><span class="card-kicker">00 / selected geometry</span><h3 id="geometry-compare-heading">Side-by-side envelopes</h3></div>
               <span class="card-symbol" aria-hidden="true">□</span>
             </div>
-            <div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Study envelopes; each card identifies whether its data is schematic or measured."></div>
+            <div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Study envelopes; each card identifies whether its data is schematic or measured." aria-describedby="comparisonStatusHelp"></div>
           </div>
           <div class="comparison-card" role="region" aria-labelledby="ratio-chart-heading">
             <div class="card-heading">
               <div><span class="card-kicker">01 / linearity</span><h3 id="ratio-chart-heading">Length : span</h3></div>
               <span class="card-symbol" aria-hidden="true">↔</span>
             </div>
-            <div class="bar-chart" id="ratioChart" role="list" aria-label="Length to span ratios"></div>
+            <div class="bar-chart" id="ratioChart" role="list" aria-label="Length to span ratios" aria-describedby="comparisonStatusHelp"></div>
             <p class="chart-note">A higher ratio reinforces a long processional reading.</p>
           </div>
           <div class="comparison-card" role="region" aria-labelledby="height-chart-heading">
@@ -444,7 +445,7 @@
               <div><span class="card-kicker">02 / verticality</span><h3 id="height-chart-heading">Height : span</h3></div>
               <span class="card-symbol" aria-hidden="true">↕</span>
             </div>
-            <div class="bar-chart" id="heightChart" role="list" aria-label="Height to span ratios"></div>
+            <div class="bar-chart" id="heightChart" role="list" aria-label="Height to span ratios" aria-describedby="comparisonStatusHelp"></div>
             <p class="chart-note">Vertical emphasis is compared with the widest enclosing dimension.</p>
           </div>
           <div class="comparison-card wide-card" role="region" aria-labelledby="module-chart-heading">
@@ -452,7 +453,7 @@
               <div><span class="card-kicker">03 / repetition</span><h3 id="module-chart-heading">Module and bay rhythm</h3></div>
               <span class="card-symbol" aria-hidden="true">∷</span>
             </div>
-            <div class="module-chart" id="moduleChart" role="list" aria-label="Bay rhythm and module sizes"></div>
+            <div class="module-chart" id="moduleChart" role="list" aria-label="Bay rhythm and module sizes" aria-describedby="comparisonStatusHelp"></div>
             <p class="chart-note">Each line is one notional bay; length shows its module in meters.</p>
           </div>
         </div>
@@ -468,7 +469,7 @@
           </div>
           <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite"></span>
           <span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>
-          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
+          <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp comparisonStatusHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable">
               <caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status.</caption>
               <thead>

@@ -547,7 +547,8 @@ h3 { letter-spacing: -0.04em; }
 .compare-callout { display: grid; min-width: 150px; padding: 0.9rem 1rem; border: 1px solid var(--amber); background: var(--amber-soft); }
 .compare-callout span, .compare-callout small { color: var(--amber); font-family: var(--mono); font-size: 0.54rem; text-transform: uppercase; }
 .compare-callout strong { margin: 0.2rem 0; color: var(--ink); font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
-.compare-helper { margin: -1rem 0 2rem; color: var(--ink-muted); font-size: 0.7rem; }
+.compare-helper { margin: -1rem 0 0.65rem; color: var(--ink-muted); font-size: 0.7rem; }
+.compare-status-note { margin: 0 0 2rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.5; }
 .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .comparison-card { min-height: 340px; padding: 1.35rem; border: 1px solid var(--line); background: var(--panel); }
 .wide-card { grid-column: 1 / -1; min-height: 280px; }
