@@ -88,6 +88,7 @@ jobs:
           if (!html.includes('<a class="skip-link skip-link-app" href="#main-content">Skip to content</a>')) throw new Error('Missing interactive skip link');
           if (!html.includes('<a class="skip-link skip-link-noscript" href="#noscript-heading">Skip to collection</a>')) throw new Error('Missing no-JS skip link');
           if (!html.includes('<main id="main-content" tabindex="-1">') || !html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('Skip-link destinations must be focusable');
+          if (!html.includes('<div class="hero-stats" role="group" aria-label="Atlas statistics">')) throw new Error('Hero statistics must expose a named group');
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root')) throw new Error('Missing GitHub Pages root navigation');
