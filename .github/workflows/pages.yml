@@ -250,6 +250,7 @@ jobs:
           }
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
           if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;')) throw new Error('Missing narrow study-header layout');
+          if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }')) throw new Error('Forced-colors mode must preserve focus and selected-state affordances');
           for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }']) {
             if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
           }
