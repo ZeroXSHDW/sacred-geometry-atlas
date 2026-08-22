@@ -647,6 +647,11 @@
     button.setAttribute("aria-label", accessibleLabel);
   }
 
+  function hideCitationFallback() {
+    const fallback = $("#citationFallback");
+    if (fallback) fallback.hidden = true;
+  }
+
   function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key) {
     if (!button) return;
     button.classList.add("is-complete");
@@ -940,6 +945,7 @@
   function renderStudy() {
     const study = activeStudy();
     if (!study) return;
+    hideCitationFallback();
     const ratio = study.length / study.span;
     $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
     $("#activeName").textContent = study.name;
@@ -1031,6 +1037,7 @@
   }
 
   function renderControls() {
+    hideCitationFallback();
     $$('[data-surface]').forEach((button) => {
       const selected = button.dataset.surface === state.surface;
       button.classList.toggle("is-active", selected);
@@ -1303,8 +1310,12 @@
     const status = $("#citationStatus");
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
-      const copied = await copyText(citationText(study));
+      const citation = citationText(study);
+      const fallback = $("#citationFallback");
+      const fallbackText = $("#citationFallbackText");
+      const copied = await copyText(citation);
       if (copied) {
+        if (fallback) fallback.hidden = true;
         button.classList.add("is-copied");
         setButtonFeedback(button, "Citation copied", "Citation copied");
         status.textContent = `Citation for ${study.name} copied.`;
@@ -1314,7 +1325,13 @@
           setButtonFeedback(button, "Copy citation", "Copy a citation for the active study");
         }, 2200);
       } else {
-        status.textContent = "Copying was unavailable. You can copy the citation from the study details.";
+        if (fallback && fallbackText) {
+          fallbackText.value = citation;
+          fallback.hidden = false;
+          if (typeof fallbackText.focus === "function") fallbackText.focus({ preventScroll: true });
+          if (typeof fallbackText.select === "function") fallbackText.select();
+        }
+        status.textContent = "Copying was unavailable. The citation is shown below for manual copying.";
       }
     } finally {
       endAsyncAction(button);

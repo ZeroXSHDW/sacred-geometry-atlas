@@ -293,6 +293,11 @@
             <span class="sr-only" id="citationStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="studyDownloadStatus" role="status" aria-live="polite"></span>
             <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite"></span>
+            <div class="citation-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>
+              <p class="citation-fallback-heading" id="citationFallbackHeading">Copy this citation manually</p>
+              <textarea id="citationFallbackText" rows="4" readonly aria-label="Citation text" aria-describedby="citationFallbackHint"></textarea>
+              <p class="citation-fallback-hint" id="citationFallbackHint">The citation is selected for copying.</p>
+            </div>
 
             <div class="drawing-controls" role="group" aria-label="Drawing controls">
               <div class="segmented-control" role="group" aria-label="Inside or outside">
