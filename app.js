@@ -120,6 +120,7 @@
   let compareShareResetTimer;
   let catalogShareResetTimer;
   let citationResetTimer;
+  let comparisonCitationResetTimer;
   let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
   let lastCatalogResultCount = "";
@@ -798,6 +799,7 @@
     $("#shareCatalog").addEventListener("click", shareCatalog);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
+    $("#copyComparisonCitation").addEventListener("click", copyComparisonCitation);
     $$('[data-dismiss-fallback]').forEach((button) => button.addEventListener("click", () => {
       const fallbackId = button.dataset && button.dataset.dismissFallback;
       const fallbackSelector = fallbackId ? `#${fallbackId}` : "";
@@ -1027,7 +1029,8 @@
     "#shareFallback": "#shareStudy",
     "#citationFallback": "#copyCitation",
     "#catalogShareFallback": "#shareCatalog",
-    "#compareShareFallback": "#shareCompare"
+    "#compareShareFallback": "#shareCompare",
+    "#comparisonCitationFallback": "#copyComparisonCitation"
   };
   const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
@@ -1986,6 +1989,49 @@
         status.textContent = fallbackShown
           ? "Copying was unavailable. The comparison link is shown below for manual copying."
           : "Copying was unavailable. You can copy the comparison URL from the address bar.";
+      }
+    } finally {
+      endAsyncAction(button);
+    }
+  }
+
+  function comparisonCitationText(comparison = comparisonStudies()) {
+    const route = comparisonRouteUrl();
+    const scope = comparisonScopeLabel(comparison);
+    const definitions = dataStatusDefinitions();
+    const statuses = [...new Set(comparison.map(studyStatus))].map((status) =>
+      `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
+    ).join(" ");
+    const records = comparison.length
+      ? comparison.map((study) => `${studyShortName(study)} (${study.axis} axis; ${studyStatus(study)})`).join("; ")
+      : "no records";
+    const schema = geometrySchema();
+    return `Sacred Geometry Atlas. Comparison of ${records}. Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
+  }
+
+  async function copyComparisonCitation() {
+    const comparison = comparisonStudies();
+    const button = $("#copyComparisonCitation");
+    const status = $("#comparisonCitationStatus");
+    if (!comparison.length || !button || !status || !beginAsyncAction(button)) return;
+    try {
+      hideManualCopyFallbacks();
+      const citation = comparisonCitationText(comparison);
+      const copied = await copyText(citation);
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Citation copied", "Comparison citation copied");
+        status.textContent = "Comparison citation copied.";
+        window.clearTimeout(comparisonCitationResetTimer);
+        comparisonCitationResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Copy citation", "Copy a citation for this comparison");
+        }, 2200);
+      } else {
+        const fallbackShown = revealManualCopyFallback("#comparisonCitationFallback", "#comparisonCitationFallbackText", citation);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The comparison citation is shown below for manual copying."
+          : "Copying was unavailable. You can copy the citation from the comparison details.";
       }
     } finally {
       endAsyncAction(button);

@@ -539,11 +539,16 @@
               <span aria-hidden="true">↗</span>
               <span>Share comparison</span>
             </button>
+            <button class="share-button compare-citation-button" id="copyComparisonCitation" type="button" aria-label="Copy a citation for this comparison" aria-controls="comparisonCitationFallback" aria-expanded="false" title="Copy a citation for this comparison">
+              <span aria-hidden="true">⧉</span>
+              <span>Copy citation</span>
+            </button>
             <button class="share-button compare-print-button" id="printComparison" type="button" aria-label="Print this comparison" title="Print this comparison">
               <span aria-hidden="true">⎙</span>
               <span>Print comparison</span>
             </button>
             <span class="sr-only" id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <span class="sr-only" id="comparisonCitationStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>
               <div class="manual-copy-fallback-heading-row">
                 <p class="manual-copy-fallback-heading" id="compareShareFallbackHeading">Copy this comparison link manually</p>
@@ -551,6 +556,14 @@
               </div>
               <textarea id="compareShareFallbackText" rows="3" readonly aria-label="Comparison share link" aria-describedby="compareShareFallbackHint"></textarea>
               <p class="manual-copy-fallback-hint" id="compareShareFallbackHint">The link is selected for copying.</p>
+            </div>
+            <div class="manual-copy-fallback" id="comparisonCitationFallback" role="region" aria-labelledby="comparisonCitationFallbackHeading" hidden>
+              <div class="manual-copy-fallback-heading-row">
+                <p class="manual-copy-fallback-heading" id="comparisonCitationFallbackHeading">Copy this comparison citation manually</p>
+                <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="comparisonCitationFallback" type="button" aria-label="Hide comparison citation manual-copy field" title="Hide manual-copy field">Hide</button>
+              </div>
+              <textarea id="comparisonCitationFallbackText" rows="5" readonly aria-label="Comparison citation" aria-describedby="comparisonCitationFallbackHint"></textarea>
+              <p class="manual-copy-fallback-hint" id="comparisonCitationFallbackHint">The citation is selected for copying.</p>
             </div>
           </div>
         </div>

@@ -1107,6 +1107,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-comparison .compare-view { display: block !important; padding: 0; border-top: 0; }
   body.print-comparison .compare-intro-side .compare-edit-button,
   body.print-comparison .compare-intro-side .compare-share-button,
+  body.print-comparison .compare-intro-side .compare-citation-button,
   body.print-comparison .compare-intro-side .compare-print-button,
   body.print-comparison .compare-helper,
   body.print-comparison .comparison-table-actions { display: none !important; }
