@@ -110,7 +110,8 @@
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${study.axis} axis; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    const status = studyStatus(study);
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${study.axis} axis; ${study.emphasis}; Data status: ${status}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1748,7 +1749,7 @@
       activeStatus.setAttribute("aria-label", `${status}: ${statusDefinition}`);
     }
     const activeStatusHelp = $("#activeStatusHelp");
-    if (activeStatusHelp) activeStatusHelp.textContent = statusDefinition;
+    if (activeStatusHelp) activeStatusHelp.textContent = `Data status: ${status}; ${statusDefinition}`;
     if (summary) summary.textContent = `Data status · ${status}`;
     if (explanation) explanation.textContent = statusDefinition;
     if (schemaNote) schemaNote.textContent = `Schema ${schema.version || "1.1"} · units: ${schema.units || "meters"}`;
