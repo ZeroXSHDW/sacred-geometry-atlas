@@ -1999,7 +1999,7 @@
     }
     const heading = $("#activeName");
     if (heading) {
-      const headingDescriptionIds = ["activeStatusHelp", "activeMeta", "activeMeasureAccessible"];
+      const headingDescriptionIds = ["activeStatusHelp", "activeMeta", "activeMeasureAccessible", "activeSource"];
       if (outsideCatalog) headingDescriptionIds.push("activeCatalogContextText");
       heading.setAttribute("aria-describedby", headingDescriptionIds.join(" "));
     }
