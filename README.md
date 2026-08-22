@@ -92,7 +92,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 ### Keyboard shortcuts
 
-When the Atlas view is active, press `/` to focus study search, `Esc` to clear a focused search,
+When the Atlas view is active, press `/` to focus study search, `Esc` to clear a focused search or close an open disclosure,
 `J` / `K` to move through the visible studies, `1` / `2` / `3` to switch between plan, elevation,
 and section, `I` / `O` to switch inside/outside, and `R` to reset zoom. These shortcuts remain
 available while Atlas controls are focused; text fields, links, and disclosure summaries retain

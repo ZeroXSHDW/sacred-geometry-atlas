@@ -890,6 +890,7 @@
         selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true });
       });
     }
+    window.addEventListener("keydown", handleDisclosureKeydown);
     window.addEventListener("keydown", handleKeyboard);
   }
 
@@ -1296,6 +1297,20 @@
     event.preventDefault();
     const clearButton = $("#clearSearchInput");
     if (clearButton && typeof clearButton.click === "function") clearButton.click();
+  }
+
+  function handleDisclosureKeydown(event) {
+    if (event.key !== "Escape") return;
+    const target = event.target;
+    const disclosure = target && typeof target.closest === "function" ? target.closest("details[open]") : null;
+    if (!disclosure || typeof disclosure.querySelector !== "function") return;
+    const summary = disclosure.querySelector("summary");
+    if (!summary) return;
+    event.preventDefault();
+    disclosure.open = false;
+    restoreFocus(summary);
+    const label = typeof summary.textContent === "string" ? summary.textContent.trim() : "";
+    announceKeyboard(`${label || "Disclosure"} closed.`);
   }
 
   function handleComparisonTableKey(event) {
