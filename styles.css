@@ -441,6 +441,7 @@ h3 { letter-spacing: -0.04em; }
 .study-status { display: inline-flex; align-items: center; align-self: center; padding: 0.32rem 0.42rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); font-family: var(--mono); font-size: 0.49rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
 .study-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
 .study-meta { margin: 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.63rem; }
+.study-measure-summary { margin: 0.28rem 0 0; color: var(--coral); font-family: var(--mono); font-size: 0.57rem; letter-spacing: 0.03em; line-height: 1.4; }
 .study-context-note { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.7rem; max-width: 42rem; margin: 0.55rem 0 0; padding: 0.45rem 0.6rem; border-left: 2px solid var(--amber); color: var(--ink-muted); background: var(--amber-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; }
 .study-context-note button { padding: 0.32rem 0.45rem; border: 1px solid var(--amber); color: var(--amber); background: transparent; font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
 .study-context-note button:hover { color: var(--ink); background: rgba(233, 179, 108, 0.18); }
@@ -937,6 +938,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }
   .catalog-card.is-active .catalog-number { color: Highlight; }
   .catalog-card-measure { color: Highlight; }
+  .study-measure-summary { color: Highlight; }
   .catalog-card-match { color: Highlight; }
   .search-hit { color: HighlightText; background: Highlight; }
   .compare-toggle.is-selected { border-color: Highlight; color: HighlightText; background: Highlight; }

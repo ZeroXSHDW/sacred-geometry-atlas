@@ -1428,6 +1428,8 @@
     renderMethodReturnAction(study);
     renderMethodContext(study);
     renderActiveCatalogContext(study, visibleStudies());
+    const measureSummary = $("#activeMeasureSummary");
+    if (measureSummary) measureSummary.textContent = `Envelope · ${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
     const printRoute = $("#printRoute");
     if (printRoute) printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;

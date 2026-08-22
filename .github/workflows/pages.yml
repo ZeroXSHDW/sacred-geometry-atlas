@@ -371,7 +371,7 @@ jobs:
           if (catalogExportStart < 0 || catalogExportEnd < 0 || catalogPayloadStart < 0 || catalogPayloadEnd < 0 || !catalogPayload.includes('const shareUrl = catalogViewRouteUrl();') || !catalogPayload.includes('route: shareUrl.href') || !catalogPayload.includes('era: state.filterEra') || !catalogPayload.includes('axis: state.filterAxis') || !catalogPayload.includes('compareIds: [...state.compareIds]') || !catalogPayload.includes('provenance: exportProvenance(visible, catalogScopeLabel())')) throw new Error('Catalog export must include a reproducible route, comparison scope, and provenance');
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript') || !styles.includes('.js-runtime.no-js .skip-link-runtime') || !styles.includes('.skip-link-runtime { display: none; }')) throw new Error('Missing no-JS/runtime skip-link visibility rules');
-          if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#activeMeta").textContent') || !app.includes('Axis: ${study.axis}') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
+          if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#activeMeta").textContent') || !app.includes('Axis: ${study.axis}') || !app.includes('const measureSummary = $("#activeMeasureSummary");') || !app.includes('measureSummary.textContent = `Envelope · ${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;') || !app.includes('$("#analysisReading").textContent') || !html.includes('<p class="study-measure-summary" id="activeMeasureSummary">Envelope · 58 × 22 × 18 m · radius 11 m</p>') || !styles.includes('.study-measure-summary {') || !styles.includes('.study-measure-summary { color: Highlight; }')) throw new Error('Missing dynamic study context rendering');
           if (!app.includes('function volumeReading(study)') || !app.includes('numeric: estimate') || !app.includes('value: estimate !== null ? cubicMeasure(estimate) : "Not supplied"') || !app.includes('studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate"') || !app.includes(': "No estimate supplied"')) throw new Error('Optional volume estimates must have an explicit missing-data state');
           if (!app.includes('const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;') || !app.includes('const estimate = positiveEstimate(study.volumeEstimate);') || !app.includes('const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";') || !app.includes('floorArea.numeric !== null ? number(floorArea.numeric, 0) : ""')) throw new Error('Optional estimate handling must share one positive-value rule across search, views, and exports');
           if (!html.includes('<th scope="col">Axis</th>') || !html.includes('<th scope="col" data-unit-header="area">Floor area (m²)</th>') || !html.includes('<th scope="col" data-unit-header="volume">Est. volume (m³)</th>') || !html.includes('<th scope="col">Volume basis</th>') || !app.includes('function floorAreaReading(study)') || !app.includes('<td>${escapeHtml(study.axis)}</td>') || !app.includes('study.era,\n        study.axis,\n        studyStatus(study)') || !app.includes('<td>${linearMeasure(study.radius)}</td>') || !app.includes('class="comparison-provenance"')) throw new Error('Comparison table and export must expose axis, optional estimates, and provenance');
@@ -1857,6 +1857,45 @@ jobs:
           if (geometryUnitName() !== 'feet' || geometryUnitSymbol() !== 'ft' || linearMeasure(12) !== '12.0 ft' || squareMeasure(144) !== '144 ft²' || cubicMeasure(1728) !== '1,728 ft³' || rawMeasure(12) !== '12 ft') throw new Error('Schema-backed measurement helpers did not use the configured unit symbol');
           if (!citationText(study).includes('58.0 ft length × 22.0 ft span × 18.0 ft height') || !svgBase(study, 'Unit test').includes('length 58 feet, span 22 feet, and height 18 feet')) throw new Error('Citations and SVG descriptions did not use the configured unit name');
           console.log('Schema-backed unit label smoke test passed.');
+          NODE
+      - name: Smoke-test active study measure summary
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const makeElement = () => ({
+            hidden: false,
+            textContent: '',
+            innerHTML: '',
+            value: '',
+            title: '',
+            setAttribute() {},
+            removeAttribute() {},
+            querySelector() { return makeElement(); }
+          });
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all', hash: '#atlas/basilica/plan/exterior/all' },
+              addEventListener() {}
+            },
+            document: {
+              title: '',
+              querySelector(selector) {
+                if (!elements.has(selector)) elements.set(selector, makeElement());
+                return elements.get(selector);
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          context.window.CHURCH_GEOMETRY_SCHEMA = { ...context.window.CHURCH_GEOMETRY_SCHEMA, units: 'feet', unitSymbol: 'ft' };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderStudy };\n})();');
+          vm.runInNewContext(app, context);
+          context.window.__atlasTest.renderStudy();
+          if (elements.get('#activeMeasureSummary').textContent !== 'Envelope · 58 × 22 × 18 ft · radius 11 ft') throw new Error('Active study measure summary did not use schema-backed units');
+          console.log('Active study measure summary smoke test passed.');
           NODE
 
       - name: Smoke-test guarded download fallback
