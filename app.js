@@ -120,6 +120,7 @@
   let compareShareResetTimer;
   let catalogShareResetTimer;
   let citationResetTimer;
+  let catalogCitationResetTimer;
   let comparisonCitationResetTimer;
   let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
@@ -797,6 +798,7 @@
     $("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
+    $("#copyCatalogCitation").addEventListener("click", copyCatalogCitation);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
     $("#copyComparisonCitation").addEventListener("click", copyComparisonCitation);
@@ -1029,6 +1031,7 @@
     "#shareFallback": "#shareStudy",
     "#citationFallback": "#copyCitation",
     "#catalogShareFallback": "#shareCatalog",
+    "#catalogCitationFallback": "#copyCatalogCitation",
     "#compareShareFallback": "#shareCompare",
     "#comparisonCitationFallback": "#copyComparisonCitation"
   };
@@ -1899,6 +1902,45 @@
       parts.push(`sorted by ${sortLabels[state.sort] || state.sort}`);
     }
     return parts.length ? parts.join(", ") : "the full collection";
+  }
+
+  function catalogCitationText(records = visibleStudies()) {
+    const route = catalogViewRouteUrl();
+    const definitions = dataStatusDefinitions();
+    const statuses = schemaStatusValues().map((status) =>
+      `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
+    ).join(" ");
+    const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
+    const schema = geometrySchema();
+    return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
+  }
+
+  async function copyCatalogCitation() {
+    const button = $("#copyCatalogCitation");
+    const status = $("#catalogCitationStatus");
+    if (!button || !status || !beginAsyncAction(button)) return;
+    try {
+      hideManualCopyFallbacks();
+      const citation = catalogCitationText();
+      const copied = await copyText(citation);
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Citation copied", "Catalog citation copied");
+        status.textContent = "Catalog citation copied.";
+        window.clearTimeout(catalogCitationResetTimer);
+        catalogCitationResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Copy citation", "Copy a citation for this catalog view");
+        }, 2200);
+      } else {
+        const fallbackShown = revealManualCopyFallback("#catalogCitationFallback", "#catalogCitationFallbackText", citation);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The catalog citation is shown below for manual copying."
+          : "Copying was unavailable. You can copy the catalog citation from the current view details.";
+      }
+    } finally {
+      endAsyncAction(button);
+    }
   }
 
   async function shareCatalog() {

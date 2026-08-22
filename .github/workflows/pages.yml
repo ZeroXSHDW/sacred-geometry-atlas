@@ -244,9 +244,10 @@ jobs:
           if (!html.includes('id="shareStudy" type="button" aria-label="Share current study" aria-controls="shareFallback" aria-expanded="false" title="Share current study"') || !app.includes('button.title = accessibleLabel;')) throw new Error('Study share feedback must expose a synchronized compact-control tooltip');
           if (!app.includes('status.textContent = "Study sharing cancelled."') || !app.includes('status.textContent = "Catalog sharing cancelled."') || !app.includes('status.textContent = "Comparison sharing cancelled."')) throw new Error('Native share cancellation must provide live feedback');
           if (!html.includes('id="copyCitation" type="button" aria-label="Copy a citation for the active study" aria-controls="citationFallback" aria-expanded="false"') || !app.includes('Axis: ${study.axis}.') || !app.includes('— ${study.axis} axis, ${state.surface} ${state.mode} view') || !app.includes('Dimensions: ${dimensions}') || !app.includes('Data status: ${studyStatus(study)}') || !app.includes('Definition: ${studyStatusDescription(study)}')) throw new Error('Citation and study sharing must expose accessible controls, axis context, key geometry context, and status provenance');
-          if (!html.includes('<div class="manual-copy-fallback" id="shareFallback" role="region" aria-labelledby="shareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="comparisonCitationFallback" role="region" aria-labelledby="comparisonCitationFallbackHeading" hidden>') || !html.includes('id="shareFallbackText"') || !html.includes('id="catalogShareFallbackText"') || !html.includes('id="compareShareFallbackText"') || !html.includes('id="citationFallbackText"') || !html.includes('id="comparisonCitationFallbackText"') || !html.includes('aria-controls="shareFallback" aria-expanded="false"') || !html.includes('aria-controls="citationFallback" aria-expanded="false"') || !html.includes('aria-controls="catalogShareFallback" aria-expanded="false"') || !html.includes('aria-controls="compareShareFallback" aria-expanded="false"') || !html.includes('aria-controls="comparisonCitationFallback" aria-expanded="false"') || !app.includes('const manualCopyFallbackControls = {') || !app.includes('trigger.setAttribute("aria-expanded", "false")') || !app.includes('trigger.setAttribute("aria-expanded", "true")') || !app.includes('function hideManualCopyFallbacks()') || !app.includes('function revealManualCopyFallback(fallbackSelector, textSelector, value)') || !app.includes('The share link is shown below for manual copying.') || !app.includes('The catalog link is shown below for manual copying.') || !app.includes('The comparison link is shown below for manual copying.') || !app.includes('The citation is shown below for manual copying.') || !app.includes('The comparison citation is shown below for manual copying.') || !styles.includes('.manual-copy-fallback {') || !styles.includes('.manual-copy-fallback textarea:focus') || !styles.includes('.share-button[aria-expanded="true"]') || !styles.includes('.share-button[aria-expanded="true"] span:first-child') || !styles.includes('background: Canvas;')) throw new Error('Share and citation actions must expose selected manual-copy fallbacks');
+          if (!html.includes('<div class="manual-copy-fallback" id="shareFallback" role="region" aria-labelledby="shareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogCitationFallback" role="region" aria-labelledby="catalogCitationFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="comparisonCitationFallback" role="region" aria-labelledby="comparisonCitationFallbackHeading" hidden>') || !html.includes('id="shareFallbackText"') || !html.includes('id="catalogShareFallbackText"') || !html.includes('id="catalogCitationFallbackText"') || !html.includes('id="compareShareFallbackText"') || !html.includes('id="citationFallbackText"') || !html.includes('id="comparisonCitationFallbackText"') || !html.includes('aria-controls="shareFallback" aria-expanded="false"') || !html.includes('aria-controls="citationFallback" aria-expanded="false"') || !html.includes('aria-controls="catalogShareFallback" aria-expanded="false"') || !html.includes('aria-controls="catalogCitationFallback" aria-expanded="false"') || !html.includes('aria-controls="compareShareFallback" aria-expanded="false"') || !html.includes('aria-controls="comparisonCitationFallback" aria-expanded="false"') || !app.includes('const manualCopyFallbackControls = {') || !app.includes('trigger.setAttribute("aria-expanded", "false")') || !app.includes('trigger.setAttribute("aria-expanded", "true")') || !app.includes('function hideManualCopyFallbacks()') || !app.includes('function revealManualCopyFallback(fallbackSelector, textSelector, value)') || !app.includes('The share link is shown below for manual copying.') || !app.includes('The catalog link is shown below for manual copying.') || !app.includes('The catalog citation is shown below for manual copying.') || !app.includes('The comparison link is shown below for manual copying.') || !app.includes('The citation is shown below for manual copying.') || !app.includes('The comparison citation is shown below for manual copying.') || !styles.includes('.manual-copy-fallback {') || !styles.includes('.manual-copy-fallback textarea:focus') || !styles.includes('.share-button[aria-expanded="true"]') || !styles.includes('.share-button[aria-expanded="true"] span:first-child') || !styles.includes('background: Canvas;')) throw new Error('Share and citation actions must expose selected manual-copy fallbacks');
+          if (!html.includes('id="copyCatalogCitation" type="button" aria-label="Copy a citation for this catalog view" aria-controls="catalogCitationFallback" aria-expanded="false"') || !html.includes('id="catalogCitationStatus"') || !app.includes('$("#copyCatalogCitation").addEventListener("click", copyCatalogCitation);') || !app.includes('function catalogCitationText(records = visibleStudies())') || !app.includes('async function copyCatalogCitation()') || !app.includes('catalogCitationResetTimer') || !app.includes('Catalog citation copied')) throw new Error('Catalog citation must expose a reusable, accessible action');
           if (!html.includes('id="copyComparisonCitation" type="button" aria-label="Copy a citation for this comparison" aria-controls="comparisonCitationFallback" aria-expanded="false"') || !html.includes('id="comparisonCitationStatus"') || !app.includes('$("#copyComparisonCitation").addEventListener("click", copyComparisonCitation);') || !app.includes('function comparisonCitationText(comparison = comparisonStudies())') || !app.includes('async function copyComparisonCitation()') || !app.includes('comparisonCitationResetTimer') || !app.includes('Comparison citation copied')) throw new Error('Comparison citation must expose a reusable, accessible action');
-          for (const token of ['data-dismiss-fallback="shareFallback"', 'data-dismiss-fallback="citationFallback"', 'data-dismiss-fallback="catalogShareFallback"', 'data-dismiss-fallback="compareShareFallback"', 'data-dismiss-fallback="comparisonCitationFallback"', 'function dismissManualCopyFallback(fallbackSelector)', 'event.key !== "Escape"', '.manual-copy-fallback-heading-row {', '.manual-copy-fallback-dismiss {', '.manual-copy-fallback-dismiss { border-color: ButtonText;']) {
+          for (const token of ['data-dismiss-fallback="shareFallback"', 'data-dismiss-fallback="citationFallback"', 'data-dismiss-fallback="catalogShareFallback"', 'data-dismiss-fallback="catalogCitationFallback"', 'data-dismiss-fallback="compareShareFallback"', 'data-dismiss-fallback="comparisonCitationFallback"', 'function dismissManualCopyFallback(fallbackSelector)', 'event.key !== "Escape"', '.manual-copy-fallback-heading-row {', '.manual-copy-fallback-dismiss {', '.manual-copy-fallback-dismiss { border-color: ButtonText;']) {
             if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
           }
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route" id="printRoute">') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;') || !app.includes('temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print sheet", "Print active study sheet", "study-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print")') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;')) throw new Error('Print output must preserve active study provenance and its reproducible route');
@@ -310,7 +311,7 @@ jobs:
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
           if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Missing atomic drawing status channel');
-          for (const token of ['id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="shareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="citationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareScope" role="status" aria-live="polite" aria-atomic="true"', 'id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareHelper" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"']) {
+          for (const token of ['id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="shareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="citationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareScope" role="status" aria-live="polite" aria-atomic="true"', 'id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareHelper" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error('Dynamic status channel must announce atomically: ' + token);
           }
           if (!styles.includes('.comparison-table-wrap:focus-visible')) throw new Error('Comparison table region must have a visible focus state');
@@ -341,7 +342,7 @@ jobs:
           const refreshStart = app.indexOf('function refreshCatalog()');
           const refreshEnd = app.indexOf('\n  function renderAll()', refreshStart);
           if (refreshStart < 0 || refreshEnd < 0 || app.slice(refreshStart, refreshEnd).includes('renderCatalogResultCount(')) throw new Error('Catalog refresh must announce its result count only through renderList');
-          for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Link copied", "Share link copied");', 'setButtonFeedback(button, "Link copied", "Catalog view link copied");', 'setButtonFeedback(button, "Link copied", "Comparison link copied");', 'setButtonFeedback(button, "Citation copied", "Citation copied");', 'setButtonFeedback(button, "Citation copied", "Comparison citation copied");']) {
+          for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Link copied", "Share link copied");', 'setButtonFeedback(button, "Link copied", "Catalog view link copied");', 'setButtonFeedback(button, "Link copied", "Comparison link copied");', 'setButtonFeedback(button, "Citation copied", "Citation copied");', 'setButtonFeedback(button, "Citation copied", "Catalog citation copied");', 'setButtonFeedback(button, "Citation copied", "Comparison citation copied");']) {
             if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
           }
           if (!app.includes('try {\n        await navigator.clipboard.writeText(value);\n        return true;\n      } catch (error) {\n        // Continue with the textarea fallback if the permissioned API rejects.') || !app.includes('const previousFocus = document.activeElement;') || !app.includes('previousFocus.focus({ preventScroll: true });')) throw new Error('Copy fallback must handle clipboard rejection and restore initiating focus');
@@ -1429,9 +1430,9 @@ jobs:
             navigator: {}
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCitationText, catalogCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable };\n})();');
           vm.runInNewContext(app, context);
-          const { state, comparisonStudies, comparisonCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable } = context.window.__atlasTest;
+          const { state, comparisonStudies, comparisonCitationText, catalogCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable } = context.window.__atlasTest;
           for (const formula of ['=SUM(1,2)', ' +CMD', '-1+1', '@A1']) {
             if (csvCell(formula) !== JSON.stringify(`'${formula}`)) throw new Error(`Formula-like CSV text was not neutralized: ${formula}`);
           }
@@ -1464,6 +1465,11 @@ jobs:
           if (fullExport.provenance.scope !== 'full collection' || fullExport.provenance.recordCount !== 6 || fullExport.provenance.statusCounts.schematic !== 6 || fullExport.provenance.statusCounts.measured !== 0 || fullExport.provenance.statusDefinitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic) throw new Error('Full JSON export did not preserve schema-backed collection provenance');
           state.query = 'basilica';
           state.filterAxis = 'Longitudinal';
+          state.page = 'atlas';
+          state.sort = 'name';
+          const catalogCitation = catalogCitationText([context.window.CHURCH_GEOMETRY[0]]);
+          if (!catalogCitation.includes('Catalog view: results matching “basilica”, Longitudinal, sorted by name (A–Z); 1 record') || !catalogCitation.includes('Status definitions: Schematic = Illustrative proportions; not a measured survey.') || !catalogCitation.includes('Schema v1.1; units: meters') || !catalogCitation.endsWith('https://example.test/atlas/?q=basilica&axis=Longitudinal&sort=name#atlas')) throw new Error('Catalog citation did not preserve query, filters, sort, status definitions, schema, and route');
+          state.sort = 'index';
           const viewExport = catalogViewExportPayload([context.window.CHURCH_GEOMETRY[0]]);
           if (viewExport.provenance.scope !== 'results matching “basilica”, Longitudinal' || viewExport.provenance.recordCount !== 1 || viewExport.provenance.statusCounts.schematic !== 1 || viewExport.view.query !== 'basilica' || viewExport.view.axis !== 'Longitudinal' || !viewExport.view.route.includes('axis=Longitudinal')) throw new Error('Catalog JSON export did not preserve filtered provenance');
           const viewCsv = catalogCsvPayload([context.window.CHURCH_GEOMETRY[0]]);
@@ -1783,6 +1789,72 @@ jobs:
           }).catch((error) => { console.error(error); process.exitCode = 1; });
           NODE
 
+      - name: Smoke-test catalog citation manual-copy fallback
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const visibleLabel = { textContent: 'Copy citation' };
+          const classes = new Set();
+          const button = {
+            disabled: false,
+            classList: {
+              add(name) { classes.add(name); },
+              remove(name) { classes.delete(name); }
+            },
+            querySelector(selector) { return selector === 'span:last-child' ? visibleLabel : null; },
+            setAttribute(name, value) { this[name] = value; }
+          };
+          const fallbackText = {
+            value: '',
+            focusCalls: 0,
+            selectCalls: 0,
+            focus() { this.focusCalls += 1; },
+            select() { this.selectCalls += 1; }
+          };
+          const fallback = { hidden: true };
+          const status = { textContent: '' };
+          elements.set('#copyCatalogCitation', button);
+          elements.set('#catalogCitationStatus', status);
+          elements.set('#catalogCitationFallback', fallback);
+          elements.set('#catalogCitationFallbackText', fallbackText);
+          const context = {
+            URL,
+            navigator: {},
+            window: {
+              isSecureContext: false,
+              location: { href: 'https://example.test/atlas/?q=basilica&axis=Longitudinal&sort=name#atlas' },
+              clearTimeout() {},
+              setTimeout() { return 1; },
+              addEventListener() {}
+            },
+            document: {
+              activeElement: button,
+              body: {},
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; },
+              createElement() { throw new Error('Copy APIs unavailable'); }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, copyCatalogCitation, visibleStudies } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, copyCatalogCitation, visibleStudies } = context.window.__atlasTest;
+          state.query = 'basilica';
+          state.filterAxis = 'Longitudinal';
+          state.sort = 'name';
+          state.page = 'atlas';
+          copyCatalogCitation().then(() => {
+            if (visibleStudies().length !== 1 || button.disabled || button['aria-busy'] !== 'false') throw new Error('Catalog citation fallback did not restore the copy button state');
+            if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('Catalog view: results matching “basilica”, Longitudinal, sorted by name (A–Z); 1 record') || !fallbackText.value.includes('Schema v1.1; units: meters') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
+              throw new Error('Catalog citation fallback did not reveal and select the citation text');
+            }
+            if (!status.textContent.includes('catalog citation is shown below for manual copying')) throw new Error('Catalog citation fallback did not announce its manual-copy state');
+            console.log('Catalog citation manual-copy fallback smoke test passed.');
+          }).catch((error) => { console.error(error); process.exitCode = 1; });
+          NODE
+
       - name: Smoke-test share-link manual-copy fallbacks
         run: |
           node - <<'NODE'
@@ -1887,6 +1959,7 @@ jobs:
             ['#shareFallback', '#shareStudy'],
             ['#citationFallback', '#copyCitation'],
             ['#catalogShareFallback', '#shareCatalog'],
+            ['#catalogCitationFallback', '#copyCatalogCitation'],
             ['#compareShareFallback', '#shareCompare'],
             ['#comparisonCitationFallback', '#copyComparisonCitation']
           ];

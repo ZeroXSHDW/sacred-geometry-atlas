@@ -275,6 +275,10 @@
                   <span aria-hidden="true">↗</span>
                   <span>Share view</span>
                 </button>
+                <button class="share-button catalog-action catalog-citation-button" id="copyCatalogCitation" type="button" aria-label="Copy a citation for this catalog view" aria-controls="catalogCitationFallback" aria-expanded="false" title="Copy a citation for this catalog view">
+                  <span aria-hidden="true">⧉</span>
+                  <span>Copy citation</span>
+                </button>
               </div>
             </div>
             <div class="catalog-batch-actions" role="group" aria-label="Batch comparison actions">
@@ -286,6 +290,7 @@
             <span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <span class="sr-only" id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <span class="sr-only" id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <span class="sr-only" id="catalogCitationStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>
               <div class="manual-copy-fallback-heading-row">
                 <p class="manual-copy-fallback-heading" id="catalogShareFallbackHeading">Copy this catalog link manually</p>
@@ -293,6 +298,14 @@
               </div>
               <textarea id="catalogShareFallbackText" rows="3" readonly aria-label="Catalog share link" aria-describedby="catalogShareFallbackHint"></textarea>
               <p class="manual-copy-fallback-hint" id="catalogShareFallbackHint">The link is selected for copying.</p>
+            </div>
+            <div class="manual-copy-fallback" id="catalogCitationFallback" role="region" aria-labelledby="catalogCitationFallbackHeading" hidden>
+              <div class="manual-copy-fallback-heading-row">
+                <p class="manual-copy-fallback-heading" id="catalogCitationFallbackHeading">Copy this catalog citation manually</p>
+                <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="catalogCitationFallback" type="button" aria-label="Hide catalog citation manual-copy field" title="Hide manual-copy field">Hide</button>
+              </div>
+              <textarea id="catalogCitationFallbackText" rows="5" readonly aria-label="Catalog citation" aria-describedby="catalogCitationFallbackHint"></textarea>
+              <p class="manual-copy-fallback-hint" id="catalogCitationFallbackHint">The citation is selected for copying.</p>
             </div>
             <div class="active-filters" id="activeFilters" role="group" aria-label="Active filters" hidden></div>
             <ul class="catalog-list" id="churchList" aria-label="Geometry study choices"></ul>

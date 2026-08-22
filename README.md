@@ -37,7 +37,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The no-script collection index includes schema/unit metadata, each record’s source note, and clearly labelled key derived readings (bays, module, radius, area, and volume), keeping the static fallback research-ready.
 - The no-script generator also renders an honest empty-collection state if future data edits temporarily remove all study records.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
-- Copyable citations for the active study and full/focused comparisons, including reference, axis, provenance, data-status definition, key geometry dimensions or comparison scope, drawing state where relevant, and a shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
+- Copyable citations for the active study, current catalog view, and full/focused comparisons, including reference, axis, provenance, data-status definition, key geometry dimensions, catalog scope, or comparison scope as relevant, drawing state where relevant, and a shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
 - Share controls use native sharing where available, then fall back to clipboard or a manually copyable link field with visible and live completion feedback.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, typology/place/era/axis context, and proportional charts.
