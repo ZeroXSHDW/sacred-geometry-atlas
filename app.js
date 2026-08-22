@@ -2601,7 +2601,11 @@
     if (state.mode === "section") svg += drawSection(study);
     svg += `</g><text class="label-text" x="710" y="449" text-anchor="end">${state.surface === "interior" ? "INNER GEOMETRY" : "OUTER ENVELOPE"}</text></svg>`;
     $("#geometryCanvas").innerHTML = svg;
-    $("#drawingScale").textContent = `Scale 1 : ${state.mode === "section" ? "120" : "200"}`;
+    const drawingScale = $("#drawingScale");
+    if (drawingScale) {
+      drawingScale.textContent = `Illustrative diagram · 1 : ${state.mode === "section" ? "120" : "200"}`;
+      drawingScale.title = "Illustrative diagram reference; not a measured survey scale";
+    }
     renderStudy();
     if (state.page === "atlas") updateDocumentTitle("atlas");
   }
