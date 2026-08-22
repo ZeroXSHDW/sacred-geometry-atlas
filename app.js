@@ -1714,8 +1714,9 @@
   function comparisonCsvPayload(comparison) {
     const route = comparisonRouteUrl().href;
     const scope = comparisonScopeLabel(comparison);
+    const statusDefinitions = dataStatusDefinitions();
     const headers = [
-      "ID", "Study", "Typology", "Place", "Era", "Status", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Place", "Era", "Status", "Status definition", "Reference", "Source", "Source note",
       "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
       "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route"
     ];
@@ -1726,6 +1727,7 @@
       study.place,
       study.era,
       studyStatus(study),
+      statusDefinitions[studyStatus(study)] || "",
       study.churchName || study.name,
       studySource(study),
       studySourceNote(study),
