@@ -424,7 +424,7 @@ jobs:
           if (!html.includes('<select id="filterSelect" aria-describedby="filterHelp">') || !html.includes('<select id="filterPlace" aria-describedby="filterHelp">') || !html.includes('<select id="filterEra" aria-describedby="filterHelp">') || !html.includes('<select id="filterAxis" aria-describedby="filterHelp">') || !html.includes('<select id="filterStatus" aria-describedby="filterHelp statusHelp">') || !html.includes('<p class="catalog-filter-note" id="filterHelp">Filter counts reflect the current search and the other active filters.</p>') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>') || !styles.includes('.catalog-filter-note {') || !styles.includes('.catalog-data-note {') || !app.includes('function schemaStatusValues()') || !app.includes('const allowedStatusValues = new Set(schemaStatusValues());') || !app.includes('const validStatuses = new Set(["all", ...schemaStatusValues()]);') || !app.includes('function studyStatusCounts(records = studies)') || !app.includes('function statusGuidanceText(records = studies, scope = "the full collection")') || !app.includes('function catalogStatusGuidanceText(records = visibleStudies())') || !app.includes('const catalogFilterSpecs = [') || !app.includes('function catalogFilterScopeRecords(excludedKey = "")') || !app.includes('function replaceSelectOptions(select, options)') || !app.includes('function renderCatalogFilterOptions()') || !app.includes('const scope = catalogFilterScopeRecords(stateKey);') || !app.includes('label: `${allLabel} · ${scope.length}`') || !app.includes('statusHelp.textContent = catalogStatusGuidanceText(visible);') || !app.includes('const statusGuidance = statusGuidanceText(studies, "the full collection");') || !app.includes('comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");') || !app.includes('const countsText = statuses.map((status) =>')) throw new Error('Catalog filters must expose scope-aware counts and schema-backed provenance');
           if (!html.includes('<select id="filterEra" aria-describedby="filterHelp">') || !html.includes('<span class="sr-only">Filter by era</span>') || !html.includes('<select id="filterAxis" aria-describedby="filterHelp">') || !html.includes('<span class="sr-only">Filter by axis</span>') || !app.includes('const eras = new Set(studies.map((study) => study.era));') || !app.includes('const axes = new Set(studies.map((study) => study.axis));') || !app.includes('state.filterEra = eras.has(requestedEra) ? requestedEra : "all";') || !app.includes('state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";')) throw new Error('Era and axis filters must be bookmarkable and accessible');
           if (!app.includes('if (state.filterEra !== "all") filters.push({ key: "era"') || !app.includes('if (key === "era")') || !app.includes('if (state.filterEra !== "all") parts.push(state.filterEra);') || !app.includes('if (state.filterAxis !== "all") filters.push({ key: "axis"') || !app.includes('if (key === "axis")') || !app.includes('if (state.filterAxis !== "all") parts.push(axisDisplayLabel(state.filterAxis));')) throw new Error('Era and axis filters must expose clearable catalog scope');
-          if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('if (state.sort === "length") return b.length - a.length;') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
+          if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('const stableStudyOrder = (left, right) => {') || !app.includes('let order = 0;') || !app.includes('return order || stableStudyOrder(a, b);') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"') || !app.includes('activeStudyOutsideCatalog') || !app.includes('The active study, ${studyShortName(study)}, is outside the current catalog view.') || !app.includes('Clear the catalog filters to restore ${studyShortName(study)}.') || !styles.includes('.visual-empty-context')) throw new Error('Missing contextual visual empty-state behavior');
@@ -1000,6 +1000,31 @@ jobs:
           context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol = originalUnitSymbol;
           if (!planWithUnsafeUnit.includes('&lt;unit&gt;') || planWithUnsafeUnit.includes('<unit>') || !sectionWithUnsafeUnit.includes('&lt;unit&gt;') || sectionWithUnsafeUnit.includes('<unit>')) throw new Error('Schema unit symbols must be escaped in generated SVG labels');
           console.log('Route-native catalog link smoke test passed.');
+          NODE
+      - name: Smoke-test deterministic catalog sorting
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const baseStudy = context.window.CHURCH_GEOMETRY[0];
+          context.window.CHURCH_GEOMETRY.push(
+            { ...baseStudy, id: 'probe-2', index: '2', name: 'Probe 2', shortName: 'Probe 2' },
+            { ...baseStudy, id: 'probe-10', index: '10', name: 'Probe 10', shortName: 'Probe 10' }
+          );
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, visibleStudies };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, visibleStudies } = context.window.__atlasTest;
+          state.query = 'probe';
+          const idsFor = (sort) => {
+            state.sort = sort;
+            return visibleStudies().map((study) => study.id);
+          };
+          if (idsFor('index').join(',') !== 'probe-2,probe-10') throw new Error('Curated order did not sort unpadded numeric indices naturally');
+          if (idsFor('length').join(',') !== 'probe-2,probe-10') throw new Error('Tied numeric sorting did not fall back to deterministic study order');
+          if (idsFor('name').join(',') !== 'probe-2,probe-10') throw new Error('Name sorting did not use natural numeric ordering');
+          console.log('Deterministic catalog sorting smoke test passed.');
           NODE
       - name: Smoke-test encoded comparison routes
         run: |

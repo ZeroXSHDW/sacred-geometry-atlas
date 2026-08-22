@@ -1642,14 +1642,26 @@
 
   function visibleStudies() {
     const result = catalogFilterScopeRecords();
+    const naturalCompare = (left, right) => String(left ?? "").localeCompare(String(right ?? ""), undefined, { numeric: true, sensitivity: "base" });
+    const stableStudyOrder = (left, right) => {
+      const leftIndexText = String((left && left.index) ?? "").trim();
+      const rightIndexText = String((right && right.index) ?? "").trim();
+      const leftIndex = leftIndexText ? Number(leftIndexText) : NaN;
+      const rightIndex = rightIndexText ? Number(rightIndexText) : NaN;
+      if (Number.isFinite(leftIndex) && Number.isFinite(rightIndex) && leftIndex !== rightIndex) return leftIndex - rightIndex;
+      return naturalCompare(leftIndexText, rightIndexText)
+        || naturalCompare(left && left.name, right && right.name)
+        || naturalCompare(left && left.id, right && right.id);
+    };
     return result.sort((a, b) => {
-      if (state.sort === "length") return b.length - a.length;
-      if (state.sort === "height") return b.height - a.height;
-      if (state.sort === "span") return b.span - a.span;
-      if (state.sort === "ratio") return (b.length / b.span) - (a.length / a.span);
-      if (state.sort === "symmetry") return b.symmetry - a.symmetry;
-      if (state.sort === "name") return a.name.localeCompare(b.name);
-      return a.index.localeCompare(b.index);
+      let order = 0;
+      if (state.sort === "length") order = b.length - a.length;
+      if (state.sort === "height") order = b.height - a.height;
+      if (state.sort === "span") order = b.span - a.span;
+      if (state.sort === "ratio") order = (b.length / b.span) - (a.length / a.span);
+      if (state.sort === "symmetry") order = b.symmetry - a.symmetry;
+      if (state.sort === "name") order = naturalCompare(a.name, b.name);
+      return order || stableStudyOrder(a, b);
     });
   }
 
