@@ -154,7 +154,7 @@ jobs:
           if (!app.includes('const revealPending = document.body.classList.contains("no-js");') || !app.includes('previousPage === route.page || revealPending') || !app.includes('pageChanged && !document.body.classList.contains("no-js")')) throw new Error('Initial deep-link focus must wait until the app is visible');
           if (!styles.includes('.no-js .runtime-fallback { display: none; }') || !styles.includes('.js-runtime.no-js .runtime-fallback { display: block; }') || !styles.includes('.data-error-state .runtime-fallback { display: none; }')) throw new Error('Runtime recovery panel must not compete with no-script or data-error states');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
-          if (!html.includes('Dimensions are shown as length × span × height in meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey.')) throw new Error('Missing no-script dimensions or provenance note');
+          if (!html.includes('Dimensions are shown as length × span × height in meters. Schema 1.1 · units: meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey. Schema 1.1 · units: meters.') || !html.includes('class="noscript-provenance"') || !styles.includes('.noscript-provenance {') || !styles.includes('.noscript-provenance { color: Highlight; }')) throw new Error('Missing no-script dimensions, schema context, or record provenance note');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
           if (!noScriptList) throw new Error('Missing no-script study list');
           const noScriptEntries = [...noScriptList[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1]);
@@ -162,7 +162,7 @@ jobs:
           for (const study of source.studies) {
             const dimensions = [study.length, study.span, study.height].join(' × ') + ' m';
             const entry = noScriptEntries.find((candidate) => candidate.includes(study.name));
-            if (!entry || [study.name, study.typology, study.place, study.era, study.emphasis, `Axis: ${study.axis}`, study.status, dimensions, study.churchName, study.surfaceNote].some((value) => !entry.includes(value))) {
+            if (!entry || [study.name, study.typology, study.place, study.era, study.emphasis, `Axis: ${study.axis}`, study.status, dimensions, study.churchName, study.source, study.sourceNote, study.surfaceNote].some((value) => !entry.includes(value))) {
               throw new Error('No-script fallback is missing ' + study.id + ': ' + dimensions + ' / ' + study.churchName + ' / reading');
             }
           }
@@ -422,12 +422,13 @@ jobs:
             const sourcePath = path.join(temporaryRoot, 'data/geometry.js');
             const source = fs.readFileSync(sourcePath, 'utf8')
               .replace('name: "The longitudinal basilica"', 'name: "The longitudinal <basilica>"')
-              .replace('status: "schematic"', 'status: "measured"');
+              .replace('status: "schematic"', 'status: "measured"')
+              .replace('sourceNote: "Illustrative proportions; no measured source."', 'sourceNote: "Source <note>"');
             fs.writeFileSync(sourcePath, source);
             const result = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (result.status !== 0) throw new Error(result.stderr || result.stdout || 'Temporary no-script generation failed');
             const generated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
-            if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
+            if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('Provenance: Sacred Geometry Atlas proportional model · Source &lt;note&gt;') || !generated.includes('Schema 1.1 · units: meters.') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
               throw new Error('Generated no-script fallback did not reflect escaped content and mixed provenance');
             }
             console.log('Generated no-script fallback smoke test passed.');
