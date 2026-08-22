@@ -1733,6 +1733,50 @@ jobs:
           console.log('Comparison table shortcut scope and status smoke test passed.');
           NODE
 
+      - name: Smoke-test comparison table scroll cue
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const cue = { hidden: true, attributes: {}, setAttribute(name, value) { this.attributes[name] = value; } };
+          const cueText = { textContent: '' };
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) {
+                return selector === '#comparisonTableScrollCue' ? cue : selector === '#comparisonTableScrollCueText' ? cueText : null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { updateComparisonTableScrollCue };\n})();');
+          vm.runInNewContext(app, context);
+          const { updateComparisonTableScrollCue } = context.window.__atlasTest;
+          const target = {
+            clientWidth: 400,
+            scrollWidth: 1000,
+            scrollLeft: 0,
+            attributes: {},
+            setAttribute(name, value) { this.attributes[name] = value; }
+          };
+          updateComparisonTableScrollCue(target);
+          if (cue.hidden || target.attributes['data-scroll-state'] !== 'start' || cue.attributes['data-scroll-state'] !== 'start' || cueText.textContent !== 'More columns →') throw new Error('Start-of-table scroll cue was not shown');
+          target.scrollLeft = 320;
+          updateComparisonTableScrollCue(target);
+          if (cue.attributes['data-scroll-state'] !== 'middle' || cueText.textContent !== '← More columns →') throw new Error('Middle-of-table scroll cue was not directional');
+          target.scrollLeft = 600;
+          updateComparisonTableScrollCue(target);
+          if (cue.attributes['data-scroll-state'] !== 'end' || cueText.textContent !== '← More columns') throw new Error('End-of-table scroll cue was not directional');
+          const noScrollTarget = { clientWidth: 400, scrollWidth: 400, scrollLeft: 0, setAttribute() {} };
+          updateComparisonTableScrollCue(noScrollTarget);
+          if (!cue.hidden || cue.attributes['data-scroll-state'] !== 'none' || cueText.textContent !== '') throw new Error('Non-overflowing table did not hide its scroll cue');
+          console.log('Comparison table scroll cue smoke test passed.');
+          NODE
+
       - name: Smoke-test Method return context
         run: |
           node - <<'NODE'

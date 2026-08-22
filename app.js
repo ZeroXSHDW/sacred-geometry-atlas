@@ -1025,6 +1025,7 @@
     const comparisonTable = $(".comparison-table-wrap");
     if (comparisonTable) {
       comparisonTable.addEventListener("keydown", handleComparisonTableKey);
+      comparisonTable.addEventListener("scroll", () => updateComparisonTableScrollCue(comparisonTable), { passive: true });
       comparisonTable.addEventListener("click", (event) => {
         const studyLink = event.target.closest("[data-table-study]");
         if (!studyLink) return;
@@ -1033,6 +1034,9 @@
         selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true });
       });
     }
+    const comparisonTablePanel = $(".comparison-table-panel");
+    if (comparisonTablePanel) comparisonTablePanel.addEventListener("toggle", () => updateComparisonTableScrollCue());
+    window.addEventListener("resize", () => updateComparisonTableScrollCue());
     window.addEventListener("keydown", handleDisclosureKeydown);
     window.addEventListener("keydown", handleKeyboard);
   }
@@ -1473,6 +1477,40 @@
     announceKeyboard(`${label || "Disclosure"} closed.`);
   }
 
+  function updateComparisonTableScrollCue(target = $(".comparison-table-wrap"), scrollLeftOverride = null) {
+    if (!target) return;
+    const scrollWidth = Number(target.scrollWidth);
+    const clientWidth = Number(target.clientWidth);
+    const maxScroll = Number.isFinite(scrollWidth) && Number.isFinite(clientWidth)
+      ? Math.max(0, scrollWidth - clientWidth)
+      : 0;
+    const rawScrollLeft = scrollLeftOverride === null ? Number(target.scrollLeft) : Number(scrollLeftOverride);
+    const currentLeft = Number.isFinite(rawScrollLeft) ? Math.max(0, Math.min(maxScroll, rawScrollLeft)) : 0;
+    const canScroll = maxScroll > 1;
+    const scrollState = !canScroll
+      ? "none"
+      : currentLeft <= 1
+        ? "start"
+        : currentLeft >= maxScroll - 1
+          ? "end"
+          : "middle";
+    if (typeof target.setAttribute === "function") target.setAttribute("data-scroll-state", scrollState);
+    const cue = $("#comparisonTableScrollCue");
+    if (!cue) return;
+    cue.hidden = !canScroll;
+    if (typeof cue.setAttribute === "function") cue.setAttribute("data-scroll-state", scrollState);
+    const cueText = $("#comparisonTableScrollCueText");
+    if (cueText) {
+      cueText.textContent = scrollState === "start"
+        ? "More columns →"
+        : scrollState === "end"
+          ? "← More columns"
+          : scrollState === "middle"
+            ? "← More columns →"
+            : "";
+    }
+  }
+
   function handleComparisonTableKey(event) {
     const target = event.currentTarget;
     if (!target || event.target !== target || event.metaKey || event.ctrlKey || event.altKey) return;
@@ -1505,6 +1543,7 @@
             ? "Comparison table is at the last columns."
             : `Comparison table moved ${key === "ArrowLeft" || key === "Home" ? "left" : "right"}.`;
     }
+    updateComparisonTableScrollCue(target, nextLeft);
     event.preventDefault();
   }
 
@@ -3233,6 +3272,7 @@
         </tr>
       `;
     }).join("");
+    updateComparisonTableScrollCue();
   }
 
   function renderGeometryCompare() {

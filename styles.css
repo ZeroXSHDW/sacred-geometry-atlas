@@ -756,6 +756,8 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .comparison-table-actions .comparison-table-hint { margin-top: 0.28rem; color: var(--teal); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; }
 .comparison-export-actions { display: flex; flex: 0 0 auto; gap: 0.45rem; }
 .comparison-table-actions .share-button { flex: 0 0 auto; }
+.comparison-table-scroll-cue { display: flex; align-items: center; gap: 0.55rem; margin: 0; padding: 0.55rem 1.15rem; border-bottom: 1px solid var(--line); color: var(--teal); font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
+.scroll-cue-mark { color: var(--amber); font-size: 0.8rem; line-height: 1; }
 .comparison-table-wrap { overflow-x: auto; }
 .comparison-table-wrap:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
 .comparison-table { width: 100%; min-width: 760px; border-collapse: collapse; font-family: var(--mono); font-size: 0.58rem; }
@@ -1164,6 +1166,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .chart-scale { color: CanvasText; }
   .chart-axis-guide { border-top-color: ButtonText; }
   .chart-axis-guide span:last-child { color: Highlight; }
+  .comparison-table-scroll-cue { border-bottom-color: ButtonText; color: Highlight; }
+  .scroll-cue-mark { color: Highlight; }
   .comparison-table thead th { color: ButtonText; background: Canvas; box-shadow: 0 1px 0 ButtonText; }
 }
 
@@ -1278,6 +1282,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-comparison .chart-note { margin-top: 1rem; }
   body.print-comparison .comparison-table-panel { display: block; margin-top: 1rem; border-color: var(--ink); background: #fff; break-before: page; }
   body.print-comparison .comparison-table-panel summary { display: none; }
+  body.print-comparison .comparison-table-scroll-cue { display: none !important; }
   body.print-comparison .comparison-table-wrap { overflow: visible; }
   body.print-comparison .comparison-table { min-width: 0; font-size: 6.4pt; }
   body.print-comparison .comparison-table th,
