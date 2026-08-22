@@ -83,8 +83,8 @@
     <script>
       document.body.classList.add("js-runtime");
       document.addEventListener("DOMContentLoaded", () => {
-        const runtimeReload = document.querySelector("[data-runtime-reload]");
-        if (runtimeReload && window.location && typeof window.location.href === "string") runtimeReload.href = window.location.href;
+        const recoveryReloads = document.querySelectorAll("[data-recovery-reload]");
+        if (window.location && typeof window.location.href === "string") recoveryReloads.forEach((recoveryReload) => { recoveryReload.href = window.location.href; });
       }, { once: true });
     </script>
     <a class="skip-link skip-link-app" href="#main-content">Skip to content</a>
@@ -93,7 +93,7 @@
       <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Interactive mode</p>
       <p id="runtimeFallbackHeading" role="status" aria-live="polite" aria-atomic="true"><strong>The atlas is still loading.</strong> If this message remains, enable JavaScript or open the static dataset below.</p>
       <div class="runtime-fallback-actions">
-        <a class="hero-action hero-action-primary" href="./" data-runtime-reload>Reload the interactive atlas <span aria-hidden="true">↻</span></a>
+        <a class="hero-action hero-action-primary" href="./" data-recovery-reload>Reload the interactive atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
@@ -149,7 +149,7 @@
       <h1 id="dataErrorHeading" tabindex="-1">Geometry data could not be loaded.</h1>
       <p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.</p>
       <div class="data-error-actions">
-        <a class="hero-action hero-action-primary" href="./">Reload the atlas <span aria-hidden="true">↻</span></a>
+        <a class="hero-action hero-action-primary" href="./" data-recovery-reload>Reload the atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
