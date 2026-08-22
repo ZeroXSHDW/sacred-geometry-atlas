@@ -25,7 +25,7 @@
 .no-js main,
 .no-js .site-footer { display: none; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 7rem; }
 
 body {
   margin: 0;
