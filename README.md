@@ -55,7 +55,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Focused comparison range announcements keep each active chart maximum available to assistive technology as the selection changes.
 - Comparison bars also expose their active range and value as semantic meters, keeping the normalized readings available beyond the visual bar lengths.
 - Comparison chart rows include the schema-backed status definition in their accessible labels, so provenance remains explicit without relying on hover tooltips.
-- Comparison study cards, the edit-selection handoff, and table links expose visible Atlas cues for returning to a selected study and mark the current Atlas study for orientation; each is route-native and preserves the focused selection when opened in a new tab.
+- Comparison study cards, the edit-selection handoff, and table links expose visible Atlas cues for returning to a selected study and mark the current Atlas study for orientation; the focused comparison helper also explains when that study is outside the selected set. Each is route-native and preserves the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal, per-study axis and provenance badges, a current-Atlas-study cue, and clear-all controls that preserve keyboard focus.
 - A one-study comparison handoff stays visible on the Compare page as a pending selection, with a clear “select one more” prompt while the full collection remains the comparison scope.
 - Focused comparison cards, charts, tables, and exports preserve the order in which studies were selected or shared in the comparison route.

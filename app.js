@@ -3032,6 +3032,12 @@
     const focused = selected >= 2;
     const partial = selected === 1;
     const compareScopeLabel = focused ? "selected collection" : "full collection";
+    const current = activeStudy();
+    const currentStudyContext = focused && current
+      ? state.compareIds.includes(current.id)
+        ? ` The current Atlas study, ${studyShortName(current)}, is marked in the comparison.`
+        : ` The current Atlas study, ${studyShortName(current)}, is outside this comparison.`
+      : "";
     const sectionNote = $("#compareSectionNote");
     const geometryKicker = $("#geometryCompareKicker");
     const scope = $("#compareScope");
@@ -3040,7 +3046,7 @@
     if (geometryKicker) geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";
     if (scope) scope.textContent = focused ? `${selected} selected` : partial ? "1 selected · choose one more" : "Full collection";
     if (helper) helper.textContent = focused
-      ? "Focused comparison is using the studies you selected in the Atlas. Open a study from a geometry card or its table link."
+      ? `Focused comparison is using the studies you selected in the Atlas.${currentStudyContext} Open a study from a geometry card or its table link.`
       : partial
         ? "One study is selected for comparison. Select one more study in the Atlas to create a focused comparison; the full collection is shown until then."
         : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.";

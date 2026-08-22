@@ -1402,7 +1402,12 @@ jobs:
           elements.set('#comparisonTableCaption', tableCaption);
           elements.set('#comparisonTableSummary', tableSummary);
           renderCompareContext();
-          if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison') || comparisonPrintRoute.textContent !== 'Route · https://example.test/atlas/#compare/basilica,gothic') throw new Error('Focused comparison scope or reproducible print route did not update');
+          if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison') || !compareHelper.textContent.includes('The current Atlas study, Longitudinal basilica, is marked in the comparison.') || comparisonPrintRoute.textContent !== 'Route · https://example.test/atlas/#compare/basilica,gothic') throw new Error('Focused comparison scope, current-study context, or reproducible print route did not update');
+          state.activeId = 'baroque';
+          renderCompareContext();
+          if (!compareHelper.textContent.includes('The current Atlas study, Baroque oval church, is outside this comparison.')) throw new Error('Focused comparison did not explain when the current Atlas study was outside the selected set');
+          state.activeId = 'basilica';
+          renderCompareContext();
           state.compareIds = ['basilica'];
           renderCompareSelection();
           renderCompareContext();
