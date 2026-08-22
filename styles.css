@@ -711,6 +711,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .comparison-table-study-link:hover, .comparison-table-study-link:focus-visible { color: var(--amber); text-decoration-color: currentColor; }
 .comparison-table tbody td { color: var(--teal); }
 .comparison-table tbody .comparison-status { color: var(--amber); letter-spacing: 0.04em; text-transform: uppercase; }
+.comparison-table tbody .comparison-status[data-status="measured"] { color: var(--teal); }
 .comparison-table tbody .comparison-provenance { max-width: 28ch; color: var(--ink-muted); text-align: left; white-space: normal; }
 .comparison-table tbody tr:last-child th, .comparison-table tbody tr:last-child td { border-bottom: 0; }
 
@@ -924,6 +925,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-card-status[data-status="measured"],
   .chart-status,
   .chart-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .comparison-table tbody .comparison-status,
+  .comparison-table tbody .comparison-status[data-status="measured"] { color: ButtonText; }
   .segment-button.is-active { color: HighlightText; background: Highlight; }
   .layer-button.is-active { border-color: Highlight; background: Canvas; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }

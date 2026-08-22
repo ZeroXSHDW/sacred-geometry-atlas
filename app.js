@@ -2465,7 +2465,7 @@
         <tr>
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(study.axis)}</td>
-          <td class="comparison-status" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
+          <td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${number(study.length)} m</td>
           <td>${number(study.span)} m</td>
           <td>${number(ratio, 2)}</td>
