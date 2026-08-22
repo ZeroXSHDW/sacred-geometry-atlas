@@ -108,6 +108,7 @@ summary:focus-visible {
 .runtime-fallback .eyebrow { margin-bottom: 0.9rem; color: var(--amber); }
 .runtime-fallback > p:not(.eyebrow) { max-width: 42rem; margin-bottom: 1rem; color: var(--ink-soft); font-size: 0.82rem; line-height: 1.7; }
 .runtime-fallback > p strong { color: var(--ink); font-weight: 700; }
+.runtime-fallback-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
 .runtime-fallback .hero-action { display: inline-flex; }
 .data-error { width: min(820px, calc(100% - 96px)); min-height: min(560px, 70vh); margin: 4rem auto; padding: clamp(2rem, 6vw, 5rem); border: 1px solid rgba(231, 127, 98, 0.42); background: linear-gradient(135deg, rgba(231, 127, 98, 0.09), rgba(24, 33, 31, 0.76)); }
 .data-error .eyebrow { margin-bottom: 1.5rem; color: var(--coral); }
@@ -869,6 +870,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }
   .dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .dataset-icon { color: ButtonText; }
+  .runtime-fallback-actions .hero-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .study-status,
   .study-provenance summary,
   .study-nav button,

@@ -30,7 +30,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog cards keep typology, place, era, emphasis, and dedicated schematic/measured provenance badges visible at a glance.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
-- A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
+- A visible runtime recovery panel offers a one-click retry and preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, provenance, data-status definition, key geometry dimensions, drawing state, and shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
 - Share controls use native sharing where available, then fall back to clipboard or a manually copyable link field with visible and live completion feedback.
