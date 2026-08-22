@@ -124,6 +124,7 @@ jobs:
             if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
           }
           if (!html.includes('<p class="section-note" id="atlasSchemaNote">Illustrative proportions · metric units · v1.1</p>')) throw new Error('Atlas collection note must expose a dynamic schema target');
+          if (!html.includes('<span id="methodProvenanceNote">The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.</span>') || !app.includes('function methodProvenanceText(records = studies)') || !app.includes('function renderMethodProvenance()') || !app.includes('renderMethodProvenance();')) throw new Error('Method provenance warning must adapt to live dataset status');
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root') || !notFound.includes('data-site-dataset')) throw new Error('Missing GitHub Pages recovery navigation');
@@ -1106,15 +1107,17 @@ jobs:
           elements.set('#activeSchemaNote', { textContent: '' });
           elements.set('#activeStatus', status);
           elements.set('#atlasSchemaNote', { textContent: '' });
+          elements.set('#methodProvenanceNote', { textContent: '' });
           const context = { window: {}, document: { querySelector(selector) { return elements.get(selector) || null; } }, navigator: {} };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText };\n})();');
           vm.runInNewContext(app, context);
-          const { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText } = context.window.__atlasTest;
+          const { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText } = context.window.__atlasTest;
           const definitions = dataStatusDefinitions();
           if (definitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic || definitions.measured !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.measured) throw new Error('Status definitions did not come from the dataset schema');
           if (studyStatusDescription({ status: 'schematic' }) !== definitions.schematic || studyStatusDescription({ status: 'measured' }) !== definitions.measured) throw new Error('Study status descriptions are not schema-backed');
           if (atlasSchemaNoteText() !== 'Illustrative proportions · metric units · v1.1' || atlasSchemaNoteText([{ status: 'schematic' }, { status: 'measured' }]) !== 'Mixed provenance · metric units · v1.1') throw new Error('Atlas collection note did not follow schema units, version, and status mix');
+          if (!methodProvenanceText().startsWith('The current collection is a schematic') || !methodProvenanceText([{ status: 'measured' }]).startsWith('The current collection uses source-supported dimensions') || !methodProvenanceText([{ status: 'schematic' }, { status: 'measured' }]).startsWith('The collection mixes schematic proportional studies')) throw new Error('Method provenance warning did not follow the collection status mix');
           renderActiveProvenance({ status: 'schematic' });
           if (elements.get('#activeProvenanceSummary').textContent !== 'Data status · schematic' || elements.get('#activeProvenanceDefinition').textContent !== definitions.schematic || elements.get('#activeSchemaNote').textContent !== 'Schema 1.1 · units: meters' || status.title !== definitions.schematic || status.attributes['aria-label'] !== `schematic: ${definitions.schematic}`) throw new Error('Active study provenance disclosure did not follow the schema');
           const guidance = statusGuidanceText();

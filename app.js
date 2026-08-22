@@ -151,6 +151,7 @@
       if (target) target.textContent = String(value).padStart(2, "0");
     });
     renderAtlasSchemaNote();
+    renderMethodProvenance();
   }
 
   function atlasSchemaNoteText(records = studies) {
@@ -168,6 +169,18 @@
   function renderAtlasSchemaNote() {
     const target = $("#atlasSchemaNote");
     if (target) target.textContent = atlasSchemaNoteText();
+  }
+
+  function methodProvenanceText(records = studies) {
+    const counts = studyStatusCounts(records);
+    if (counts.schematic && counts.measured) return "The collection mixes schematic proportional studies and source-supported dimensions. Use each record's status and provenance note to distinguish them.";
+    if (counts.measured) return "The current collection uses source-supported dimensions. Each record carries a status and provenance note so its evidence can be identified.";
+    return "The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.";
+  }
+
+  function renderMethodProvenance() {
+    const target = $("#methodProvenanceNote");
+    if (target) target.textContent = methodProvenanceText();
   }
 
   function studyStatusCounts(records = studies) {
