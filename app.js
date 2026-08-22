@@ -1562,7 +1562,10 @@
         status.textContent = `${study.name} shared.`;
         return;
       }
-      if (nativeShareResult === "cancelled") return;
+      if (nativeShareResult === "cancelled") {
+        status.textContent = "Study sharing cancelled.";
+        return;
+      }
 
       const copied = await copyText(shareUrl.href);
 
@@ -1628,7 +1631,10 @@
         status.textContent = "Catalog view shared.";
         return;
       }
-      if (nativeShareResult === "cancelled") return;
+      if (nativeShareResult === "cancelled") {
+        status.textContent = "Catalog sharing cancelled.";
+        return;
+      }
 
       const copied = await copyText(shareUrl.href);
       if (copied) {
@@ -1674,7 +1680,10 @@
         status.textContent = "Comparison shared.";
         return;
       }
-      if (nativeShareResult === "cancelled") return;
+      if (nativeShareResult === "cancelled") {
+        status.textContent = "Comparison sharing cancelled.";
+        return;
+      }
 
       const copied = await copyText(shareUrl.href);
       if (copied) {
