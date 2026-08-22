@@ -141,7 +141,6 @@
   let comparisonCitationResetTimer;
   let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
-  let lastCatalogResultCount = "";
   let lastRouteSignature = "";
   const actionFeedbackTimers = new Map();
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
@@ -941,19 +940,17 @@
     const resultCount = $("#catalogResultCount");
     if (!resultCount) return;
     const text = resultCountText(count);
-    const scopeLabel = `${text}; ${catalogScopeLabel()}.`;
+    const scope = catalogScopeLabel();
+    const scopeLabel = `${text}; ${scope}.`;
     resultCount.textContent = text;
     resultCount.setAttribute("aria-label", scopeLabel);
     const liveStatus = $("#catalogLiveStatus");
     if (liveStatus) {
-      if (lastCatalogStatus && lastCatalogStatus !== scopeLabel && lastCatalogResultCount === text) {
-        liveStatus.textContent = `Catalog updated: ${scopeLabel}`;
-      } else if (lastCatalogResultCount !== text) {
-        liveStatus.textContent = "";
-      }
+      liveStatus.textContent = lastCatalogStatus && lastCatalogStatus !== scope
+        ? `Catalog updated: ${scope}.`
+        : "";
     }
-    lastCatalogResultCount = text;
-    lastCatalogStatus = scopeLabel;
+    lastCatalogStatus = scope;
   }
 
   function renderActiveFilters() {
