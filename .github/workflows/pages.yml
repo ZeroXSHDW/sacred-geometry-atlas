@@ -596,19 +596,19 @@ jobs:
             if (!generated.includes('<section class="noscript-status-key" aria-labelledby="noscript-status-key-heading">') || !generated.includes('class="noscript-status-key-label" data-status="schematic">Schematic</span> <code>schematic</code>') || !generated.includes('class="noscript-status-key-label" data-status="measured">Measured</span> <code>measured</code>') || !generated.includes('class="noscript-status-key-count">5 records</span>') || !generated.includes('class="noscript-status-key-count">1 record</span>')) throw new Error('Generated no-script fallback did not expose its mixed evidence status key');
             if (!generatedCsv.includes('"Source <note>"') || !generatedCsv.includes('"measured","Source-supported dimensions."') || !generatedCsv.includes('"Schema URL"') || !generatedCsv.includes('"data/geometry.schema.json"')) throw new Error('Generated CSV did not preserve provenance, status context, and schema URL');
             const customStatusSource = fs.readFileSync('data/geometry.js', 'utf8')
-              .replace('statusValues: ["schematic", "measured"],', 'statusValues: ["schematic", "measured", "estimated"],')
-              .replace('    measured: "Source-supported dimensions."\n  },', '    measured: "Source-supported dimensions.",\n    estimated: "Proportional estimate pending source review."\n  },')
-              .replace('status: "schematic"', 'status: "estimated"');
+              .replace('statusValues: ["schematic", "measured"],', 'statusValues: ["schematic", "measured", "estimated_pending"],')
+              .replace('    measured: "Source-supported dimensions."\n  },', '    measured: "Source-supported dimensions.",\n    estimated_pending: "Proportional estimate pending source review."\n  },')
+              .replace('status: "schematic"', 'status: "estimated_pending"');
             fs.writeFileSync(sourcePath, customStatusSource);
             const customStatusResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (customStatusResult.status !== 0) throw new Error(customStatusResult.stderr || customStatusResult.stdout || 'Custom-status no-script generation failed');
             const customStatusGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
             const customStatusCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
-            if (!customStatusGenerated.includes('Six schematic and estimated studies') || !customStatusGenerated.includes('Estimated = Proportional estimate pending source review.') || !customStatusGenerated.includes('5 schematic · 1 estimated')) {
+            if (!customStatusGenerated.includes('Six schematic and estimated_pending studies') || !customStatusGenerated.includes('Estimated Pending = Proportional estimate pending source review.') || !customStatusGenerated.includes('5 schematic · 1 estimated_pending')) {
               throw new Error('Generated no-script fallback did not preserve a schema-defined custom status');
             }
-            if (!customStatusGenerated.includes('class="noscript-status-key-label" data-status="estimated">Estimated</span> <code>estimated</code>') || !customStatusGenerated.includes('Proportional estimate pending source review.') || !customStatusGenerated.includes('class="noscript-status-key-count">1 record</span>')) throw new Error('Generated no-script fallback did not expose a custom evidence status key');
-            if (!customStatusCsv.includes('"estimated","Proportional estimate pending source review."')) throw new Error('Generated CSV did not preserve a schema-defined custom status');
+            if (!customStatusGenerated.includes('class="noscript-status-key-label" data-status="estimated_pending">Estimated Pending</span> <code>estimated_pending</code>') || !customStatusGenerated.includes('Proportional estimate pending source review.') || !customStatusGenerated.includes('class="noscript-status-key-count">1 record</span>')) throw new Error('Generated no-script fallback did not expose a custom evidence status key');
+            if (!customStatusCsv.includes('"estimated_pending","Proportional estimate pending source review."')) throw new Error('Generated CSV did not preserve a schema-defined custom status');
             const noteSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('note: "The current collection is a schematic proportional study, not a measured survey or a claim about every church."', 'note: "Custom <note> disclaimer."');
             fs.writeFileSync(sourcePath, noteSource);
@@ -2857,11 +2857,12 @@ jobs:
             }
           };
           context.window.CHURCH_GEOMETRY = context.window.CHURCH_GEOMETRY.map((study, index) => index === 0 ? { ...study, status: 'estimated' } : study);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodStatusKey, populateFilter, state, syncCatalogFromUrl, visibleStudies };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataIssue, validStatuses, dataStatusDefinitions, statusDisplayName, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodStatusKey, populateFilter, state, syncCatalogFromUrl, visibleStudies };\n})();');
           vm.runInNewContext(app, context);
-          const { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodStatusKey, populateFilter, state, syncCatalogFromUrl, visibleStudies } = context.window.__atlasTest;
+          const { dataIssue, validStatuses, dataStatusDefinitions, statusDisplayName, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodStatusKey, populateFilter, state, syncCatalogFromUrl, visibleStudies } = context.window.__atlasTest;
           if (dataIssue || !validStatuses.has('estimated')) throw new Error('A schema-defined custom status was rejected by runtime validation');
           if (dataStatusDefinitions().estimated !== 'Proportional estimate pending source review.') throw new Error('Custom status definition was not read from the schema');
+          if (statusDisplayName('estimated_pending') !== 'Estimated Pending' || statusDisplayName('estimated-pending') !== 'Estimated Pending') throw new Error('Custom status labels did not humanize separator-delimited schema values');
           if (studyStatusCounts().estimated !== 1 || !statusGuidanceText().includes('Estimated = Proportional estimate pending source review.') || !statusGuidanceText().includes('1 estimated')) throw new Error('Custom status guidance did not expose its definition and count');
           if (atlasSchemaNoteText() !== 'Mixed data status · metric units · v1.1' || !methodProvenanceText().startsWith('The current collection uses schematic records and estimated records.')) throw new Error('Custom status was not reflected in collection provenance summaries');
           if (methodReadingsIntroText([{ status: 'estimated' }]) !== 'These readings use records labeled Estimated; use the status definition and provenance note to interpret their evidence level.') throw new Error('Custom status was not reflected in derived-reading guidance');

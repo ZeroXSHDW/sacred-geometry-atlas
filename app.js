@@ -73,8 +73,13 @@
   const studyStatus = (study) => study.status || "schematic";
   const studyDataLabel = (study) => studyStatus(study);
   const statusDisplayName = (status) => {
-    const value = String(status || "").trim();
-    return value ? value[0].toUpperCase() + value.slice(1) : "Unknown";
+    const words = String(status ?? "")
+      .trim()
+      .split(/[\s_-]+/)
+      .filter(Boolean);
+    return words.length
+      ? words.map((word) => word[0].toUpperCase() + word.slice(1)).join(" ")
+      : "Unknown";
   };
   const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
