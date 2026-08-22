@@ -1200,6 +1200,7 @@
       const isActive = study.id === state.activeId;
       const isCompared = state.compareIds.includes(study.id);
       const matchContext = searchMatchContext(study);
+      const compareLabel = `${isCompared ? "Remove" : "Add"} ${study.name} ${isCompared ? "from" : "to"} comparison`;
       const currentAttribute = isActive ? ' aria-current="true"' : "";
       return `
         <li class="catalog-entry">
@@ -1214,7 +1215,7 @@
             </span>
             ${catalogGlyph(study)}
           </a>
-          <button class="compare-toggle ${isCompared ? "is-selected" : ""}" data-compare-id="${escapeHtml(study.id)}" type="button" aria-pressed="${isCompared}" aria-label="${isCompared ? "Remove" : "Add"} ${escapeHtml(study.name)} ${isCompared ? "from" : "to"} comparison">${isCompared ? "✓" : "+"}</button>
+          <button class="compare-toggle ${isCompared ? "is-selected" : ""}" data-compare-id="${escapeHtml(study.id)}" type="button" aria-pressed="${isCompared}" aria-label="${escapeHtml(compareLabel)}" title="${escapeHtml(compareLabel)}">${isCompared ? "✓" : "+"}</button>
         </li>
       `;
     }).join("");
@@ -1467,16 +1468,24 @@
     const drawingState = $("#drawingState");
     if (drawingState) drawingState.textContent = drawingStateLabel();
     $("#zoomReadout").textContent = `${Math.round(state.zoom * 100)}%`;
-    $("#zoomReset").textContent = `${Math.round(state.zoom * 100)}%`;
+    const zoomReset = $("#zoomReset");
+    if (zoomReset) {
+      zoomReset.textContent = `${Math.round(state.zoom * 100)}%`;
+      zoomReset.title = "Reset zoom to 100%";
+    }
     const zoomOut = $("#zoomOut");
     const zoomIn = $("#zoomIn");
     if (zoomOut) {
       zoomOut.disabled = state.zoom <= MIN_ZOOM;
-      zoomOut.setAttribute("aria-label", zoomOut.disabled ? "Zoom out (minimum 70%)" : "Zoom out");
+      const label = zoomOut.disabled ? "Zoom out (minimum 70%)" : "Zoom out";
+      zoomOut.setAttribute("aria-label", label);
+      zoomOut.title = label;
     }
     if (zoomIn) {
       zoomIn.disabled = state.zoom >= MAX_ZOOM;
-      zoomIn.setAttribute("aria-label", zoomIn.disabled ? "Zoom in (maximum 160%)" : "Zoom in");
+      const label = zoomIn.disabled ? "Zoom in (maximum 160%)" : "Zoom in";
+      zoomIn.setAttribute("aria-label", label);
+      zoomIn.title = label;
     }
   }
 

@@ -200,7 +200,8 @@ jobs:
           for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom" aria-controls="geometryCanvas"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true" aria-label="06 of 06 studies; the full collection."']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
-          if (!app.includes('const MIN_ZOOM = 0.7;') || !app.includes('const MAX_ZOOM = 1.6;') || !app.includes('zoomOut.disabled = state.zoom <= MIN_ZOOM;') || !app.includes('zoomIn.disabled = state.zoom >= MAX_ZOOM;') || !app.includes('Zoom out (minimum 70%)') || !app.includes('Zoom in (maximum 160%)') || !styles.includes('.zoom-control button:disabled')) throw new Error('Zoom limits must expose disabled endpoint controls');
+          if (!html.includes('id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas" title="Zoom out"') || !html.includes('id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas" aria-keyshortcuts="R" title="Reset zoom to 100%"') || !html.includes('id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas" title="Zoom in"')) throw new Error('Zoom controls must expose compact-control tooltips');
+          if (!app.includes('const MIN_ZOOM = 0.7;') || !app.includes('const MAX_ZOOM = 1.6;') || !app.includes('zoomOut.disabled = state.zoom <= MIN_ZOOM;') || !app.includes('zoomIn.disabled = state.zoom >= MAX_ZOOM;') || !app.includes('zoomOut.title = label;') || !app.includes('zoomIn.title = label;') || !app.includes('zoomReset.title = "Reset zoom to 100%";') || !app.includes('Zoom out (minimum 70%)') || !app.includes('Zoom in (maximum 160%)') || !styles.includes('.zoom-control button:disabled')) throw new Error('Zoom limits must expose disabled endpoint controls');
           if (!app.includes('$("#metricLength").textContent = `${number(study.length)} m`;') || !styles.includes('.metric-strip { display: grid; grid-template-columns: repeat(5, 1fr);') || !styles.includes('.metric-cell:nth-child(even)') || !styles.includes('.metric-cell:nth-child(-n + 4)')) throw new Error('Overall length metric must render and reflow responsively');
           if (!html.includes('id="downloadDrawing" type="button" aria-label="Export the current drawing as SVG"')) throw new Error('Missing accessible drawing export label');
           if (!html.includes('<span class="sr-only" id="drawingDownloadStatus" role="status" aria-live="polite"></span>')) throw new Error('Drawing export must have a nearby live status channel');
@@ -208,7 +209,8 @@ jobs:
           const drawingExportEnd = app.indexOf('\n  function downloadStudy()', drawingExportStart);
           const drawingExport = app.slice(drawingExportStart, drawingExportEnd);
           if (drawingExportStart < 0 || drawingExportEnd < 0 || !drawingExport.includes('const status = $("#drawingDownloadStatus");') || drawingExport.includes('const status = $("#downloadStatus");')) throw new Error('Drawing export must announce completion through its dedicated status channel');
-          if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
+          if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON" title="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
+          if (!html.includes('id="clearSearchInput" type="button" aria-label="Clear search" title="Clear search"')) throw new Error('Search clear control must expose its compact-control tooltip');
           if (!html.includes('id="downloadStudy" type="button" aria-label="Download active study as JSON"')) throw new Error('Missing accessible study-data download label');
           if (!html.includes('id="shareStudy" type="button" aria-label="Share current study" aria-controls="shareFallback" aria-expanded="false" title="Share current study"') || !app.includes('button.title = accessibleLabel;')) throw new Error('Study share feedback must expose a synchronized compact-control tooltip');
           if (!app.includes('status.textContent = "Study sharing cancelled."') || !app.includes('status.textContent = "Catalog sharing cancelled."') || !app.includes('status.textContent = "Comparison sharing cancelled."')) throw new Error('Native share cancellation must provide live feedback');
@@ -376,7 +378,7 @@ jobs:
           if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('textarea:focus-visible') || !styles.includes('.manual-copy-fallback textarea:focus { outline: 2px solid Highlight; outline-offset: 2px; }') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.search-hit { color: HighlightText; background: Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }') || !styles.includes('.compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.compare-tray-summary { color: ButtonText; }') || !styles.includes('.catalog-batch-action span:first-child { color: ButtonText; }') || !styles.includes('.study-status,') || !styles.includes('.method-return-button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.study-provenance summary::after,') || !styles.includes('.study-nav button:disabled,') || !styles.includes('color: GrayText; }')) throw new Error('Forced-colors mode must preserve focus and selected-state affordances');
           if (!styles.includes('.runtime-fallback-actions .hero-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }')) throw new Error('Runtime recovery actions must remain visible in forced-colors mode');
           if (!styles.includes('#runtimeFallback:focus { outline-color: Highlight; }')) throw new Error('Runtime recovery focus must remain visible in forced-colors mode');
-          for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }', '.search-field input, .select-wrap select { min-height: 40px; }', '.filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }']) {
+          for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }', '.search-clear { width: 36px; height: 36px; }', '.search-field input, .select-wrap select { min-height: 40px; }', '.filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }']) {
             if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
           }
           if (!styles.includes('@media (max-width: 430px)') || !styles.includes('  .tool-row { grid-template-columns: 1fr; }') || !styles.includes('  .compare-tray { align-items: start; flex-direction: column; }') || !styles.includes('  .compare-tray-actions { width: 100%; justify-content: space-between; }')) throw new Error('Catalog controls and comparison context must stack on narrow screens');
@@ -497,9 +499,9 @@ jobs:
           ]);
           const drawingState = { textContent: '' };
           const zoomReadout = { textContent: '' };
-          const zoomReset = { textContent: '' };
-          const zoomOut = { disabled: false, setAttribute() {} };
-          const zoomIn = { disabled: false, setAttribute() {} };
+          const zoomReset = { textContent: '', title: '' };
+          const zoomOut = { disabled: false, title: '', setAttribute() {} };
+          const zoomIn = { disabled: false, title: '', setAttribute() {} };
           const context = {
             URL,
             window: {
@@ -536,6 +538,15 @@ jobs:
           state.zoom = 1.3;
           renderControls();
           if (drawingState.textContent !== 'Inside · Section · axis focus · 130% zoom') throw new Error(`Drawing context did not follow the active view: ${drawingState.textContent}`);
+          if (zoomOut.title !== 'Zoom out' || zoomReset.title !== 'Reset zoom to 100%' || zoomIn.title !== 'Zoom in') throw new Error('Zoom controls did not expose synchronized tooltips');
+          state.zoom = 0.7;
+          renderControls();
+          if (!zoomOut.disabled || zoomOut.title !== 'Zoom out (minimum 70%)') throw new Error('Minimum zoom control did not expose its endpoint state');
+          state.zoom = 1.6;
+          renderControls();
+          if (!zoomIn.disabled || zoomIn.title !== 'Zoom in (maximum 160%)') throw new Error('Maximum zoom control did not expose its endpoint state');
+          state.zoom = 1.3;
+          renderControls();
           if (!filterEra.options.some((option) => option.textContent === '4th–6th century')) throw new Error('Era filter did not expose study periods');
           if (filterStatus.options[0].textContent !== 'All data status · 6' || filterStatus.options[1].textContent !== 'Schematic · 6' || filterStatus.options[2].textContent !== 'Measured · 0') throw new Error('Status filter did not expose full-collection counts');
           context.window.location.href = 'https://example.test/atlas/?era=4th%E2%80%936th%20century#atlas/basilica/plan/exterior/all';
@@ -652,7 +663,7 @@ jobs:
           vm.runInNewContext(app, context);
           const { renderList, state } = context.window.__atlasTest;
           renderList();
-          if (!list.innerHTML.includes('class="catalog-card-status" data-status="schematic" title="Illustrative proportions; not a measured survey.">schematic</span>')) throw new Error('Catalog card did not render the schema-backed schematic status badge');
+          if (!list.innerHTML.includes('class="catalog-card-status" data-status="schematic" title="Illustrative proportions; not a measured survey.">schematic</span>') || !list.innerHTML.includes('title="Add The longitudinal basilica to comparison"')) throw new Error('Catalog card did not render its schema-backed status or compact comparison tooltip');
           state.filterStatus = 'measured';
           renderList();
           if (list.innerHTML.includes('catalog-card-status')) throw new Error('Catalog status filter rendered hidden schematic records');

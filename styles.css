@@ -855,7 +855,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
-  .search-clear { width: 32px; height: 32px; }
+  .search-clear { width: 36px; height: 36px; }
   .search-field input, .select-wrap select { min-height: 40px; }
   .manual-copy-fallback-dismiss { min-height: 36px; }
 }

@@ -112,7 +112,7 @@
           <span class="dataset-icon" aria-hidden="true">{ }</span>
           <span>Raw JSON</span>
         </a>
-        <button class="download-button" id="downloadData" type="button" aria-label="Download full atlas data as JSON">
+        <button class="download-button" id="downloadData" type="button" aria-label="Download full atlas data as JSON" title="Download full atlas data as JSON">
           <span class="download-icon" aria-hidden="true">↓</span>
           <span>Download data</span>
         </button>
@@ -167,7 +167,7 @@
                 <label class="sr-only" for="searchInput">Search geometry studies</label>
                 <span class="search-icon" aria-hidden="true"></span>
                 <input id="searchInput" type="search" placeholder="Search names, ratios, refs" autocomplete="off" spellcheck="false" autocapitalize="none" aria-describedby="searchHelp" aria-keyshortcuts="/ Escape" />
-                <button class="search-clear" id="clearSearchInput" type="button" aria-label="Clear search" hidden>×</button>
+                <button class="search-clear" id="clearSearchInput" type="button" aria-label="Clear search" title="Clear search" hidden>×</button>
               </div>
               <span class="sr-only" id="searchHelp">Search study names, references, readings, notes, detail terms, geometry dimensions, and derived ratios. Separate multiple words to match all terms. Press Escape to clear the current search.</span>
               <div class="tool-row">
@@ -399,9 +399,9 @@
                     <span>Reset view</span>
                   </button>
                   <div class="zoom-control" role="group" aria-label="Drawing zoom">
-                    <button id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas">−</button>
-                    <button id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas" aria-keyshortcuts="R">100%</button>
-                    <button id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas">+</button>
+                    <button id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas" title="Zoom out">−</button>
+                    <button id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas" aria-keyshortcuts="R" title="Reset zoom to 100%">100%</button>
+                    <button id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas" title="Zoom in">+</button>
                   </div>
                   <span class="zoom-readout" id="zoomReadout" role="status" aria-live="polite" aria-atomic="true">100%</span>
                 </div>
