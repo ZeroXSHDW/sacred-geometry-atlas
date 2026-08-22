@@ -485,7 +485,8 @@ jobs:
           const vm = require('vm');
           const events = [];
           const dataError = { hidden: true };
-          const heading = { focus(options) { events.push(['focus', options]); } };
+          const heading = { textContent: '', focus(options) { events.push(['focus', options]); } };
+          const description = { textContent: '' };
           const context = {
             window: { CHURCH_GEOMETRY: [], location: { href: 'https://example.test/' } },
             document: {
@@ -497,12 +498,13 @@ jobs:
                 }
               },
               querySelector(selector) {
-                return selector === '#dataError' ? dataError : selector === '#dataErrorHeading' ? heading : null;
+                return selector === '#dataError' ? dataError : selector === '#dataErrorHeading' ? heading : selector === '#dataErrorDescription' ? description : null;
               }
             }
           };
           vm.runInNewContext(fs.readFileSync('app.js', 'utf8'), context);
           if (dataError.hidden || context.document.title !== 'Atlas unavailable · Sacred Geometry Atlas') throw new Error('Data-load recovery did not activate');
+          if (heading.textContent !== 'The atlas collection is currently empty.' || !description.textContent.includes('No study records are available in the current dataset.')) throw new Error('Empty-data recovery did not explain the collection state');
           if (JSON.stringify(events) !== JSON.stringify([['remove', 'no-js'], ['add', 'data-error-state'], ['focus', { preventScroll: true }]])) throw new Error(`Unexpected recovery sequence: ${JSON.stringify(events)}`);
           console.log('Data-load recovery smoke test passed.');
           NODE

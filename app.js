@@ -138,8 +138,16 @@
       document.title = "Atlas unavailable · Sacred Geometry Atlas";
       const dataError = $("#dataError");
       if (dataError) {
-        dataError.hidden = false;
+        const hasDataset = Array.isArray(window.CHURCH_GEOMETRY);
         const heading = $("#dataErrorHeading");
+        const description = $("#dataErrorDescription");
+        if (heading) heading.textContent = hasDataset
+          ? "The atlas collection is currently empty."
+          : "Geometry data could not be loaded.";
+        if (description) description.textContent = hasDataset
+          ? "No study records are available in the current dataset. Open the static JSON artifact or return after the collection has been populated."
+          : "The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.";
+        dataError.hidden = false;
         if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
       }
       return;

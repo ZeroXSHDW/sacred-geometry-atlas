@@ -31,6 +31,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
 - A visible runtime recovery panel offers a one-click retry and preserves a usable static-data path if the app script is blocked or fails before initialization.
+- Runtime recovery distinguishes a missing dataset from an empty collection, so its explanation stays accurate while the static JSON path remains available.
 - The no-script collection index includes schema/unit metadata and each record’s source note, keeping the static fallback research-ready.
 - The no-script generator also renders an honest empty-collection state if future data edits temporarily remove all study records.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
