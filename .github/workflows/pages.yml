@@ -733,7 +733,7 @@ jobs:
           const filterAxis = makeSelect();
           const sortSelect = makeSelect([{ value: 'index' }]);
           const filterStatus = makeSelect([
-            { value: 'all', textContent: 'All data status' },
+            { value: 'all', textContent: 'All statuses' },
             { value: 'schematic', textContent: 'Schematic' },
             { value: 'measured', textContent: 'Measured' }
           ]);
@@ -831,7 +831,7 @@ jobs:
           if (!filterSelect.options.some((option) => option.textContent === 'All typologies · 6') || !filterSelect.options.some((option) => option.textContent === 'Gothic · 1')) throw new Error('Typology filter did not expose scope-aware counts');
           if (!filterEra.options.some((option) => option.textContent === '4th–6th century · 1')) throw new Error('Era filter did not expose study periods and counts');
           if (!filterAxis.options.some((option) => option.textContent === 'Longitudinal axis · 2')) throw new Error('Axis filter did not expose geometry axes and counts');
-          if (filterStatus.options[0].textContent !== 'All data status · 6' || filterStatus.options[1].textContent !== 'Schematic · 6' || filterStatus.options[2].textContent !== 'Measured · 0') throw new Error('Status filter did not expose full-collection counts');
+          if (filterStatus.options[0].textContent !== 'All statuses · 6' || filterStatus.options[1].textContent !== 'Schematic · 6' || filterStatus.options[2].textContent !== 'Measured · 0') throw new Error('Status filter did not expose full-collection counts');
           state.query = 'gothic';
           renderCatalogFilterOptions();
           if (!filterSelect.options.some((option) => option.textContent === 'All typologies · 1') || !filterSelect.options.some((option) => option.textContent === 'Gothic · 1') || !filterStatus.options.some((option) => option.textContent === 'Schematic · 1')) throw new Error('Catalog filter counts did not follow the active search scope');

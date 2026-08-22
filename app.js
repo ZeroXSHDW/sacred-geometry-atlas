@@ -183,7 +183,7 @@
     {
       stateKey: "filterStatus",
       selector: "#filterStatus",
-      allLabel: "All data status",
+      allLabel: "All statuses",
       values: schemaStatusValues,
       value: (study) => studyStatus(study),
       display: statusDisplayName
