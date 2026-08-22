@@ -3242,6 +3242,7 @@
     target.innerHTML = comparisonStudies().map((study) => {
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
+      const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       const label = comparisonStudyAriaLabel(study, ratio, section);
       const isActive = study.id === state.activeId;
       const currentAttribute = isActive ? ' aria-current="true"' : "";
@@ -3253,6 +3254,8 @@
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
         <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(studyAxisLabel(study))}</span>
+        <span class="compare-study-measure">${escapeHtml(measureLabel)}</span>
+        <span class="compare-study-emphasis">${escapeHtml(study.emphasis)}</span>
         <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
         <span class="compare-study-open">${isActive ? "Current Atlas study · open in Atlas" : "Open in Atlas"} <span aria-hidden="true">↗</span></span>
       </a>
@@ -3261,7 +3264,7 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; Data status: ${escapeHtml(studyStatus(study))}; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(studyStatus(study))}; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
