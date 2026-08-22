@@ -2928,6 +2928,7 @@ jobs:
               '"@id": "data/geometry.json"': f'"@id": "{dataset_url}"',
               '"contentUrl": "data/geometry.json"': f'"contentUrl": "{dataset_url}"',
               '"contentUrl": "data/geometry.csv"': f'"contentUrl": "{csv_url}"',
+              '"contentUrl": "data/geometry.schema.json"': f'"contentUrl": "{schema_url}"',
           }
           for old, new in replacements.items():
               if old not in source:
@@ -3022,14 +3023,15 @@ jobs:
               f'"@id": "{base_url}data/geometry.json"',
               f'"contentUrl": "{base_url}data/geometry.json"',
               f'"contentUrl": "{base_url}data/geometry.csv"',
+              f'"contentUrl": "{base_url}data/geometry.schema.json"',
               f'Sitemap: {base_url}sitemap.xml',
               f'<loc>{base_url}</loc>',
               f'<loc>{base_url}data/geometry.json</loc>',
               f'<loc>{base_url}data/geometry.csv</loc>',
               f'<loc>{base_url}data/geometry.schema.json</loc>',
           ]
-          missing = [token for token in expected[:7] if token not in page]
-          missing.extend(token for token in expected[7:] if token not in (robots + sitemap))
+          missing = [token for token in expected[:8] if token not in page]
+          missing.extend(token for token in expected[8:] if token not in (robots + sitemap))
           expected_artifacts = [
               f'"schemaUrl": "{base_url}data/geometry.schema.json"',
               f'"{base_url}data/geometry.schema.json"',
