@@ -2973,8 +2973,9 @@
     const comparison = focused ? comparisonStudies() : [];
     selection.hidden = !focused;
     list.innerHTML = focused ? comparison.map((study) => {
-      const label = `Remove ${study.name} from comparison`;
-      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span aria-hidden="true">×</span></button>`;
+      const status = studyDataLabel(study);
+      const label = `Remove ${study.name} from comparison. Data status: ${status}; ${studyStatusDescription(study)}`;
+      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span><span aria-hidden="true">×</span></button>`;
     }).join("") : "";
     if (clear && focused) {
       const clearLabel = `Clear ${comparison.length} selected ${comparison.length === 1 ? "study" : "studies"}`;
