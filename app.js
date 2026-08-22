@@ -2072,34 +2072,37 @@
       "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
       "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
     ];
-    const rows = comparison.map((study) => [
-      study.id,
-      studyShortName(study),
-      study.typology,
-      study.place,
-      study.era,
-      studyStatus(study),
-      statusDefinitions[studyStatus(study)] || "",
-      study.churchName || study.name,
-      studySource(study),
-      studySourceNote(study),
-      number(study.length),
-      number(study.span),
-      number(study.length / study.span, 2),
-      number(study.height),
-      number(study.height / study.span, 2),
-      study.bayCount,
-      number(study.module),
-      number(study.radius),
-      Number.isFinite(study.floorAreaEstimate) ? number(study.floorAreaEstimate, 0) : "",
-      Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : "",
-      study.volumeBasis || "",
-      number(study.symmetry, 2),
-      scope,
-      route,
-      schema.version,
-      schema.units
-    ]);
+    const rows = comparison.map((study) => {
+      const volume = volumeReading(study);
+      return [
+        study.id,
+        studyShortName(study),
+        study.typology,
+        study.place,
+        study.era,
+        studyStatus(study),
+        statusDefinitions[studyStatus(study)] || "",
+        study.churchName || study.name,
+        studySource(study),
+        studySourceNote(study),
+        number(study.length),
+        number(study.span),
+        number(study.length / study.span, 2),
+        number(study.height),
+        number(study.height / study.span, 2),
+        study.bayCount,
+        number(study.module),
+        number(study.radius),
+        Number.isFinite(study.floorAreaEstimate) ? number(study.floorAreaEstimate, 0) : "",
+        Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : "",
+        volume.basis,
+        number(study.symmetry, 2),
+        scope,
+        route,
+        schema.version,
+        schema.units
+      ];
+    });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
   }
 

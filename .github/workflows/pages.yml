@@ -1015,7 +1015,10 @@ jobs:
           if (!fullCsv.includes('"full collection","https://example.test/atlas/#compare"')) throw new Error('Full comparison CSV did not preserve its route');
           const missingEstimateStudy = { ...context.window.CHURCH_GEOMETRY[0], floorAreaEstimate: undefined, volumeEstimate: undefined, volumeBasis: undefined };
           const missingEstimateCsv = comparisonCsvPayload([missingEstimateStudy]);
-          if (!missingEstimateCsv.includes('"11.0","","","","1.00"')) throw new Error('Comparison CSV did not leave optional estimate fields explicitly blank');
+          if (!missingEstimateCsv.includes('"11.0","","","No estimate supplied","1.00"')) throw new Error('Comparison CSV did not describe missing volume estimates consistently');
+          const staleBasisStudy = { ...missingEstimateStudy, volumeBasis: 'stale basis without estimate' };
+          const staleBasisCsv = comparisonCsvPayload([staleBasisStudy]);
+          if (!staleBasisCsv.includes('"No estimate supplied"') || staleBasisCsv.includes('"stale basis without estimate"')) throw new Error('Comparison CSV exposed a volume basis without its estimate');
           const fullExport = fullAtlasExportPayload();
           if (fullExport.provenance.scope !== 'full collection' || fullExport.provenance.recordCount !== 6 || fullExport.provenance.statusCounts.schematic !== 6 || fullExport.provenance.statusCounts.measured !== 0 || fullExport.provenance.statusDefinitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic) throw new Error('Full JSON export did not preserve schema-backed collection provenance');
           state.query = 'basilica';
