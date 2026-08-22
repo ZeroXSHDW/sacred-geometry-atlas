@@ -3048,9 +3048,10 @@
       const isActive = study.id === state.activeId;
       const currentAttribute = isActive ? ' aria-current="true"' : "";
       const currentLabel = isActive ? " This is the current Atlas study." : "";
+      const status = studyDataLabel(study);
       return `
       <a class="compare-study-card ${isActive ? "is-active" : ""}" data-compare-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-controls="atlas"${currentAttribute} aria-label="${label}${currentLabel}">
-        <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
+        <span class="compare-study-number">${escapeHtml(study.index)} / <span class="compare-study-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
         <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.axis)}</span>

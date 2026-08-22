@@ -697,6 +697,8 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .compare-study-card.is-active .compare-study-open { color: var(--amber); }
 .compare-study-card:hover .compare-study-open, .compare-study-card:focus-visible .compare-study-open { color: var(--amber); }
 .compare-study-number { color: var(--amber); font-family: var(--mono); font-size: 0.57rem; }
+.compare-study-status { display: inline-flex; margin-left: 0.18rem; padding: 0.12rem 0.24rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
+.compare-study-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
 .compare-mini { display: block; width: 100%; height: 110px; margin-top: 0.45rem; background: var(--bg-deep); }
 .compare-mini .mini-primary { fill: rgba(233, 179, 108, 0.1); stroke: var(--amber); stroke-width: 1.7; }
 .compare-mini .mini-secondary { fill: none; stroke: var(--teal); stroke-width: 1; stroke-dasharray: 3 3; }
@@ -1027,7 +1029,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-card-status,
   .catalog-card-status[data-status="measured"],
   .chart-status,
-  .chart-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .chart-status[data-status="measured"],
+  .compare-study-status,
+  .compare-study-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .comparison-table tbody .comparison-status,
   .comparison-table tbody .comparison-status[data-status="measured"] { color: ButtonText; }
   .segment-button.is-active { color: HighlightText; background: Highlight; }
