@@ -27,7 +27,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
 - The Atlas comparison tray previews selected study names, including selections outside the current filter view.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
-- Catalog cards keep typology, place, era, emphasis, and data status visible at a glance.
+- Catalog cards keep typology, place, era, emphasis, and dedicated schematic/measured provenance badges visible at a glance.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
 - A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
@@ -46,6 +46,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
 - Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state, derived readings, and a deterministic `provenance` manifest that records scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
+- A visible Raw JSON link keeps the committed dataset reachable when a browser cannot trigger a generated download.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition, schema/unit provenance, and reproducible direct route remain included even when the interactive disclosure is collapsed.

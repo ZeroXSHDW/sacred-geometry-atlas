@@ -103,10 +103,16 @@
         <button class="nav-button" data-view="method" type="button" aria-controls="methodView">Method</button>
       </nav>
 
-      <button class="download-button" id="downloadData" type="button" aria-label="Download full atlas data as JSON">
-        <span class="download-icon" aria-hidden="true">↓</span>
-        <span>Download data</span>
-      </button>
+      <div class="header-actions">
+        <a class="dataset-link" href="data/geometry.json" aria-label="Open the static atlas dataset as JSON" title="Open the static atlas dataset as JSON">
+          <span class="dataset-icon" aria-hidden="true">{ }</span>
+          <span>Raw JSON</span>
+        </a>
+        <button class="download-button" id="downloadData" type="button" aria-label="Download full atlas data as JSON">
+          <span class="download-icon" aria-hidden="true">↓</span>
+          <span>Download data</span>
+        </button>
+      </div>
       <span class="sr-only" id="downloadStatus" role="status" aria-live="polite"></span>
     </header>
 
