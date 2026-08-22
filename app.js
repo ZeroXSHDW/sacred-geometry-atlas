@@ -142,6 +142,7 @@
   let comparisonCitationResetTimer;
   let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
+  let lastCatalogStatusFilter = null;
   let lastRouteSignature = "";
   const actionFeedbackTimers = new Map();
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
@@ -331,6 +332,13 @@
 
   function catalogStatusGuidanceText(records = visibleStudies()) {
     return statusGuidanceText(records, catalogScopeLabel());
+  }
+
+  function catalogStatusFilterAnnouncement() {
+    if (state.filterStatus === "all") return "Data status filter cleared.";
+    const status = statusDisplayName(state.filterStatus);
+    const definition = dataStatusDefinitions()[state.filterStatus] || "Data status is not documented.";
+    return `Data status filter: ${status}. ${definition}`;
   }
 
   function exportProvenance(records, scope) {
@@ -944,15 +952,18 @@
     const text = resultCountText(count);
     const scope = catalogScopeLabel();
     const scopeLabel = `${text}; ${scope}.`;
+    const statusFilterChanged = lastCatalogStatusFilter !== null && lastCatalogStatusFilter !== state.filterStatus;
     resultCount.textContent = text;
     resultCount.setAttribute("aria-label", scopeLabel);
     const liveStatus = $("#catalogLiveStatus");
     if (liveStatus) {
-      liveStatus.textContent = lastCatalogStatus && lastCatalogStatus !== scope
-        ? `Catalog updated: ${scope}.`
-        : "";
+      const announcements = [];
+      if (lastCatalogStatus && lastCatalogStatus !== scope) announcements.push(`Catalog updated: ${scope}.`);
+      if (statusFilterChanged) announcements.push(catalogStatusFilterAnnouncement());
+      liveStatus.textContent = announcements.join(" ");
     }
     lastCatalogStatus = scope;
+    lastCatalogStatusFilter = state.filterStatus;
   }
 
   function renderActiveFilters() {
