@@ -259,12 +259,12 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing decorative marker guard: ' + token);
           }
           if (!app.includes('<span class="catalog-number" aria-hidden="true">')) throw new Error('Missing catalog number guard');
-          if (!app.includes('function studySearchText(study)') || !app.includes('study.details.flat()')) throw new Error('Catalog search must cover full study text');
+          if (!app.includes('function queryTerms(value)') || !app.includes('const terms = queryTerms(state.query);') || !app.includes('terms.every((term) => haystack.includes(term))') || !app.includes('function studySearchText(study)') || !app.includes('study.details.flat()')) throw new Error('Catalog search must cover full study text and support multi-term queries');
           if (!app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || app.includes('aria-current="${isActive ? "true" : "false"}"')) throw new Error('Inactive catalog cards must omit aria-current');
           if (!app.includes('function routeHash(page, includeStudy, studyId = state.activeId)') || !app.includes('href="${escapeHtml(navigationUrl(routeHash("atlas", true, study.id)))}"')) throw new Error('Catalog studies must expose route-native links');
           if (!app.includes('(event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey') || !app.includes('event.preventDefault();')) throw new Error('Catalog links must preserve modified-click behavior while selecting in place');
           if (!styles.includes('color: inherit; text-align: left; text-decoration: none; transition: 180ms ease;')) throw new Error('Catalog route links must retain card styling without browser underlines');
-          if (!html.includes('<label class="sr-only" for="searchInput">Search geometry studies</label>') || !html.includes('placeholder="Search names, ratios, refs"') || !html.includes('id="searchHelp"') || !html.includes('geometry dimensions') || !html.includes('Press Escape to clear the current search.') || !html.includes('aria-describedby="searchHelp"') || !html.includes('aria-keyshortcuts="/ Escape"') || !html.includes('spellcheck="false"') || !html.includes('autocapitalize="none"')) throw new Error('Missing catalog search instructions');
+          if (!html.includes('<label class="sr-only" for="searchInput">Search geometry studies</label>') || !html.includes('placeholder="Search names, ratios, refs"') || !html.includes('id="searchHelp"') || !html.includes('geometry dimensions') || !html.includes('Separate multiple words to match all terms.') || !html.includes('Press Escape to clear the current search.') || !html.includes('aria-describedby="searchHelp"') || !html.includes('aria-keyshortcuts="/ Escape"') || !html.includes('spellcheck="false"') || !html.includes('autocapitalize="none"')) throw new Error('Missing catalog search instructions');
           if (!html.includes('<kbd>/</kbd>') || !html.includes('Focus study search') || !html.includes('<kbd>Esc</kbd>') || !html.includes('Clear search when focused')) throw new Error('Missing search keyboard shortcut guidance');
           if (!app.includes('function handleSearchKeydown(event)') || !app.includes('$("#searchInput").addEventListener("keydown", handleSearchKeydown)') || !app.includes('event.key !== "Escape"') || !app.includes('clearButton.click()')) throw new Error('Missing Escape-to-clear search behavior');
           if (!app.includes('const dimensions = [') || !app.includes('`length ${study.length} m`') || !app.includes('`length ${number(study.length)} m`') || !app.includes('`${study.bayCount} bays`') || !app.includes('`symmetry ${number(study.symmetry, 2)}`') || !app.includes('`section ratio ${number(study.height / study.span, 2)}`') || !app.includes('`module / span ${number(study.module / study.span, 2)}`') || !app.includes('`radial reach ${number(study.radius)} m`') || !app.includes('floor area ${number(study.floorAreaEstimate, 0)} m²')) throw new Error('Catalog search must include labeled geometry and derived readings');
@@ -522,6 +522,10 @@ jobs:
           const eraVisible = visibleStudies();
           if (eraVisible.length !== 1 || eraVisible[0].id !== 'basilica') throw new Error('Era filter did not narrow the catalog to the expected study');
           state.filterEra = 'all';
+          state.query = 'gothic northern';
+          const multiTermVisible = visibleStudies();
+          if (multiTermVisible.length !== 1 || multiTermVisible[0].id !== 'gothic') throw new Error('Multi-term search did not match across study fields');
+          state.query = '';
           let prevented = false;
           state.page = 'atlas';
           state.compareIds = [];

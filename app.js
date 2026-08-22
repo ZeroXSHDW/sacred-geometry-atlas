@@ -852,6 +852,10 @@
     event.preventDefault();
   }
 
+  function queryTerms(value) {
+    return String(value || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  }
+
   function studySearchText(study) {
     const details = Array.isArray(study.details) ? study.details.flat() : [];
     const dimensions = [
@@ -887,9 +891,10 @@
   }
 
   function visibleStudies() {
+    const terms = queryTerms(state.query);
     const result = studies.filter((study) => {
       const haystack = studySearchText(study);
-      const matchesQuery = !state.query || haystack.includes(state.query);
+      const matchesQuery = !terms.length || terms.every((term) => haystack.includes(term));
       const matchesFilter = state.filter === "all" || study.typology === state.filter;
       const matchesPlace = state.filterPlace === "all" || study.place === state.filterPlace;
       const matchesEra = state.filterEra === "all" || study.era === state.filterEra;
