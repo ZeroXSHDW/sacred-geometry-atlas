@@ -57,7 +57,7 @@
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; ${study.axis} axis; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${study.axis} axis; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1429,7 +1429,13 @@
     renderMethodContext(study);
     renderActiveCatalogContext(study, visibleStudies());
     const measureSummary = $("#activeMeasureSummary");
-    if (measureSummary) measureSummary.textContent = `Envelope · ${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
+    const measureText = `Envelope · ${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
+    const measureAccessibleText = `Envelope dimensions: ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}.`;
+    const measureVisible = $("#activeMeasureVisible");
+    const measureAccessible = $("#activeMeasureAccessible");
+    if (measureVisible) measureVisible.textContent = measureText;
+    if (measureAccessible) measureAccessible.textContent = measureAccessibleText;
+    if (measureSummary && !measureVisible) measureSummary.textContent = measureText;
     const printRoute = $("#printRoute");
     if (printRoute) printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
