@@ -314,22 +314,30 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
-  function updateCatalogRoute(historyMethod = "replaceState") {
-    const current = new URL(window.location.href);
-    const url = new URL(current.href);
-    const values = {
+  function catalogRouteValues(includeCompare = state.page === "atlas") {
+    return {
       q: state.query,
       typology: state.filter === "all" ? "" : state.filter,
       place: state.filterPlace === "all" ? "" : state.filterPlace,
       era: state.filterEra === "all" ? "" : state.filterEra,
       status: state.filterStatus === "all" ? "" : state.filterStatus,
       sort: state.sort === "index" ? "" : state.sort,
-      compare: state.page === "atlas" && state.compareIds.length ? state.compareIds.join(",") : ""
+      compare: includeCompare && state.compareIds.length ? state.compareIds.join(",") : ""
     };
+  }
+
+  function applyCatalogRouteState(url, includeCompare = state.page === "atlas") {
+    const values = catalogRouteValues(includeCompare);
     catalogParamKeys.forEach((key) => {
       if (values[key]) url.searchParams.set(key, values[key]);
       else url.searchParams.delete(key);
     });
+    return url;
+  }
+
+  function updateCatalogRoute(historyMethod = "replaceState") {
+    const current = new URL(window.location.href);
+    const url = applyCatalogRouteState(new URL(current.href));
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
     const currentUrl = `${current.pathname}${current.search}${current.hash}`;
     if (nextUrl === currentUrl) {
@@ -377,11 +385,15 @@
   }
 
   function atlasStudyNavigationUrl(studyId) {
-    const url = new URL(window.location.href);
+    const url = applyCatalogRouteState(new URL(window.location.href), true);
     url.hash = routeHash("atlas", true, studyId);
-    if (state.compareIds.length) url.searchParams.set("compare", state.compareIds.join(","));
-    else url.searchParams.delete("compare");
     return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  function catalogViewRouteUrl() {
+    const url = applyCatalogRouteState(new URL(window.location.href), true);
+    url.hash = routeHash("atlas", false);
+    return url;
   }
 
   function studyRouteUrl(studyId = state.activeId) {
@@ -1264,7 +1276,7 @@
       const currentAttribute = isActive ? ' aria-current="true"' : "";
       return `
         <li class="catalog-entry">
-          <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(navigationUrl(routeHash("atlas", true, study.id)))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
+          <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
@@ -1718,8 +1730,7 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
-      const shareUrl = new URL(window.location.href);
-      shareUrl.hash = routeHash("atlas", false);
+      const shareUrl = catalogViewRouteUrl();
       const sharePayload = {
         title: "Sacred Geometry Atlas · catalog view",
         text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.`,
@@ -2005,8 +2016,7 @@
   }
 
   function catalogViewExportPayload(visible) {
-    const shareUrl = new URL(window.location.href);
-    shareUrl.hash = routeHash("atlas", false);
+    const shareUrl = catalogViewRouteUrl();
     return {
       title: "Sacred Geometry Atlas · catalog view",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
