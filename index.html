@@ -254,7 +254,7 @@
               <div class="tool-row">
                 <label class="select-wrap">
                   <span class="sr-only">Filter by typology</span>
-                  <select id="filterSelect">
+                  <select id="filterSelect" aria-describedby="filterHelp">
                     <option value="all">All typologies</option>
                   </select>
                 </label>
@@ -275,13 +275,13 @@
               <div class="tool-row tool-row-secondary">
                 <label class="select-wrap">
                   <span class="sr-only">Filter by location</span>
-                  <select id="filterPlace">
+                  <select id="filterPlace" aria-describedby="filterHelp">
                     <option value="all">All locations</option>
                   </select>
                 </label>
                 <label class="select-wrap">
                   <span class="sr-only">Filter by era</span>
-                  <select id="filterEra">
+                  <select id="filterEra" aria-describedby="filterHelp">
                     <option value="all">All eras</option>
                   </select>
                 </label>
@@ -289,19 +289,20 @@
               <div class="tool-row tool-row-secondary">
                 <label class="select-wrap">
                   <span class="sr-only">Filter by axis</span>
-                  <select id="filterAxis">
+                  <select id="filterAxis" aria-describedby="filterHelp">
                     <option value="all">All axes</option>
                   </select>
                 </label>
                 <label class="select-wrap">
                   <span class="sr-only">Filter by data status</span>
-                  <select id="filterStatus" aria-describedby="statusHelp">
+                  <select id="filterStatus" aria-describedby="filterHelp statusHelp">
                     <option value="all">All data status</option>
                     <option value="schematic">Schematic</option>
                     <option value="measured">Measured</option>
                   </select>
                 </label>
               </div>
+              <span class="sr-only" id="filterHelp">Counts beside each catalog filter option show how many studies match the current search and the other active filters; counts update as the catalog view changes.</span>
               <p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>
             </div>
 

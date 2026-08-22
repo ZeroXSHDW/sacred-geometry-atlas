@@ -145,6 +145,44 @@
   let lastCatalogStatusFilter = null;
   let lastRouteSignature = "";
   const actionFeedbackTimers = new Map();
+  const catalogFilterSpecs = [
+    {
+      stateKey: "filter",
+      selector: "#filterSelect",
+      allLabel: "All typologies",
+      values: () => [...new Set(studies.map((study) => study.typology))],
+      value: (study) => study.typology
+    },
+    {
+      stateKey: "filterPlace",
+      selector: "#filterPlace",
+      allLabel: "All locations",
+      values: () => [...new Set(studies.map((study) => study.place))],
+      value: (study) => study.place
+    },
+    {
+      stateKey: "filterEra",
+      selector: "#filterEra",
+      allLabel: "All eras",
+      values: () => [...new Set(studies.map((study) => study.era))],
+      value: (study) => study.era
+    },
+    {
+      stateKey: "filterAxis",
+      selector: "#filterAxis",
+      allLabel: "All axes",
+      values: () => [...new Set(studies.map((study) => study.axis))],
+      value: (study) => study.axis
+    },
+    {
+      stateKey: "filterStatus",
+      selector: "#filterStatus",
+      allLabel: "All data status",
+      values: schemaStatusValues,
+      value: (study) => studyStatus(study),
+      display: statusDisplayName
+    }
+  ];
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -348,6 +386,20 @@
       statusCounts: studyStatusCounts(records),
       statusDefinitions: dataStatusDefinitions()
     };
+  }
+
+  function catalogFilterScopeRecords(excludedKey = "") {
+    const terms = queryTerms(state.query);
+    return studies.filter((study) => {
+      const haystack = studySearchText(study);
+      if (terms.length && !terms.every((term) => haystack.includes(term))) return false;
+      if (excludedKey !== "filter" && state.filter !== "all" && study.typology !== state.filter) return false;
+      if (excludedKey !== "filterPlace" && state.filterPlace !== "all" && study.place !== state.filterPlace) return false;
+      if (excludedKey !== "filterEra" && state.filterEra !== "all" && study.era !== state.filterEra) return false;
+      if (excludedKey !== "filterAxis" && state.filterAxis !== "all" && study.axis !== state.filterAxis) return false;
+      if (excludedKey !== "filterStatus" && state.filterStatus !== "all" && studyStatus(study) !== state.filterStatus) return false;
+      return true;
+    });
   }
 
   function parseRoute() {
@@ -651,63 +703,48 @@
   }
 
   function populateFilter() {
-    const select = $("#filterSelect");
-    [...new Set(studies.map((study) => study.typology))].forEach((typology) => {
-      const option = document.createElement("option");
-      option.value = typology;
-      option.textContent = typology;
-      select.appendChild(option);
-    });
-    const placeSelect = $("#filterPlace");
-    [...new Set(studies.map((study) => study.place))].forEach((place) => {
-      const option = document.createElement("option");
-      option.value = place;
-      option.textContent = place;
-      placeSelect.appendChild(option);
-    });
-    const eraSelect = $("#filterEra");
-    [...new Set(studies.map((study) => study.era))].forEach((era) => {
-      const option = document.createElement("option");
-      option.value = era;
-      option.textContent = era;
-      eraSelect.appendChild(option);
-    });
-    const axisSelect = $("#filterAxis");
-    [...new Set(studies.map((study) => study.axis))].forEach((axis) => {
-      const option = document.createElement("option");
-      option.value = axis;
-      option.textContent = axis;
-      axisSelect.appendChild(option);
-    });
-    const statusSelect = $("#filterStatus");
-    if (statusSelect) {
-      const statusCounts = studyStatusCounts();
-      const previousStatus = state.filterStatus;
-      const statusOptions = [
-        { value: "all", label: `All data status · ${studies.length}` },
-        ...schemaStatusValues().map((status) => ({
-          value: status,
-          label: `${statusDisplayName(status)} · ${statusCounts[status] || 0}`
-        }))
-      ];
-      if (typeof statusSelect.replaceChildren === "function") statusSelect.replaceChildren();
-      else if (Array.isArray(statusSelect.options)) statusSelect.options.length = 0;
-      else if (statusSelect.options && typeof statusSelect.remove === "function") {
-        while (statusSelect.options.length) statusSelect.remove(0);
-      }
-      statusOptions.forEach(({ value, label }) => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = label;
-        statusSelect.appendChild(option);
-      });
-      state.filterStatus = validStatuses.has(previousStatus) ? previousStatus : "all";
-      statusSelect.value = state.filterStatus;
-    }
+    renderCatalogFilterOptions();
     const statusGuidance = statusGuidanceText(studies, "the full collection");
     ["#statusHelp", "#comparisonStatusHelp"].forEach((selector) => {
       const target = $(selector);
       if (target) target.textContent = statusGuidance;
+    });
+  }
+
+  function replaceSelectOptions(select, options) {
+    if (!select || typeof select.appendChild !== "function") return;
+    if (typeof select.replaceChildren === "function") select.replaceChildren();
+    else if (Array.isArray(select.options)) select.options.length = 0;
+    else if (select.options && typeof select.remove === "function") {
+      while (select.options.length) select.remove(0);
+    }
+    options.forEach(({ value, label }) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      select.appendChild(option);
+    });
+  }
+
+  function renderCatalogFilterOptions() {
+    catalogFilterSpecs.forEach(({ stateKey, selector, allLabel, values, value, display }) => {
+      const select = $(selector);
+      if (!select) return;
+      const availableValues = values();
+      const currentValue = availableValues.includes(state[stateKey]) || state[stateKey] === "all"
+        ? state[stateKey]
+        : "all";
+      state[stateKey] = currentValue;
+      const scope = catalogFilterScopeRecords(stateKey);
+      const options = [
+        { value: "all", label: `${allLabel} · ${scope.length}` },
+        ...availableValues.map((optionValue) => ({
+          value: optionValue,
+          label: `${display ? display(optionValue) : optionValue} · ${scope.filter((study) => value(study) === optionValue).length}`
+        }))
+      ];
+      replaceSelectOptions(select, options);
+      select.value = state[stateKey];
     });
   }
 
@@ -1452,17 +1489,7 @@
   }
 
   function visibleStudies() {
-    const terms = queryTerms(state.query);
-    const result = studies.filter((study) => {
-      const haystack = studySearchText(study);
-      const matchesQuery = !terms.length || terms.every((term) => haystack.includes(term));
-      const matchesFilter = state.filter === "all" || study.typology === state.filter;
-      const matchesPlace = state.filterPlace === "all" || study.place === state.filterPlace;
-      const matchesEra = state.filterEra === "all" || study.era === state.filterEra;
-      const matchesAxis = state.filterAxis === "all" || study.axis === state.filterAxis;
-      const matchesStatus = state.filterStatus === "all" || studyStatus(study) === state.filterStatus;
-      return matchesQuery && matchesFilter && matchesPlace && matchesEra && matchesAxis && matchesStatus;
-    });
+    const result = catalogFilterScopeRecords();
     return result.sort((a, b) => {
       if (state.sort === "length") return b.length - a.length;
       if (state.sort === "height") return b.height - a.height;
@@ -1505,6 +1532,7 @@
     const list = $("#churchList");
     const empty = $("#emptyState");
     const emptyMessage = $("#emptyStateMessage");
+    renderCatalogFilterOptions();
     const visible = visibleStudies();
     const catalogExport = $("#downloadCatalogView");
     const catalogCsvExport = $("#downloadCatalogCsv");
