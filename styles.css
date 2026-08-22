@@ -1006,6 +1006,35 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
 
+@media (prefers-contrast: more) {
+  :root {
+    --ink-soft: #d8e2da;
+    --ink-muted: #b6c4ba;
+    --line: rgba(213, 229, 214, 0.36);
+    --line-strong: rgba(213, 229, 214, 0.68);
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  summary:focus-visible { outline-width: 3px; }
+
+  #atlas-heading:focus-visible,
+  .page-view h2:focus-visible,
+  #visualEmptyHeading:focus-visible,
+  #activeName:focus-visible,
+  #main-content:focus-visible,
+  #noscript-heading:focus-visible,
+  #dataErrorHeading:focus { outline-width: 3px; }
+
+  .bar-track,
+  .profile-track,
+  .module-bars { border: 1px solid var(--line-strong); }
+  .catalog-card.is-active { border-inline-start: 3px solid var(--amber); }
+}
+
 @media (forced-colors: active) {
   .site-header { background: Canvas; }
   button:focus-visible,

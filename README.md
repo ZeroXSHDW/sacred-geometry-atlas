@@ -91,6 +91,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
 - Forced-colors mode maps meter tracks, fills, and chart guides to system colors so quantitative readings remain legible in high-contrast themes.
+- A `prefers-contrast: more` layer strengthens muted text, boundaries, meters, selected-study markers, and focus rings without changing the default dark palette.
 - Compact catalog export controls keep their JSON and CSV format labels visible at tablet and phone widths, so identical download glyphs remain distinguishable.
 - The full-atlas download keeps a compact JSON label at phone widths, with a visible Done state during export feedback, while its accessible name remains explicit.
 - Active-study Share, Cite, JSON, and Print actions keep compact visible labels at phone widths, while their full accessible names and live feedback remain intact.
