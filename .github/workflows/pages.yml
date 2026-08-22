@@ -297,7 +297,7 @@ jobs:
           }
           if (!html.includes('<svg viewBox="0 0 360 260" role="img" focusable="false">')) throw new Error('Missing decorative method SVG focus guard');
           if (!app.includes('class="catalog-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"')) throw new Error('Missing catalog glyph focus guard');
-          if (!app.includes('data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"')) throw new Error('Missing comparison study destination relationship');
+          if (!app.includes('data-compare-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-controls="atlas"')) throw new Error('Missing comparison study route-native destination');
           for (const token of ['function comparisonStudyAriaLabel', 'Dimensions:', 'study.typology)} study at', 'studyStatusDescription(study)', 'with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}']) {
             if (!app.includes(token)) throw new Error('Comparison study labels must retain context: ' + token);
           }
@@ -454,7 +454,8 @@ jobs:
           }
           if (!styles.includes('@media (max-width: 430px)') || !styles.includes('  .tool-row { grid-template-columns: 1fr; }') || !styles.includes('  .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }') || !styles.includes('  .drawing-scale { flex: 0 0 100%; }') || !styles.includes('  .compare-tray { align-items: start; flex-direction: column; }') || !styles.includes('  .compare-tray-actions { width: 100%; justify-content: space-between; }')) throw new Error('Catalog controls, drawing tools, and comparison context must stack on narrow screens');
           if (!styles.includes('.visual-column.is-empty > .drawing-card') || !styles.includes('.visual-empty-action')) throw new Error('Missing visual empty-state styling');
-          if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled buttons');
+          if (!app.includes('class="compare-mini" viewBox="0 0 220 140" aria-hidden="true" focusable="false"')) throw new Error('Comparison mini-plans must be decorative inside labeled links');
+          if (!app.includes('if (studyCard.tagName.toLowerCase() === "a")') || !app.includes('data-compare-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"')) throw new Error('Comparison study links must preserve native destinations while supporting in-place selection');
           if (!app.includes('function safeDownloadPart(value, fallback = "study")') || !app.includes('const filename = `${safeDownloadPart(study.id)}-${state.surface}-${state.mode}-${state.layer}.svg`;') || !app.includes('const filename = `${safeDownloadPart(study.id)}-sacred-geometry-study.json`;')) throw new Error('Study export filenames must normalize dataset IDs while preserving geometry context');
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');

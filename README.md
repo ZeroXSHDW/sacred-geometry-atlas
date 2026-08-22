@@ -47,7 +47,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Each normalized comparison chart includes a dynamic zero, midpoint, and active-maximum guide so focused selections remain visually honest when their scale changes.
 - Focused comparison range announcements keep each active chart maximum available to assistive technology as the selection changes.
 - Comparison bars also expose their active range and value as semantic meters, keeping the normalized readings available beyond the visual bar lengths.
-- Comparison study cards and table links expose visible “Open in Atlas” cues for returning to a selected study and mark the current Atlas study for orientation; table links preserve the focused selection when opened in a new tab.
+- Comparison study cards and table links expose visible “Open in Atlas” cues for returning to a selected study and mark the current Atlas study for orientation; both are route-native and preserve the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
 - Focused comparison cards, charts, tables, and exports preserve the order in which studies were selected or shared in the comparison route.
 - An expandable semantic comparison table with route-native study links, axis and recorded study status, lengths, spans, ratios, heights, bays, modules, radii, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling on narrow screens.

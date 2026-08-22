@@ -661,7 +661,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .wide-card { grid-column: 1 / -1; min-height: 280px; }
 .geometry-compare-card { min-height: 330px; }
 .geometry-compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.7rem; }
-.compare-study-card { min-width: 0; padding: 0.85rem; border: 1px solid var(--line); background: rgba(7, 12, 11, 0.34); text-align: left; transition: 180ms ease; }
+.compare-study-card { display: block; min-width: 0; width: 100%; padding: 0.85rem; border: 1px solid var(--line); color: inherit; background: rgba(7, 12, 11, 0.34); text-align: left; text-decoration: none; transition: 180ms ease; }
 .compare-study-card:hover { border-color: var(--amber); background: var(--amber-soft); }
 .compare-study-card.is-active { border-color: var(--teal); box-shadow: inset 3px 0 0 var(--teal); }
 .compare-study-card:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
