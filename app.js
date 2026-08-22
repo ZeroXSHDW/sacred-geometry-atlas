@@ -656,6 +656,7 @@
 
   function bindEvents() {
     $(".brand").addEventListener("click", (event) => {
+      if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       showPage("atlas", { routeStudy: false });
       renderAll();
