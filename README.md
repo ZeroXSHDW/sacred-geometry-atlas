@@ -26,7 +26,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog cards keep typology, place, era, emphasis, and data status visible at a glance.
 - A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
-- Copyable citations that include the active study, reference, provenance, key geometry dimensions, data status, drawing state, and shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
+- Copyable citations that include the active study, reference, provenance, data-status definition, key geometry dimensions, drawing state, and shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
 - Share controls use native sharing where available, then fall back to clipboard or a manually copyable link field with visible and live completion feedback.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, place/era context, and proportional charts.
