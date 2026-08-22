@@ -47,6 +47,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition and schema/unit provenance remain included even when the interactive disclosure is collapsed.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
+- The Method view keeps the current study in context with a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with a direct route to the static dataset.

@@ -172,6 +172,7 @@ jobs:
           if (!html.includes('id="clearVisualFilters" type="button"')) throw new Error('Missing visual empty-state recovery action');
           if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('<section class="method-readings" aria-labelledby="derived-readings-heading">') || !html.includes('id="derived-readings-heading"') || !html.includes('Bounding area') || !html.includes('Reading profile') || !styles.includes('.method-readings-grid')) throw new Error('Method view must explain derived readings');
+          if (!html.includes('<button class="share-button method-return-button" id="methodBackToStudy" type="button" aria-controls="atlas" aria-label="Open current study in Atlas"') || !app.includes('function renderMethodReturnAction(study = activeStudy())') || !app.includes('visibleStudies().some((candidate) => candidate.id === study.id)') || !app.includes('$("#methodBackToStudy").addEventListener("click"') || !styles.includes('.section-heading-actions {') || !styles.includes('.method-return-button {')) throw new Error('Method view must provide a context-aware return-to-study action');
           if (!html.includes('data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Dimensions</button>')) throw new Error('Dimension layer must use clear schematic terminology');
           if (!html.includes('<div class="metric-strip" role="group" aria-label="Primary dimensions">')) throw new Error('Primary dimension group must use clear schematic terminology');
           if (!html.includes('<span class="metric-label">overall length</span>') || !html.includes('id="metricLength"')) throw new Error('Primary dimension group must expose overall length');
@@ -734,6 +735,44 @@ jobs:
           if (finalUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Comparison selection was not preserved: ${finalUrl.search}`);
           if (historyCalls.length !== 2 || historyCalls[0][0] !== 'pushState' || historyCalls[1][0] !== 'replaceState') throw new Error(`Unexpected handoff history sequence: ${JSON.stringify(historyCalls)}`);
           console.log('Comparison edit handoff smoke test passed.');
+          NODE
+
+      - name: Smoke-test Method return context
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const actionText = { textContent: '' };
+          const action = {
+            title: '',
+            setAttribute(name, value) { this[name] = value; },
+            querySelector() { return actionText; }
+          };
+          elements.set('#methodBackToStudy', action);
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#methodView' },
+              addEventListener() {}
+            },
+            document: {
+              body: { classList: { contains() { return false; } } },
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, renderMethodReturnAction } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, renderMethodReturnAction } = context.window.__atlasTest;
+          state.activeId = 'basilica';
+          renderMethodReturnAction();
+          if (action['aria-label'] !== 'Open Longitudinal basilica in Atlas' || action.title !== action['aria-label'] || actionText.textContent !== 'Open current study') throw new Error('Method action did not identify the visible current study');
+          state.query = 'gothic';
+          renderMethodReturnAction();
+          if (action['aria-label'] !== 'Return to Atlas catalog' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not fall back to the filtered Atlas catalog');
+          console.log('Method return context smoke test passed.');
           NODE
 
       - name: Smoke-test comparison export context

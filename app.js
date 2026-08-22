@@ -565,6 +565,15 @@
     $("#selectVisibleCompare").addEventListener("click", () => addVisibleToComparison({ focus: true }));
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#editCompare").addEventListener("click", () => showPage("atlas"));
+    $("#methodBackToStudy").addEventListener("click", () => {
+      const study = activeStudy();
+      const canFocusStudy = Boolean(study && visibleStudies().some((candidate) => candidate.id === study.id));
+      showPage("atlas");
+      if (canFocusStudy) {
+        const heading = $("#activeName");
+        if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
+      }
+    });
     $("#clearCompareView").addEventListener("click", () => clearComparisonSelection({ focus: true }));
     $("#compareSelection").addEventListener("click", (event) => {
       const remove = event.target.closest("[data-remove-compare-id]");
@@ -1155,6 +1164,7 @@
     $("#activeName").textContent = study.name;
     $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
     renderActiveProvenance(study);
+    renderMethodReturnAction(study);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -1183,6 +1193,17 @@
     $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
       <div class="profile-item" role="listitem"><div class="profile-label"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
     `).join("");
+  }
+
+  function renderMethodReturnAction(study = activeStudy()) {
+    const button = $("#methodBackToStudy");
+    if (!button) return;
+    const canOpenStudy = Boolean(study && visibleStudies().some((candidate) => candidate.id === study.id));
+    const label = canOpenStudy ? `Open ${studyShortName(study)} in Atlas` : "Return to Atlas catalog";
+    button.setAttribute("aria-label", label);
+    button.title = label;
+    const text = button.querySelector("span:last-child");
+    if (text) text.textContent = canOpenStudy ? "Open current study" : "Return to Atlas";
   }
 
   function renderActiveProvenance(study) {
