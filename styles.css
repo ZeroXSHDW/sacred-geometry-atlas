@@ -831,7 +831,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .atlas-layout { grid-template-columns: minmax(205px, 240px) 1fr; gap: 2.2rem; }
   .detail-grid { grid-template-columns: repeat(2, 1fr); }
   .method-grid { grid-template-columns: repeat(2, 1fr); }
-  .dataset-link span:last-child { display: none; }
+  .dataset-link span:last-child { display: inline; font-size: 0; white-space: nowrap; }
+  .dataset-link-json span:last-child::after { content: "JSON"; font-size: 0.56rem; }
+  .dataset-link-csv span:last-child::after { content: "CSV"; font-size: 0.56rem; }
+  .dataset-link-schema span:last-child::after { content: "Schema"; font-size: 0.56rem; }
   .catalog-action span:last-child { display: none; }
   .catalog-action#downloadCatalogView span:last-child,
   .catalog-action#downloadCatalogCsv span:last-child { display: inline; }
@@ -925,7 +928,6 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .brand-name { font-size: 0.65rem; }
   .brand-subtitle { font-size: 0.5rem; }
   .download-button span:last-child { display: none; }
-  .dataset-link span:last-child { display: none; }
   .hero-stats { justify-content: space-between; gap: 0.75rem; }
   .share-button { padding: 0.5rem; }
   .share-button span:last-child { display: none; }
