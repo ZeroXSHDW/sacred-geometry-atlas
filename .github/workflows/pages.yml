@@ -400,6 +400,36 @@ jobs:
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
           if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');
           NODE
+      - name: Smoke-test generated no-script fallback
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const os = require('os');
+          const path = require('path');
+          const { spawnSync } = require('child_process');
+          const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'sacred-geometry-sync-'));
+          try {
+            fs.mkdirSync(path.join(temporaryRoot, 'scripts'));
+            fs.mkdirSync(path.join(temporaryRoot, 'data'));
+            fs.copyFileSync('scripts/sync-geometry-json.js', path.join(temporaryRoot, 'scripts/sync-geometry-json.js'));
+            fs.copyFileSync('data/geometry.js', path.join(temporaryRoot, 'data/geometry.js'));
+            fs.copyFileSync('index.html', path.join(temporaryRoot, 'index.html'));
+            const sourcePath = path.join(temporaryRoot, 'data/geometry.js');
+            const source = fs.readFileSync(sourcePath, 'utf8')
+              .replace('name: "The longitudinal basilica"', 'name: "The longitudinal <basilica>"')
+              .replace('status: "schematic"', 'status: "measured"');
+            fs.writeFileSync(sourcePath, source);
+            const result = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
+            if (result.status !== 0) throw new Error(result.stderr || result.stdout || 'Temporary no-script generation failed');
+            const generated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
+              throw new Error('Generated no-script fallback did not reflect escaped content and mixed provenance');
+            }
+            console.log('Generated no-script fallback smoke test passed.');
+          } finally {
+            fs.rmSync(temporaryRoot, { recursive: true, force: true });
+          }
+          NODE
       - name: Audit HTML accessibility references
         run: |
           python3 - <<'PY'
