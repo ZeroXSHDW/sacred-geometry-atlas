@@ -553,7 +553,7 @@
     const requestedAxis = params.get("axis");
     const requestedStatus = params.get("status");
     const requestedSort = params.get("sort");
-    state.query = requestedQuery ? requestedQuery.trim().toLowerCase() : "";
+    state.query = normalizeCatalogQuery(requestedQuery);
     state.filter = typologies.has(requestedTypology) ? requestedTypology : "all";
     state.filterPlace = places.has(requestedPlace) ? requestedPlace : "all";
     state.filterEra = eras.has(requestedEra) ? requestedEra : "all";
@@ -853,7 +853,7 @@
       renderAll();
     });
     $("#searchInput").addEventListener("input", (event) => {
-      state.query = event.target.value.trim().toLowerCase();
+      state.query = normalizeCatalogQuery(event.target.value);
       refreshCatalog();
       replaceCatalogRoute();
     });
@@ -1547,8 +1547,12 @@
     event.preventDefault();
   }
 
+  function normalizeCatalogQuery(value) {
+    return String(value ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
   function queryTerms(value) {
-    return String(value || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+    return normalizeCatalogQuery(value).split(" ").filter(Boolean);
   }
 
   function escapeRegExp(value) {
