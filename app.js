@@ -234,6 +234,10 @@
       document.title = `Compare ${label}${extra} · Sacred Geometry Atlas`;
       return;
     }
+    if (page === "compare" && state.compareIds.length === 1) {
+      document.title = `Compare · 1 selected · Sacred Geometry Atlas`;
+      return;
+    }
     if (page === "method") {
       const route = parseRoute();
       const contextStudy = route.contextStudyId ? studies.find((study) => study.id === route.contextStudyId) : null;
@@ -2200,11 +2204,16 @@
     try {
       hideManualCopyFallbacks();
       const shareUrl = comparisonRouteUrl();
-      const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
+      const focused = state.compareIds.length >= 2;
+      const selected = focused ? comparisonStudies() : [];
       const selectionLabel = comparisonSelectionShareText(selected);
+      const pending = state.compareIds.length === 1 ? selectedComparisonStudies() : [];
+      const shareLabel = pending.length
+        ? `${comparisonSelectionShareText(pending)} selected; choose one more study for a focused comparison`
+        : selectionLabel;
       const sharePayload = {
         title: "Sacred Geometry Atlas comparison",
-        text: `Compare ${selectionLabel} in the Sacred Geometry Atlas.`,
+        text: `Compare ${shareLabel} in the Sacred Geometry Atlas.`,
         url: shareUrl.href
       };
 
@@ -2985,13 +2994,14 @@
   }
 
   function comparisonScopeLabel(comparison = comparisonStudies()) {
-    return state.compareIds.length >= 2
-      ? `${comparison.length} selected studies`
-      : "full collection";
+    if (state.compareIds.length >= 2) return `${comparison.length} selected studies`;
+    if (state.compareIds.length === 1) return "full collection · 1 selected; choose one more for a focused comparison";
+    return "full collection";
   }
 
   function comparisonRouteUrl() {
     const url = clearCatalogParams(new URL(window.location.href));
+    if (state.compareIds.length === 1) url.searchParams.set("compare", state.compareIds[0]);
     url.hash = routeHash("compare", false);
     return url;
   }
@@ -3005,12 +3015,12 @@
     const selected = state.compareIds.length;
     const edit = $("#editCompare");
     if (edit) {
-      const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";
+      const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : selected === 1 ? "Select another study in Atlas" : "Browse studies in Atlas";
       edit.setAttribute("aria-label", editLabel);
       edit.title = editLabel;
       edit.setAttribute("href", atlasStudyNavigationUrl(state.activeId));
       const editText = edit.querySelector("span:last-child");
-      if (editText) editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";
+      if (editText) editText.textContent = selected >= 2 ? "Edit selection" : selected === 1 ? "Select another" : "Browse Atlas";
     }
     if (state.page === "compare") updateDocumentTitle("compare");
   }
@@ -3018,6 +3028,7 @@
   function renderCompareContext() {
     const selected = state.compareIds.length;
     const focused = selected >= 2;
+    const partial = selected === 1;
     const compareScopeLabel = focused ? "selected collection" : "full collection";
     const sectionNote = $("#compareSectionNote");
     const geometryKicker = $("#geometryCompareKicker");
@@ -3025,15 +3036,17 @@
     const helper = $("#compareHelper");
     if (sectionNote) sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;
     if (geometryKicker) geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";
-    if (scope) scope.textContent = focused ? `${selected} selected` : "Full collection";
+    if (scope) scope.textContent = focused ? `${selected} selected` : partial ? "1 selected · choose one more" : "Full collection";
     if (helper) helper.textContent = focused
       ? "Focused comparison is using the studies you selected in the Atlas. Open a study from a geometry card or its table link."
-      : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.";
+      : partial
+        ? "One study is selected for comparison. Select one more study in the Atlas to create a focused comparison; the full collection is shown until then."
+        : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.";
     const comparisonStatusHelp = $("#comparisonStatusHelp");
     if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
     const printRoute = $("#comparisonPrintRoute");
     const comparisonRoute = comparisonRouteUrl().href;
-    renderRouteLink(printRoute, ".comparison-route-link", comparisonRoute, focused ? `Open the ${selected}-study comparison route` : "Open the full collection comparison route");
+    renderRouteLink(printRoute, ".comparison-route-link", comparisonRoute, focused ? `Open the ${selected}-study comparison route` : partial ? "Open the comparison route with the pending selection" : "Open the full collection comparison route");
   }
 
   function renderCompareSelection() {
@@ -3042,15 +3055,17 @@
     const clear = $("#clearCompareView");
     if (!selection || !list) return;
     const focused = state.compareIds.length >= 2;
-    const comparison = focused ? comparisonStudies() : [];
-    selection.hidden = !focused;
-    list.innerHTML = focused ? comparison.map((study) => {
+    const comparison = selectedComparisonStudies();
+    selection.hidden = !comparison.length;
+    const heading = $("#compareSelectionHeading");
+    if (heading) heading.textContent = focused ? "Focused selection" : "Pending selection";
+    list.innerHTML = comparison.length ? comparison.map((study) => {
       const axisLabel = studyAxisLabel(study);
       const status = studyDataLabel(study);
-      const label = `Remove ${study.name} from comparison. Axis: ${study.axis}. Data status: ${status}; ${studyStatusDescription(study)}`;
+      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${status}; ${studyStatusDescription(study)}`;
       return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span><span aria-hidden="true">×</span></button>`;
     }).join("") : "";
-    if (clear && focused) {
+    if (clear && comparison.length) {
       const clearLabel = `Clear ${comparison.length} selected ${comparison.length === 1 ? "study" : "studies"}`;
       clear.setAttribute("aria-label", clearLabel);
       clear.title = clearLabel;
