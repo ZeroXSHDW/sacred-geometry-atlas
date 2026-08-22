@@ -3380,7 +3380,7 @@
   function renderGeometryCompare() {
     const target = $("#geometryCompare");
     if (!target) return;
-    target.setAttribute("aria-label", "Study envelopes; each card identifies its schema-defined data status.");
+    target.setAttribute("aria-label", "Study envelopes; each card identifies its schema-defined data status, source, and source note.");
     target.innerHTML = comparisonStudies().map((study) => {
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
@@ -3467,7 +3467,7 @@
       const statusLabel = statusDisplayName(status);
       const axisLabel = studyAxisLabel(study);
       const current = currentStudyContext(study);
-      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative length to span ratio", ratio, maxRatio, `${number(ratio, 2)} of ${number(maxRatio, 2)} maximum`)}><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative length to span ratio", ratio, maxRatio, `${number(ratio, 2)} of ${number(maxRatio, 2)} maximum`)}><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#heightChart").innerHTML = comparison.map((study) => {
       const ratio = study.height / study.span;
@@ -3475,7 +3475,7 @@
       const statusLabel = statusDisplayName(status);
       const axisLabel = studyAxisLabel(study);
       const current = currentStudyContext(study);
-      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative height to span ratio", ratio, maxHeightRatio, `${number(ratio, 2)} of ${number(maxHeightRatio, 2)} maximum`)}><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative height to span ratio", ratio, maxHeightRatio, `${number(ratio, 2)} of ${number(maxHeightRatio, 2)} maximum`)}><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#moduleChart").innerHTML = comparison.map((study) => {
       const status = studyDataLabel(study);
@@ -3484,7 +3484,7 @@
       const axisLabel = studyAxisLabel(study);
       const current = currentStudyContext(study);
       return `
-      <div class="module-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module length; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}"${current.description}>
+      <div class="module-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module length; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}"${current.description}>
         <span class="module-name" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span>
         <span class="module-bars" ${meterAttributes("Relative module length", study.module, maxModule, `${number(study.module)} ${unit} of ${number(maxModule)} ${unit} maximum`)} style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
         <span class="module-value" aria-hidden="true">${escapedLinearMeasure(study.module)}</span>
