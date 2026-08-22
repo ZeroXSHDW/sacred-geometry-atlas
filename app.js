@@ -1320,6 +1320,7 @@
       const matchContext = searchMatchContext(study);
       const compareLabel = `${isCompared ? "Remove" : "Add"} ${study.name} ${isCompared ? "from" : "to"} comparison`;
       const currentAttribute = isActive ? ' aria-current="true"' : "";
+      const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       return `
         <li class="catalog-entry">
           <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
@@ -1329,6 +1330,7 @@
               <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place}`)}</span>
               <span class="catalog-card-status" data-status="${escapeHtml(studyDataLabel(study))}" title="${escapeHtml(studyStatusDescription(study))}">${highlightSearchText(studyDataLabel(study))}</span>
               <span class="catalog-card-detail">${highlightSearchText(`${study.era} · Axis: ${study.axis} · ${study.emphasis}`)}</span>
+              <span class="catalog-card-measure">${escapeHtml(measureLabel)}</span>
               ${matchContext ? `<span class="catalog-card-match">${escapeHtml(matchContext)}</span>` : ""}
             </span>
             ${catalogGlyph(study)}

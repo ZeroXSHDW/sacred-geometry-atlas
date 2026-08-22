@@ -390,6 +390,7 @@ h3 { letter-spacing: -0.04em; }
 .catalog-card-status { display: inline-flex; margin-top: 0.32rem; padding: 0.18rem 0.3rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.46rem; letter-spacing: 0.05em; line-height: 1.2; text-transform: uppercase; }
 .catalog-card-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
 .catalog-card-detail { display: block; margin-top: 0.16rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.35; }
+.catalog-card-measure { display: block; margin-top: 0.18rem; color: var(--coral); font-family: var(--mono); font-size: 0.51rem; line-height: 1.35; }
 .catalog-card-match { display: block; margin-top: 0.26rem; color: var(--teal); font-family: var(--mono); font-size: 0.48rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
 .search-hit { padding: 0 0.08em; color: var(--bg); background: var(--amber); font-weight: 700; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .catalog-glyph { width: 38px; height: 38px; color: var(--amber); }
@@ -935,6 +936,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .layer-button.is-active { border-color: Highlight; background: Canvas; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }
   .catalog-card.is-active .catalog-number { color: Highlight; }
+  .catalog-card-measure { color: Highlight; }
   .catalog-card-match { color: Highlight; }
   .search-hit { color: HighlightText; background: Highlight; }
   .compare-toggle.is-selected { border-color: Highlight; color: HighlightText; background: Highlight; }
