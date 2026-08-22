@@ -357,7 +357,7 @@ h3 { letter-spacing: -0.04em; }
 
 .atlas-layout { display: grid; grid-template-columns: minmax(220px, 288px) 1fr; gap: clamp(2.1rem, 5vw, 5.5rem); }
 
-.catalog-panel { position: sticky; top: 1.5rem; align-self: start; min-width: 0; }
+.catalog-panel { position: sticky; top: 7rem; align-self: start; min-width: 0; }
 .catalog-tools { padding-bottom: 1.1rem; border-bottom: 1px solid var(--line); }
 .search-field { position: relative; display: block; }
 .search-field input {
