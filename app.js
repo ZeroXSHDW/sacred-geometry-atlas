@@ -781,6 +781,7 @@
     $("#downloadStudy").addEventListener("click", downloadStudy);
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
+    $("#downloadComparisonJson").addEventListener("click", downloadComparisonJson);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#printComparison").addEventListener("click", printComparison);
     $("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);
@@ -2350,6 +2351,24 @@
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
   }
 
+  function comparisonJsonPayload(comparison) {
+    const scope = comparisonScopeLabel(comparison);
+    return {
+      title: "Sacred Geometry Atlas · comparison",
+      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      provenance: exportProvenance(comparison, scope),
+      view: {
+        scope,
+        route: comparisonRouteUrl().href,
+        compareIds: [...state.compareIds]
+      },
+      records: comparison.map((study) => ({
+        study,
+        derived: derivedStudyReadings(study)
+      }))
+    };
+  }
+
   function downloadComparisonCsv() {
     const comparison = comparisonStudies();
     const status = $("#comparisonDownloadStatus");
@@ -2371,6 +2390,33 @@
     hideDownloadRecovery();
     if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
+    } finally {
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
+    }
+  }
+
+  function downloadComparisonJson() {
+    const comparison = comparisonStudies();
+    const status = $("#comparisonDownloadStatus");
+    const button = $("#downloadComparisonJson");
+    hideDownloadRecovery();
+    if (!comparison.length) {
+      if (status) status.textContent = "There are no comparison records to export.";
+      return;
+    }
+    if (!beginAsyncAction(button)) return;
+    try {
+      const filename = "sacred-geometry-comparison.json";
+      const payload = JSON.stringify(comparisonJsonPayload(comparison), null, 2);
+      const downloaded = triggerDownload(filename, payload, "application/json");
+      if (!downloaded) {
+        if (status) status.textContent = "Comparison JSON download is unavailable in this browser. Share the comparison URL instead.";
+        showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparisonJson");
+        return;
+      }
+      hideDownloadRecovery();
+      if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
+      temporaryButtonFeedback(button, "Downloaded", "Comparison JSON downloaded", "JSON", "Download comparison data as JSON", "comparison-json-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
