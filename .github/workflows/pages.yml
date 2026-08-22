@@ -79,7 +79,7 @@ jobs:
               if (typeof study[field] !== 'string' || !study[field].trim()) throw new Error(`Study ${index + 1} has missing text field: ${field}`);
             }
             for (const field of requiredNumericFields) {
-              if (!Number.isFinite(study[field]) || study[field] <= 0) throw new Error(`Study ${study.id || index + 1} has invalid numeric field: ${field}`);
+              if (!Number.isFinite(study[field]) || (field === 'symmetry' ? study[field] < 0 : study[field] <= 0)) throw new Error(`Study ${study.id || index + 1} has invalid numeric field: ${field}`);
             }
             for (const field of optionalNumericFields) {
               if (study[field] !== undefined && (!Number.isFinite(study[field]) || study[field] <= 0)) throw new Error(`Study ${study.id || index + 1} has invalid optional numeric field: ${field}`);
@@ -469,6 +469,22 @@ jobs:
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
           if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');
+          NODE
+      - name: Smoke-test schema-valid zero symmetry
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataIssue, isRenderableStudy };\n})();');
+          vm.runInNewContext(app, context);
+          const { dataIssue, isRenderableStudy } = context.window.__atlasTest;
+          if (dataIssue) throw new Error(`Current dataset was rejected by runtime validation: ${dataIssue}`);
+          const asymmetricStudy = { ...context.window.CHURCH_GEOMETRY[0], symmetry: 0 };
+          if (!isRenderableStudy(asymmetricStudy)) throw new Error('A schema-valid symmetry index of 0 was rejected by runtime validation');
+          if (isRenderableStudy({ ...asymmetricStudy, symmetry: -0.01 })) throw new Error('A negative symmetry index was accepted by runtime validation');
+          console.log('Schema-valid zero symmetry smoke test passed.');
           NODE
       - name: Smoke-test generated no-script fallback
         run: |

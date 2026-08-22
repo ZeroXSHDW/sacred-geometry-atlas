@@ -17,11 +17,12 @@
   const allowedStatusValues = new Set(schemaStatusValues());
   const requiredStudyTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "status", "source", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
   const requiredStudyNumericFields = ["length", "span", "height", "bayCount", "module", "radius", "symmetry"];
+  const nonNegativeStudyNumericFields = new Set(["symmetry"]);
   const isRenderableStudy = (study) => {
     if (!study || typeof study !== "object") return false;
     if (requiredStudyTextFields.some((field) => typeof study[field] !== "string" || !study[field].trim())) return false;
     if (!allowedStatusValues.has(study.status)) return false;
-    if (requiredStudyNumericFields.some((field) => !Number.isFinite(study[field]) || study[field] <= 0)) return false;
+    if (requiredStudyNumericFields.some((field) => !Number.isFinite(study[field]) || (nonNegativeStudyNumericFields.has(field) ? study[field] < 0 : study[field] <= 0))) return false;
     if (!Number.isInteger(study.bayCount) || study.symmetry > 1) return false;
     if (study.floorAreaEstimate !== undefined && (!Number.isFinite(study.floorAreaEstimate) || study.floorAreaEstimate <= 0)) return false;
     if (study.volumeEstimate !== undefined && (!Number.isFinite(study.volumeEstimate) || study.volumeEstimate <= 0)) return false;
