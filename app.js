@@ -177,7 +177,8 @@
       selector: "#filterAxis",
       allLabel: "All axes",
       values: () => [...new Set(studies.map((study) => study.axis))],
-      value: (study) => study.axis
+      value: (study) => study.axis,
+      display: axisDisplayLabel
     },
     {
       stateKey: "filterStatus",
@@ -1574,7 +1575,7 @@
     const groups = [
       ["reference", [study.churchName]],
       ["provenance", [studySource(study), studySourceNote(study), studyStatus(study), studyStatusDescription(study)]],
-      ["reading", [study.axis, study.envelope, study.surfaceNote, study.exteriorNote, study.interiorNote, ...details]],
+      ["reading", [study.axis, studyAxisLabel(study), study.envelope, study.surfaceNote, study.exteriorNote, study.interiorNote, ...details]],
       ["dimensions", studySearchDimensions(study)],
       ["derived ratios", studySearchDerivedReadings(study)]
     ];
@@ -1591,7 +1592,7 @@
     const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";
     return [
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
-      study.emphasis, study.axis, study.envelope, studySource(study), studySourceNote(study),
+      study.emphasis, study.axis, studyAxisLabel(study), study.envelope, studySource(study), studySourceNote(study),
       study.surfaceNote, study.exteriorNote, study.interiorNote, volumeBasis, studyStatus(study),
       studyStatusDescription(study),
       ...dimensions,
@@ -1677,7 +1678,7 @@
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
               <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place}`)}</span>
               <span class="catalog-card-status" data-status="${escapeHtml(studyDataLabel(study))}" title="${escapeHtml(studyStatusDescription(study))}">${highlightSearchText(studyDataLabel(study))}</span>
-              <span class="catalog-card-detail">${highlightSearchText(`${study.era} · Axis: ${study.axis} · ${study.emphasis}`)}</span>
+              <span class="catalog-card-detail">${highlightSearchText(`${study.era} · Axis: ${studyAxisLabel(study)} · ${study.emphasis}`)}</span>
               <span class="catalog-card-measure">${escapeHtml(measureLabel)}</span>
               ${matchContext ? `<span class="catalog-card-match">${escapeHtml(matchContext)}</span>` : ""}
             </span>
@@ -1776,7 +1777,7 @@
     const ratio = study.length / study.span;
     $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
     $("#activeName").textContent = study.name;
-    $("#activeMeta").textContent = `${study.place} · ${study.era} · Axis: ${study.axis} · ${study.emphasis.toLowerCase()}`;
+    $("#activeMeta").textContent = `${study.place} · ${study.era} · Axis: ${studyAxisLabel(study)} · ${study.emphasis.toLowerCase()}`;
     renderActiveProvenance(study);
     renderMethodReturnAction(study);
     renderMethodContext(study);
@@ -2152,7 +2153,7 @@
     if (state.filter !== "all") parts.push(state.filter);
     if (state.filterPlace !== "all") parts.push(state.filterPlace);
     if (state.filterEra !== "all") parts.push(state.filterEra);
-    if (state.filterAxis !== "all") parts.push(state.filterAxis);
+    if (state.filterAxis !== "all") parts.push(axisDisplayLabel(state.filterAxis));
     if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
     if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);
     if (state.sort !== "index") {
@@ -2391,7 +2392,7 @@
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
     const dimensions = `${linearMeasure(study.length)} length × ${linearMeasure(study.span)} span × ${linearMeasure(study.height)} height; ${study.bayCount} bays at ${linearMeasure(study.module)} module; radius ${linearMeasure(study.radius)}; symmetry ${number(study.symmetry, 2)}`;
-    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${study.axis}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatus(study)}. Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatus(study)}. Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
@@ -3215,7 +3216,7 @@
       return `
         <tr>
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
-          <td>${escapeHtml(study.axis)}</td>
+          <td>${escapeHtml(studyAxisLabel(study))}</td>
           <td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${escapedLinearMeasure(study.length)}</td>
           <td>${escapedLinearMeasure(study.span)}</td>
@@ -3251,7 +3252,7 @@
         <span class="compare-study-number">${escapeHtml(study.index)} / <span class="compare-study-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
-        <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.axis)}</span>
+        <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(studyAxisLabel(study))}</span>
         <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
         <span class="compare-study-open">${isActive ? "Current Atlas study · open in Atlas" : "Open in Atlas"} <span aria-hidden="true">↗</span></span>
       </a>
@@ -3359,7 +3360,7 @@
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const reading = studySurfaceReading(study);
     const unitName = geometryUnitName();
-    const description = `${surface} ${state.mode} ${studyDataLabel(study)} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
+    const description = `${surface} ${state.mode} ${studyDataLabel(study)} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${studyAxisLabel(study)}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
