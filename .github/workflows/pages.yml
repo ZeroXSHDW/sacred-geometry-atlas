@@ -338,15 +338,15 @@ jobs:
             if (!html.includes(token)) throw new Error('Comparison status explanation is not wired to every visual surface: ' + token);
           }
           if (!html.includes('<p class="chart-scale" id="ratioChartScale">Scale 0 → 2.71 · active comparison maximum</p>') || !html.includes('<p class="chart-scale" id="heightChartScale">Scale 0 → 1.53 · active comparison maximum</p>') || !html.includes('<p class="chart-scale" id="moduleChartScale">Scale 0 → 11.5 m · active comparison maximum</p>') || !html.includes('<p class="sr-only" id="comparisonChartScaleStatus" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('<div class="chart-axis-guide bar-axis-guide" id="ratioChartAxis" aria-hidden="true">') || !html.includes('<div class="chart-axis-guide bar-axis-guide" id="heightChartAxis" aria-hidden="true">') || !html.includes('<div class="chart-axis-guide module-axis-guide" id="moduleChartAxis" aria-hidden="true">') || !app.includes('const ratioScale = $("#ratioChartScale");') || !app.includes('const chartScaleStatus = $("#comparisonChartScaleStatus");') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} ${unit}.`;') || !app.includes('const ratioAxisMid = $("#ratioChartAxisMid");') || !app.includes('ratioAxisMid.textContent = number(maxRatio / 2, 2);') || !app.includes('heightAxisMid.textContent = number(maxHeightRatio / 2, 2);') || !app.includes('moduleAxisMid.textContent = `${number(maxModule / 2, 2)} ${unit}`;') || !app.includes('ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;') || !app.includes('heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;') || !app.includes('moduleScale.textContent = `Scale 0 → ${number(maxModule)} ${unit} · active comparison maximum`;') || !app.includes('class="chart-study-meta"') || !styles.includes('.chart-axis-guide {') || !styles.includes('.bar-axis-guide {') || !styles.includes('.module-axis-guide {') || !styles.includes('.chart-scale {') || !styles.includes('.chart-study-meta {')) throw new Error('Comparison charts must expose dynamic axis, live range announcements, maximum-scale, and study-context information');
-          if (!styles.includes('.compare-status-note {') || !html.includes('<span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>') || !html.includes('<p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>') || !html.includes('Study names open in Atlas.') || !styles.includes('.comparison-table-copy {') || !styles.includes('.comparison-table-hint {')) throw new Error('Comparison status terminology and table instructions must be exposed');
+          if (!styles.includes('.compare-status-note {') || !html.includes('<span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>') || !html.includes('<span class="sr-only" id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"></span>') || !html.includes('<p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>') || !html.includes('Study names open in Atlas.') || !styles.includes('.comparison-table-copy {') || !styles.includes('.comparison-table-hint {')) throw new Error('Comparison status terminology and table instructions must be exposed');
           if (!html.includes('<caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status.</caption>') || !app.includes('Recorded study values for') || !app.includes('<td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>') || !app.includes('const studyDataLabel = (study) =>') || !styles.includes('.comparison-table tbody .comparison-status') || !styles.includes('.comparison-table tbody .comparison-status[data-status="measured"]') || !styles.includes('text-transform: uppercase') || !app.includes('target.setAttribute("aria-label", "Study envelopes; each card identifies whether its data is schematic or measured.")')) throw new Error('Comparison surfaces must expose per-study data status and consistent provenance styling');
           if (!styles.includes('.comparison-table thead th:first-child, .comparison-table tbody th { position: sticky;') || !styles.includes('box-shadow: 1px 0 0 var(--line);')) throw new Error('Comparison table must keep study labels visible while scrolling');
-          if (!app.includes('function handleComparisonTableKey(event)') || !app.includes('event.target !== target') || !app.includes('comparisonTable.addEventListener("keydown", handleComparisonTableKey)') || !app.includes('target.scrollBy({ left: delta, behavior })') || !app.includes('target.scrollTo({ left, behavior })')) throw new Error('Comparison table keyboard scrolling behavior is missing or too broadly delegated');
+          if (!app.includes('function handleComparisonTableKey(event)') || !app.includes('event.target !== target') || !app.includes('comparisonTable.addEventListener("keydown", handleComparisonTableKey)') || !app.includes('target.scrollBy({ left: delta, behavior })') || !app.includes('target.scrollTo({ left, behavior })') || !app.includes('const status = $("#comparisonTableScrollStatus");') || !app.includes('Comparison table is at the first columns.')) throw new Error('Comparison table keyboard scrolling behavior is missing or too broadly delegated');
           if (!app.includes('$(".brand").addEventListener("click", (event) => {\n      if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;\n      event.preventDefault();')) throw new Error('Brand navigation must preserve modified-click and non-primary link behavior');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
           if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Missing atomic drawing status channel');
-          for (const token of ['id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="shareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="citationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareScope" role="status" aria-live="polite" aria-atomic="true"', 'id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareHelper" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"']) {
+          for (const token of ['id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="shareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="citationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareScope" role="status" aria-live="polite" aria-atomic="true"', 'id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareHelper" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"']) {
             if (!html.includes(token)) throw new Error('Dynamic status channel must announce atomically: ' + token);
           }
           if (!styles.includes('.comparison-table-wrap:focus-visible')) throw new Error('Comparison table region must have a visible focus state');
@@ -1504,6 +1504,7 @@ jobs:
           node - <<'NODE'
           const fs = require('fs');
           const vm = require('vm');
+          const scrollStatus = { textContent: '' };
           const context = {
             URL,
             window: {
@@ -1511,7 +1512,7 @@ jobs:
               addEventListener() {}
             },
             document: {
-              querySelector() { return null; },
+              querySelector(selector) { return selector === '#comparisonTableScrollStatus' ? scrollStatus : null; },
               querySelectorAll() { return []; }
             }
           };
@@ -1522,17 +1523,28 @@ jobs:
           const target = {
             clientWidth: 400,
             scrollWidth: 1000,
+            scrollLeft: 0,
             scrollBy(options) { scrollCalls.push(['by', options]); },
             scrollTo(options) { scrollCalls.push(['to', options]); }
           };
           let prevented = false;
           handleComparisonTableKey({ currentTarget: target, target, key: 'ArrowRight', preventDefault() { prevented = true; } });
-          if (!prevented || scrollCalls.length !== 1 || scrollCalls[0][0] !== 'by' || scrollCalls[0][1].left !== 320) throw new Error('Table scroll shortcut did not work when the scroll region was focused');
+          if (!prevented || scrollCalls.length !== 1 || scrollCalls[0][0] !== 'by' || scrollCalls[0][1].left !== 320 || scrollStatus.textContent !== 'Comparison table moved right.') throw new Error('Table scroll shortcut did not work when the scroll region was focused');
+          target.scrollLeft = 320;
+          prevented = false;
+          handleComparisonTableKey({ currentTarget: target, target, key: 'ArrowLeft', preventDefault() { prevented = true; } });
+          if (!prevented || scrollCalls.length !== 2 || scrollCalls[1][0] !== 'by' || scrollCalls[1][1].left !== -320 || scrollStatus.textContent !== 'Comparison table is at the first columns.') throw new Error('Table scroll shortcut did not announce the first columns');
+          prevented = false;
+          handleComparisonTableKey({ currentTarget: target, target, key: 'End', preventDefault() { prevented = true; } });
+          if (!prevented || scrollCalls.length !== 3 || scrollCalls[2][0] !== 'to' || scrollCalls[2][1].left !== 600 || scrollStatus.textContent !== 'Comparison table is at the last columns.') throw new Error('Table End shortcut did not announce the last columns');
+          const noScrollTarget = { clientWidth: 400, scrollWidth: 400, scrollLeft: 0, scrollBy() {} };
+          handleComparisonTableKey({ currentTarget: noScrollTarget, target: noScrollTarget, key: 'ArrowRight', preventDefault() {} });
+          if (scrollStatus.textContent !== 'The comparison table fits within the available width; horizontal scrolling is not needed.') throw new Error('Table shortcut did not announce when horizontal scrolling was unnecessary');
           prevented = false;
           const studyLink = {};
           handleComparisonTableKey({ currentTarget: target, target: studyLink, key: 'ArrowRight', preventDefault() { prevented = true; } });
-          if (prevented || scrollCalls.length !== 1) throw new Error('Table scroll shortcut hijacked a nested study link');
-          console.log('Comparison table shortcut scope smoke test passed.');
+          if (prevented || scrollCalls.length !== 3) throw new Error('Table scroll shortcut hijacked a nested study link');
+          console.log('Comparison table shortcut scope and status smoke test passed.');
           NODE
 
       - name: Smoke-test Method return context

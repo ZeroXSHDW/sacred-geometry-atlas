@@ -1308,15 +1308,30 @@
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(key)) return;
     const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     const maxScroll = Math.max(0, (target.scrollWidth || 0) - (target.clientWidth || 0));
+    const rawScrollLeft = Number(target.scrollLeft);
+    const currentLeft = Number.isFinite(rawScrollLeft) ? Math.max(0, Math.min(maxScroll, rawScrollLeft)) : 0;
+    let nextLeft = currentLeft;
     if (key === "Home" || key === "End") {
       const left = key === "End" ? maxScroll : 0;
+      nextLeft = left;
       if (typeof target.scrollTo === "function") target.scrollTo({ left, behavior });
       else target.scrollLeft = left;
     } else {
       const amount = Math.max(120, Math.round((target.clientWidth || 0) * 0.8));
       const delta = key === "ArrowRight" ? amount : -amount;
+      nextLeft = Math.max(0, Math.min(maxScroll, currentLeft + delta));
       if (typeof target.scrollBy === "function") target.scrollBy({ left: delta, behavior });
-      else target.scrollLeft = Math.max(0, Math.min(maxScroll, (target.scrollLeft || 0) + delta));
+      else target.scrollLeft = nextLeft;
+    }
+    const status = $("#comparisonTableScrollStatus");
+    if (status) {
+      status.textContent = maxScroll <= 0
+        ? "The comparison table fits within the available width; horizontal scrolling is not needed."
+        : nextLeft <= 0
+          ? "Comparison table is at the first columns."
+          : nextLeft >= maxScroll
+            ? "Comparison table is at the last columns."
+            : `Comparison table moved ${key === "ArrowLeft" || key === "Home" ? "left" : "right"}.`;
     }
     event.preventDefault();
   }
