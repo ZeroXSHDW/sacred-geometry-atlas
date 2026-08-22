@@ -116,6 +116,14 @@
       document.title = `Compare ${label}${extra} · Sacred Geometry Atlas`;
       return;
     }
+    if (page === "method") {
+      const route = parseRoute();
+      const contextStudy = route.contextStudyId ? studies.find((study) => study.id === route.contextStudyId) : null;
+      document.title = contextStudy
+        ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas`
+        : "Method · Sacred Geometry Atlas";
+      return;
+    }
     document.title = page[0].toUpperCase() + page.slice(1) + " · Sacred Geometry Atlas";
   }
 
@@ -239,6 +247,9 @@
     const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
       : null;
+    const contextStudyId = ["atlas", "method"].includes(page) && studies.some((study) => study.id === requestedStudy)
+      ? requestedStudy
+      : null;
     const requestedCompareIds = requestedStudy ? requestedStudy.split(",") : [];
     const compareIds = page === "compare"
       ? [...new Set(requestedCompareIds.filter((id) => studies.some((study) => study.id === id)))]
@@ -248,6 +259,7 @@
       requestedPage,
       requestedStudy,
       studyId,
+      contextStudyId,
       mode: validModes.has(requestedMode) ? requestedMode : null,
       surface: validSurfaces.has(requestedSurface) ? requestedSurface : null,
       layer: validLayers.has(requestedLayer) ? requestedLayer : null,
@@ -352,6 +364,9 @@
     if (page === "compare" && state.compareIds.length >= 2) {
       return `#compare/${state.compareIds.map((id) => encodeURIComponent(id)).join(",")}`;
     }
+    if (page === "method" && includeStudy && studyId) {
+      return `#method/${encodeURIComponent(studyId)}`;
+    }
     return `#${page}`;
   }
 
@@ -384,6 +399,7 @@
       state.layer = route.layer || "all";
       state.zoom = route.zoom || 1;
     }
+    if (route.page === "method" && route.contextStudyId) state.activeId = route.contextStudyId;
     if (route.page === "compare") {
       state.compareIds = route.compareIds;
       normalizedCompareRoute = window.location.hash !== routeHash("compare", false);
@@ -407,7 +423,10 @@
         includeStudyInNormalizedRoute = false;
       }
     } else if (route.page !== "compare") {
-      normalizedPageRoute = window.location.hash.length > 0 && window.location.hash !== routeHash(route.page, false);
+      const canonicalPageHash = route.page === "method" && route.contextStudyId
+        ? routeHash("method", true, route.contextStudyId)
+        : routeHash(route.page, false);
+      normalizedPageRoute = window.location.hash.length > 0 && window.location.hash !== canonicalPageHash;
     }
     showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
     replaceCatalogRoute();
@@ -422,7 +441,7 @@
       updateDocumentTitle("compare");
     }
     if (normalizedPageRoute) {
-      replaceRoute(route.page, false);
+      replaceRoute(route.page, route.page === "method" && Boolean(route.contextStudyId));
       updateDocumentTitle(route.page);
     }
     if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute) {
@@ -563,17 +582,25 @@
     });
     $("#resetDrawing").addEventListener("click", resetDrawingView);
     $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
-      showPage(button.dataset.view, { routeStudy: false });
+      showPage(button.dataset.view, { routeStudy: button.dataset.view === "method" });
     }));
+    const methodLink = $('.hero-action[href="#methodView"]');
+    if (methodLink) methodLink.addEventListener("click", (event) => {
+      if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      showPage("method", { routeStudy: true });
+    });
     $("#clearCompare").addEventListener("click", () => clearComparisonSelection({ focus: true }));
     $("#selectVisibleCompare").addEventListener("click", () => addVisibleToComparison({ focus: true }));
     $("#openCompare").addEventListener("click", () => showPage("compare"));
     $("#editCompare").addEventListener("click", () => showPage("atlas"));
     $("#methodBackToStudy").addEventListener("click", () => {
       const study = activeStudy();
-      const canFocusStudy = Boolean(study && visibleStudies().some((candidate) => candidate.id === study.id));
-      showPage("atlas");
-      if (canFocusStudy) {
+      const visible = visibleStudies();
+      const canOpenStudy = Boolean(study && visible.some((candidate) => candidate.id === study.id));
+      showPage("atlas", { routeStudy: canOpenStudy });
+      if (!canOpenStudy) refreshCatalog();
+      if (canOpenStudy) {
         const heading = $("#activeName");
         if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
       }
