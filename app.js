@@ -176,10 +176,10 @@
     }, {});
   }
 
-  function statusGuidanceText() {
+  function statusGuidanceText(records = studies, scope = "the full collection") {
     const definitions = dataStatusDefinitions();
-    const counts = studyStatusCounts();
-    return `Schematic = ${definitions.schematic} Measured = ${definitions.measured} Counts reflect the full collection: ${counts.schematic} schematic · ${counts.measured} measured.`;
+    const counts = studyStatusCounts(records);
+    return `Schematic = ${definitions.schematic} Measured = ${definitions.measured} Counts for ${scope}: ${counts.schematic} schematic · ${counts.measured} measured.`;
   }
 
   function exportProvenance(records, scope) {
@@ -435,7 +435,7 @@
         if (statusLabels[option.value]) option.textContent = statusLabels[option.value];
       });
     }
-    const statusGuidance = statusGuidanceText();
+    const statusGuidance = statusGuidanceText(studies, "the full collection");
     ["#statusHelp", "#comparisonStatusHelp"].forEach((selector) => {
       const target = $(selector);
       if (target) target.textContent = statusGuidance;
@@ -2007,6 +2007,8 @@
     if (helper) helper.textContent = focused
       ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
       : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
+    const comparisonStatusHelp = $("#comparisonStatusHelp");
+    if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
   }
 
   function renderCompareSelection() {
