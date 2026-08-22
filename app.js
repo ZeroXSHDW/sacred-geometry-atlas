@@ -3340,7 +3340,7 @@
   function renderGeometryCompare() {
     const target = $("#geometryCompare");
     if (!target) return;
-    target.setAttribute("aria-label", "Study envelopes; each card identifies whether its data is schematic or measured.");
+    target.setAttribute("aria-label", "Study envelopes; each card identifies its schema-defined data status.");
     target.innerHTML = comparisonStudies().map((study) => {
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
