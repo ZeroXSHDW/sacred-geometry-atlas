@@ -2296,7 +2296,11 @@
   }
 
   function csvCell(value) {
-    return `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const text = String(value ?? "");
+    const safeText = typeof value === "string" && /^[\t\r\n ]*[=+\-@]/.test(text)
+      ? `'${text}`
+      : text;
+    return `"${safeText.replace(/"/g, '""')}"`;
   }
 
   function comparisonCsvPayload(comparison) {

@@ -52,6 +52,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Comparison tables carry the same schematic/measured status styling as cards and charts, so provenance stays visible across every comparison surface.
 - The active study status badge uses the same schematic/measured styling as the catalog, charts, and comparison table.
 - Context-aware CSV export for the active comparison scope, including typology/place/era/axis context, per-record status definitions, optional floor-area and volume estimates, estimate provenance, scope, reproducible route, schema version, and units, alongside the full-atlas and filtered-view JSON downloads.
+- Comparison CSV text that resembles a spreadsheet formula is prefixed safely, so research exports remain inert when opened in spreadsheet software.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis/1.3` (the optional final segment restores 130% drawing zoom), study-aware Method links such as `#method/gothic`, focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort/axis state; selected comparison studies persist in the Atlas URL and browser history restores the selected context. Partial or malformed study links and catalog parameters are canonicalized to valid defaults.
 - Browser history restores each route once, even when a traversal emits both hash and history events, so focus and live announcements do not repeat for the same URL.
