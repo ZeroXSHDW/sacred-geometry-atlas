@@ -326,6 +326,7 @@ h3 { letter-spacing: -0.04em; }
 
 .tool-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.65rem; }
 .tool-row-secondary { margin-top: 0.45rem; }
+.tool-row-single { grid-template-columns: 1fr; }
 .select-wrap { position: relative; }
 .select-wrap::after { position: absolute; top: 0.8rem; right: 0.65rem; color: var(--amber); content: '⌄'; pointer-events: none; }
 .select-wrap select { width: 100%; padding: 0.6rem 1.35rem 0.6rem 0.65rem; border: 1px solid var(--line); border-radius: var(--radius); outline: none; color: var(--ink-soft); background: var(--panel); font-family: var(--mono); font-size: 0.57rem; appearance: none; }

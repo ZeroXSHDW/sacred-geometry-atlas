@@ -11,6 +11,7 @@
     query: "",
     filter: "all",
     filterPlace: "all",
+    filterEra: "all",
     filterStatus: "all",
     sort: "index",
     page: "atlas",
@@ -58,7 +59,7 @@
   };
   const validStatuses = new Set(["all", "schematic", "measured"]);
   const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);
-  const catalogParamKeys = ["q", "typology", "place", "status", "sort", "compare"];
+  const catalogParamKeys = ["q", "typology", "place", "era", "status", "sort", "compare"];
   let shareResetTimer;
   let compareShareResetTimer;
   let catalogShareResetTimer;
@@ -83,6 +84,7 @@
         state.query
         || state.filter !== "all"
         || state.filterPlace !== "all"
+        || state.filterEra !== "all"
         || state.filterStatus !== "all"
         || state.sort !== "index"
         || state.compareIds.length > 0
@@ -174,6 +176,7 @@
     $("#searchInput").value = state.query;
     $("#filterSelect").value = state.filter;
     $("#filterPlace").value = state.filterPlace;
+    $("#filterEra").value = state.filterEra;
     $("#filterStatus").value = state.filterStatus;
     $("#sortSelect").value = state.sort;
   }
@@ -182,15 +185,18 @@
     const params = new URL(window.location.href).searchParams;
     const typologies = new Set(studies.map((study) => study.typology));
     const places = new Set(studies.map((study) => study.place));
+    const eras = new Set(studies.map((study) => study.era));
     const requestedQuery = params.get("q");
     const requestedTypology = params.get("typology");
     const requestedPlace = params.get("place");
+    const requestedEra = params.get("era");
     const requestedStatus = params.get("status");
     const requestedSort = params.get("sort");
     const requestedCompare = params.get("compare");
     state.query = requestedQuery ? requestedQuery.trim().toLowerCase() : "";
     state.filter = typologies.has(requestedTypology) ? requestedTypology : "all";
     state.filterPlace = places.has(requestedPlace) ? requestedPlace : "all";
+    state.filterEra = eras.has(requestedEra) ? requestedEra : "all";
     state.filterStatus = validStatuses.has(requestedStatus) ? requestedStatus : "all";
     state.sort = validSorts.has(requestedSort) ? requestedSort : "index";
     state.compareIds = requestedCompare
@@ -212,6 +218,7 @@
       q: state.query,
       typology: state.filter === "all" ? "" : state.filter,
       place: state.filterPlace === "all" ? "" : state.filterPlace,
+      era: state.filterEra === "all" ? "" : state.filterEra,
       status: state.filterStatus === "all" ? "" : state.filterStatus,
       sort: state.sort === "index" ? "" : state.sort,
       compare: state.page === "atlas" && state.compareIds.length ? state.compareIds.join(",") : ""
@@ -353,6 +360,13 @@
       option.textContent = place;
       placeSelect.appendChild(option);
     });
+    const eraSelect = $("#filterEra");
+    [...new Set(studies.map((study) => study.era))].forEach((era) => {
+      const option = document.createElement("option");
+      option.value = era;
+      option.textContent = era;
+      eraSelect.appendChild(option);
+    });
     const statusSelect = $("#filterStatus");
     if (statusSelect) {
       const statusCounts = studies.reduce((counts, study) => {
@@ -391,6 +405,11 @@
     });
     $("#filterPlace").addEventListener("change", (event) => {
       state.filterPlace = event.target.value;
+      pushCatalogRoute();
+      refreshCatalog();
+    });
+    $("#filterEra").addEventListener("change", (event) => {
+      state.filterEra = event.target.value;
       pushCatalogRoute();
       refreshCatalog();
     });
@@ -497,10 +516,12 @@
     state.query = "";
     state.filter = "all";
     state.filterPlace = "all";
+    state.filterEra = "all";
     state.filterStatus = "all";
     $("#searchInput").value = "";
     $("#filterSelect").value = "all";
     $("#filterPlace").value = "all";
+    $("#filterEra").value = "all";
     $("#filterStatus").value = "all";
     if (resetSort) {
       $("#sortSelect").value = "index";
@@ -558,6 +579,7 @@
     if (state.query) filters.push({ key: "query", label: `Search: “${state.query}”` });
     if (state.filter !== "all") filters.push({ key: "filter", label: $("#filterSelect").selectedOptions[0].textContent });
     if (state.filterPlace !== "all") filters.push({ key: "place", label: $("#filterPlace").selectedOptions[0].textContent });
+    if (state.filterEra !== "all") filters.push({ key: "era", label: $("#filterEra").selectedOptions[0].textContent });
     if (state.filterStatus !== "all") filters.push({ key: "status", label: $("#filterStatus").selectedOptions[0].textContent });
     if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });
     target.hidden = filters.length === 0;
@@ -577,6 +599,7 @@
       query: "#searchInput",
       filter: "#filterSelect",
       place: "#filterPlace",
+      era: "#filterEra",
       status: "#filterStatus",
       sort: "#sortSelect"
     };
@@ -607,6 +630,10 @@
     if (key === "place") {
       state.filterPlace = "all";
       $("#filterPlace").value = "all";
+    }
+    if (key === "era") {
+      state.filterEra = "all";
+      $("#filterEra").value = "all";
     }
     if (key === "status") {
       state.filterStatus = "all";
@@ -855,8 +882,9 @@
       const matchesQuery = !state.query || haystack.includes(state.query);
       const matchesFilter = state.filter === "all" || study.typology === state.filter;
       const matchesPlace = state.filterPlace === "all" || study.place === state.filterPlace;
+      const matchesEra = state.filterEra === "all" || study.era === state.filterEra;
       const matchesStatus = state.filterStatus === "all" || studyStatus(study) === state.filterStatus;
-      return matchesQuery && matchesFilter && matchesPlace && matchesStatus;
+      return matchesQuery && matchesFilter && matchesPlace && matchesEra && matchesStatus;
     });
     return result.sort((a, b) => {
       if (state.sort === "length") return b.length - a.length;
@@ -951,7 +979,7 @@
   }
 
   function emptyCatalogMessage() {
-    const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all";
+    const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all";
     const hasCatalogFilters = hasSecondaryFilters || state.filterStatus !== "all";
     if (state.query && hasCatalogFilters) return `No studies match “${state.query}” within the selected catalog filters.`;
     if (state.query) return `No studies match “${state.query}”.`;
@@ -1233,6 +1261,7 @@
     if (state.query) parts.push(`results matching “${state.query}”`);
     if (state.filter !== "all") parts.push(state.filter);
     if (state.filterPlace !== "all") parts.push(state.filterPlace);
+    if (state.filterEra !== "all") parts.push(state.filterEra);
     if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
     if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);
     if (state.sort !== "index") {
@@ -1515,6 +1544,7 @@
         query: state.query || null,
         typology: state.filter,
         place: state.filterPlace,
+        era: state.filterEra,
         status: state.filterStatus,
         sort: state.sort,
         compareIds: [...state.compareIds]

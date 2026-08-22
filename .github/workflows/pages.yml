@@ -304,16 +304,18 @@ jobs:
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction must be explained to assistive technology');
           if (!html.includes('<select id="filterStatus" aria-describedby="statusHelp">') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative model · measured = source-supported dimensions · counts reflect the full collection.</p>') || !styles.includes('.catalog-data-note {') || !app.includes('const statusCounts = studies.reduce') || !app.includes('Schematic · ${statusCounts.schematic}') || !app.includes('Measured · ${statusCounts.measured}')) throw new Error('Data status filter must expose full-collection counts and provenance');
+          if (!html.includes('<select id="filterEra">') || !html.includes('<span class="sr-only">Filter by era</span>') || !styles.includes('.tool-row-single {') || !app.includes('const eras = new Set(studies.map((study) => study.era));') || !app.includes('state.filterEra = eras.has(requestedEra) ? requestedEra : "all";')) throw new Error('Era filter must be bookmarkable and accessible');
+          if (!app.includes('if (state.filterEra !== "all") filters.push({ key: "era"') || !app.includes('if (key === "era")') || !app.includes('if (state.filterEra !== "all") parts.push(state.filterEra);')) throw new Error('Era filter must expose clearable catalog scope');
           if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('if (state.sort === "length") return b.length - a.length;') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
-          if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
+          if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
           if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware active-study JSON export');
           const catalogExportStart = app.indexOf('function downloadCatalogView()');
           const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
           const catalogExport = app.slice(catalogExportStart, catalogExportEnd);
-          if (catalogExportStart < 0 || catalogExportEnd < 0 || !catalogExport.includes('const shareUrl = new URL(window.location.href);') || !catalogExport.includes('route: shareUrl.href') || !catalogExport.includes('compareIds: [...state.compareIds]')) throw new Error('Catalog export must include a reproducible route and comparison scope');
+          if (catalogExportStart < 0 || catalogExportEnd < 0 || !catalogExport.includes('const shareUrl = new URL(window.location.href);') || !catalogExport.includes('route: shareUrl.href') || !catalogExport.includes('era: state.filterEra') || !catalogExport.includes('compareIds: [...state.compareIds]')) throw new Error('Catalog export must include a reproducible route and comparison scope');
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript')) throw new Error('Missing no-JS skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
@@ -323,10 +325,10 @@ jobs:
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
             if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);
           }
-          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'function pushCatalogRoute()', 'function updateCatalogRoute(historyMethod = "replaceState")', 'const catalogParamKeys = ["q", "typology", "place", "status", "sort", "compare"];', 'requestedCompare', 'state.compareIds = requestedCompare', 'compare: state.page === "atlas" && state.compareIds.length', 'window.history[historyMethod]', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas") {', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', 'if (key === "/") {', 'focusCatalogControl("query");', '\"a\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
+          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'function replaceCatalogRoute()', 'function pushCatalogRoute()', 'function updateCatalogRoute(historyMethod = "replaceState")', 'const catalogParamKeys = ["q", "typology", "place", "era", "status", "sort", "compare"];', 'requestedEra', 'state.filterEra = eras.has(requestedEra) ? requestedEra : "all";', 'requestedCompare', 'state.compareIds = requestedCompare', 'compare: state.page === "atlas" && state.compareIds.length', 'window.history[historyMethod]', 'navigationUrl(nextHash)', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas") {', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', 'if (key === "/") {', 'focusCatalogControl("query");', '\"a\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
-          for (const token of ['state.filter = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterPlace = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterStatus = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.sort = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();']) {
+          for (const token of ['state.filter = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterPlace = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterEra = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterStatus = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.sort = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();']) {
             if (!app.includes(token)) throw new Error('Discrete catalog changes must create browser history entries: ' + token.split('\n')[0]);
           }
           for (const token of ['function commitComparisonRoute()', 'if (state.page === "atlas") pushCatalogRoute();', 'commitComparisonRoute();']) {
@@ -449,8 +451,11 @@ jobs:
           const keyboardStatus = { textContent: '' };
           const elements = new Map();
           const makeSelect = (options = []) => ({ options, appendChild(option) { this.options.push(option); } });
+          const searchInput = { value: '' };
           const filterSelect = makeSelect();
           const filterPlace = makeSelect();
+          const filterEra = makeSelect();
+          const sortSelect = makeSelect([{ value: 'index' }]);
           const filterStatus = makeSelect([
             { value: 'all', textContent: 'All data status' },
             { value: 'schematic', textContent: 'Schematic' },
@@ -468,14 +473,28 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          elements.set('#searchInput', searchInput);
           elements.set('#filterSelect', filterSelect);
           elements.set('#filterPlace', filterPlace);
+          elements.set('#filterEra', filterEra);
           elements.set('#filterStatus', filterStatus);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText, populateFilter };\n})();');
+          elements.set('#sortSelect', sortSelect);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText, populateFilter, visibleStudies, syncCatalogFromUrl };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText, populateFilter } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText, populateFilter, visibleStudies, syncCatalogFromUrl } = context.window.__atlasTest;
           populateFilter();
+          if (!filterEra.options.some((option) => option.textContent === '4th–6th century')) throw new Error('Era filter did not expose study periods');
           if (filterStatus.options[0].textContent !== 'All data status · 6' || filterStatus.options[1].textContent !== 'Schematic · 6' || filterStatus.options[2].textContent !== 'Measured · 0') throw new Error('Status filter did not expose full-collection counts');
+          context.window.location.href = 'https://example.test/atlas/?era=4th%E2%80%936th%20century#atlas/basilica/plan/exterior/all';
+          syncCatalogFromUrl();
+          if (state.filterEra !== '4th–6th century' || filterEra.value !== '4th–6th century') throw new Error('Era filter did not restore from the catalog URL');
+          context.window.location.href = 'https://example.test/atlas/?q=central%20plan#atlas/basilica/plan/exterior/all';
+          syncCatalogFromUrl();
+          state.query = '';
+          state.filterEra = '4th–6th century';
+          const eraVisible = visibleStudies();
+          if (eraVisible.length !== 1 || eraVisible[0].id !== 'basilica') throw new Error('Era filter did not narrow the catalog to the expected study');
+          state.filterEra = 'all';
           let prevented = false;
           state.page = 'atlas';
           state.compareIds = [];
