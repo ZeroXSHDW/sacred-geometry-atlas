@@ -1420,7 +1420,8 @@
     const svgElement = $("#geometryCanvas svg");
     const status = $("#drawingDownloadStatus");
     const button = $("#downloadDrawing");
-    if (!study || !svgElement) return;
+    if (!study || !svgElement || !beginAsyncAction(button)) return;
+    try {
     const exportStyles = `
       .geometry-svg { background: #0c1110; color: #eef2e9; }
       .geometry-svg text { font-family: 'DM Mono', 'SFMono-Regular', Consolas, monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
@@ -1467,13 +1468,17 @@
     if (status) status.textContent = `Current drawing exported as ${filename}.`;
     temporaryButtonFeedback(button, "Exported", "Drawing exported", "SVG", "Export the current drawing as SVG", "drawing-export");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
+    } finally {
+      endAsyncAction(button);
+    }
   }
 
   function downloadStudy() {
     const study = activeStudy();
     const status = $("#studyDownloadStatus");
     const button = $("#downloadStudy");
-    if (!study) return;
+    if (!study || !beginAsyncAction(button)) return;
+    try {
     const filename = `${study.id}-sacred-geometry-study.json`;
     const payload = JSON.stringify(activeStudyExportPayload(study), null, 2);
     const blob = new Blob([payload], { type: "application/json" });
@@ -1487,6 +1492,9 @@
     if (status) status.textContent = `Active study exported as ${filename}.`;
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
+    } finally {
+      endAsyncAction(button);
+    }
   }
 
   function activeStudyExportPayload(study) {
@@ -1510,6 +1518,8 @@
 
   function downloadData() {
     const button = $("#downloadData");
+    if (!beginAsyncAction(button)) return;
+    try {
     const payload = JSON.stringify({ title: "Sacred Geometry Atlas", schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" }, studies }, null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -1522,6 +1532,9 @@
     $("#downloadStatus").textContent = "Atlas data downloaded as sacred-geometry-atlas.json.";
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
+    } finally {
+      endAsyncAction(button);
+    }
   }
 
   function downloadCatalogView() {
@@ -1532,6 +1545,8 @@
       if (status) status.textContent = "There are no studies in the current catalog view to export.";
       return;
     }
+    if (!beginAsyncAction(button)) return;
+    try {
     const filename = "sacred-geometry-atlas-view.json";
     const shareUrl = new URL(window.location.href);
     shareUrl.hash = routeHash("atlas", false);
@@ -1562,6 +1577,9 @@
     if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}.`;
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
+    } finally {
+      endAsyncAction(button);
+    }
   }
 
   function csvCell(value) {
@@ -1612,6 +1630,8 @@
       if (status) status.textContent = "There are no comparison records to export.";
       return;
     }
+    if (!beginAsyncAction(button)) return;
+    try {
     const filename = "sacred-geometry-comparison.csv";
     const blob = new Blob([`\uFEFF${comparisonCsvPayload(comparison)}`], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -1624,6 +1644,9 @@
     if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}.`;
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
+    } finally {
+      endAsyncAction(button);
+    }
   }
 
   function changeZoom(delta) {

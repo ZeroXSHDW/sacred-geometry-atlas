@@ -285,6 +285,12 @@ jobs:
           for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'function endAsyncAction(button)', 'button.setAttribute("aria-busy", "false");', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
             if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
+          for (const functionName of ['downloadDrawing()', 'downloadStudy()', 'downloadData()', 'downloadCatalogView()', 'downloadComparisonCsv()']) {
+            const start = app.indexOf(`function ${functionName}`);
+            const end = app.indexOf('\n  function ', start + 1);
+            const source = start >= 0 && end >= 0 ? app.slice(start, end) : '';
+            if (!source.includes('beginAsyncAction(button)') || !source.includes('endAsyncAction(button)') || !source.includes('finally')) throw new Error(`Download action is missing busy-state protection: ${functionName}`);
+          }
           for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete', '.share-button[aria-busy="true"]']) {
             if (!styles.includes(token)) throw new Error('Download completion state is missing styling: ' + token);
           }
