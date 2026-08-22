@@ -2741,7 +2741,7 @@
       }
       content += dimensionLine(x, y - 25, x + width, y - 25, rawMeasure(study.length), x + width / 2, y - 33);
       content += dimensionLine(x - 25, y, x - 25, y + height * 0.72, rawMeasure(study.span), x - 34, y + height * 0.36);
-      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">module ${linearMeasure(study.module)} · ${study.bayCount} bays · radius ${linearMeasure(study.radius)}</text>`;
+      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">module ${escapeHtml(linearMeasure(study.module))} · ${study.bayCount} bays · radius ${escapeHtml(linearMeasure(study.radius))}</text>`;
     } else if (study.type === "gothic") {
       const transeptY = y + height * 0.42;
       const apseR = height * 0.22;
@@ -2756,7 +2756,7 @@
       content += `<circle class="faint-line" cx="${x + width / 2}" cy="${y + height * 0.86}" r="${apseR}" />`;
       content += dimensionLine(x, y - 25, x + width, y - 25, rawMeasure(study.length), x + width / 2, y - 33);
       content += dimensionLine(x - 25, y + height * 0.42, x - 25, y + height * 0.59, rawMeasure(study.span), x - 34, y + height * 0.51);
-      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">pointed bay · ${study.bayCount} ribs · radius ${linearMeasure(study.radius)}</text>`;
+      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">pointed bay · ${study.bayCount} ribs · radius ${escapeHtml(linearMeasure(study.radius))}</text>`;
     } else if (study.type === "central") {
       const r = Math.min(width, height) * 0.34;
       content += `<rect class="${mainClass}" x="${330 - r * 1.18}" y="${265 - r * 1.18}" width="${r * 2.36}" height="${r * 2.36}" />`;
@@ -2770,7 +2770,7 @@
       });
       content += `<circle class="secondary-line" cx="330" cy="265" r="${r * 0.2}" fill="none" />`;
       content += dimensionLine(330 - r * 1.18, 265 + r * 1.55, 330 + r * 1.18, 265 + r * 1.55, rawMeasure(study.span), 330, 265 + r * 1.7);
-      content += `<text class="small-label" x="330" y="${265 + r * 1.95}" text-anchor="middle">central radius ${linearMeasure(study.radius)} · 4 arms · dome field</text>`;
+      content += `<text class="small-label" x="330" y="${265 + r * 1.95}" text-anchor="middle">central radius ${escapeHtml(linearMeasure(study.radius))} · 4 arms · dome field</text>`;
     } else if (study.type === "baroque") {
       const rx = width * 0.37;
       const ry = height * 0.44;
@@ -2779,7 +2779,7 @@
       content += `<line class="secondary-line" x1="330" y1="${y}" x2="330" y2="${y + height}" /><line class="secondary-line" x1="${x}" y1="265" x2="${x + width}" y2="265" />`;
       content += `<circle class="column" cx="${330 - rx}" cy="265" r="4" /><circle class="column" cx="${330 + rx}" cy="265" r="4" />`;
       content += dimensionLine(x, y - 25, x + width, y - 25, rawMeasure(study.length), 330, y - 33);
-      content += `<text class="small-label" x="330" y="${y + height + 33}" text-anchor="middle">ellipse ${linearMeasure(rx / scale)} × ${linearMeasure(ry / scale)} · 2 focal points</text>`;
+      content += `<text class="small-label" x="330" y="${y + height + 33}" text-anchor="middle">ellipse ${escapeHtml(linearMeasure(rx / scale))} × ${escapeHtml(linearMeasure(ry / scale))} · 2 focal points</text>`;
     } else if (study.type === "stave") {
       content += `<rect class="${mainClass}" x="${x + width * 0.15}" y="${y + height * 0.16}" width="${width * 0.7}" height="${height * 0.68}" />`;
       content += `<rect class="${mainClass}" x="${x + width * 0.28}" y="${y + height * 0.04}" width="${width * 0.44}" height="${height * 0.92}" />`;
@@ -2789,7 +2789,7 @@
       }
       content += `<path class="${inner ? "secondary-line" : "primary-line"}" d="M${x + width * 0.13} ${y + height * 0.16}L${x + width * 0.27} ${y}L${x + width * 0.5} ${y + height * 0.13}L${x + width * 0.73} ${y}L${x + width * 0.87} ${y + height * 0.16}" fill="none" />`;
       content += dimensionLine(x + width * 0.15, y + height + 25, x + width * 0.85, y + height + 25, rawMeasure(study.span), 330, y + height + 33);
-      content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">${study.bayCount} post frames · module ${linearMeasure(study.module)}</text>`;
+      content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">${study.bayCount} post frames · module ${escapeHtml(linearMeasure(study.module))}</text>`;
     } else {
       const poly = `${x + width * 0.08},${y + height * 0.75} ${x + width * 0.17},${y + height * 0.15} ${x + width * 0.6},${y + height * 0.05} ${x + width * 0.92},${y + height * 0.3} ${x + width * 0.78},${y + height * 0.86} ${x + width * 0.08},${y + height * 0.75}`;
       content += `<polygon class="${mainClass}" points="${poly}" />`;
@@ -2896,7 +2896,7 @@
     }
     content += dimensionLine(x, ground + 30, x + width, ground + 30, rawMeasure(study.span), 330, ground + 47);
     content += dimensionLine(x + width + 28, ground, x + width + 28, top, rawMeasure(study.height), x + width + 42, (ground + top) / 2);
-    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">vault / roof profile · ${study.type === "central" ? "central radius" : `module ${linearMeasure(study.module)}`}</text>`;
+    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">vault / roof profile · ${study.type === "central" ? "central radius" : `module ${escapeHtml(linearMeasure(study.module))}`}</text>`;
     return content;
   }
 

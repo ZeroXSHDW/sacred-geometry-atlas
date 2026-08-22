@@ -606,9 +606,9 @@ jobs:
           elements.set('#zoomReset', zoomReset);
           elements.set('#zoomOut', zoomOut);
           elements.set('#zoomIn', zoomIn);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, parseRoute, handleKeyboard, renderStudyNav, renderControls, drawElevation, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, parseRoute, handleKeyboard, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, parseRoute, handleKeyboard, renderStudyNav, renderControls, drawElevation, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, parseRoute, handleKeyboard, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl } = context.window.__atlasTest;
           populateFilter();
           renderControls();
           if (drawingState.textContent !== 'Outside · Plan · all geometry · 100% zoom') throw new Error(`Initial drawing context did not render: ${drawingState.textContent}`);
@@ -719,6 +719,12 @@ jobs:
           const specialCharacterStudy = { ...context.window.CHURCH_GEOMETRY[0], emphasis: 'Light & <line>' };
           const elevation = drawElevation(specialCharacterStudy);
           if (!elevation.includes('light &amp; &lt;line&gt;') || elevation.includes('Light & <line>')) throw new Error('Dynamic SVG labels must escape study text');
+          const originalUnitSymbol = context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol;
+          context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol = '<unit>';
+          const planWithUnsafeUnit = drawPlan(context.window.CHURCH_GEOMETRY[0]);
+          const sectionWithUnsafeUnit = drawSection(context.window.CHURCH_GEOMETRY[0]);
+          context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol = originalUnitSymbol;
+          if (!planWithUnsafeUnit.includes('&lt;unit&gt;') || planWithUnsafeUnit.includes('<unit>') || !sectionWithUnsafeUnit.includes('&lt;unit&gt;') || sectionWithUnsafeUnit.includes('<unit>')) throw new Error('Schema unit symbols must be escaped in generated SVG labels');
           console.log('Route-native catalog link smoke test passed.');
           NODE
       - name: Smoke-test filtered study focus handoff
