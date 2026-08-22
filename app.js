@@ -89,6 +89,7 @@
     "'": "&#39;",
     '"': "&quot;"
   }[character]));
+  const escapedLinearMeasure = (value, digits = 1) => escapeHtml(linearMeasure(value, digits));
   const layerDisplayName = (layer) => layerDisplayNames[layer] || layer;
   const layerFocusLabel = () => state.layer === "all" ? "all geometry" : `${layerDisplayName(state.layer)} focus`;
   const drawingStateLabel = () => {
@@ -2543,14 +2544,14 @@
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(study.axis)}</td>
           <td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
-          <td>${linearMeasure(study.length)}</td>
-          <td>${linearMeasure(study.span)}</td>
+          <td>${escapedLinearMeasure(study.length)}</td>
+          <td>${escapedLinearMeasure(study.span)}</td>
           <td>${number(ratio, 2)}</td>
-          <td>${linearMeasure(study.height)}</td>
+          <td>${escapedLinearMeasure(study.height)}</td>
           <td>${number(section, 2)}</td>
           <td>${study.bayCount}</td>
-          <td>${linearMeasure(study.module)}</td>
-          <td>${linearMeasure(study.radius)}</td>
+          <td>${escapedLinearMeasure(study.module)}</td>
+          <td>${escapedLinearMeasure(study.radius)}</td>
           <td>${number(study.symmetry, 2)}</td>
           <td>${escapeHtml(floorArea.value)}</td>
           <td>${escapeHtml(volume.value)}</td>
@@ -2647,7 +2648,7 @@
       <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} ${escapeHtml(unitName)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record">
         <span class="module-name"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span>
         <span class="module-bars" ${meterAttributes(`${studyShortName(study)} relative module length`, study.module, maxModule, `${number(study.module)} ${unit} of ${number(maxModule)} ${unit} maximum`)} style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
-        <span class="module-value">${number(study.module)} ${unit}</span>
+        <span class="module-value">${escapedLinearMeasure(study.module)}</span>
       </div>
     `;
     }).join("");
