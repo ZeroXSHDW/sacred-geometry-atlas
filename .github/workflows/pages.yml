@@ -166,6 +166,8 @@ jobs:
               throw new Error('No-script fallback is missing ' + study.id + ': ' + dimensions + ' / ' + study.churchName + ' / reading');
             }
           }
+          const decorativeMarkup = html.match(/<(?:span|i) class="(?:eyebrow-line|dot dot-amber|legend-swatch [^"]+)"[^>]*>/g) || [];
+          if (!decorativeMarkup.length || decorativeMarkup.some((tag) => !tag.includes('aria-hidden="true"'))) throw new Error('Decorative rules, swatches, and status dots must be hidden from assistive technology');
           if (!html.includes('<ul class="catalog-list" id="churchList"')) throw new Error('Catalog must use a semantic list');
           for (const token of ['data-view="atlas" type="button" aria-controls="atlas" aria-current="page"', 'data-view="compare" type="button" aria-controls="compareView"', '<span class="nav-count" id="compareNavCount" aria-hidden="true" hidden></span>', 'data-view="method" type="button" aria-controls="methodView"']) {
             if (!html.includes(token)) throw new Error('Missing navigation relationship: ' + token);
