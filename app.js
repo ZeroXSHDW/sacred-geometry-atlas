@@ -1462,7 +1462,8 @@
     if (!terms.length) return "";
     const details = Array.isArray(study.details) ? study.details.flat() : [];
     const groups = [
-      ["reference", [study.churchName, studySource(study), studySourceNote(study)]],
+      ["reference", [study.churchName]],
+      ["provenance", [studySource(study), studySourceNote(study), studyStatus(study), studyStatusDescription(study)]],
       ["reading", [study.axis, study.envelope, study.surfaceNote, study.exteriorNote, study.interiorNote, ...details]],
       ["dimensions", studySearchDimensions(study)],
       ["derived ratios", studySearchDerivedReadings(study)]
@@ -1482,6 +1483,7 @@
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
       study.emphasis, study.axis, study.envelope, studySource(study), studySourceNote(study),
       study.surfaceNote, study.exteriorNote, study.interiorNote, volumeBasis, studyStatus(study),
+      studyStatusDescription(study),
       ...dimensions,
       ...derivedReadings,
       ...details
