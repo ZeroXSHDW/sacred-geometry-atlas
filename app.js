@@ -2051,7 +2051,7 @@
       return `
         <tr>
           <th scope="row">${escapeHtml(studyShortName(study))}</th>
-          <td class="comparison-status">${escapeHtml(studyStatus(study))}</td>
+          <td class="comparison-status" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${number(study.length)} m</td>
           <td>${number(study.span)} m</td>
           <td>${number(ratio, 2)}</td>
