@@ -95,6 +95,7 @@ summary:focus-visible {
 .noscript-number { color: var(--amber); font-family: var(--serif); font-size: 1.35rem; line-height: 1; }
 .noscript-list strong { display: block; color: var(--ink); font-size: 0.82rem; }
 .noscript-list small { display: block; margin-top: 0.22rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.45; }
+.noscript-derived { display: block; margin-top: 0.22rem; color: var(--amber); font-family: var(--mono); font-size: 0.55rem; line-height: 1.45; }
 .noscript-provenance { display: block; margin-top: 0.22rem; color: var(--teal); font-family: var(--mono); font-size: 0.55rem; line-height: 1.45; }
 .noscript-reading { display: block; margin-top: 0.5rem; color: var(--ink-soft); font-size: 0.69rem; line-height: 1.55; }
 .noscript-note { margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.59rem; }
@@ -944,6 +945,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-study-card.is-active { border-color: Highlight; box-shadow: inset 3px 0 0 Highlight; }
   .compare-study-card.is-active .compare-study-open { color: Highlight; }
   .compare-tray-summary { color: ButtonText; }
+  .noscript-derived { color: Highlight; }
   .noscript-provenance { color: Highlight; }
   .noscript-empty { border-top-color: ButtonText; color: CanvasText; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
