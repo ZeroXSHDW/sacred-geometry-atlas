@@ -17,6 +17,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
 - Reading-profile bars expose their 0–100 scores as accessible meters as well as visual guides.
 - Search across study names, references, notes, detail vocabulary, numeric geometry dimensions, and derived ratios, with multi-word queries matching all terms across the record; typology, location, era, and measured/schematic status filtering use an explicit provenance key.
+- Matching terms are highlighted in catalog cards so multi-word results can be scanned at a glance.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
 - The Atlas comparison tray previews selected study names, including selections outside the current filter view.

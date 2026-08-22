@@ -856,6 +856,27 @@
     return String(value || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   }
 
+  function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function highlightSearchText(value) {
+    const text = String(value ?? "");
+    const terms = [...new Set(queryTerms(state.query).filter((term) => term.length > 1))]
+      .sort((a, b) => b.length - a.length);
+    if (!terms.length) return escapeHtml(text);
+    const pattern = new RegExp(terms.map(escapeRegExp).join("|"), "gi");
+    let cursor = 0;
+    let highlighted = "";
+    for (const match of text.matchAll(pattern)) {
+      const start = match.index ?? cursor;
+      highlighted += escapeHtml(text.slice(cursor, start));
+      highlighted += `<mark class="search-hit">${escapeHtml(match[0])}</mark>`;
+      cursor = start + match[0].length;
+    }
+    return highlighted + escapeHtml(text.slice(cursor));
+  }
+
   function studySearchText(study) {
     const details = Array.isArray(study.details) ? study.details.flat() : [];
     const dimensions = [
@@ -961,9 +982,9 @@
           <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(navigationUrl(routeHash("atlas", true, study.id)))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
-              <span class="catalog-card-title">${escapeHtml(study.name)}</span>
-              <span class="catalog-card-meta">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(studyStatus(study))}</span>
-              <span class="catalog-card-detail">${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)}</span>
+              <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
+              <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place} · ${studyStatus(study)}`)}</span>
+              <span class="catalog-card-detail">${highlightSearchText(`${study.era} · ${study.emphasis}`)}</span>
             </span>
             ${catalogGlyph(study)}
           </a>
