@@ -1748,11 +1748,12 @@
   function comparisonCsvPayload(comparison) {
     const route = comparisonRouteUrl().href;
     const scope = comparisonScopeLabel(comparison);
+    const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const statusDefinitions = dataStatusDefinitions();
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Status", "Status definition", "Reference", "Source", "Source note",
       "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
-      "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route"
+      "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
     ];
     const rows = comparison.map((study) => [
       study.id,
@@ -1778,7 +1779,9 @@
       study.volumeBasis || "",
       number(study.symmetry, 2),
       scope,
-      route
+      route,
+      schema.version,
+      schema.units
     ]);
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
   }
