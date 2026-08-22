@@ -501,6 +501,36 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
+  function methodNavigationUrl() {
+    const url = applyCatalogRouteState(new URL(window.location.href), false);
+    const study = activeStudy();
+    url.hash = routeHash("method", Boolean(study), study ? study.id : null);
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  function comparisonNavigationUrl() {
+    const url = applyCatalogRouteState(new URL(window.location.href), false);
+    url.hash = routeHash("compare", false);
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  function viewNavigationUrl(page) {
+    if (page === "atlas") {
+      const url = catalogViewRouteUrl();
+      return `${url.pathname}${url.search}${url.hash}`;
+    }
+    if (page === "compare") return comparisonNavigationUrl();
+    return methodNavigationUrl();
+  }
+
+  function updateViewNavigationLinks() {
+    $$('[data-view]').forEach((link) => {
+      link.setAttribute("href", viewNavigationUrl(link.dataset.view));
+    });
+    const methodLink = $("[data-method-link]");
+    if (methodLink) methodLink.setAttribute("href", methodNavigationUrl());
+  }
+
   function updateRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     const nextUrl = navigationUrl(nextHash);
@@ -753,7 +783,7 @@
     });
     $("#resetDrawing").addEventListener("click", resetDrawingView);
     $$("[data-view]").forEach((link) => link.addEventListener("click", handleViewNavigation));
-    const methodLink = $('.hero-action[href="#methodView"]');
+    const methodLink = $("[data-method-link]");
     if (methodLink) methodLink.addEventListener("click", (event) => {
       if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
@@ -1766,6 +1796,7 @@
     if (page === "compare") renderCompare();
     if (shouldUpdateHash) updateRoute(page, routeStudy);
     if (shouldUpdateHash) replaceCatalogRoute();
+    updateViewNavigationLinks();
     if (page === "method") renderMethodContext();
     if (scroll) {
       const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
@@ -2697,6 +2728,7 @@
   }
 
   function updateCompareTray() {
+    updateViewNavigationLinks();
     updateCompareNavigation();
     const tray = $("#compareTray");
     const count = $("#compareCount");

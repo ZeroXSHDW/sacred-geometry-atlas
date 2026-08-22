@@ -205,10 +205,10 @@ jobs:
           if (!html.includes('<span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Catalog scope changes must have a live status channel');
           if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>') || !html.includes('id="visualEmptyContext" hidden') || !app.includes('emptyState.setAttribute("aria-describedby", activeStudyOutsideCatalog') || !app.includes('? "visualEmptyMessage visualEmptyContext"') || !app.includes(': "visualEmptyMessage");')) throw new Error('Missing contextual visual empty state');
           if (!html.includes('id="clearVisualFilters" type="button" aria-label="Clear catalog filters"')) throw new Error('Missing visual empty-state recovery action');
-          if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
+          if (!html.includes('<a class="hero-action" data-method-link href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('<section class="method-readings" aria-labelledby="derived-readings-heading">') || !html.includes('id="derived-readings-heading"') || !html.includes('Bounding area') || !html.includes('Reading profile') || !styles.includes('.method-readings-grid')) throw new Error('Method view must explain derived readings');
           if (!html.includes('<button class="share-button method-return-button" id="methodBackToStudy" type="button" aria-controls="atlas" aria-label="Open current study in Atlas"') || !app.includes('function renderMethodReturnAction(study = activeStudy(), visible = visibleStudies())') || !app.includes('visible.some((candidate) => candidate.id === study.id)') || !app.includes('$("#methodBackToStudy").addEventListener("click"') || !styles.includes('.section-heading-actions {') || !styles.includes('.method-return-button {')) throw new Error('Method view must provide a context-aware return-to-study action');
-          if (!app.includes('const methodLink = $(\'.hero-action[href="#methodView"]\');') || !app.includes('showPage(link.dataset.view, { routeStudy: link.dataset.view === "method" });') || !app.includes('showPage("method", { routeStudy: true });') || !app.includes('showPage("atlas", { routeStudy: canOpenStudy });') || !app.includes('document.title = contextStudy')) throw new Error('Method navigation must preserve the active study context and return cleanly from filtered views');
+          if (!app.includes('function methodNavigationUrl()') || !app.includes('function comparisonNavigationUrl()') || !app.includes('function viewNavigationUrl(page)') || !app.includes('function updateViewNavigationLinks()') || !app.includes('const methodLink = $("[data-method-link]");') || !app.includes('showPage(link.dataset.view, { routeStudy: link.dataset.view === "method" });') || !app.includes('showPage("method", { routeStudy: true });') || !app.includes('showPage("atlas", { routeStudy: canOpenStudy });') || !app.includes('document.title = contextStudy')) throw new Error('Context-aware view navigation must preserve study and comparison routes and return cleanly from filtered views');
           if (!html.includes('<p class="section-note" id="methodContextNote">Notes on the atlas model</p>') || !app.includes('function renderMethodContext(study = activeStudy(), visible = visibleStudies())') || !app.includes('Current study · ${studyShortName(study)}') || !app.includes('outside current catalog') || !app.includes('if (page === "method") renderMethodContext();')) throw new Error('Method view must identify its preserved study context visibly');
           if (!html.includes('<div class="study-context-note" id="activeCatalogContext" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="activeCatalogContextText"') || !html.includes('id="showActiveStudy" type="button"') || !app.includes('if (!route.studyId) state.activeId = visible[0].id;') || !app.includes('function renderActiveCatalogContext(study = activeStudy(), visible = visibleStudies())') || !app.includes('outsideCatalog') || !app.includes('$("#showActiveStudy").addEventListener("click"') || !styles.includes('.study-context-note {') || !styles.includes('.study-context-note button {')) throw new Error('Filtered study deep links must remain open and explain how to restore the study in the catalog');
           if (!app.includes('const headingDescriptionIds = ["activeStatusHelp", "activeMeta", "activeMeasureAccessible"];') || !app.includes('headingDescriptionIds.push("activeCatalogContextText");') || !app.includes('heading.setAttribute("aria-describedby", headingDescriptionIds.join(" "));')) throw new Error('Filtered study context must preserve the active title geometry description');
@@ -654,6 +654,11 @@ jobs:
           const zoomReset = { textContent: '', title: '' };
           const zoomOut = { disabled: false, title: '', setAttribute() {} };
           const zoomIn = { disabled: false, title: '', setAttribute() {} };
+          const navLinks = ['atlas', 'compare', 'method'].map((view) => ({
+            dataset: { view },
+            setAttribute(name, value) { this[name] = value; }
+          }));
+          const methodLink = { setAttribute(name, value) { this[name] = value; } };
           const context = {
             URL,
             window: {
@@ -663,7 +668,7 @@ jobs:
               body: { classList: { remove() {} } },
               createElement() { return {}; },
               querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : elements.get(selector) || null; },
-              querySelectorAll() { return []; }
+              querySelectorAll(selector) { return selector === '[data-view]' ? navLinks : []; }
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
@@ -679,9 +684,10 @@ jobs:
           elements.set('#zoomReset', zoomReset);
           elements.set('#zoomOut', zoomOut);
           elements.set('#zoomIn', zoomIn);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, parseRoute, handleKeyboard, handleViewNavigation, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl };\n})();');
+          elements.set('[data-method-link]', methodLink);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, methodNavigationUrl, comparisonNavigationUrl, viewNavigationUrl, updateViewNavigationLinks, parseRoute, handleKeyboard, handleViewNavigation, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, parseRoute, handleKeyboard, handleViewNavigation, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, methodNavigationUrl, comparisonNavigationUrl, viewNavigationUrl, updateViewNavigationLinks, parseRoute, handleKeyboard, handleViewNavigation, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, visibleStudies, catalogStatusGuidanceText, syncCatalogFromUrl } = context.window.__atlasTest;
           populateFilter();
           renderControls();
           if (drawingState.textContent !== 'Outside · Plan · all geometry · 100% zoom') throw new Error(`Initial drawing context did not render: ${drawingState.textContent}`);
@@ -733,6 +739,16 @@ jobs:
           if (multiTermVisible.length !== 1 || multiTermVisible[0].id !== 'gothic') throw new Error('Multi-term search did not match across study fields');
           if (!catalogStatusGuidanceText(multiTermVisible).includes('Counts for results matching “gothic northern”: 1 schematic · 0 measured.')) throw new Error('Catalog status guidance did not follow the filtered scope');
           state.compareIds = ['basilica', 'gothic'];
+          state.activeId = 'gothic';
+          context.window.location.href = 'https://example.test/atlas/?q=gothic%20northern&compare=basilica%2Cgothic#atlas/gothic/plan/exterior/all';
+          updateViewNavigationLinks();
+          const compareNavLink = navLinks.find((link) => link.dataset.view === 'compare');
+          const methodNavLink = navLinks.find((link) => link.dataset.view === 'method');
+          if (methodNavigationUrl() !== '/atlas/?q=gothic+northern#method/gothic' || methodNavLink.href !== methodNavigationUrl() || methodLink.href !== methodNavigationUrl()) throw new Error(`Method links did not preserve the active study and catalog scope: ${methodNavigationUrl()} / ${methodNavLink.href} / ${methodLink.href}`);
+          if (comparisonNavigationUrl() !== '/atlas/?q=gothic+northern#compare/basilica,gothic' || viewNavigationUrl('compare') !== comparisonNavigationUrl() || compareNavLink.href !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve the focused selection: ${comparisonNavigationUrl()} / ${compareNavLink.href}`);
+          const contextualAtlasHref = viewNavigationUrl('atlas');
+          if (contextualAtlasHref !== '/atlas/?q=gothic+northern&compare=basilica%2Cgothic#atlas' || navLinks.find((link) => link.dataset.view === 'atlas').href !== contextualAtlasHref) throw new Error(`Atlas link did not preserve the catalog scope: ${contextualAtlasHref}`);
+          context.window.location.href = 'https://example.test/atlas/?q=central%20plan#atlas/basilica/plan/exterior/all';
           const stateAwareStudyHref = atlasStudyNavigationUrl('gothic');
           const stateAwareCatalogHref = catalogViewRouteUrl();
           if (!stateAwareStudyHref.includes('q=gothic+northern') || !stateAwareStudyHref.includes('compare=basilica%2Cgothic') || !stateAwareCatalogHref.href.includes('q=gothic+northern') || !stateAwareCatalogHref.href.includes('compare=basilica%2Cgothic')) throw new Error(`Route links did not use current catalog state: ${stateAwareStudyHref} / ${stateAwareCatalogHref.href}`);
