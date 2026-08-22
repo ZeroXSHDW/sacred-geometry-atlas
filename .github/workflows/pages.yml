@@ -331,7 +331,7 @@ jobs:
           for (const token of ['if (!study || !button || !status || !beginAsyncAction(button)) return;', 'if (!button || !status || !beginAsyncAction(button)) return;', 'endAsyncAction(button);']) {
             if (!app.includes(token)) throw new Error('Async share and citation actions must use the busy-state guard: ' + token);
           }
-          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${studyDataLabel(study)} record"', 'module ${number(study.module)} meters; ${studyDataLabel(study)} record']) {
+          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${study.axis} axis; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${study.axis} axis; ${studyDataLabel(study)} record"', 'module ${number(study.module)} meters; ${study.axis} axis; ${studyDataLabel(study)} record']) {
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
@@ -944,9 +944,9 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage, renderCompareSelection, renderCompareContext, renderGeometryCompare, renderComparisonTable };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, showPage, renderCompareSelection, renderCompareContext, renderCharts, renderGeometryCompare, renderComparisonTable };\n})();');
           vm.runInNewContext(app, context);
-          const { state, showPage, renderCompareSelection, renderCompareContext, renderGeometryCompare, renderComparisonTable } = context.window.__atlasTest;
+          const { state, showPage, renderCompareSelection, renderCompareContext, renderCharts, renderGeometryCompare, renderComparisonTable } = context.window.__atlasTest;
           state.page = 'compare';
           state.activeId = 'basilica';
           state.compareIds = ['basilica', 'gothic'];
@@ -972,6 +972,12 @@ jobs:
           elements.set('#compareHelper', compareHelper);
           const geometryCompare = { innerHTML: '', setAttribute(name, value) { this[name] = value; } };
           elements.set('#geometryCompare', geometryCompare);
+          const ratioChart = { innerHTML: '' };
+          const heightChart = { innerHTML: '' };
+          const moduleChart = { innerHTML: '' };
+          elements.set('#ratioChart', ratioChart);
+          elements.set('#heightChart', heightChart);
+          elements.set('#moduleChart', moduleChart);
           const tableBody = { innerHTML: '' };
           const tableCaption = { textContent: '' };
           const tableSummary = { textContent: '' };
@@ -980,6 +986,8 @@ jobs:
           elements.set('#comparisonTableSummary', tableSummary);
           renderCompareContext();
           if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison')) throw new Error('Focused comparison scope copy did not update');
+          renderCharts();
+          if (!ratioChart.innerHTML.includes('Longitudinal axis') || !heightChart.innerHTML.includes('Longitudinal axis') || !moduleChart.innerHTML.includes('Longitudinal axis')) throw new Error('Comparison chart labels did not expose study axis context');
           renderGeometryCompare();
           if (!geometryCompare.innerHTML.includes('Basilica · Mediterranean · 4th–6th century · Longitudinal') || !geometryCompare.innerHTML.includes('Gothic · Northern Europe · 12th–15th century · Longitudinal') || !geometryCompare.innerHTML.includes('Longitudinal axis') || !geometryCompare.innerHTML.includes('Open in Atlas') || !geometryCompare.innerHTML.includes('compare-study-card is-active') || !geometryCompare.innerHTML.includes('aria-current="true"') || !geometryCompare.innerHTML.includes('Current Atlas study · open in Atlas')) throw new Error('Comparison cards did not render place, era, axis, destination context, and current-study state');
           renderComparisonTable();
