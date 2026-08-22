@@ -1481,7 +1481,8 @@
     citationUrl.hash = routeHash("atlas", true);
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
-    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. ${studyStatus(study)}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
+    const dimensions = `${number(study.length)} m length × ${number(study.span)} m span × ${number(study.height)} m height; ${study.bayCount} bays at ${number(study.module)} m module; radius ${number(study.radius)} m; symmetry ${number(study.symmetry, 2)}`;
+    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatus(study)}. Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
