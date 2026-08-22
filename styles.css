@@ -460,7 +460,10 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .share-button.is-copied { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .download-button.is-complete, .drawing-export.is-complete, .share-button.is-complete { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .manual-copy-fallback { display: grid; gap: 0.55rem; margin: 0 0 1rem; padding: 0.8rem 0.9rem; border: 1px solid rgba(233, 179, 108, 0.42); background: var(--amber-soft); }
+.manual-copy-fallback-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .manual-copy-fallback-heading { margin: 0; color: var(--amber); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.manual-copy-fallback-dismiss { flex: 0 0 auto; padding: 0.3rem 0.45rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.manual-copy-fallback-dismiss:hover { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .manual-copy-fallback textarea { width: 100%; min-height: 4.6rem; padding: 0.6rem; border: 1px solid var(--line-strong); color: var(--ink); background: var(--bg-deep); font-family: var(--mono); font-size: 0.63rem; line-height: 1.5; resize: vertical; }
 .manual-copy-fallback textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); outline: none; }
 .manual-copy-fallback-hint { margin: 0; color: var(--ink-muted); font-size: 0.62rem; line-height: 1.45; }
@@ -854,6 +857,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .zoom-control button { width: 36px; height: 36px; }
   .search-clear { width: 32px; height: 32px; }
   .search-field input, .select-wrap select { min-height: 40px; }
+  .manual-copy-fallback-dismiss { min-height: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -913,6 +917,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-context-note button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .manual-copy-fallback { border-color: ButtonText; background: Canvas; }
   .manual-copy-fallback-heading { color: ButtonText; }
+  .manual-copy-fallback-dismiss { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .manual-copy-fallback textarea { border-color: ButtonText; color: CanvasText; background: Canvas; }
   .manual-copy-fallback textarea:focus { outline: 2px solid Highlight; outline-offset: 2px; }
   .filter-chip,

@@ -214,6 +214,9 @@ jobs:
           if (!app.includes('status.textContent = "Study sharing cancelled."') || !app.includes('status.textContent = "Catalog sharing cancelled."') || !app.includes('status.textContent = "Comparison sharing cancelled."')) throw new Error('Native share cancellation must provide live feedback');
           if (!html.includes('id="copyCitation" type="button" aria-label="Copy a citation for the active study" aria-controls="citationFallback" aria-expanded="false"') || !app.includes('Dimensions: ${dimensions}') || !app.includes('Data status: ${studyStatus(study)}') || !app.includes('Definition: ${studyStatusDescription(study)}')) throw new Error('Citation must expose accessible controls, key geometry context, and status provenance');
           if (!html.includes('<div class="manual-copy-fallback" id="shareFallback" role="region" aria-labelledby="shareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>') || !html.includes('id="shareFallbackText"') || !html.includes('id="catalogShareFallbackText"') || !html.includes('id="compareShareFallbackText"') || !html.includes('id="citationFallbackText"') || !html.includes('aria-controls="shareFallback" aria-expanded="false"') || !html.includes('aria-controls="citationFallback" aria-expanded="false"') || !html.includes('aria-controls="catalogShareFallback" aria-expanded="false"') || !html.includes('aria-controls="compareShareFallback" aria-expanded="false"') || !app.includes('const manualCopyFallbackControls = {') || !app.includes('trigger.setAttribute("aria-expanded", "false")') || !app.includes('trigger.setAttribute("aria-expanded", "true")') || !app.includes('function hideManualCopyFallbacks()') || !app.includes('function revealManualCopyFallback(fallbackSelector, textSelector, value)') || !app.includes('The share link is shown below for manual copying.') || !app.includes('The catalog link is shown below for manual copying.') || !app.includes('The comparison link is shown below for manual copying.') || !app.includes('The citation is shown below for manual copying.') || !styles.includes('.manual-copy-fallback {') || !styles.includes('.manual-copy-fallback textarea:focus') || !styles.includes('.share-button[aria-expanded="true"]') || !styles.includes('.share-button[aria-expanded="true"] span:first-child') || !styles.includes('background: Canvas;')) throw new Error('Share and citation actions must expose selected manual-copy fallbacks');
+          for (const token of ['data-dismiss-fallback="shareFallback"', 'data-dismiss-fallback="citationFallback"', 'data-dismiss-fallback="catalogShareFallback"', 'data-dismiss-fallback="compareShareFallback"', 'function dismissManualCopyFallback(fallbackSelector)', 'event.key !== "Escape"', '.manual-copy-fallback-heading-row {', '.manual-copy-fallback-dismiss {', '.manual-copy-fallback-dismiss { border-color: ButtonText;']) {
+            if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
+          }
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route" id="printRoute">') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;')) throw new Error('Print output must preserve active study provenance and its reproducible route');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false"')) throw new Error('Missing catalog share control');
@@ -1225,6 +1228,52 @@ jobs:
             if (shareStudyButton.disabled || shareCatalogButton.disabled || shareCompareButton.disabled) throw new Error('Share-link fallback did not restore the share button states');
             console.log('Share-link manual-copy fallback smoke test passed.');
           })().catch((error) => { console.error(error); process.exitCode = 1; });
+          NODE
+
+      - name: Smoke-test manual-copy fallback dismissal
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const makeTrigger = () => ({
+            focusCalls: 0,
+            focus() { this.focusCalls += 1; },
+            setAttribute(name, value) { this[name] = value; }
+          });
+          const makeFallback = () => ({ hidden: false });
+          const mappings = [
+            ['#shareFallback', '#shareStudy'],
+            ['#citationFallback', '#copyCitation'],
+            ['#catalogShareFallback', '#shareCatalog'],
+            ['#compareShareFallback', '#shareCompare']
+          ];
+          for (const [fallbackSelector, triggerSelector] of mappings) {
+            elements.set(fallbackSelector, makeFallback());
+            elements.set(triggerSelector, makeTrigger());
+          }
+          const context = {
+            URL,
+            navigator: {},
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dismissManualCopyFallback };\n})();');
+          vm.runInNewContext(app, context);
+          for (const [fallbackSelector, triggerSelector] of mappings) {
+            const fallback = elements.get(fallbackSelector);
+            const trigger = elements.get(triggerSelector);
+            context.window.__atlasTest.dismissManualCopyFallback(fallbackSelector);
+            if (!fallback.hidden || trigger['aria-expanded'] !== 'false' || trigger.focusCalls !== 1) throw new Error(`Fallback dismissal did not hide ${fallbackSelector} and restore focus`);
+          }
+          console.log('Manual-copy fallback dismissal smoke test passed.');
           NODE
 
       - name: Smoke-test export busy cooldown

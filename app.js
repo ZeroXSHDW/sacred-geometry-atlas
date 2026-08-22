@@ -647,6 +647,16 @@
     $("#shareCatalog").addEventListener("click", shareCatalog);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
+    $$('[data-dismiss-fallback]').forEach((button) => button.addEventListener("click", () => {
+      const fallbackId = button.dataset && button.dataset.dismissFallback;
+      const fallbackSelector = fallbackId ? `#${fallbackId}` : "";
+      if (manualCopyFallbackControls[fallbackSelector]) dismissManualCopyFallback(fallbackSelector);
+    }));
+    $$(".manual-copy-fallback").forEach((fallback) => fallback.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !fallback.id) return;
+      event.preventDefault();
+      dismissManualCopyFallback(`#${fallback.id}`);
+    }));
     $("#printStudy").addEventListener("click", printStudy);
     $("#prevStudy").addEventListener("click", () => cycleStudy(-1));
     $("#nextStudy").addEventListener("click", () => cycleStudy(1));
@@ -851,6 +861,21 @@
       const trigger = $(manualCopyFallbackControls[selector]);
       if (trigger && typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "false");
     });
+  }
+
+  function dismissManualCopyFallback(fallbackSelector) {
+    const fallback = $(fallbackSelector);
+    if (fallback) fallback.hidden = true;
+    const trigger = $(manualCopyFallbackControls[fallbackSelector]);
+    if (!trigger) return;
+    if (typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "false");
+    if (typeof trigger.focus === "function") {
+      try {
+        trigger.focus({ preventScroll: true });
+      } catch (error) {
+        // Focus restoration is best-effort; the fallback is still dismissed.
+      }
+    }
   }
 
   function revealManualCopyFallback(fallbackSelector, textSelector, value) {
