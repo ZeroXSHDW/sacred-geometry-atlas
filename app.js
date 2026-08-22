@@ -1323,7 +1323,9 @@
     if (key === "c") {
       event.preventDefault();
       if (state.compareIds.length >= 2) showPage("compare");
-      else announceKeyboard("Select at least two studies to open comparison.");
+      else announceKeyboard(state.compareIds.length === 1
+        ? "Select one more study to open comparison."
+        : "Select at least two studies to open comparison.");
       return;
     }
     if (key === "j" || key === "k") {

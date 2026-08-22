@@ -911,6 +911,10 @@ jobs:
           if (navPrevented) throw new Error('Command-click navigation must preserve native view links');
           let prevented = false;
           state.page = 'atlas';
+          state.compareIds = ['basilica'];
+          handleKeyboard({ key: 'c', target: { tagName: 'body', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+          if (!prevented || keyboardStatus.textContent !== 'Select one more study to open comparison.') throw new Error('Comparison shortcut must give a singular next step for a partial selection');
+          prevented = false;
           state.compareIds = [];
           handleKeyboard({ key: 'c', target: { tagName: 'body', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
           if (!prevented || keyboardStatus.textContent !== 'Select at least two studies to open comparison.') throw new Error('Comparison shortcut must explain when more selection is needed');
