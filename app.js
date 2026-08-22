@@ -1,7 +1,31 @@
 (function () {
   "use strict";
 
-  const studies = Array.isArray(window.CHURCH_GEOMETRY) ? window.CHURCH_GEOMETRY : [];
+  const rawStudies = window.CHURCH_GEOMETRY;
+  const studies = Array.isArray(rawStudies) ? rawStudies : [];
+  const requiredStudyTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "status", "source", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
+  const requiredStudyNumericFields = ["length", "span", "height", "bayCount", "module", "radius", "symmetry"];
+  const isRenderableStudy = (study) => {
+    if (!study || typeof study !== "object") return false;
+    if (requiredStudyTextFields.some((field) => typeof study[field] !== "string" || !study[field].trim())) return false;
+    if (requiredStudyNumericFields.some((field) => !Number.isFinite(study[field]) || study[field] <= 0)) return false;
+    if (!Number.isInteger(study.bayCount) || study.symmetry > 1) return false;
+    if (study.floorAreaEstimate !== undefined && (!Number.isFinite(study.floorAreaEstimate) || study.floorAreaEstimate <= 0)) return false;
+    if (study.volumeEstimate !== undefined && (!Number.isFinite(study.volumeEstimate) || study.volumeEstimate <= 0)) return false;
+    if (study.volumeBasis !== undefined && (typeof study.volumeBasis !== "string" || !study.volumeBasis.trim())) return false;
+    return Array.isArray(study.details)
+      && study.details.length > 0
+      && study.details.every((detail) => Array.isArray(detail) && detail.length === 2 && detail.every((value) => typeof value === "string" && value.trim()));
+  };
+  const hasDuplicateStudyKeys = studies.length !== new Set(studies.map((study) => study && study.id)).size
+    || studies.length !== new Set(studies.map((study) => study && study.index)).size;
+  const dataIssue = !Array.isArray(rawStudies)
+    ? "missing"
+    : studies.length === 0
+      ? "empty"
+      : studies.some((study) => !isRenderableStudy(study)) || hasDuplicateStudyKeys
+        ? "invalid"
+        : "";
   const state = {
     activeId: studies[0] ? studies[0].id : null,
     surface: "exterior",
@@ -140,21 +164,30 @@
   }
 
   function init() {
-    if (!studies.length) {
+    if (dataIssue) {
       document.body.classList.remove("no-js");
       document.body.classList.add("data-error-state");
       document.title = "Atlas unavailable · Sacred Geometry Atlas";
       const dataError = $("#dataError");
       if (dataError) {
-        const hasDataset = Array.isArray(window.CHURCH_GEOMETRY);
         const heading = $("#dataErrorHeading");
         const description = $("#dataErrorDescription");
-        if (heading) heading.textContent = hasDataset
-          ? "The atlas collection is currently empty."
-          : "Geometry data could not be loaded.";
-        if (description) description.textContent = hasDataset
-          ? "No study records are available in the current dataset. Open the static JSON artifact or return after the collection has been populated."
-          : "The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.";
+        const recoveryCopy = {
+          missing: {
+            heading: "Geometry data could not be loaded.",
+            description: "The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored."
+          },
+          empty: {
+            heading: "The atlas collection is currently empty.",
+            description: "No study records are available in the current dataset. Open the static JSON artifact or return after the collection has been populated."
+          },
+          invalid: {
+            heading: "The atlas data is incomplete.",
+            description: "The local dataset is present but one or more records cannot be rendered safely. Reload the atlas, or open the static JSON artifact while the connection is restored."
+          }
+        }[dataIssue];
+        if (heading) heading.textContent = recoveryCopy.heading;
+        if (description) description.textContent = recoveryCopy.description;
         dataError.hidden = false;
         if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
       }

@@ -527,6 +527,35 @@ jobs:
           if (JSON.stringify(events) !== JSON.stringify([['remove', 'no-js'], ['add', 'data-error-state'], ['focus', { preventScroll: true }]])) throw new Error(`Unexpected recovery sequence: ${JSON.stringify(events)}`);
           console.log('Data-load recovery smoke test passed.');
           NODE
+      - name: Smoke-test invalid data recovery
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const events = [];
+          const dataError = { hidden: true };
+          const heading = { textContent: '', focus(options) { events.push(['focus', options]); } };
+          const description = { textContent: '' };
+          const context = {
+            window: { CHURCH_GEOMETRY: [{}], location: { href: 'https://example.test/' } },
+            document: {
+              title: 'Sacred Geometry Atlas',
+              body: {
+                classList: {
+                  remove(name) { events.push(['remove', name]); },
+                  add(name) { events.push(['add', name]); }
+                }
+              },
+              querySelector(selector) {
+                return selector === '#dataError' ? dataError : selector === '#dataErrorHeading' ? heading : selector === '#dataErrorDescription' ? description : null;
+              }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('app.js', 'utf8'), context);
+          if (dataError.hidden || heading.textContent !== 'The atlas data is incomplete.' || !description.textContent.includes('one or more records cannot be rendered safely')) throw new Error('Invalid-data recovery did not explain the malformed collection');
+          if (JSON.stringify(events) !== JSON.stringify([['remove', 'no-js'], ['add', 'data-error-state'], ['focus', { preventScroll: true }]])) throw new Error(`Unexpected invalid-data recovery sequence: ${JSON.stringify(events)}`);
+          console.log('Invalid data recovery smoke test passed.');
+          NODE
       - name: Smoke-test 404 project root resolver
         run: |
           node - <<'NODE'
