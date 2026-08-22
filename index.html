@@ -79,10 +79,10 @@
       </section>
     </noscript>
 
-    <div class="data-error" id="dataError" role="alert" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" aria-atomic="true" hidden>
+    <div class="data-error" id="dataError" role="main" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" tabindex="-1" hidden>
       <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Atlas unavailable</p>
       <h1 id="dataErrorHeading" tabindex="-1">Geometry data could not be loaded.</h1>
-      <p id="dataErrorDescription">The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.</p>
+      <p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored.</p>
       <div class="data-error-actions">
         <a class="hero-action hero-action-primary" href="./">Reload the atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
