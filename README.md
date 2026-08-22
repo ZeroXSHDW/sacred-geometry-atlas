@@ -50,6 +50,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition, schema/unit provenance, and reproducible direct route remain included even when the interactive disclosure is collapsed.
+- Print-ready comparison sheets that preserve the active full-collection or focused comparison, visible provenance context, charts, and the complete comparison table.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
 - The Method view keeps the current study in context with a study-aware deep link, a visible context label, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.

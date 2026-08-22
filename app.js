@@ -690,6 +690,7 @@
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
+    $("#printComparison").addEventListener("click", printComparison);
     $("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);
     $("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);
     $("#shareStudy").addEventListener("click", shareStudy);
@@ -1894,6 +1895,32 @@
     }
     announceKeyboard(`Printing ${study.name} study sheet.`);
     window.print();
+  }
+
+  function printComparison() {
+    const comparison = comparisonStudies();
+    if (!comparison.length) return;
+    if (typeof window.print !== "function") {
+      announceKeyboard("Printing is unavailable in this browser.");
+      return;
+    }
+    const panel = $(".comparison-table-panel");
+    const wasOpen = panel ? panel.open : false;
+    const cleanup = () => {
+      document.body.classList.remove("print-comparison");
+      if (panel) panel.open = wasOpen;
+      if (typeof window.removeEventListener === "function") window.removeEventListener("afterprint", cleanup);
+    };
+    document.body.classList.add("print-comparison");
+    if (panel) panel.open = true;
+    if (typeof window.addEventListener === "function") window.addEventListener("afterprint", cleanup, { once: true });
+    announceKeyboard(`Printing ${comparison.length} study comparison.`);
+    try {
+      window.print();
+    } catch (error) {
+      cleanup();
+      announceKeyboard("Printing is unavailable in this browser.");
+    }
   }
 
   function triggerDownload(filename, contents, type) {

@@ -227,6 +227,7 @@ jobs:
             if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
           }
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route" id="printRoute">') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;')) throw new Error('Print output must preserve active study provenance and its reproducible route');
+          if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, and table');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="selectVisibleCompare" type="button" aria-label="Add visible studies to comparison"') || !app.includes('function addVisibleToComparison({ focus = false } = {})') || !app.includes('renderVisibleComparisonAction(visible);') || !styles.includes('.catalog-batch-action')) throw new Error('Missing filter-aware batch comparison action');
@@ -1011,6 +1012,42 @@ jobs:
           if (finalUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Comparison selection was not preserved: ${finalUrl.search}`);
           if (historyCalls.length !== 2 || historyCalls[0][0] !== 'pushState' || historyCalls[1][0] !== 'replaceState') throw new Error(`Unexpected handoff history sequence: ${JSON.stringify(historyCalls)}`);
           console.log('Comparison edit handoff smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison printing
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const panel = { open: false };
+          const keyboardStatus = { textContent: '' };
+          const classes = new Set();
+          let printCalls = 0;
+          let afterPrint;
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
+              print() { printCalls += 1; },
+              addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
+              removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
+            },
+            document: {
+              body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
+              querySelector(selector) { return selector === '.comparison-table-panel' ? panel : selector === '#keyboardStatus' ? keyboardStatus : null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, printComparison } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, printComparison } = context.window.__atlasTest;
+          state.compareIds = ['basilica', 'gothic'];
+          printComparison();
+          if (printCalls !== 1 || !classes.has('print-comparison') || !panel.open || keyboardStatus.textContent !== 'Printing 2 study comparison.' || typeof afterPrint !== 'function') throw new Error('Comparison printing did not prepare its scoped print state');
+          afterPrint();
+          if (classes.has('print-comparison') || panel.open || afterPrint !== null) throw new Error('Comparison printing did not restore the interactive state after printing');
+          console.log('Comparison printing smoke test passed.');
           NODE
 
       - name: Smoke-test escaped comparison labels
