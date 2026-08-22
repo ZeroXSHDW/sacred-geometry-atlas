@@ -370,6 +370,14 @@
     return `#${page}`;
   }
 
+  function atlasStudyNavigationUrl(studyId) {
+    const url = new URL(window.location.href);
+    url.hash = routeHash("atlas", true, studyId);
+    if (state.compareIds.length) url.searchParams.set("compare", state.compareIds.join(","));
+    else url.searchParams.delete("compare");
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
   function updateRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     if (window.location.hash === nextHash) return;
@@ -2136,8 +2144,8 @@
     if (geometryKicker) geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";
     if (scope) scope.textContent = focused ? `${selected} selected` : "Full collection";
     if (helper) helper.textContent = focused
-      ? "Focused comparison is using the studies you selected in the Atlas. Click a geometry card to return to that study."
-      : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.";
+      ? "Focused comparison is using the studies you selected in the Atlas. Open a study from a geometry card or its table link."
+      : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.";
     const comparisonStatusHelp = $("#comparisonStatusHelp");
     if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
   }
@@ -2181,7 +2189,7 @@
       const volume = volumeReading(study);
       return `
         <tr>
-          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(navigationUrl(routeHash("atlas", true, study.id)))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
+          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
           <td class="comparison-status" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${number(study.length)} m</td>
           <td>${number(study.span)} m</td>

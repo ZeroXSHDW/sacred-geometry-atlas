@@ -34,7 +34,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Share controls use native sharing where available, then fall back to clipboard or a manually copyable link field with visible and live completion feedback.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, place/era context, and proportional charts.
-- Comparison study cards expose a visible “Open in Atlas” cue for returning to a selected study and mark the current Atlas study for orientation.
+- Comparison study cards and table links expose visible “Open in Atlas” cues for returning to a selected study and mark the current Atlas study for orientation; table links preserve the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
 - An expandable semantic comparison table with route-native study links, recorded study status, lengths, spans, ratios, heights, bays, modules, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling on narrow screens.
 - Context-aware CSV export for the active comparison scope, including per-record status definitions, optional floor-area and volume estimates, estimate provenance, scope, reproducible route, schema version, and units, alongside the full-atlas and filtered-view JSON downloads.
