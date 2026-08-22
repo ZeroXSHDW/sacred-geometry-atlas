@@ -80,6 +80,11 @@
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
+  function axisDisplayLabel(value) {
+    const axis = String(value ?? "").trim();
+    return /axis$/i.test(axis) ? axis : `${axis} axis`;
+  }
+  const studyAxisLabel = (study) => axisDisplayLabel(study && study.axis);
   const studySurfaceReading = (study) => state.surface === "interior"
     ? study.interiorNote || study.surfaceNote || study.exteriorNote
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
@@ -111,7 +116,7 @@
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
     const status = studyStatus(study);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${study.axis} axis; ${study.emphasis}; Data status: ${status}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${status}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1999,7 +2004,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${study.axis} axis, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatus(study)}.`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatus(study)}.`,
         url: shareUrl.href
       };
 
@@ -2081,13 +2086,13 @@
 
   function comparisonSelectionShareText(selection = selectedComparisonStudies()) {
     return selection.length
-      ? selection.map((study) => `${studyShortName(study)} (${study.axis} axis; ${studyStatus(study)})`).join("; ")
+      ? selection.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatus(study)})`).join("; ")
       : "the full collection";
   }
 
   function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
     return selection
-      .map(({ name, axis, status, statusDefinition }) => `${name} (${axis} axis; ${status}; ${statusDefinition})`)
+      .map(({ name, axis, status, statusDefinition }) => `${name} (${axisDisplayLabel(axis)}; ${status}; ${statusDefinition})`)
       .join("; ");
   }
 
@@ -2236,7 +2241,7 @@
       `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
     ).join(" ");
     const records = comparison.length
-      ? comparison.map((study) => `${studyShortName(study)} (${study.axis} axis; ${studyStatus(study)})`).join("; ")
+      ? comparison.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatus(study)})`).join("; ")
       : "no records";
     const schema = geometrySchema();
     return `Sacred Geometry Atlas. Comparison of ${records}. Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
@@ -3033,7 +3038,7 @@
     const comparison = focused ? comparisonStudies() : [];
     selection.hidden = !focused;
     list.innerHTML = focused ? comparison.map((study) => {
-      const axisLabel = /axis$/i.test(study.axis) ? study.axis : `${study.axis} axis`;
+      const axisLabel = studyAxisLabel(study);
       const status = studyDataLabel(study);
       const label = `Remove ${study.name} from comparison. Axis: ${study.axis}. Data status: ${status}; ${studyStatusDescription(study)}`;
       return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span><span aria-hidden="true">×</span></button>`;
@@ -3125,7 +3130,7 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(study.axis)} axis; Data status: ${escapeHtml(studyStatus(study))}; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; Data status: ${escapeHtml(studyStatus(study))}; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
@@ -3173,19 +3178,22 @@
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const status = studyDataLabel(study);
-      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span><span class="bar-track" ${meterAttributes(`${studyShortName(study)} relative length to span ratio`, ratio, maxRatio, `${number(ratio, 2)} of ${number(maxRatio, 2)} maximum`)}><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+      const axisLabel = studyAxisLabel(study);
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(axisLabel)}; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span><span class="bar-track" ${meterAttributes(`${studyShortName(study)} relative length to span ratio`, ratio, maxRatio, `${number(ratio, 2)} of ${number(maxRatio, 2)} maximum`)}><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#heightChart").innerHTML = comparison.map((study) => {
       const ratio = study.height / study.span;
       const status = studyDataLabel(study);
-      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span><span class="bar-track" ${meterAttributes(`${studyShortName(study)} relative height to span ratio`, ratio, maxHeightRatio, `${number(ratio, 2)} of ${number(maxHeightRatio, 2)} maximum`)}><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+      const axisLabel = studyAxisLabel(study);
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(axisLabel)}; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span><span class="bar-track" ${meterAttributes(`${studyShortName(study)} relative height to span ratio`, ratio, maxHeightRatio, `${number(ratio, 2)} of ${number(maxHeightRatio, 2)} maximum`)}><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#moduleChart").innerHTML = comparison.map((study) => {
       const status = studyDataLabel(study);
       const moduleWidth = (study.module / maxModule) * 100;
+      const axisLabel = studyAxisLabel(study);
       return `
-      <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} ${escapeHtml(unitName)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}">
-        <span class="module-name"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span>
+      <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} ${escapeHtml(unitName)}; ${escapeHtml(axisLabel)}; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}">
+        <span class="module-name"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span>
         <span class="module-bars" ${meterAttributes(`${studyShortName(study)} relative module length`, study.module, maxModule, `${number(study.module)} ${unit} of ${number(maxModule)} ${unit} maximum`)} style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
         <span class="module-value">${escapedLinearMeasure(study.module)}</span>
       </div>
