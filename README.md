@@ -16,6 +16,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Study-selection announcements repeat that active drawing context, so assistive-technology users receive the same surface, mode, layer, and zoom handoff as the visible drawing caption.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
 - The data-status vocabulary is read from the schema, so documented statuses beyond schematic/measured remain filterable, counted, announced, and preserved in exports.
+- Human-facing status labels normalize separator-delimited schema codes across badges, charts, citations, and the no-JavaScript record index, while raw codes remain available for machine-readable exports and styling hooks.
 - Displayed dimensions, SVG labels, citations, comparison tables, and CSV headers use the schema-backed unit symbol, so a changed unit system cannot silently retain metre labels.
 - The Method warning and derived-reading preface adapt when a collection mixes schematic, measured, or custom-status records, so its limitations stay accurate as the atlas grows.
 - A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON, CSV, and JSON Schema artifacts plus the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.

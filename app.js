@@ -81,6 +81,7 @@
       ? words.map((word) => word[0].toUpperCase() + word.slice(1)).join(" ")
       : "Unknown";
   };
+  const studyStatusLabel = (study) => statusDisplayName(studyStatus(study));
   const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
@@ -121,7 +122,8 @@
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
     const status = studyStatus(study);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${status}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    const statusLabel = statusDisplayName(status);
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -415,7 +417,7 @@
 
   function studyStatusSummary(records = studies) {
     const counts = studyStatusCounts(records);
-    return schemaStatusValues().map((status) => `${counts[status] || 0} ${status}`).join(" · ");
+    return schemaStatusValues().map((status) => `${counts[status] || 0} ${statusDisplayName(status).toLowerCase()}`).join(" · ");
   }
 
   function dataStatusDefinitions() {
@@ -434,7 +436,7 @@
     const counts = studyStatusCounts(records);
     const statuses = [...new Set([...schemaStatusValues(), ...Object.keys(counts)])];
     const definitionsText = statuses.map((status) => `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`).join(" ");
-    const countsText = statuses.map((status) => `${counts[status] || 0} ${status}`).join(" · ");
+    const countsText = statuses.map((status) => `${counts[status] || 0} ${statusDisplayName(status).toLowerCase()}`).join(" · ");
     return `${definitionsText} Counts for ${scope}: ${countsText}.`;
   }
 
@@ -1800,6 +1802,7 @@
       const compareLabel = `${isCompared ? "Remove" : "Add"} ${study.name} ${isCompared ? "from" : "to"} comparison`;
       const currentAttribute = isActive ? ' aria-current="page"' : "";
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
+      const statusLabel = studyStatusLabel(study);
       return `
         <li class="catalog-entry">
           <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
@@ -1807,7 +1810,7 @@
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
               <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place}`)}</span>
-              <span class="catalog-card-status" data-status="${escapeHtml(studyDataLabel(study))}" title="${escapeHtml(studyStatusDescription(study))}">${highlightSearchText(studyDataLabel(study))}</span>
+              <span class="catalog-card-status" data-status="${escapeHtml(studyDataLabel(study))}" title="${escapeHtml(studyStatusDescription(study))}">${highlightSearchText(statusLabel)}</span>
               <span class="catalog-card-detail">${highlightSearchText(`${study.era} · Axis: ${studyAxisLabel(study)} · ${study.emphasis}`)}</span>
               <span class="catalog-card-measure">${escapeHtml(measureLabel)}</span>
               ${matchContext ? `<span class="catalog-card-match">${escapeHtml(matchContext)}</span>` : ""}
@@ -2018,6 +2021,7 @@
   function renderActiveProvenance(study) {
     if (!study) return;
     const status = studyStatus(study);
+    const statusLabel = statusDisplayName(status);
     const statusDefinition = studyStatusDescription(study);
     const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const activeStatus = $("#activeStatus");
@@ -2025,14 +2029,14 @@
     const explanation = $("#activeProvenanceDefinition");
     const schemaNote = $("#activeSchemaNote");
     if (activeStatus) {
-      activeStatus.textContent = status;
+      activeStatus.textContent = statusLabel;
       activeStatus.title = statusDefinition;
       activeStatus.setAttribute("data-status", studyDataLabel(study));
-      activeStatus.setAttribute("aria-label", `${status}: ${statusDefinition}`);
+      activeStatus.setAttribute("aria-label", `${statusLabel} (${status}): ${statusDefinition}`);
     }
     const activeStatusHelp = $("#activeStatusHelp");
-    if (activeStatusHelp) activeStatusHelp.textContent = `Data status: ${status}; ${statusDefinition}`;
-    if (summary) summary.textContent = `Data status · ${status}`;
+    if (activeStatusHelp) activeStatusHelp.textContent = `Data status: ${statusLabel} (${status}); ${statusDefinition}`;
+    if (summary) summary.textContent = `Data status · ${statusLabel}`;
     if (explanation) explanation.textContent = statusDefinition;
     if (schemaNote) schemaNote.textContent = `Schema ${schema.version || "1.1"} · units: ${schema.units || "meters"}`;
   }
@@ -2240,7 +2244,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatus(study)}.`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatusLabel(study).toLowerCase()}.`,
         url: shareUrl.href
       };
 
@@ -2284,7 +2288,7 @@
     if (state.filterPlace !== "all") parts.push(state.filterPlace);
     if (state.filterEra !== "all") parts.push(state.filterEra);
     if (state.filterAxis !== "all") parts.push(axisDisplayLabel(state.filterAxis));
-    if (state.filterStatus !== "all") parts.push(`${state.filterStatus} records`);
+    if (state.filterStatus !== "all") parts.push(`${statusDisplayName(state.filterStatus).toLowerCase()} records`);
     if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);
     if (state.sort !== "index") {
       const sortLabels = {
@@ -2322,7 +2326,7 @@
 
   function comparisonSelectionShareText(selection = selectedComparisonStudies()) {
     return selection.length
-      ? selection.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatus(study)})`).join("; ")
+      ? selection.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
       : "the full collection";
   }
 
@@ -2341,7 +2345,7 @@
     const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
     const selected = selectedComparisonStudies();
     const selection = selected.length
-      ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatus(study)})`).join("; ")}.`
+      ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}.`
       : "";
     const schema = geometrySchema();
     return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}.${selection} Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
@@ -2482,7 +2486,7 @@
       `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
     ).join(" ");
     const records = comparison.length
-      ? comparison.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatus(study)})`).join("; ")
+      ? comparison.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
       : "no records";
     const schema = geometrySchema();
     return `Sacred Geometry Atlas. Comparison of ${records}. Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
@@ -2522,7 +2526,7 @@
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
     const dimensions = `${linearMeasure(study.length)} length × ${linearMeasure(study.span)} span × ${linearMeasure(study.height)} height; ${study.bayCount} bays at ${linearMeasure(study.module)} module; radius ${linearMeasure(study.radius)}; symmetry ${number(study.symmetry, 2)}`;
-    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatus(study)}. Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
@@ -3161,7 +3165,7 @@
       .map((id) => studies.find((study) => study.id === id))
       .filter(Boolean);
     const selectedNames = selectedStudies.map(studyShortName);
-    const selectedStatuses = selectedStudies.map((study) => `${studyShortName(study)} (${studyStatus(study)})`);
+    const selectedStatuses = selectedStudies.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`);
     const statusSummary = studyStatusSummary(selectedStudies);
     const statusDefinitions = schemaStatusValues()
       .map((status) => `${statusDisplayName(status)}: ${dataStatusDefinitions()[status]}`)
@@ -3293,11 +3297,12 @@
     list.innerHTML = comparison.length ? comparison.map((study) => {
       const axisLabel = studyAxisLabel(study);
       const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentLabel = isActive ? " Current Atlas study." : "";
-      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${status}; ${studyStatusDescription(study)}${currentLabel}`;
+      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}${currentLabel}`;
       const currentCue = isActive ? '<span class="compare-selection-chip-current" title="Current Atlas study">current</span>' : "";
-      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span>${currentCue}<span aria-hidden="true">×</span></button>`;
+      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}<span aria-hidden="true">×</span></button>`;
     }).join("") : "";
     if (clear && comparison.length) {
       const clearLabel = `Clear ${comparison.length} selected ${comparison.length === 1 ? "study" : "studies"}`;
@@ -3338,6 +3343,8 @@
       const section = study.height / study.span;
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
+      const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentAttribute = isActive ? ' aria-current="page"' : "";
       const studyLinkLabel = isActive
@@ -3347,7 +3354,7 @@
         <tr>
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(studyAxisLabel(study))}</td>
-          <td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
+          <td class="comparison-status" data-status="${escapeHtml(status)}" aria-label="${escapeHtml(`${statusLabel} (${status}): ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</td>
           <td>${escapedLinearMeasure(study.length)}</td>
           <td>${escapedLinearMeasure(study.span)}</td>
           <td>${number(ratio, 2)}</td>
@@ -3379,9 +3386,10 @@
       const currentAttribute = isActive ? ' aria-current="page"' : "";
       const currentLabel = isActive ? " This is the current Atlas study." : "";
       const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
       return `
       <a class="compare-study-card ${isActive ? "is-active" : ""}" data-compare-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-controls="atlas"${currentAttribute} aria-label="${label}${currentLabel}">
-        <span class="compare-study-number">${escapeHtml(study.index)} / <span class="compare-study-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span>
+        <span class="compare-study-number">${escapeHtml(study.index)} / <span class="compare-study-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span></span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
         <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(studyAxisLabel(study))}</span>
@@ -3395,7 +3403,8 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(studyStatus(study))}; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    const status = studyStatus(study);
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(statusDisplayName(status))} (${escapeHtml(status)}); ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
@@ -3451,25 +3460,28 @@
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
       const axisLabel = studyAxisLabel(study);
       const current = currentStudyContext(study);
-      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative length to span ratio", ratio, maxRatio, `${number(ratio, 2)} of ${number(maxRatio, 2)} maximum`)}><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative length to span ratio", ratio, maxRatio, `${number(ratio, 2)} of ${number(maxRatio, 2)} maximum`)}><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#heightChart").innerHTML = comparison.map((study) => {
       const ratio = study.height / study.span;
       const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
       const axisLabel = studyAxisLabel(study);
       const current = currentStudyContext(study);
-      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative height to span ratio", ratio, maxHeightRatio, `${number(ratio, 2)} of ${number(maxHeightRatio, 2)} maximum`)}><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}"${current.description}><span class="bar-label" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span><span class="bar-track" ${meterAttributes("Relative height to span ratio", ratio, maxHeightRatio, `${number(ratio, 2)} of ${number(maxHeightRatio, 2)} maximum`)}><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value" aria-hidden="true">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#moduleChart").innerHTML = comparison.map((study) => {
       const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
       const moduleWidth = (study.module / maxModule) * 100;
       const axisLabel = studyAxisLabel(study);
       const current = currentStudyContext(study);
       return `
-      <div class="module-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module length; ${escapeHtml(axisLabel)}; ${escapeHtml(studyDataLabel(study))} record: ${escapeHtml(studyStatusDescription(study))}"${current.description}>
-        <span class="module-name" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span>${current.cue}</span></span>
+      <div class="module-row${current.className}" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module length; ${escapeHtml(axisLabel)}; ${escapeHtml(statusLabel)} (${escapeHtml(status)}) record: ${escapeHtml(studyStatusDescription(study))}"${current.description}>
+        <span class="module-name" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${current.cue}</span></span>
         <span class="module-bars" ${meterAttributes("Relative module length", study.module, maxModule, `${number(study.module)} ${unit} of ${number(maxModule)} ${unit} maximum`)} style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
         <span class="module-value" aria-hidden="true">${escapedLinearMeasure(study.module)}</span>
       </div>
@@ -3494,7 +3506,7 @@
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const reading = studySurfaceReading(study);
     const unitName = geometryUnitName();
-    const description = `${surface} ${state.mode} ${studyDataLabel(study)} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${studyAxisLabel(study)}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
+    const description = `${surface} ${state.mode} ${studyStatusLabel(study).toLowerCase()} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${studyAxisLabel(study)}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path class="dimension-arrow" d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
