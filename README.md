@@ -53,7 +53,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Comparison chart rows identify the current Atlas study with a visible cue and matching accessible context, keeping ratio, height, and module readings oriented while a visitor moves between comparison and Atlas.
 - Each normalized comparison chart includes a dynamic zero, midpoint, and active-maximum guide so focused selections remain visually honest when their scale changes.
 - Focused comparison range announcements keep each active chart maximum available to assistive technology as the selection changes.
-- Comparison bars also expose their active range and value as semantic meters, keeping the normalized readings available beyond the visual bar lengths.
+- Comparison bars expose their active range and value as semantic meters; visible chart labels and numeric readouts stay out of the accessibility tree so each normalized reading is announced once.
 - Comparison chart rows include the schema-backed status definition in their accessible labels, so provenance remains explicit without relying on hover tooltips.
 - Comparison study cards, the edit-selection handoff, and table links expose visible Atlas cues for returning to a selected study and mark the current Atlas study for orientation; the focused comparison helper also explains when that study is outside the selected set. Each is route-native and preserves the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal, per-study axis and provenance badges, a current-Atlas-study cue, and clear-all controls that preserve keyboard focus.
