@@ -218,7 +218,7 @@ jobs:
           for (const token of ['function comparisonStudyAriaLabel', 'Dimensions:', 'study.typology)} study at', 'studyStatusDescription(study)', 'with a span of ${number(study.span)} meters']) {
             if (!app.includes(token)) throw new Error('Comparison study labels must retain context: ' + token);
           }
-          if (!app.includes('<span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)}</span>') || !app.includes('study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)};') || !styles.includes('.compare-study-context {')) throw new Error('Comparison cards must expose place and era context');
+          if (!app.includes('<span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)}</span>') || !app.includes('<span class="compare-study-open">Open in Atlas') || !app.includes('study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)};') || !styles.includes('.compare-study-context {') || !styles.includes('.compare-study-open {')) throw new Error('Comparison cards must expose place, era, and a visible Atlas destination cue');
           if (app.includes('meters wide')) throw new Error('Comparison study labels must use span terminology');
           if (!app.includes('role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"')) throw new Error('Drawing SVG must expose separate accessible name and description relationships');
           for (const token of ['role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Status: ${studyStatusDescription(study)}', 'Reference:']) {
@@ -651,7 +651,7 @@ jobs:
           renderCompareContext();
           if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison')) throw new Error('Focused comparison scope copy did not update');
           renderGeometryCompare();
-          if (!geometryCompare.innerHTML.includes('Basilica · Mediterranean · 4th–6th century') || !geometryCompare.innerHTML.includes('Gothic · Northern Europe · 12th–15th century')) throw new Error('Comparison cards did not render place and era context');
+          if (!geometryCompare.innerHTML.includes('Basilica · Mediterranean · 4th–6th century') || !geometryCompare.innerHTML.includes('Gothic · Northern Europe · 12th–15th century') || !geometryCompare.innerHTML.includes('Open in Atlas')) throw new Error('Comparison cards did not render place, era, and destination context');
           renderComparisonTable();
           if (tableSummary.textContent !== 'Read the 2 selected study records as a table' || !tableCaption.textContent.includes('2 selected studies')) throw new Error('Focused comparison table scope copy did not update');
           state.compareIds = [];

@@ -1992,6 +1992,7 @@
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
         <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)}</span>
         <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
+        <span class="compare-study-open">Open in Atlas <span aria-hidden="true">↗</span></span>
       </button>
     `;
     }).join("");
