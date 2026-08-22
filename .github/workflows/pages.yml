@@ -268,6 +268,7 @@ jobs:
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }
+          if (!html.includes('Each line is one notional bay; group length is normalized to the largest module in the active comparison.') || !app.includes('const maxModule = Math.max(...comparison.map((study) => study.module));') || !app.includes('const moduleWidth = (study.module / maxModule) * 100;') || !app.includes('style="width:${moduleWidth}%"') || !styles.includes('.module-bars { display: flex; align-items: stretch;') || !styles.includes('height: 100%; background: var(--teal);')) throw new Error('Module chart must encode normalized module length with honest equal bay markers');
           for (const token of ['R = L ÷ W', 'length-to-width ratio', 'L × W', 'H ÷ W', 'M ÷ W']) {
             if (html.includes(token) || app.includes(token)) throw new Error('Stale width-based proportion notation remains: ' + token);
           }
@@ -992,6 +993,8 @@ jobs:
           if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison') || comparisonPrintRoute.textContent !== 'Route · https://example.test/atlas/#compare/basilica,gothic') throw new Error('Focused comparison scope or reproducible print route did not update');
           renderCharts();
           if (!ratioChart.innerHTML.includes('Longitudinal axis') || !heightChart.innerHTML.includes('Longitudinal axis') || !moduleChart.innerHTML.includes('Longitudinal axis') || !ratioChart.innerHTML.includes('class="chart-status" data-status="schematic"') || !heightChart.innerHTML.includes('class="chart-status" data-status="schematic"') || !moduleChart.innerHTML.includes('class="chart-status" data-status="schematic"')) throw new Error('Comparison charts did not expose axis context and visible provenance chips');
+          const moduleWidths = [...moduleChart.innerHTML.matchAll(/<span class="module-bars" style="width:([^%]+)%">/g)].map((match) => Number(match[1]));
+          if (moduleWidths.length !== 2 || !(moduleWidths[0] < moduleWidths[1]) || Math.abs(moduleWidths[1] - 100) > 0.0001 || !moduleChart.innerHTML.includes('<i class="module-bar"></i>')) throw new Error('Module chart did not normalize group length or use equal bay markers');
           const originalGothicStatus = context.window.CHURCH_GEOMETRY[1].status;
           context.window.CHURCH_GEOMETRY[1].status = 'measured';
           renderCharts();
