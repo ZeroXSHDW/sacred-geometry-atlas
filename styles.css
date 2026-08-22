@@ -748,8 +748,9 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .comparison-table caption { padding: 0.9rem 1.15rem 0.65rem; color: var(--ink-muted); text-align: left; }
 .comparison-table th, .comparison-table td { padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
 .comparison-table thead th { color: var(--amber); font-size: 0.52rem; font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; }
+.comparison-table thead th { position: sticky; top: 7rem; z-index: 1; background: var(--panel); box-shadow: 0 1px 0 var(--line); }
 .comparison-table thead th:first-child, .comparison-table tbody th { position: sticky; left: 0; z-index: 1; background: var(--panel); box-shadow: 1px 0 0 var(--line); }
-.comparison-table thead th:first-child { z-index: 2; }
+.comparison-table thead th:first-child { z-index: 3; box-shadow: 1px 1px 0 var(--line); }
 .comparison-table thead th:first-child, .comparison-table tbody th { text-align: left; }
 .comparison-table tbody th { color: var(--ink-soft); font-family: var(--sans); font-size: 0.68rem; font-weight: 600; }
 .comparison-table-study-link { display: inline-flex; align-items: center; gap: 0.35rem; color: inherit; text-decoration-color: var(--line-strong); text-underline-offset: 0.2em; transition: 180ms ease; }
@@ -1117,6 +1118,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .chart-scale { color: CanvasText; }
   .chart-axis-guide { border-top-color: ButtonText; }
   .chart-axis-guide span:last-child { color: Highlight; }
+  .comparison-table thead th { color: ButtonText; background: Canvas; box-shadow: 0 1px 0 ButtonText; }
 }
 
 @media print {
@@ -1236,5 +1238,6 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-comparison .comparison-table td { padding: 0.35rem 0.25rem; white-space: normal; }
   body.print-comparison .comparison-table thead th:first-child,
   body.print-comparison .comparison-table tbody th { position: static; background: #fff; box-shadow: none; }
+  body.print-comparison .comparison-table thead th { position: static; background: #fff; box-shadow: none; }
   body.print-comparison .comparison-table tbody .comparison-provenance { max-width: none; }
 }

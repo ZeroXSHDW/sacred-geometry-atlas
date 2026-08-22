@@ -53,6 +53,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
 - Focused comparison cards, charts, tables, and exports preserve the order in which studies were selected or shared in the comparison route.
 - An expandable semantic comparison table with route-native study links, axis and recorded study status, lengths, spans, ratios, heights, bays, modules, radii, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling and live position feedback on narrow screens.
+- The comparison table keeps its column headings visible below the sticky site header while long records are scanned vertically, and keeps the study-name column visible while scrolling horizontally.
 - Comparison tables carry the same schematic/measured status styling as cards and charts, so provenance stays visible across every comparison surface.
 - The active study status badge uses the same schematic/measured styling as the catalog, charts, and comparison table.
 - Context-aware CSV and structured JSON exports for the active comparison scope, including typology/place/era/axis context, per-record status definitions, optional floor-area and volume estimates, derived readings, estimate provenance, scope, reproducible route, schema version, and units, alongside the full-atlas and filtered-view JSON downloads.
