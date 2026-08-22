@@ -123,7 +123,7 @@
     const matchContext = searchMatchContext(study);
     const status = studyStatus(study);
     const statusLabel = statusDisplayName(status);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -3408,7 +3408,7 @@
 
   function comparisonStudyAriaLabel(study, ratio, section) {
     const status = studyStatus(study);
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(statusDisplayName(status))} (${escapeHtml(status)}); ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(statusDisplayName(status))} (${escapeHtml(status)}); ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}; Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
