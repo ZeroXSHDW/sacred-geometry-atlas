@@ -282,16 +282,16 @@ jobs:
             if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
           }
           if (!app.includes('try {\n        await navigator.clipboard.writeText(value);\n        return true;\n      } catch (error) {\n        // Continue with the textarea fallback if the permissioned API rejects.') || !app.includes('const previousFocus = document.activeElement;') || !app.includes('previousFocus.focus({ preventScroll: true });')) throw new Error('Copy fallback must handle clipboard rejection and restore initiating focus');
-          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'function endAsyncAction(button)', 'button.setAttribute("aria-busy", "false");', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
+          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'const SYNC_ACTION_COOLDOWN_MS = 400;', 'function endAsyncAction(button, delay = 0)', 'if (delay > 0) window.setTimeout(release, delay);', 'button.setAttribute("aria-busy", "false");', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
             if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
           for (const functionName of ['downloadDrawing()', 'downloadStudy()', 'downloadData()', 'downloadCatalogView()', 'downloadComparisonCsv()']) {
             const start = app.indexOf(`function ${functionName}`);
             const end = app.indexOf('\n  function ', start + 1);
             const source = start >= 0 && end >= 0 ? app.slice(start, end) : '';
-            if (!source.includes('beginAsyncAction(button)') || !source.includes('endAsyncAction(button)') || !source.includes('finally')) throw new Error(`Download action is missing busy-state protection: ${functionName}`);
+            if (!source.includes('beginAsyncAction(button)') || !source.includes('endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS)') || !source.includes('finally')) throw new Error(`Download action is missing busy-state protection: ${functionName}`);
           }
-          for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete', '.share-button[aria-busy="true"]']) {
+          for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete', 'button[aria-busy="true"]']) {
             if (!styles.includes(token)) throw new Error('Download completion state is missing styling: ' + token);
           }
           for (const token of ['if (!study || !button || !status || !beginAsyncAction(button)) return;', 'if (!button || !status || !beginAsyncAction(button)) return;', 'endAsyncAction(button);']) {
@@ -949,6 +949,41 @@ jobs:
             if (shareStudyButton.disabled || shareCatalogButton.disabled || shareCompareButton.disabled) throw new Error('Share-link fallback did not restore the share button states');
             console.log('Share-link manual-copy fallback smoke test passed.');
           })().catch((error) => { console.error(error); process.exitCode = 1; });
+          NODE
+
+      - name: Smoke-test export busy cooldown
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const timers = [];
+          const context = {
+            window: {
+              CHURCH_GEOMETRY: [],
+              setTimeout(callback, delay) {
+                timers.push({ callback, delay });
+                return timers.length;
+              }
+            },
+            document: {
+              querySelector() { return null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { beginAsyncAction, endAsyncAction };\n})();');
+          vm.runInNewContext(app, context);
+          const { beginAsyncAction, endAsyncAction } = context.window.__atlasTest;
+          const button = {
+            disabled: false,
+            setAttribute(name, value) { this[name] = value; }
+          };
+          if (!beginAsyncAction(button) || !button.disabled || button['aria-busy'] !== 'true') throw new Error('Export action did not enter its busy state');
+          if (beginAsyncAction(button)) throw new Error('Busy export action accepted a duplicate activation');
+          endAsyncAction(button, 400);
+          if (!button.disabled || button['aria-busy'] !== 'true' || timers.length !== 1 || timers[0].delay !== 400) throw new Error('Export action released its busy state too early');
+          timers[0].callback();
+          if (button.disabled || button['aria-busy'] !== 'false') throw new Error('Export action did not release after its cooldown');
+          console.log('Export busy cooldown smoke test passed.');
           NODE
 
   deploy:

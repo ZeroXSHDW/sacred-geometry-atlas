@@ -22,6 +22,7 @@
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const MIN_ZOOM = 0.7;
   const MAX_ZOOM = 1.6;
+  const SYNC_ACTION_COOLDOWN_MS = 400;
   const zoomPercent = (zoom) => `${Math.round((zoom ?? state.zoom) * 100)}%`;
   const parseZoom = (value) => {
     if (value === undefined || value === "") return null;
@@ -725,10 +726,14 @@
     return true;
   }
 
-  function endAsyncAction(button) {
+  function endAsyncAction(button, delay = 0) {
     if (!button) return;
-    button.disabled = false;
-    button.setAttribute("aria-busy", "false");
+    const release = () => {
+      button.disabled = false;
+      button.setAttribute("aria-busy", "false");
+    };
+    if (delay > 0) window.setTimeout(release, delay);
+    else release();
   }
 
   function renderStudyNav() {
@@ -1469,7 +1474,7 @@
     temporaryButtonFeedback(button, "Exported", "Drawing exported", "SVG", "Export the current drawing as SVG", "drawing-export");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
-      endAsyncAction(button);
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
   }
 
@@ -1493,7 +1498,7 @@
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
-      endAsyncAction(button);
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
   }
 
@@ -1533,7 +1538,7 @@
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
-      endAsyncAction(button);
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
   }
 
@@ -1578,7 +1583,7 @@
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
-      endAsyncAction(button);
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
   }
 
@@ -1645,7 +1650,7 @@
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
-      endAsyncAction(button);
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
   }
 
