@@ -341,6 +341,7 @@ jobs:
           for (const token of ['const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer, requestedZoom] = segments;', 'const parseZoom = (value) =>', 'zoom: page === "atlas" && studyId ? parseZoom(requestedZoom) : null,', 'state.zoom = route.zoom || 1;', 'const zoomSegment = state.zoom === 1 ? "" : `/${Number(state.zoom.toFixed(2))}`;']) {
             if (!app.includes(token)) throw new Error('Study routes must restore optional drawing zoom: ' + token);
           }
+          if (!app.includes('lastRouteSignature = currentUrl;') || !app.includes('lastRouteSignature = nextUrl;')) throw new Error('Local history mutations must refresh the route deduplication marker');
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction must be explained to assistive technology');
@@ -739,6 +740,81 @@ jobs:
           syncFromHash();
           if (drawingRenders !== 1) throw new Error(`Duplicate route event rendered again: ${drawingRenders}`);
           console.log('Route event deduplication and filtered deep-link smoke test passed.');
+          NODE
+      - name: Smoke-test local history restoration
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          let drawingRenders = 0;
+          const makeElement = () => ({
+            hidden: false,
+            value: '',
+            textContent: '',
+            innerHTML: '',
+            disabled: false,
+            title: '',
+            selectedOptions: [{ textContent: 'All' }],
+            classList: { add() {}, remove() {}, contains() { return false; }, toggle() {} },
+            setAttribute() {},
+            removeAttribute() {},
+            querySelector() { return makeElement(); },
+            scrollIntoView() {},
+            focus() {}
+          });
+          const drawing = makeElement();
+          Object.defineProperty(drawing, 'innerHTML', {
+            get() { return this._innerHTML || ''; },
+            set(value) { this._innerHTML = value; drawingRenders += 1; }
+          });
+          elements.set('#geometryCanvas', drawing);
+          const classes = new Set(['no-js']);
+          const initialHref = 'https://example.test/atlas/#atlas/basilica/plan/exterior/all';
+          const location = { href: initialHref, hash: '#atlas/basilica/plan/exterior/all' };
+          const historyCalls = [];
+          const move = (url) => {
+            const next = new URL(url, location.href);
+            location.href = next.href;
+            location.hash = next.hash;
+          };
+          const context = {
+            URL,
+            window: {
+              location,
+              history: {
+                pushState(state, title, url) { historyCalls.push(['pushState', url]); move(url); },
+                replaceState(state, title, url) { historyCalls.push(['replaceState', url]); move(url); }
+              },
+              matchMedia() { return { matches: false }; },
+              scrollTo() {},
+              clearTimeout() {},
+              setTimeout() { return 1; },
+              addEventListener() {}
+            },
+            document: {
+              title: '',
+              body: { classList: { contains(name) { return classes.has(name); }, remove(name) { classes.delete(name); }, add(name) { classes.add(name); } } },
+              querySelector(selector) {
+                if (!elements.has(selector)) elements.set(selector, makeElement());
+                return elements.get(selector);
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, syncFromHash, showPage };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, syncFromHash, showPage } = context.window.__atlasTest;
+          syncFromHash();
+          if (state.activeId !== 'basilica' || drawingRenders !== 1) throw new Error('Initial history route did not hydrate the requested study');
+          state.activeId = 'gothic';
+          showPage('atlas', { scroll: false });
+          if (location.hash !== '#atlas/gothic/plan/exterior/all' || !historyCalls.some(([method]) => method === 'pushState')) throw new Error(`Local navigation did not create the gothic route: ${location.hash}`);
+          move(initialHref);
+          syncFromHash();
+          if (state.activeId !== 'basilica' || drawingRenders !== 2) throw new Error(`Back navigation was skipped as a duplicate route: ${state.activeId} / ${drawingRenders}`);
+          console.log('Local history restoration smoke test passed.');
           NODE
       - name: Smoke-test filtered empty-state context
         run: |

@@ -332,12 +332,16 @@
     });
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
     const currentUrl = `${current.pathname}${current.search}${current.hash}`;
-    if (nextUrl === currentUrl) return;
+    if (nextUrl === currentUrl) {
+      lastRouteSignature = currentUrl;
+      return;
+    }
     window.history[historyMethod]({
       page: state.page,
       studyId: state.page === "atlas" ? state.activeId : null,
       compareIds: state.page === "compare" ? [...state.compareIds] : []
     }, "", nextUrl);
+    lastRouteSignature = nextUrl;
   }
 
   function replaceCatalogRoute() {
@@ -393,14 +397,24 @@
 
   function updateRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
-    if (window.location.hash === nextHash) return;
-    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", navigationUrl(nextHash));
+    const nextUrl = navigationUrl(nextHash);
+    if (window.location.hash === nextHash) {
+      lastRouteSignature = currentRouteSignature();
+      return;
+    }
+    window.history.pushState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", nextUrl);
+    lastRouteSignature = nextUrl;
   }
 
   function replaceRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
-    if (window.location.hash === nextHash) return;
-    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", navigationUrl(nextHash));
+    const nextUrl = navigationUrl(nextHash);
+    if (window.location.hash === nextHash) {
+      lastRouteSignature = currentRouteSignature();
+      return;
+    }
+    window.history.replaceState({ page, studyId: includeStudy ? state.activeId : null, compareIds: page === "compare" ? [...state.compareIds] : [] }, "", nextUrl);
+    lastRouteSignature = nextUrl;
   }
 
   function syncFromHash() {
