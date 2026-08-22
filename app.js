@@ -1123,6 +1123,7 @@
     renderActiveFilters();
     renderVisibleComparisonAction(visible);
     renderMethodReturnAction(activeStudy(), visible);
+    renderMethodContext(activeStudy(), visible);
     updateSearchClear();
     renderStudyNav();
     list.innerHTML = visible.map((study) => {
@@ -1199,6 +1200,7 @@
     $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
     renderActiveProvenance(study);
     renderMethodReturnAction(study);
+    renderMethodContext(study);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -1238,6 +1240,21 @@
     button.title = label;
     const text = button.querySelector("span:last-child");
     if (text) text.textContent = canOpenStudy ? "Open current study" : "Return to Atlas";
+  }
+
+  function renderMethodContext(study = activeStudy(), visible = visibleStudies()) {
+    const target = $("#methodContextNote");
+    if (!target) return;
+    const route = parseRoute();
+    const hasContext = Boolean(study && route.page === "method" && route.contextStudyId === study.id);
+    if (!hasContext) {
+      target.textContent = "Notes on the atlas model";
+      return;
+    }
+    const isVisible = visible.some((candidate) => candidate.id === study.id);
+    target.textContent = isVisible
+      ? `Current study · ${studyShortName(study)}`
+      : `Study context · ${studyShortName(study)} · outside current catalog`;
   }
 
   function renderActiveProvenance(study) {
@@ -1365,6 +1382,7 @@
     if (page === "compare") renderCompare();
     if (shouldUpdateHash) updateRoute(page, routeStudy);
     if (shouldUpdateHash) replaceCatalogRoute();
+    if (page === "method") renderMethodContext();
     if (scroll) {
       const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
       const pageTarget = page === "atlas" ? atlas : page === "compare" ? compare : method;

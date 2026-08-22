@@ -174,6 +174,7 @@ jobs:
           if (!html.includes('<section class="method-readings" aria-labelledby="derived-readings-heading">') || !html.includes('id="derived-readings-heading"') || !html.includes('Bounding area') || !html.includes('Reading profile') || !styles.includes('.method-readings-grid')) throw new Error('Method view must explain derived readings');
           if (!html.includes('<button class="share-button method-return-button" id="methodBackToStudy" type="button" aria-controls="atlas" aria-label="Open current study in Atlas"') || !app.includes('function renderMethodReturnAction(study = activeStudy(), visible = visibleStudies())') || !app.includes('visible.some((candidate) => candidate.id === study.id)') || !app.includes('$("#methodBackToStudy").addEventListener("click"') || !styles.includes('.section-heading-actions {') || !styles.includes('.method-return-button {')) throw new Error('Method view must provide a context-aware return-to-study action');
           if (!app.includes('const methodLink = $(\'.hero-action[href="#methodView"]\');') || !app.includes('showPage(button.dataset.view, { routeStudy: button.dataset.view === "method" });') || !app.includes('showPage("method", { routeStudy: true });') || !app.includes('showPage("atlas", { routeStudy: canOpenStudy });') || !app.includes('document.title = contextStudy')) throw new Error('Method navigation must preserve the active study context and return cleanly from filtered views');
+          if (!html.includes('<p class="section-note" id="methodContextNote">Notes on the atlas model</p>') || !app.includes('function renderMethodContext(study = activeStudy(), visible = visibleStudies())') || !app.includes('Current study · ${studyShortName(study)}') || !app.includes('outside current catalog') || !app.includes('if (page === "method") renderMethodContext();')) throw new Error('Method view must identify its preserved study context visibly');
           if (!html.includes('data-layer="measure" type="button" aria-pressed="false" aria-controls="geometryCanvas">Dimensions</button>')) throw new Error('Dimension layer must use clear schematic terminology');
           if (!html.includes('<div class="metric-strip" role="group" aria-label="Primary dimensions">')) throw new Error('Primary dimension group must use clear schematic terminology');
           if (!html.includes('<span class="metric-label">overall length</span>') || !html.includes('id="metricLength"')) throw new Error('Primary dimension group must expose overall length');
@@ -754,16 +755,18 @@ jobs:
           const vm = require('vm');
           const elements = new Map();
           const actionText = { textContent: '' };
+          const contextNote = { textContent: '' };
           const action = {
             title: '',
             setAttribute(name, value) { this[name] = value; },
             querySelector() { return actionText; }
           };
           elements.set('#methodBackToStudy', action);
+          elements.set('#methodContextNote', contextNote);
           const context = {
             URL,
             window: {
-              location: { href: 'https://example.test/atlas/#methodView' },
+              location: { href: 'https://example.test/atlas/#method/basilica', hash: '#method/basilica' },
               addEventListener() {}
             },
             document: {
@@ -773,15 +776,19 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, renderMethodReturnAction } ;\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, renderMethodReturnAction, renderMethodContext } ;\n})();');
           vm.runInNewContext(app, context);
-          const { state, renderMethodReturnAction } = context.window.__atlasTest;
+          const { state, renderMethodReturnAction, renderMethodContext } = context.window.__atlasTest;
           state.activeId = 'basilica';
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Open Longitudinal basilica in Atlas' || action.title !== action['aria-label'] || actionText.textContent !== 'Open current study') throw new Error('Method action did not identify the visible current study');
+          renderMethodContext();
+          if (contextNote.textContent !== 'Current study · Longitudinal basilica') throw new Error('Method view did not name its preserved study context');
           state.query = 'gothic';
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Return to Atlas catalog' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not fall back to the filtered Atlas catalog');
+          renderMethodContext();
+          if (contextNote.textContent !== 'Study context · Longitudinal basilica · outside current catalog') throw new Error('Method view did not explain an out-of-scope study context');
           state.query = 'no matching study';
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Return to Atlas catalog' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not preserve the catalog fallback for an empty result set');
