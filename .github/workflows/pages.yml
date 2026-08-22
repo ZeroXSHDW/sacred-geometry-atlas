@@ -26,10 +26,13 @@ jobs:
         run: |
           node --check app.js
           node --check data/geometry.js
+          node --check scripts/sync-geometry-json.js
+          node scripts/sync-geometry-json.js --check
           test -s index.html
           test -s 404.html
           test -s styles.css
           test -s data/geometry.json
+          test -s scripts/sync-geometry-json.js
           test -f .nojekyll
           test -s og.png
           test -s favicon.svg
@@ -104,12 +107,13 @@ jobs:
           }
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
+          if (!workflow.includes('node scripts/sync-geometry-json.js --check')) throw new Error('Pages validation must check the generated geometry artifact');
           if (!html.includes('<body class="no-js">') || !html.includes('<script>document.body.classList.add("js-runtime");</script>')) throw new Error('Missing no-JS/runtime fallback markers');
           if (!html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('No-JS fallback must provide the page heading');
           if (!html.includes('<a class="skip-link skip-link-app" href="#main-content">Skip to content</a>')) throw new Error('Missing interactive skip link');

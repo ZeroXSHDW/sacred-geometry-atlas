@@ -14,6 +14,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A plain-language drawing context line that keeps the active surface, mode, layer focus, and zoom visible beside the interpretive caption.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
 - The Method warning adapts when a collection mixes schematic and source-supported records, so its limitations stay accurate as the atlas grows.
+- A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON artifact from the editable geometry source, with a `--check` mode used by GitHub Actions.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
@@ -101,6 +102,14 @@ The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.sv
 ## Add real churches
 
 The current values are explicitly schematic, illustrative proportions—not a measured survey of every church. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii when you have them.
+
+After editing the source, regenerate the static artifact with:
+
+```bash
+node scripts/sync-geometry-json.js
+```
+
+Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON is current without changing files.
 
 Each record should include:
 
