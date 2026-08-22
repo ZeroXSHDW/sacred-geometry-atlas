@@ -489,7 +489,7 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
-  function catalogRouteValues(includeCompare = state.page === "atlas") {
+  function catalogRouteValues(includeCompare = ["atlas", "method"].includes(state.page)) {
     return {
       q: state.query,
       typology: state.filter === "all" ? "" : state.filter,
@@ -502,7 +502,7 @@
     };
   }
 
-  function applyCatalogRouteState(url, includeCompare = state.page === "atlas") {
+  function applyCatalogRouteState(url, includeCompare = ["atlas", "method"].includes(state.page)) {
     const values = catalogRouteValues(includeCompare);
     catalogParamKeys.forEach((key) => {
       if (values[key]) url.searchParams.set(key, values[key]);
@@ -584,7 +584,7 @@
   }
 
   function methodNavigationUrl() {
-    const url = applyCatalogRouteState(new URL(window.location.href), false);
+    const url = applyCatalogRouteState(new URL(window.location.href), true);
     const study = activeStudy();
     url.hash = routeHash("method", Boolean(study), study ? study.id : null);
     return `${url.pathname}${url.search}${url.hash}`;
