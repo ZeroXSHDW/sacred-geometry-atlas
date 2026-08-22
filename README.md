@@ -101,6 +101,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - At the narrowest phone widths, header artifact controls tighten their spacing and padding without reducing their compact format labels or touch-target heights.
 - The desktop catalog panel stays below the sticky site header while visitors scan a long study list, without changing its static mobile flow.
 - The comparison table reveals a live visual cue only when its columns overflow, updating from “More columns →” to edge-aware directions as touch or keyboard scrolling moves through the data.
+- The comparison table keeps horizontal touch overscroll inside its data region, so a sideways scan does not pull the surrounding page along with it.
 - At phone widths, the drawing toolbar gives its scale readout a full row and wraps the export, reset, and zoom controls so the instrument remains usable without horizontal overflow.
 - The drawing toolbar labels its ratio as an illustrative diagram reference, keeping the schematic studies distinct from measured survey output.
 
