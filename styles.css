@@ -121,6 +121,7 @@ summary:focus-visible {
 .action-recovery .hero-action { padding: 0.5rem 0.65rem; font-size: 0.56rem; }
 .action-recovery-dismiss { padding: 0.5rem 0.65rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
 .action-recovery-dismiss:hover { border-color: var(--coral); color: var(--coral); background: rgba(231, 127, 98, 0.1); }
+#downloadRecovery:focus { outline: 2px solid var(--teal); outline-offset: 4px; }
 
 .sr-only {
   position: absolute;
@@ -935,6 +936,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .action-recovery-dismiss { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .action-recovery .hero-action:hover,
   .action-recovery-dismiss:hover { color: HighlightText; background: Highlight; }
+  #downloadRecovery:focus { outline-color: Highlight; }
   .filter-chip,
   .filter-clear-all,
   .download-button.is-complete,

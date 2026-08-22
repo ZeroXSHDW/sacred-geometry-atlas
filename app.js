@@ -879,6 +879,13 @@
     heading.textContent = message;
     recovery.hidden = false;
     downloadRecoveryFocusTarget = focusSelector || "";
+    if (typeof recovery.focus === "function") {
+      try {
+        recovery.focus();
+      } catch (error) {
+        // Focus is best-effort; the visible recovery actions remain available.
+      }
+    }
   }
 
   function dismissDownloadRecovery() {
