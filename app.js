@@ -780,7 +780,7 @@
       const heading = $("#activeName");
       if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: !scroll });
     } else if (restoreCardFocus) {
-      focusStudyCard(id);
+      focusStudyTarget(id);
     }
   }
 
@@ -854,7 +854,25 @@
   function focusStudyCard(id, options = {}) {
     const { preventScroll = true } = options;
     const card = $$(`[data-study-id]`).find((button) => button.dataset.studyId === id);
-    if (card && typeof card.focus === "function") card.focus({ preventScroll });
+    if (!card || typeof card.focus !== "function") return false;
+    card.focus({ preventScroll });
+    return true;
+  }
+
+  function focusStudyTarget(id) {
+    if (focusStudyCard(id)) return "card";
+    const emptyState = $("#visualEmptyState");
+    const emptyHeading = $("#visualEmptyHeading");
+    if (emptyState && !emptyState.hidden && emptyHeading && typeof emptyHeading.focus === "function") {
+      emptyHeading.focus({ preventScroll: true });
+      return "empty";
+    }
+    const heading = $("#activeName");
+    if (heading && typeof heading.focus === "function") {
+      heading.focus({ preventScroll: true });
+      return "heading";
+    }
+    return "none";
   }
 
   function clearFilter(key, options = {}) {

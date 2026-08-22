@@ -56,6 +56,7 @@ summary:focus-visible {
 
 #atlas-heading:focus-visible,
 .page-view h2:focus-visible,
+#visualEmptyHeading:focus-visible,
 #activeName:focus-visible,
 #main-content:focus-visible,
 #noscript-heading:focus-visible {

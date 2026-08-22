@@ -314,6 +314,7 @@ jobs:
           for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'catalog-card-detail', 'class="catalog-card-measure"', 'const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;', 'highlightSearchText(`${study.era} · Axis: ${study.axis} · ${study.emphasis}`)', 'compare-study-title', 'Length to span ratio', 'function catalogStudyAriaLabel(study, isActive)', 'study.typology}, ${study.place}, ${study.era};', 'number(study.radius)} ${geometryUnitName()};', 'study.axis} axis; ${study.emphasis};', 'catalogStudyAriaLabel(study, isActive)', 'study.place', 'number(study.length)} ${geometryUnitName()} long, span', 'if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });', 'sort: "#sortSelect"', 'if (key === "sort")', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true })', 'selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true })', 'toggleCompare(compareToggle.dataset.compareId, { focus: true })', 'announceStudy(activeStudy(), visible.length)', 'function focusCatalogControl(key, options = {})', 'const { preventScroll = true } = options;', 'control.focus({ preventScroll })', 'focusCatalogControl(key)', 'clearFilter("query", { focus: true })', 'clearCatalogFilters({ resetSort: true, focus: true })', 'clearFilter(chip.dataset.clearFilter, { focus: true })', 'if (focus) focusCatalogControl("query")', 'focusCompareToggle(id)', 'focusStudyCard(id)', 'focusCatalogControl("query", { preventScroll: false });']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
+          if (!app.includes('function focusStudyTarget(id)') || !app.includes('if (focusStudyCard(id)) return "card";') || !app.includes('const emptyState = $("#visualEmptyState");') || !app.includes('return "empty";') || !app.includes('return "heading";') || !app.includes('focusStudyTarget(id);') || !html.includes('id="visualEmptyHeading" tabindex="-1"') || !styles.includes('#visualEmptyHeading:focus-visible')) throw new Error('Opening a filtered-out study must restore focus to a visible Atlas context heading');
           if (!app.includes('class="catalog-card-status"') || !app.includes('data-status="${escapeHtml(studyDataLabel(study))}"') || !app.includes('title="${escapeHtml(studyStatusDescription(study))}"') || !app.includes('escapeHtml(measureLabel)') || !styles.includes('.catalog-card-status {') || !styles.includes('.catalog-card-status[data-status="measured"]') || !styles.includes('.catalog-card-measure {') || !styles.includes('.catalog-card-status,\n  .catalog-card-status[data-status="measured"]')) throw new Error('Catalog cards must expose schema-backed status badges and geometry measures');
           if (!app.includes('window.addEventListener("popstate", syncFromHash)') || !app.includes('let lastRouteSignature = "";') || !app.includes('function currentRouteSignature()') || !app.includes('if (!revealPending && currentRouteSignature() === lastRouteSignature) return;') || !app.includes('lastRouteSignature = currentRouteSignature();')) throw new Error('Missing deduplicated browser history navigation support');
           if (!app.includes('const previousPage = state.page;') || !app.includes('else if (window.location.hash.length > 0 && (previousPage === route.page || revealPending))') || !app.includes('function focusPageHeading(page, preventScroll = true)')) throw new Error('Same-view and startup hash navigation must restore heading focus');
@@ -713,6 +714,43 @@ jobs:
           const elevation = drawElevation(specialCharacterStudy);
           if (!elevation.includes('light &amp; &lt;line&gt;') || elevation.includes('Light & <line>')) throw new Error('Dynamic SVG labels must escape study text');
           console.log('Route-native catalog link smoke test passed.');
+          NODE
+      - name: Smoke-test filtered study focus handoff
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const cards = [];
+          let focused = '';
+          const heading = { focus(options) { focused = 'heading'; this.focusOptions = options; } };
+          const emptyState = { hidden: true };
+          const emptyHeading = { focus(options) { focused = 'empty'; this.focusOptions = options; } };
+          const context = {
+            window: {},
+            document: {
+              querySelector(selector) {
+                if (selector === '#activeName') return heading;
+                if (selector === '#visualEmptyState') return emptyState;
+                if (selector === '#visualEmptyHeading') return emptyHeading;
+                return null;
+              },
+              querySelectorAll(selector) { return selector === '[data-study-id]' ? cards : []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { focusStudyCard, focusStudyTarget };\n})();');
+          vm.runInNewContext(app, context);
+          const { focusStudyCard, focusStudyTarget } = context.window.__atlasTest;
+          cards.push({ dataset: { studyId: 'basilica' }, focus() { focused = 'card'; } });
+          if (!focusStudyCard('basilica') || focusStudyTarget('basilica') !== 'card' || focused !== 'card') throw new Error('Visible study cards did not retain focus restoration');
+          cards.length = 0;
+          focused = '';
+          emptyState.hidden = false;
+          if (focusStudyCard('gothic') || focusStudyTarget('gothic') !== 'empty' || focused !== 'empty' || !emptyHeading.focusOptions.preventScroll) throw new Error('Empty filtered view did not restore focus to its visible context heading');
+          emptyState.hidden = true;
+          focused = '';
+          if (focusStudyTarget('gothic') !== 'heading' || focused !== 'heading' || !heading.focusOptions.preventScroll) throw new Error('Filtered-out study did not restore focus to the active Atlas heading');
+          console.log('Filtered study focus handoff smoke test passed.');
           NODE
       - name: Smoke-test catalog provenance badge
         run: |
