@@ -68,6 +68,7 @@
   let citationResetTimer;
   let lastCatalogStatus = "";
   let lastCatalogResultCount = "";
+  let lastRouteSignature = "";
   const actionFeedbackTimers = new Map();
   const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({
     "&": "&amp;",
@@ -218,6 +219,11 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
+  function currentRouteSignature() {
+    const url = new URL(window.location.href);
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
   function updateCatalogRoute(historyMethod = "replaceState") {
     const current = new URL(window.location.href);
     const url = new URL(current.href);
@@ -287,6 +293,7 @@
 
   function syncFromHash() {
     const revealPending = document.body.classList.contains("no-js");
+    if (!revealPending && currentRouteSignature() === lastRouteSignature) return;
     syncCatalogFromUrl();
     const route = parseRoute();
     const previousPage = state.page;
@@ -350,6 +357,7 @@
     } else if (window.location.hash.length > 0 && (previousPage === route.page || revealPending)) {
       focusPageHeading(route.page);
     }
+    lastRouteSignature = currentRouteSignature();
   }
 
   function populateFilter() {

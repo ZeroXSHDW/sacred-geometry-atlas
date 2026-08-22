@@ -36,6 +36,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Context-aware CSV export for the active comparison scope, including optional floor-area and volume estimates, estimate provenance, scope, and reproducible route, alongside the full-atlas and filtered-view JSON downloads.
 - Section-aware navigation that brings Atlas, Compare, and Method views into place.
 - Shareable study and catalog views: hash routes such as `#atlas/gothic/section/interior/axis/1.3` (the optional final segment restores 130% drawing zoom), focused comparisons such as `#compare/basilica,gothic`, and bookmarkable catalog query/filter/sort state; selected comparison studies persist in the Atlas URL and browser history restores the selected context. Partial or malformed study links and catalog parameters are canonicalized to valid defaults.
+- Browser history restores each route once, even when a traversal emits both hash and history events, so focus and live announcements do not repeat for the same URL.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
 - Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state and derived readings, plus a committed [`data/geometry.json`](data/geometry.json) artifact for static and no-script use.
