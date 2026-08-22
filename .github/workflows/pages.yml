@@ -95,6 +95,16 @@ jobs:
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
+          const structuredDataMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+          if (!structuredDataMatch) throw new Error('Missing collection JSON-LD metadata');
+          let structuredData;
+          try {
+            structuredData = JSON.parse(structuredDataMatch[1]);
+          } catch (error) {
+            throw new Error('Collection JSON-LD metadata is not valid JSON');
+          }
+          const structuredDataset = structuredData && structuredData.mainEntity;
+          if (structuredData['@context'] !== 'https://schema.org' || structuredData['@type'] !== 'CollectionPage' || structuredData.name !== 'Sacred Geometry Atlas' || !structuredDataset || structuredDataset['@type'] !== 'Dataset' || structuredDataset.encodingFormat !== 'application/json' || !structuredDataset.distribution || structuredDataset.distribution.contentUrl !== 'data/geometry.json') throw new Error('Collection JSON-LD metadata is incomplete');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
             'property="og:url" content="./"',

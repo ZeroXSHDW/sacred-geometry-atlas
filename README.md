@@ -119,6 +119,8 @@ git commit -m "Update Sacred Geometry Atlas"
 
 The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, `twitter:image`, `robots.txt`, and `sitemap.xml` crawl metadata before uploading the site artifact.
 
+The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON distribution.
+
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
 
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
