@@ -105,6 +105,7 @@ jobs:
           }
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
+          if (!notFound.includes('@media (pointer: coarse)') || !notFound.includes('.home-link { min-height: 44px; }') || !notFound.includes('@media (forced-colors: active)') || !notFound.includes('border-color: ButtonText; color: ButtonText; background: ButtonFace;') || !notFound.includes('color: HighlightText; background: Highlight;') || !notFound.includes('.error-footer strong { color: Highlight; }')) throw new Error('404 recovery actions must preserve touch targets and forced-colors affordances');
           for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }

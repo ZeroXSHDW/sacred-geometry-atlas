@@ -46,8 +46,22 @@
         .error-footer { display: block; width: min(100% - 32px, 520px); line-height: 1.7; }
         .error-footer p + p { margin-top: 0.3rem; }
       }
+      @media (pointer: coarse) {
+        .home-link { min-height: 44px; }
+      }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      }
+      @media (forced-colors: active) {
+        .home-link,
+        .home-link-secondary { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+        .home-link:hover,
+        .home-link:focus-visible,
+        .home-link-secondary:hover,
+        .home-link-secondary:focus-visible { color: HighlightText; background: Highlight; }
+        .home-link:focus-visible { outline-color: Highlight; }
+        .error-footer { border-top-color: ButtonText; color: ButtonText; }
+        .error-footer strong { color: Highlight; }
       }
     </style>
   </head>
