@@ -672,6 +672,10 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .bar-fill { display: block; height: 100%; min-width: 3px; background: var(--amber); transition: width 450ms ease; }
 .bar-fill.teal { background: var(--teal); }
 .bar-value { color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; text-align: right; }
+.chart-axis-guide { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 0.6rem; padding-top: 0.35rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.48rem; line-height: 1; }
+.chart-axis-guide span:nth-child(2) { text-align: center; }
+.chart-axis-guide span:last-child { color: var(--teal); text-align: right; }
+.bar-axis-guide { padding-inline: calc(92px + 0.7rem) calc(44px + 0.7rem); }
 .chart-scale { margin: 1.25rem 0 0; color: var(--teal); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
 .chart-note { margin: 0.5rem 0 0; color: var(--ink-muted); font-size: 0.68rem; }
 .module-chart { display: grid; gap: 0.75rem; }
@@ -680,6 +684,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .module-bars { display: flex; align-items: stretch; gap: 3px; max-width: 100%; height: 22px; }
 .module-bar { flex: 1; min-width: 2px; height: 100%; background: var(--teal); opacity: 0.72; }
 .module-value { color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; text-align: right; }
+.module-axis-guide { padding-inline: calc(145px + 0.8rem) calc(55px + 0.8rem); }
 .comparison-table-panel { margin-top: 1rem; border: 1px solid var(--line); background: var(--panel); }
 .comparison-table-panel summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.95rem 1.15rem; color: var(--teal); cursor: pointer; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.04em; list-style: none; text-transform: uppercase; }
 .comparison-table-panel summary::-webkit-details-marker { display: none; }
@@ -852,7 +857,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .analysis-heading { display: block; }
   .equation { width: fit-content; margin-top: 0.8rem; }
   .bar-row { grid-template-columns: 78px 1fr 37px; gap: 0.45rem; }
+  .bar-axis-guide { padding-inline: calc(78px + 0.45rem) calc(37px + 0.45rem); }
   .module-row { grid-template-columns: 108px 1fr 43px; gap: 0.45rem; }
+  .module-axis-guide { padding-inline: calc(108px + 0.45rem) calc(43px + 0.45rem); }
 }
 
 @media (pointer: coarse) {

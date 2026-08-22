@@ -2531,9 +2531,21 @@
     const ratioScale = $("#ratioChartScale");
     const heightScale = $("#heightChartScale");
     const moduleScale = $("#moduleChartScale");
+    const ratioAxisMid = $("#ratioChartAxisMid");
+    const ratioAxisMax = $("#ratioChartAxisMax");
+    const heightAxisMid = $("#heightChartAxisMid");
+    const heightAxisMax = $("#heightChartAxisMax");
+    const moduleAxisMid = $("#moduleChartAxisMid");
+    const moduleAxisMax = $("#moduleChartAxisMax");
     if (ratioScale) ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;
     if (heightScale) heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;
     if (moduleScale) moduleScale.textContent = `Scale 0 → ${number(maxModule)} m · active comparison maximum`;
+    if (ratioAxisMid) ratioAxisMid.textContent = number(maxRatio / 2, 2);
+    if (ratioAxisMax) ratioAxisMax.textContent = number(maxRatio, 2);
+    if (heightAxisMid) heightAxisMid.textContent = number(maxHeightRatio / 2, 2);
+    if (heightAxisMax) heightAxisMax.textContent = number(maxHeightRatio, 2);
+    if (moduleAxisMid) moduleAxisMid.textContent = `${number(maxModule / 2, 2)} m`;
+    if (moduleAxisMax) moduleAxisMax.textContent = `${number(maxModule)} m`;
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const status = studyDataLabel(study);
