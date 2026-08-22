@@ -213,6 +213,10 @@
     return `Schematic = ${definitions.schematic} Measured = ${definitions.measured} Counts for ${scope}: ${counts.schematic} schematic · ${counts.measured} measured.`;
   }
 
+  function catalogStatusGuidanceText(records = visibleStudies()) {
+    return statusGuidanceText(records, catalogScopeLabel());
+  }
+
   function exportProvenance(records, scope) {
     return {
       scope,
@@ -1084,6 +1088,8 @@
     const visible = visibleStudies();
     const catalogExport = $("#downloadCatalogView");
     renderCatalogResultCount(visible.length);
+    const statusHelp = $("#statusHelp");
+    if (statusHelp) statusHelp.textContent = catalogStatusGuidanceText(visible);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
     if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
     renderVisualState(visible);
