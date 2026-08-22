@@ -872,19 +872,40 @@
   };
   const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
+  function hasFocusWithin(element) {
+    if (!element || !document.activeElement) return false;
+    if (document.activeElement === element) return true;
+    return typeof element.contains === "function" && element.contains(document.activeElement);
+  }
+
+  function restoreFocus(target) {
+    if (!target || typeof target.focus !== "function") return;
+    try {
+      target.focus({ preventScroll: true });
+    } catch (error) {
+      // Focus restoration is best-effort; the visible recovery action remains available.
+    }
+  }
+
   function hideManualCopyFallbacks() {
+    let focusTarget = null;
     manualCopyFallbackSelectors.forEach((selector) => {
       const fallback = $(selector);
-      if (fallback) fallback.hidden = true;
       const trigger = $(manualCopyFallbackControls[selector]);
+      if (!focusTarget && hasFocusWithin(fallback)) focusTarget = trigger;
+      if (fallback) fallback.hidden = true;
       if (trigger && typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "false");
     });
+    restoreFocus(focusTarget);
   }
 
   function hideDownloadRecovery() {
     const recovery = $("#downloadRecovery");
+    const focusTarget = hasFocusWithin(recovery) ? $(downloadRecoveryFocusTarget) : null;
     if (recovery) recovery.hidden = true;
     downloadRecoveryFocusTarget = "";
+    restoreFocus(focusTarget);
+    return Boolean(focusTarget);
   }
 
   function showDownloadRecovery(message, focusSelector) {
@@ -894,26 +915,14 @@
     heading.textContent = message;
     recovery.hidden = false;
     downloadRecoveryFocusTarget = focusSelector || "";
-    if (typeof recovery.focus === "function") {
-      try {
-        recovery.focus();
-      } catch (error) {
-        // Focus is best-effort; the visible recovery actions remain available.
-      }
-    }
+    restoreFocus(recovery);
   }
 
   function dismissDownloadRecovery() {
     const focusSelector = downloadRecoveryFocusTarget;
-    hideDownloadRecovery();
+    const focusRestored = hideDownloadRecovery();
     const trigger = focusSelector ? $(focusSelector) : null;
-    if (trigger && typeof trigger.focus === "function") {
-      try {
-        trigger.focus({ preventScroll: true });
-      } catch (error) {
-        // Focus restoration is best-effort; the recovery actions remain available.
-      }
-    }
+    if (!focusRestored) restoreFocus(trigger);
   }
 
   function handleDownloadRecoveryKeydown(event) {
@@ -928,13 +937,7 @@
     const trigger = $(manualCopyFallbackControls[fallbackSelector]);
     if (!trigger) return;
     if (typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "false");
-    if (typeof trigger.focus === "function") {
-      try {
-        trigger.focus({ preventScroll: true });
-      } catch (error) {
-        // Focus restoration is best-effort; the fallback is still dismissed.
-      }
-    }
+    restoreFocus(trigger);
   }
 
   function revealManualCopyFallback(fallbackSelector, textSelector, value) {
@@ -945,13 +948,7 @@
     fallback.hidden = false;
     const trigger = $(manualCopyFallbackControls[fallbackSelector]);
     if (trigger && typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "true");
-    if (typeof fallbackText.focus === "function") {
-      try {
-        fallbackText.focus({ preventScroll: true });
-      } catch (error) {
-        // Focus is best-effort; the visible field remains available.
-      }
-    }
+    restoreFocus(fallbackText);
     if (typeof fallbackText.select === "function") {
       try {
         fallbackText.select();

@@ -1531,6 +1531,62 @@ jobs:
           console.log('Visible download recovery smoke test passed.');
           NODE
 
+      - name: Smoke-test recovery focus handoff
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const trigger = {
+            focusCalls: 0,
+            focus() { this.focusCalls += 1; }
+          };
+          const fallbackText = {};
+          const fallback = {
+            hidden: false,
+            contains(element) { return element === fallbackText; }
+          };
+          const recovery = {
+            hidden: false,
+            focusCalls: 0,
+            focus() { this.focusCalls += 1; }
+          };
+          const recoveryTrigger = {
+            focusCalls: 0,
+            focus() { this.focusCalls += 1; }
+          };
+          elements.set('#shareFallback', fallback);
+          elements.set('#shareFallbackText', fallbackText);
+          elements.set('#shareStudy', trigger);
+          elements.set('#downloadRecovery', recovery);
+          elements.set('#downloadRecoveryHeading', { textContent: '' });
+          elements.set('#downloadData', recoveryTrigger);
+          const document = {
+            activeElement: fallbackText,
+            querySelector(selector) { return elements.get(selector) || null; },
+            querySelectorAll() { return []; }
+          };
+          const context = {
+            URL,
+            navigator: {},
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
+              addEventListener() {}
+            },
+            document
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { hideManualCopyFallbacks, showDownloadRecovery, hideDownloadRecovery };\n})();');
+          vm.runInNewContext(app, context);
+          const { hideManualCopyFallbacks, showDownloadRecovery, hideDownloadRecovery } = context.window.__atlasTest;
+          hideManualCopyFallbacks();
+          if (!fallback.hidden || trigger.focusCalls !== 1) throw new Error('Rerendering a focused manual-copy fallback did not return focus to its trigger');
+          showDownloadRecovery('The file download was blocked.', '#downloadData');
+          document.activeElement = recovery;
+          hideDownloadRecovery();
+          if (!recovery.hidden || recoveryTrigger.focusCalls !== 1) throw new Error('Hiding a focused download recovery panel did not return focus to its trigger');
+          console.log('Recovery focus handoff smoke test passed.');
+          NODE
       - name: Smoke-test export busy cooldown
         run: |
           node - <<'NODE'
