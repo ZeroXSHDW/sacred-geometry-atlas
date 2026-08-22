@@ -355,9 +355,21 @@
     return `The current collection uses ${labels || "records without a documented status"}. Each record carries a status and provenance note so its evidence can be identified.`;
   }
 
+  function methodReadingsIntroText(records = studies) {
+    const counts = studyStatusCounts(records);
+    const activeStatuses = schemaStatusValues().filter((status) => counts[status] > 0);
+    if (activeStatuses.length === 1 && activeStatuses[0] === "schematic") return "These readings describe the proportional model; they are analytical aids, not measured survey results.";
+    if (activeStatuses.length === 1 && activeStatuses[0] === "measured") return "These readings use records labeled measured; each record's provenance note identifies its source context.";
+    if (activeStatuses.length === 1) return `These readings use records labeled ${statusDisplayName(activeStatuses[0])}; use the status definition and provenance note to interpret their evidence level.`;
+    if (activeStatuses.length > 1) return "These readings combine multiple data-status categories; use each record's status definition and provenance note to distinguish analytical aids from source-supported values.";
+    return "These readings are analytical aids; use each record's data status and provenance note to interpret their evidence level.";
+  }
+
   function renderMethodProvenance() {
     const target = $("#methodProvenanceNote");
     if (target) target.textContent = methodProvenanceText();
+    const intro = $("#methodReadingsIntro");
+    if (intro) intro.textContent = methodReadingsIntroText();
   }
 
   function studyStatusCounts(records = studies) {

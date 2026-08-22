@@ -17,7 +17,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
 - The data-status vocabulary is read from the schema, so documented statuses beyond schematic/measured remain filterable, counted, announced, and preserved in exports.
 - Displayed dimensions, SVG labels, citations, comparison tables, and CSV headers use the schema-backed unit symbol, so a changed unit system cannot silently retain metre labels.
-- The Method warning adapts when a collection mixes schematic and source-supported records, so its limitations stay accurate as the atlas grows.
+- The Method warning and derived-reading preface adapt when a collection mixes schematic, measured, or custom-status records, so its limitations stay accurate as the atlas grows.
 - A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON, CSV, and JSON Schema artifacts plus the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
