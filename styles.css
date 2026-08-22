@@ -951,6 +951,11 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button span.download-label { display: inline; font-size: 0; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.62rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
+  .catalog-summary-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .catalog-summary .catalog-share-button span:last-child,
+  .catalog-summary .catalog-citation-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
+  .catalog-summary .catalog-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }
+  .catalog-summary .catalog-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }
   .method-return-button span:last-child { display: inline; }
   .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
   .drawing-scale { flex: 0 0 100%; }
