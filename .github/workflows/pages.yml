@@ -854,6 +854,10 @@ jobs:
           context.window.location.hash = '#compare';
           const partialCompareRoute = parseRoute();
           if (partialCompareRoute.page !== 'compare' || partialCompareRoute.compareIds.join(',') !== 'basilica') throw new Error('Compare route parser did not preserve a partial selection carried in the query');
+          context.window.location.href = 'https://example.test/atlas/#compare/basilica';
+          context.window.location.hash = '#compare/basilica';
+          const hashPartialCompareRoute = parseRoute();
+          if (hashPartialCompareRoute.page !== 'compare' || hashPartialCompareRoute.compareIds.join(',') !== 'basilica') throw new Error('Compare route parser did not preserve a partial selection carried in the hash');
           state.query = '';
           state.filterEra = '4th–6th century';
           const eraVisible = visibleStudies();

@@ -434,7 +434,7 @@
       ? [...new Set(queryCompareValue.split(",").map((id) => id.trim()).filter((id) => studies.some((study) => study.id === id)))]
       : [];
     const compareIds = page === "compare"
-      ? (hashCompareIds.length >= 2 ? hashCompareIds : queryCompareIds)
+      ? (hashCompareIds.length ? hashCompareIds : queryCompareIds)
       : [];
     return {
       page,
