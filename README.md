@@ -59,6 +59,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state, derived readings, and a deterministic `provenance` manifest that records scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
 - A visible Raw JSON link keeps the committed dataset reachable when a browser cannot trigger a generated download.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
+- Generated study and SVG filenames normalize dataset IDs, so spaces, separators, and punctuation cannot create ambiguous download paths.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition, schema/unit provenance, and reproducible direct route remain included even when the interactive disclosure is collapsed.
 - Print-ready comparison sheets that preserve the active full-collection or focused comparison, visible provenance context, charts, the complete comparison table, and a reproducible route.

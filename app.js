@@ -2060,6 +2060,16 @@
     }
   }
 
+  function safeDownloadPart(value, fallback = "study") {
+    const safe = String(value ?? "")
+      .trim()
+      .replace(/[\u0027\u2019]/g, "")
+      .replace(/[^a-z0-9_-]+/gi, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    return safe || fallback;
+  }
+
   function downloadDrawing() {
     const study = activeStudy();
     const svgElement = $("#geometryCanvas svg");
@@ -2102,7 +2112,7 @@
       const namespace = attributes.includes("xmlns=") ? "" : ' xmlns="http://www.w3.org/2000/svg"';
       return `<svg${attributes}${namespace}><style>${exportStyles}</style>`;
     });
-    const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;
+    const filename = `${safeDownloadPart(study.id)}-${state.surface}-${state.mode}-${state.layer}.svg`;
     const downloaded = triggerDownload(filename, `<?xml version="1.0" encoding="UTF-8"?>\n${source}`, "image/svg+xml;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "SVG download is unavailable in this browser. Use Print sheet to preserve the current view instead.";
@@ -2124,7 +2134,7 @@
     hideDownloadRecovery();
     if (!study || !beginAsyncAction(button)) return;
     try {
-    const filename = `${study.id}-sacred-geometry-study.json`;
+    const filename = `${safeDownloadPart(study.id)}-sacred-geometry-study.json`;
     const payload = JSON.stringify(activeStudyExportPayload(study), null, 2);
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
