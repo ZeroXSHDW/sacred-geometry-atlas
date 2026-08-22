@@ -6,4 +6,13 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>./data/geometry.json</loc>
+  </url>
+  <url>
+    <loc>./data/geometry.csv</loc>
+  </url>
+  <url>
+    <loc>./data/geometry.schema.json</loc>
+  </url>
 </urlset>

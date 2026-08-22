@@ -126,6 +126,8 @@ The source metadata uses repository-relative paths so local previews and project
 
 The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON and CSV distributions. The HTML advertises the JSON Schema through an `application/schema+json` alternate link. Deployment resolves both Dataset URLs to the final absolute Pages address.
 
+The sitemap includes the landing page plus the published JSON, CSV, and JSON Schema artifacts, so the static research surface is discoverable without JavaScript.
+
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
 
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.

@@ -134,13 +134,13 @@ jobs:
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
-          if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
+          if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>') || !sitemap.includes('<loc>./data/geometry.json</loc>') || !sitemap.includes('<loc>./data/geometry.csv</loc>') || !sitemap.includes('<loc>./data/geometry.schema.json</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
           if (!notFound.includes('@media (pointer: coarse)') || !notFound.includes('.home-link { min-height: 44px; }') || !notFound.includes('@media (forced-colors: active)') || !notFound.includes('border-color: ButtonText; color: ButtonText; background: ButtonFace;') || !notFound.includes('color: HighlightText; background: Highlight;') || !notFound.includes('.error-footer strong { color: Highlight; }')) throw new Error('404 recovery actions must preserve touch targets and forced-colors affordances');
           for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'JSON and CSV distributions', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
-          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>']) {
+          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
           if (!workflow.includes("permissions:\n  contents: read\n\nconcurrency:") || !workflow.includes("  deploy:\n    needs: validate\n    if: github.event_name != 'pull_request'\n    permissions:\n      contents: read\n      pages: write\n      id-token: write")) throw new Error('Pages write and OIDC permissions must be scoped to the deploy job');
@@ -2511,11 +2511,17 @@ jobs:
 
           sitemap = Path("sitemap.xml")
           sitemap_source = sitemap.read_text()
-          sitemap_marker = "<loc>./</loc>"
-          sitemap_value = f"<loc>{html.escape(base_url, quote=True)}</loc>"
-          if sitemap_marker not in sitemap_source:
-              raise SystemExit(f"Missing repository-relative sitemap marker: {sitemap_marker}")
-          sitemap.write_text(sitemap_source.replace(sitemap_marker, sitemap_value))
+          sitemap_markers = {
+              "<loc>./</loc>": f"<loc>{html.escape(base_url, quote=True)}</loc>",
+              "<loc>./data/geometry.json</loc>": f"<loc>{html.escape(base_url + 'data/geometry.json', quote=True)}</loc>",
+              "<loc>./data/geometry.csv</loc>": f"<loc>{html.escape(base_url + 'data/geometry.csv', quote=True)}</loc>",
+              "<loc>./data/geometry.schema.json</loc>": f"<loc>{html.escape(base_url + 'data/geometry.schema.json', quote=True)}</loc>",
+          }
+          for sitemap_marker, sitemap_value in sitemap_markers.items():
+              if sitemap_marker not in sitemap_source:
+                  raise SystemExit(f"Missing repository-relative sitemap marker: {sitemap_marker}")
+              sitemap_source = sitemap_source.replace(sitemap_marker, sitemap_value)
+          sitemap.write_text(sitemap_source)
           print(f"Stamped absolute Pages metadata and crawl URLs for {base_url}")
           PY
       - name: Verify deployed site metadata
@@ -2541,6 +2547,9 @@ jobs:
               f'"contentUrl": "{base_url}data/geometry.csv"',
               f'Sitemap: {base_url}sitemap.xml',
               f'<loc>{base_url}</loc>',
+              f'<loc>{base_url}data/geometry.json</loc>',
+              f'<loc>{base_url}data/geometry.csv</loc>',
+              f'<loc>{base_url}data/geometry.schema.json</loc>',
           ]
           missing = [token for token in expected[:7] if token not in page]
           missing.extend(token for token in expected[7:] if token not in (robots + sitemap))
