@@ -835,12 +835,20 @@
     button.setAttribute("aria-label", accessibleLabel);
   }
 
-  const manualCopyFallbackSelectors = ["#shareFallback", "#citationFallback", "#catalogShareFallback", "#compareShareFallback"];
+  const manualCopyFallbackControls = {
+    "#shareFallback": "#shareStudy",
+    "#citationFallback": "#copyCitation",
+    "#catalogShareFallback": "#shareCatalog",
+    "#compareShareFallback": "#shareCompare"
+  };
+  const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
   function hideManualCopyFallbacks() {
     manualCopyFallbackSelectors.forEach((selector) => {
       const fallback = $(selector);
       if (fallback) fallback.hidden = true;
+      const trigger = $(manualCopyFallbackControls[selector]);
+      if (trigger && typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "false");
     });
   }
 
@@ -850,6 +858,8 @@
     if (!fallback || !fallbackText) return false;
     fallbackText.value = value;
     fallback.hidden = false;
+    const trigger = $(manualCopyFallbackControls[fallbackSelector]);
+    if (trigger && typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "true");
     if (typeof fallbackText.focus === "function") {
       try {
         fallbackText.focus({ preventScroll: true });

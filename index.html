@@ -228,7 +228,7 @@
                   <span aria-hidden="true">↓</span>
                   <span>Export view</span>
                 </button>
-                <button class="share-button catalog-action catalog-share-button" id="shareCatalog" type="button" aria-label="Share current catalog view" title="Share current catalog view">
+                <button class="share-button catalog-action catalog-share-button" id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false" title="Share current catalog view">
                   <span aria-hidden="true">↗</span>
                   <span>Share view</span>
                 </button>
@@ -302,11 +302,11 @@
                   <button id="nextStudy" type="button" aria-label="Next study" aria-keyshortcuts="J" title="Next study">→</button>
                 </div>
                 <div class="study-share-actions">
-                  <button class="share-button" id="shareStudy" type="button" aria-label="Share current study">
+                  <button class="share-button" id="shareStudy" type="button" aria-label="Share current study" aria-controls="shareFallback" aria-expanded="false">
                     <span aria-hidden="true">↗</span>
                     <span>Share study</span>
                   </button>
-                  <button class="share-button citation-button" id="copyCitation" type="button" aria-label="Copy a citation for the active study" title="Copy a citation for the active study">
+                  <button class="share-button citation-button" id="copyCitation" type="button" aria-label="Copy a citation for the active study" aria-controls="citationFallback" aria-expanded="false" title="Copy a citation for the active study">
                     <span aria-hidden="true">⧉</span>
                     <span>Copy citation</span>
                   </button>
@@ -482,7 +482,7 @@
               <span aria-hidden="true">←</span>
               <span>Edit selection</span>
             </button>
-            <button class="share-button compare-share-button" id="shareCompare" type="button" aria-label="Share this comparison" title="Share this comparison">
+            <button class="share-button compare-share-button" id="shareCompare" type="button" aria-label="Share this comparison" aria-controls="compareShareFallback" aria-expanded="false" title="Share this comparison">
               <span aria-hidden="true">↗</span>
               <span>Share comparison</span>
             </button>
