@@ -45,7 +45,8 @@
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.emphasis}; ${studyStatusDescription(study)}`;
+    const matchContext = searchMatchContext(study);
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -877,9 +878,8 @@
     return highlighted + escapeHtml(text.slice(cursor));
   }
 
-  function studySearchText(study) {
-    const details = Array.isArray(study.details) ? study.details.flat() : [];
-    const dimensions = [
+  function studySearchDimensions(study) {
+    return [
       `length ${study.length} m`,
       `length ${number(study.length)} m`,
       `span ${study.span} m`,
@@ -891,6 +891,11 @@
       `module ${number(study.module)} m`,
       `radius ${study.radius} m`,
       `radius ${number(study.radius)} m`,
+    ];
+  }
+
+  function studySearchDerivedReadings(study) {
+    return [
       `symmetry ${number(study.symmetry, 2)}`,
       `length / span ${number(study.length / study.span, 2)}`,
       `height / span ${number(study.height / study.span, 2)}`,
@@ -902,11 +907,34 @@
       Number.isFinite(study.volumeEstimate) ? `volume ${study.volumeEstimate} m³` : "",
       Number.isFinite(study.volumeEstimate) ? `volume ${Number(study.volumeEstimate).toLocaleString()} m³` : ""
     ];
+  }
+
+  function searchMatchContext(study) {
+    const terms = queryTerms(state.query);
+    if (!terms.length) return "";
+    const details = Array.isArray(study.details) ? study.details.flat() : [];
+    const groups = [
+      ["reference", [study.churchName, studySource(study), studySourceNote(study)]],
+      ["reading", [study.axis, study.envelope, study.surfaceNote, study.exteriorNote, study.interiorNote, ...details]],
+      ["dimensions", studySearchDimensions(study)],
+      ["derived ratios", studySearchDerivedReadings(study)]
+    ];
+    const labels = groups
+      .filter(([, values]) => terms.some((term) => values.filter(Boolean).join(" ").toLowerCase().includes(term)))
+      .map(([label]) => label);
+    return labels.length ? `Found in ${labels.join(" · ")}` : "";
+  }
+
+  function studySearchText(study) {
+    const details = Array.isArray(study.details) ? study.details.flat() : [];
+    const dimensions = studySearchDimensions(study);
+    const derivedReadings = studySearchDerivedReadings(study);
     return [
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
       study.emphasis, study.axis, study.envelope, studySource(study), studySourceNote(study),
       study.surfaceNote, study.exteriorNote, study.interiorNote, study.volumeBasis, studyStatus(study),
       ...dimensions,
+      ...derivedReadings,
       ...details
     ].filter(Boolean).join(" ").toLowerCase();
   }
@@ -976,6 +1004,7 @@
     list.innerHTML = visible.map((study) => {
       const isActive = study.id === state.activeId;
       const isCompared = state.compareIds.includes(study.id);
+      const matchContext = searchMatchContext(study);
       const currentAttribute = isActive ? ' aria-current="true"' : "";
       return `
         <li class="catalog-entry">
@@ -985,6 +1014,7 @@
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
               <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place} · ${studyStatus(study)}`)}</span>
               <span class="catalog-card-detail">${highlightSearchText(`${study.era} · ${study.emphasis}`)}</span>
+              ${matchContext ? `<span class="catalog-card-match">${escapeHtml(matchContext)}</span>` : ""}
             </span>
             ${catalogGlyph(study)}
           </a>

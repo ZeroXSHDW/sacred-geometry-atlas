@@ -364,6 +364,7 @@ h3 { letter-spacing: -0.04em; }
 .catalog-card-title { display: block; margin-bottom: 0.23rem; color: var(--ink); font-size: 0.82rem; font-weight: 700; line-height: 1.25; }
 .catalog-card-meta { display: block; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.4; }
 .catalog-card-detail { display: block; margin-top: 0.16rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.35; }
+.catalog-card-match { display: block; margin-top: 0.26rem; color: var(--teal); font-family: var(--mono); font-size: 0.48rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
 .search-hit { padding: 0 0.08em; color: var(--bg); background: var(--amber); font-weight: 700; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .catalog-glyph { width: 38px; height: 38px; color: var(--amber); }
 .catalog-glyph path, .catalog-glyph circle, .catalog-glyph rect, .catalog-glyph ellipse, .catalog-glyph line, .catalog-glyph polygon { fill: none; stroke: currentColor; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
@@ -829,6 +830,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .layer-button.is-active { border-color: Highlight; background: Canvas; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }
   .catalog-card.is-active .catalog-number { color: Highlight; }
+  .catalog-card-match { color: Highlight; }
   .search-hit { color: HighlightText; background: Highlight; }
   .compare-toggle.is-selected { border-color: Highlight; color: HighlightText; background: Highlight; }
   .compare-selection-clear,
