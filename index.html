@@ -260,12 +260,13 @@
           </aside>
 
           <div class="visual-column">
-            <div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>
+            <div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage visualEmptyContext" hidden>
               <span class="empty-mark" aria-hidden="true">∅</span>
               <p class="visual-empty-kicker">Current catalog view</p>
               <h3 id="visualEmptyHeading">No study matches this view.</h3>
+              <p class="visual-empty-context" id="visualEmptyContext" hidden></p>
               <p id="visualEmptyMessage">Clear the catalog filters to restore a drawing.</p>
-              <button class="visual-empty-action" id="clearVisualFilters" type="button">Clear filters</button>
+              <button class="visual-empty-action" id="clearVisualFilters" type="button" aria-label="Clear catalog filters">Clear filters</button>
             </div>
             <div class="study-header">
               <div>

@@ -173,8 +173,8 @@ jobs:
           if (!styles.includes('.nav-count {') || !styles.includes('  justify-content: center;\n  gap: 0.38rem;') || !styles.includes('.nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }')) throw new Error('Compare navigation count must remain aligned and visible in forced-colors mode');
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
           if (!html.includes('<span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Catalog scope changes must have a live status channel');
-          if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>')) throw new Error('Missing visual empty state');
-          if (!html.includes('id="clearVisualFilters" type="button"')) throw new Error('Missing visual empty-state recovery action');
+          if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage visualEmptyContext" hidden>') || !html.includes('id="visualEmptyContext" hidden')) throw new Error('Missing contextual visual empty state');
+          if (!html.includes('id="clearVisualFilters" type="button" aria-label="Clear catalog filters"')) throw new Error('Missing visual empty-state recovery action');
           if (!html.includes('<a class="hero-action" href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('<section class="method-readings" aria-labelledby="derived-readings-heading">') || !html.includes('id="derived-readings-heading"') || !html.includes('Bounding area') || !html.includes('Reading profile') || !styles.includes('.method-readings-grid')) throw new Error('Method view must explain derived readings');
           if (!html.includes('<button class="share-button method-return-button" id="methodBackToStudy" type="button" aria-controls="atlas" aria-label="Open current study in Atlas"') || !app.includes('function renderMethodReturnAction(study = activeStudy(), visible = visibleStudies())') || !app.includes('visible.some((candidate) => candidate.id === study.id)') || !app.includes('$("#methodBackToStudy").addEventListener("click"') || !styles.includes('.section-heading-actions {') || !styles.includes('.method-return-button {')) throw new Error('Method view must provide a context-aware return-to-study action');
@@ -332,7 +332,7 @@ jobs:
           if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('if (state.sort === "length") return b.length - a.length;') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
-          if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
+          if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"') || !app.includes('activeStudyOutsideCatalog') || !app.includes('The active study, ${studyShortName(study)}, is outside the current catalog view.') || !app.includes('Clear the catalog filters to restore ${studyShortName(study)}.') || !styles.includes('.visual-empty-context')) throw new Error('Missing contextual visual empty-state behavior');
           if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
           if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('function dataStatusDefinitions()') || !app.includes('window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
           const catalogExportStart = app.indexOf('function downloadCatalogView()');
@@ -664,6 +664,43 @@ jobs:
           syncFromHash();
           if (drawingRenders !== 1) throw new Error(`Duplicate route event rendered again: ${drawingRenders}`);
           console.log('Route event deduplication and filtered deep-link smoke test passed.');
+          NODE
+      - name: Smoke-test filtered empty-state context
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const visualColumn = { classList: { toggle(name, value) { this[name] = value; } } };
+          const emptyState = { hidden: true };
+          const contextNote = { hidden: true, textContent: '' };
+          const message = { textContent: '' };
+          const recovery = { attributes: {}, title: '', setAttribute(name, value) { this.attributes[name] = value; } };
+          elements.set('.visual-column', visualColumn);
+          elements.set('#visualEmptyState', emptyState);
+          elements.set('#visualEmptyContext', contextNote);
+          elements.set('#visualEmptyMessage', message);
+          elements.set('#clearVisualFilters', recovery);
+          const context = {
+            window: {},
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderVisualState, state };\n})();');
+          vm.runInNewContext(app, context);
+          const { renderVisualState, state } = context.window.__atlasTest;
+          state.filter = 'Gothic';
+          renderVisualState([]);
+          if (emptyState.hidden || contextNote.hidden || !contextNote.textContent.includes('Longitudinal basilica') || !message.textContent.includes('Clear the catalog filters to restore Longitudinal basilica.') || recovery.attributes['aria-label'] !== 'Clear catalog filters and show Longitudinal basilica') {
+            throw new Error(`Filtered empty state lost active-study recovery context: ${contextNote.textContent} / ${message.textContent} / ${recovery.attributes['aria-label']}`);
+          }
+          state.filter = 'all';
+          renderVisualState([]);
+          if (!contextNote.hidden || recovery.attributes['aria-label'] !== 'Clear catalog filters') throw new Error('Generic empty state retained stale active-study context');
+          console.log('Filtered empty-state context smoke test passed.');
           NODE
       - name: Smoke-test comparison edit handoff
         run: |

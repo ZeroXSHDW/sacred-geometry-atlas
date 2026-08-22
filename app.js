@@ -1218,10 +1218,38 @@
     const emptyState = $("#visualEmptyState");
     if (!visualColumn || !emptyState) return;
     const isEmpty = visible.length === 0;
+    const study = activeStudy();
+    const hasCatalogScope = Boolean(
+      state.query
+      || state.filter !== "all"
+      || state.filterPlace !== "all"
+      || state.filterEra !== "all"
+      || state.filterStatus !== "all"
+    );
+    const activeStudyOutsideCatalog = Boolean(isEmpty && study && hasCatalogScope);
     visualColumn.classList.toggle("is-empty", isEmpty);
     emptyState.hidden = !isEmpty;
+    const context = $("#visualEmptyContext");
+    if (context) {
+      context.hidden = !activeStudyOutsideCatalog;
+      context.textContent = activeStudyOutsideCatalog
+        ? `The active study, ${studyShortName(study)}, is outside the current catalog view.`
+        : "";
+    }
     const message = $("#visualEmptyMessage");
-    if (message && isEmpty) message.textContent = `${emptyCatalogMessage()} Clear filters to restore a study drawing.`;
+    if (message && isEmpty) {
+      message.textContent = activeStudyOutsideCatalog
+        ? `${emptyCatalogMessage()} Clear the catalog filters to restore ${studyShortName(study)}.`
+        : `${emptyCatalogMessage()} Clear filters to restore a study drawing.`;
+    }
+    const recovery = $("#clearVisualFilters");
+    if (recovery) {
+      const label = activeStudyOutsideCatalog
+        ? `Clear catalog filters and show ${studyShortName(study)}`
+        : "Clear catalog filters";
+      recovery.setAttribute("aria-label", label);
+      recovery.title = label;
+    }
   }
 
   function renderStudy() {
