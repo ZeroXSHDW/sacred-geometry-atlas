@@ -77,6 +77,11 @@
   }[character]));
   const layerDisplayName = (layer) => layerDisplayNames[layer] || layer;
   const layerFocusLabel = () => state.layer === "all" ? "all geometry" : `${layerDisplayName(state.layer)} focus`;
+  const drawingStateLabel = () => {
+    const surface = state.surface === "interior" ? "Inside" : "Outside";
+    const mode = state.mode[0].toUpperCase() + state.mode.slice(1);
+    return `${surface} · ${mode} · ${layerFocusLabel()} · ${zoomPercent()} zoom`;
+  };
 
   function updateDocumentTitle(page = state.page) {
     if (page === "atlas" && activeStudy()) {
@@ -660,7 +665,7 @@
   }
 
   function announceDrawingState() {
-    announceKeyboard(`${state.surface} ${state.mode} view selected, ${layerFocusLabel()}, ${zoomPercent()} zoom.`);
+    announceKeyboard(`${drawingStateLabel()} selected.`);
   }
 
   function updateSearchClear() {
@@ -1115,6 +1120,8 @@
       button.classList.toggle("is-active", selected);
       button.setAttribute("aria-pressed", String(selected));
     });
+    const drawingState = $("#drawingState");
+    if (drawingState) drawingState.textContent = drawingStateLabel();
     $("#zoomReadout").textContent = `${Math.round(state.zoom * 100)}%`;
     $("#zoomReset").textContent = `${Math.round(state.zoom * 100)}%`;
     const zoomOut = $("#zoomOut");
