@@ -454,6 +454,8 @@ h3 { letter-spacing: -0.04em; }
 .share-button { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.62rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.03em; text-transform: uppercase; transition: 180ms ease; }
 .share-button span:first-child { color: var(--teal); font-size: 0.85rem; line-height: 0; }
 .share-button:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
+.share-button[aria-expanded="true"] { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.share-button[aria-expanded="true"] span:first-child { color: var(--amber); }
 button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .share-button.is-copied { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .download-button.is-complete, .drawing-export.is-complete, .share-button.is-complete { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
@@ -918,7 +920,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button.is-complete,
   .drawing-export.is-complete,
   .share-button.is-copied,
-  .share-button.is-complete { border-color: Highlight; color: Highlight; }
+  .share-button.is-complete,
+  .share-button[aria-expanded="true"] { border-color: Highlight; color: Highlight; background: Canvas; }
+  .share-button[aria-expanded="true"] span:first-child { color: Highlight; }
   .zoom-control button:disabled { color: GrayText; }
 }
 
