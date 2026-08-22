@@ -353,6 +353,22 @@
       option.textContent = place;
       placeSelect.appendChild(option);
     });
+    const statusSelect = $("#filterStatus");
+    if (statusSelect) {
+      const statusCounts = studies.reduce((counts, study) => {
+        const status = studyStatus(study);
+        counts[status] = (counts[status] || 0) + 1;
+        return counts;
+      }, { schematic: 0, measured: 0 });
+      const statusLabels = {
+        all: `All data status · ${studies.length}`,
+        schematic: `Schematic · ${statusCounts.schematic}`,
+        measured: `Measured · ${statusCounts.measured}`
+      };
+      [...statusSelect.options].forEach((option) => {
+        if (statusLabels[option.value]) option.textContent = statusLabels[option.value];
+      });
+    }
   }
 
   function bindEvents() {

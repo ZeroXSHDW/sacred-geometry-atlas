@@ -302,7 +302,7 @@ jobs:
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction must be explained to assistive technology');
-          if (!html.includes('<select id="filterStatus" aria-describedby="statusHelp">') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative model · measured = source-supported dimensions.</p>') || !styles.includes('.catalog-data-note {')) throw new Error('Data status filter must explain schematic and measured provenance');
+          if (!html.includes('<select id="filterStatus" aria-describedby="statusHelp">') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative model · measured = source-supported dimensions · counts reflect the full collection.</p>') || !styles.includes('.catalog-data-note {') || !app.includes('const statusCounts = studies.reduce') || !app.includes('Schematic · ${statusCounts.schematic}') || !app.includes('Measured · ${statusCounts.measured}')) throw new Error('Data status filter must expose full-collection counts and provenance');
           if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('if (state.sort === "length") return b.length - a.length;') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
@@ -447,6 +447,14 @@ jobs:
           const vm = require('vm');
           const keyboardStatus = { textContent: '' };
           const elements = new Map();
+          const makeSelect = (options = []) => ({ options, appendChild(option) { this.options.push(option); } });
+          const filterSelect = makeSelect();
+          const filterPlace = makeSelect();
+          const filterStatus = makeSelect([
+            { value: 'all', textContent: 'All data status' },
+            { value: 'schematic', textContent: 'Schematic' },
+            { value: 'measured', textContent: 'Measured' }
+          ]);
           const context = {
             URL,
             window: {
@@ -454,13 +462,19 @@ jobs:
             },
             document: {
               body: { classList: { remove() {} } },
+              createElement() { return {}; },
               querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : elements.get(selector) || null; }
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText };\n})();');
+          elements.set('#filterSelect', filterSelect);
+          elements.set('#filterPlace', filterPlace);
+          elements.set('#filterStatus', filterStatus);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText, populateFilter };\n})();');
           vm.runInNewContext(app, context);
-          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText } = context.window.__atlasTest;
+          const { state, routeHash, navigationUrl, handleKeyboard, renderStudyNav, drawElevation, studySearchText, populateFilter } = context.window.__atlasTest;
+          populateFilter();
+          if (filterStatus.options[0].textContent !== 'All data status · 6' || filterStatus.options[1].textContent !== 'Schematic · 6' || filterStatus.options[2].textContent !== 'Measured · 0') throw new Error('Status filter did not expose full-collection counts');
           let prevented = false;
           state.page = 'atlas';
           state.compareIds = [];
