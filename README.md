@@ -38,6 +38,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, typology/place/era/axis context, and proportional charts.
 - Comparison chart rows keep each study’s geometric axis visible beside its name and provenance status, so the visual comparison retains the same orientation context as the accessible labels and table.
 - Each normalized comparison chart includes a dynamic zero, midpoint, and active-maximum guide so focused selections remain visually honest when their scale changes.
+- Focused comparison range announcements keep each active chart maximum available to assistive technology as the selection changes.
 - Comparison bars also expose their active range and value as semantic meters, keeping the normalized readings available beyond the visual bar lengths.
 - Comparison study cards and table links expose visible “Open in Atlas” cues for returning to a selected study and mark the current Atlas study for orientation; table links preserve the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
