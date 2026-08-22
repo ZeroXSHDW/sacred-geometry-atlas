@@ -917,6 +917,13 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-kicker { color: var(--amber); }
   .study-header h3 { color: var(--ink); }
   .study-meta, .study-source { color: var(--ink-muted); }
+  .study-provenance { display: block; width: auto; max-width: none; margin-top: 0.45rem; }
+  .study-provenance summary { display: block; min-height: 0; padding: 0; border: 0; color: var(--ink-muted); background: transparent; cursor: default; font-size: 8pt; letter-spacing: 0; text-transform: none; }
+  .study-provenance summary::after { display: none; }
+  .study-provenance-body,
+  .study-provenance:not([open]) .study-provenance-body { display: block !important; max-width: none; margin-top: 0.2rem; padding: 0.25rem 0 0.25rem 0.55rem; border-left: 1px solid var(--line-strong); background: transparent; }
+  .study-provenance-body p { color: var(--ink-soft); font-size: 8pt; }
+  .study-provenance-body p + p { color: var(--ink-muted); }
   .drawing-card { border-color: var(--ink); background: #fff; }
   .svg-wrap { min-height: 0; background: #fff; }
   .geometry-svg { min-height: 0; color: var(--ink); background: #fff; }
