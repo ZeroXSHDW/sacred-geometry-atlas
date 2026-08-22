@@ -1668,7 +1668,7 @@
       const isCompared = state.compareIds.includes(study.id);
       const matchContext = searchMatchContext(study);
       const compareLabel = `${isCompared ? "Remove" : "Add"} ${study.name} ${isCompared ? "from" : "to"} comparison`;
-      const currentAttribute = isActive ? ' aria-current="true"' : "";
+      const currentAttribute = isActive ? ' aria-current="page"' : "";
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       return `
         <li class="catalog-entry">
@@ -3209,7 +3209,7 @@
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
       const isActive = study.id === state.activeId;
-      const currentAttribute = isActive ? ' aria-current="true"' : "";
+      const currentAttribute = isActive ? ' aria-current="page"' : "";
       const studyLinkLabel = isActive
         ? `Open ${studyShortName(study)} in Atlas. Current Atlas study.`
         : `Open ${studyShortName(study)} in Atlas`;
@@ -3245,7 +3245,7 @@
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       const label = comparisonStudyAriaLabel(study, ratio, section);
       const isActive = study.id === state.activeId;
-      const currentAttribute = isActive ? ' aria-current="true"' : "";
+      const currentAttribute = isActive ? ' aria-current="page"' : "";
       const currentLabel = isActive ? " This is the current Atlas study." : "";
       const status = studyDataLabel(study);
       return `
