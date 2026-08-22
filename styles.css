@@ -959,6 +959,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .manual-copy-fallback-dismiss { min-height: 36px; }
   .action-recovery .hero-action, .action-recovery-dismiss { min-height: 36px; }
   .noscript-artifact-actions a { min-height: 36px; }
+  .noscript-link { display: inline-flex; align-items: center; min-height: 36px; padding: 0.35rem 0.5rem; border: 1px solid var(--coral); background: rgba(231, 127, 98, 0.08); }
+  .noscript-link:hover,
+  .noscript-link:focus-visible { color: var(--bg); background: var(--coral); text-decoration: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1045,6 +1048,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .noscript-method { border-color: ButtonText; background: Canvas; }
   .noscript-method-grid > div { border-top-color: ButtonText; }
   .noscript-method-grid dt { color: Highlight; }
+  .noscript-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .noscript-link:hover,
+  .noscript-link:focus-visible { color: HighlightText; background: Highlight; }
   .noscript-artifact-actions a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .noscript-artifact-actions a:hover,
   .noscript-artifact-actions a:focus-visible { color: HighlightText; background: Highlight; }
