@@ -2319,7 +2319,9 @@
         name: studyShortName(study),
         axis: study.axis,
         status,
-        statusDefinition: definitions[status] || "Data status is not documented."
+        statusDefinition: definitions[status] || "Data status is not documented.",
+        source: studySource(study),
+        sourceNote: studySourceNote(study)
       };
     });
   }
@@ -2332,7 +2334,7 @@
 
   function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
     return selection
-      .map(({ name, axis, status, statusDefinition }) => `${name} (${axisDisplayLabel(axis)}; ${status}; ${statusDefinition})`)
+      .map(({ name, axis, status, statusDefinition, source, sourceNote }) => `${name} (${axisDisplayLabel(axis)}; ${status}; ${statusDefinition}; Source: ${source}; ${sourceNote})`)
       .join("; ");
   }
 
@@ -3303,7 +3305,7 @@
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentLabel = isActive ? " Current Atlas study." : "";
-      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}${currentLabel}`;
+      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
       const currentCue = isActive ? '<span class="compare-selection-chip-current" title="Current Atlas study">current</span>' : "";
       return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}<span aria-hidden="true">×</span></button>`;
     }).join("") : "";
