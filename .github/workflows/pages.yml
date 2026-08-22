@@ -158,7 +158,7 @@ jobs:
           for (const token of ['id="studyCount"', 'id="modeCount"', 'id="profileCount"']) {
             if (!html.includes(token)) throw new Error('Hero statistics must expose a dynamic target: ' + token);
           }
-          if (!html.includes('<div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">') || !html.includes('<span class="study-nav-position" id="studyNavPosition">01 / 06 visible</span>') || !styles.includes('.study-nav-position {') || !app.includes('const positionLabel = visible.length && currentIndex >= 0') || !app.includes('navigation.setAttribute("aria-label", visible.length && currentIndex >= 0')) throw new Error('Study navigation must expose its position within the visible collection');
+          if (!html.includes('<div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">') || !html.includes('<span class="study-nav-position" id="studyNavPosition">01 / 06 visible</span>') || !styles.includes('.study-nav-position {') || !app.includes('const activeStudyOutsideCatalog = visible.length > 0 && currentIndex < 0') || !app.includes('const positionLabel = currentIndex >= 0') || !app.includes('navigation.setAttribute("aria-label", currentIndex >= 0')) throw new Error('Study navigation must expose its position within the visible collection');
           for (const token of ['function renderHeroStats()', 'studyCount: studies.length', 'modeCount: validModes.size', 'profileCount: activeStudy() ? profileScores(activeStudy()).length : 0', 'renderHeroStats();', 'function atlasSchemaNoteText(records = studies)', 'function renderAtlasSchemaNote()', 'renderAtlasSchemaNote();']) {
             if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
           }
@@ -951,6 +951,11 @@ jobs:
           state.activeId = 'gothic';
           renderStudyNav();
           if (position.textContent !== '01 / 01 visible' || navigation['aria-label'] !== 'Move between studies; showing study 1 of 1 visible studies' || !previous.disabled || !next.disabled) throw new Error('Filtered study navigation position did not render');
+          state.activeId = 'basilica';
+          renderStudyNav();
+          if (position.textContent !== 'Outside / 01 visible' || navigation['aria-label'] !== 'Move between studies; current study is outside the 1 visible study' || previous.disabled || next.disabled) throw new Error('Out-of-scope study navigation did not expose its visible recovery target');
+          state.query = '';
+          state.activeId = 'basilica';
           const searchText = studySearchText(context.window.CHURCH_GEOMETRY[0]);
           if (!searchText.includes('section ratio 0.82') || !searchText.includes('module / span 0.33') || !searchText.includes('radial reach 11.0 m')) throw new Error('Catalog search did not index derived readings');
           const specialCharacterStudy = { ...context.window.CHURCH_GEOMETRY[0], emphasis: 'Light & <line>' };

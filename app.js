@@ -1361,16 +1361,25 @@
     if (!previous || !next) return;
     const visible = visibleStudies();
     const currentIndex = visible.findIndex((study) => study.id === state.activeId);
-    const canNavigate = visible.length > 1 && currentIndex >= 0;
-    const previousStudy = canNavigate ? visible[(currentIndex - 1 + visible.length) % visible.length] : null;
-    const nextStudy = canNavigate ? visible[(currentIndex + 1) % visible.length] : null;
-    const positionLabel = visible.length && currentIndex >= 0
+    const activeStudyOutsideCatalog = visible.length > 0 && currentIndex < 0;
+    const canNavigate = visible.length > 0 && (activeStudyOutsideCatalog || visible.length > 1);
+    const previousStudy = canNavigate
+      ? visible[activeStudyOutsideCatalog ? visible.length - 1 : (currentIndex - 1 + visible.length) % visible.length]
+      : null;
+    const nextStudy = canNavigate
+      ? visible[activeStudyOutsideCatalog ? 0 : (currentIndex + 1) % visible.length]
+      : null;
+    const positionLabel = currentIndex >= 0
       ? `${String(currentIndex + 1).padStart(2, "0")} / ${String(visible.length).padStart(2, "0")} visible`
-      : "No studies visible";
+      : activeStudyOutsideCatalog
+        ? `Outside / ${String(visible.length).padStart(2, "0")} visible`
+        : "No studies visible";
     if (position) position.textContent = positionLabel;
-    if (navigation) navigation.setAttribute("aria-label", visible.length && currentIndex >= 0
+    if (navigation) navigation.setAttribute("aria-label", currentIndex >= 0
       ? `Move between studies; showing study ${currentIndex + 1} of ${visible.length} visible studies`
-      : "Move between studies; no studies visible");
+      : activeStudyOutsideCatalog
+        ? `Move between studies; current study is outside the ${visible.length} visible ${visible.length === 1 ? "study" : "studies"}`
+        : "Move between studies; no studies visible");
     previous.disabled = !canNavigate;
     next.disabled = !canNavigate;
     previous.setAttribute("aria-label", previousStudy ? `Previous study: ${previousStudy.name}` : "Previous study");
