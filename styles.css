@@ -964,6 +964,18 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .share-button[aria-expanded="true"] { border-color: Highlight; color: Highlight; background: Canvas; }
   .share-button[aria-expanded="true"] span:first-child { color: Highlight; }
   .zoom-control button:disabled { color: GrayText; }
+  .profile-track,
+  .bar-track,
+  .module-bars { border: 1px solid ButtonText; background: Canvas; }
+  .profile-fill,
+  .bar-fill,
+  .module-bar { background: Highlight; opacity: 1; }
+  .bar-value,
+  .module-value,
+  .chart-axis-guide,
+  .chart-scale { color: CanvasText; }
+  .chart-axis-guide { border-top-color: ButtonText; }
+  .chart-axis-guide span:last-child { color: Highlight; }
 }
 
 @media print {
