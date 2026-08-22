@@ -619,6 +619,8 @@ jobs:
           from html.parser import HTMLParser
           from pathlib import Path
           import re
+          import posixpath
+          from urllib.parse import unquote, urlsplit
           from xml.etree import ElementTree
 
           class AccessibilityAudit(HTMLParser):
@@ -626,6 +628,8 @@ jobs:
                   super().__init__()
                   self.ids = []
                   self.references = []
+                  self.fragments = []
+                  self.resources = []
 
               def handle_starttag(self, tag, attrs):
                   attrs = dict(attrs)
@@ -634,6 +638,18 @@ jobs:
                   for key in ("aria-labelledby", "aria-describedby", "aria-controls", "aria-owns"):
                       if key in attrs:
                           self.references.extend(attrs[key].split())
+                  href = attrs.get("href")
+                  if href:
+                      parsed = urlsplit(href)
+                      if not parsed.scheme and not parsed.netloc and not parsed.path and parsed.fragment:
+                          self.fragments.append(unquote(parsed.fragment))
+                      if not parsed.scheme and not parsed.netloc and parsed.path:
+                          self.resources.append(href)
+                  src = attrs.get("src")
+                  if src:
+                      parsed = urlsplit(src)
+                      if not parsed.scheme and not parsed.netloc and parsed.path:
+                          self.resources.append(src)
 
           parser = AccessibilityAudit()
           html = Path("index.html").read_text()
@@ -643,6 +659,30 @@ jobs:
           missing = sorted(set(parser.references) - set(parser.ids))
           if missing:
               raise SystemExit("Missing ARIA references: " + ", ".join(missing))
+          missing_fragments = sorted(set(parser.fragments) - set(parser.ids))
+          if missing_fragments:
+              raise SystemExit("Missing local fragment targets: " + ", ".join(missing_fragments))
+          repository_root = Path(".").resolve()
+          missing_resources = []
+          for resource in sorted(set(parser.resources)):
+              parsed = urlsplit(resource)
+              resource_path = Path(unquote(parsed.path))
+              if resource_path.is_absolute():
+                  continue
+              normalized = posixpath.normpath(parsed.path)
+              candidate = (repository_root / normalized).resolve()
+              try:
+                  candidate.relative_to(repository_root)
+              except ValueError:
+                  raise SystemExit(f"Local HTML resource escapes the repository root: {resource}")
+              if candidate == repository_root:
+                  candidate = repository_root / "index.html"
+              if candidate.is_dir():
+                  candidate = candidate / "index.html"
+              if not candidate.is_file():
+                  missing_resources.append(resource)
+          if missing_resources:
+              raise SystemExit("Missing local HTML resources: " + ", ".join(missing_resources))
           raw_attribute_ampersands = re.compile(r'="[^"\n]*&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9A-Fa-f]+);)')
           if raw_attribute_ampersands.search(html):
               raise SystemExit("Unescaped ampersand found in an HTML attribute")
@@ -650,7 +690,7 @@ jobs:
           sitemap_namespace = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
           if sitemap_root.tag != f"{sitemap_namespace}urlset" or not sitemap_root.findall(f"{sitemap_namespace}url"):
               raise SystemExit("Sitemap must contain at least one URL entry")
-          print(f"Accessibility reference audit passed: {len(parser.ids)} unique IDs.")
+          print(f"Accessibility and static-reference audit passed: {len(parser.ids)} unique IDs, {len(parser.fragments)} local fragments, {len(set(parser.resources))} local resources.")
           PY
       - name: Smoke-test data-load recovery
         run: |
