@@ -95,6 +95,8 @@ summary:focus-visible {
 .noscript-list li { display: grid; grid-template-columns: 32px 1fr; gap: 0.7rem; padding: 1rem 0; border-top: 1px solid var(--line); }
 .noscript-number { color: var(--amber); font-family: var(--serif); font-size: 1.35rem; line-height: 1; }
 .noscript-list strong { display: block; color: var(--ink); font-size: 0.82rem; }
+.noscript-study-link { color: inherit; text-decoration-color: var(--line-strong); text-underline-offset: 0.2em; transition: 180ms ease; }
+.noscript-study-link:hover { color: var(--amber); text-decoration-color: currentColor; }
 .noscript-list small { display: block; margin-top: 0.22rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.45; }
 .noscript-derived { display: block; margin-top: 0.22rem; color: var(--amber); font-family: var(--mono); font-size: 0.55rem; line-height: 1.45; }
 .noscript-provenance { display: block; margin-top: 0.22rem; color: var(--teal); font-family: var(--mono); font-size: 0.55rem; line-height: 1.45; }
@@ -992,6 +994,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-tray-summary { color: ButtonText; }
   .noscript-derived { color: Highlight; }
   .noscript-provenance { color: Highlight; }
+  .noscript-study-link { color: LinkText; text-decoration-color: LinkText; }
+  .noscript-study-link:hover { color: Highlight; }
   .noscript-empty { border-top-color: ButtonText; color: CanvasText; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
