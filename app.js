@@ -39,6 +39,10 @@
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
+  const DATA_STATUS_DEFINITIONS = {
+    schematic: "Illustrative proportions; not a measured survey.",
+    measured: "Source-supported dimensions."
+  };
   const studySurfaceReading = (study) => state.surface === "interior"
     ? study.interiorNote || study.surfaceNote || study.exteriorNote
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
@@ -148,6 +152,28 @@
       const target = $(`#${id}`);
       if (target) target.textContent = String(value).padStart(2, "0");
     });
+  }
+
+  function studyStatusCounts(records = studies) {
+    return records.reduce((counts, study) => {
+      const status = studyStatus(study);
+      counts[status] = (counts[status] || 0) + 1;
+      return counts;
+    }, { schematic: 0, measured: 0 });
+  }
+
+  function studyStatusSummary(records = studies) {
+    const counts = studyStatusCounts(records);
+    return `${counts.schematic} schematic · ${counts.measured} measured`;
+  }
+
+  function exportProvenance(records, scope) {
+    return {
+      scope,
+      recordCount: records.length,
+      statusCounts: studyStatusCounts(records),
+      statusDefinitions: { ...DATA_STATUS_DEFINITIONS }
+    };
   }
 
   function parseRoute() {
@@ -384,11 +410,7 @@
     });
     const statusSelect = $("#filterStatus");
     if (statusSelect) {
-      const statusCounts = studies.reduce((counts, study) => {
-        const status = studyStatus(study);
-        counts[status] = (counts[status] || 0) + 1;
-        return counts;
-      }, { schematic: 0, measured: 0 });
+      const statusCounts = studyStatusCounts();
       const statusLabels = {
         all: `All data status · ${studies.length}`,
         schematic: `Schematic · ${statusCounts.schematic}`,
@@ -1565,7 +1587,7 @@
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    if (status) status.textContent = `Active study exported as ${filename}.`;
+    if (status) status.textContent = `Active study exported as ${filename}. Data status: ${studyStatusSummary([study])}.`;
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
@@ -1579,6 +1601,7 @@
     return {
       title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      provenance: exportProvenance([study], "active study"),
       view: {
         studyId: study.id,
         surface: state.surface,
@@ -1592,11 +1615,42 @@
     };
   }
 
+  function fullAtlasExportPayload() {
+    return {
+      title: "Sacred Geometry Atlas",
+      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      provenance: exportProvenance(studies, "full collection"),
+      studies
+    };
+  }
+
+  function catalogViewExportPayload(visible) {
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = routeHash("atlas", false);
+    return {
+      title: "Sacred Geometry Atlas · catalog view",
+      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      provenance: exportProvenance(visible, catalogScopeLabel()),
+      view: {
+        scope: catalogScopeLabel(),
+        route: shareUrl.href,
+        query: state.query || null,
+        typology: state.filter,
+        place: state.filterPlace,
+        era: state.filterEra,
+        status: state.filterStatus,
+        sort: state.sort,
+        compareIds: [...state.compareIds]
+      },
+      studies: visible
+    };
+  }
+
   function downloadData() {
     const button = $("#downloadData");
     if (!beginAsyncAction(button)) return;
     try {
-    const payload = JSON.stringify({ title: "Sacred Geometry Atlas", schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" }, studies }, null, 2);
+    const payload = JSON.stringify(fullAtlasExportPayload(), null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -1605,7 +1659,7 @@
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    $("#downloadStatus").textContent = "Atlas data downloaded as sacred-geometry-atlas.json.";
+    $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. Data status: ${studyStatusSummary()}.`;
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
@@ -1624,24 +1678,7 @@
     if (!beginAsyncAction(button)) return;
     try {
     const filename = "sacred-geometry-atlas-view.json";
-    const shareUrl = new URL(window.location.href);
-    shareUrl.hash = routeHash("atlas", false);
-    const payload = JSON.stringify({
-      title: "Sacred Geometry Atlas · catalog view",
-      schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
-      view: {
-        scope: catalogScopeLabel(),
-        route: shareUrl.href,
-        query: state.query || null,
-        typology: state.filter,
-        place: state.filterPlace,
-        era: state.filterEra,
-        status: state.filterStatus,
-        sort: state.sort,
-        compareIds: [...state.compareIds]
-      },
-      studies: visible
-    }, null, 2);
+    const payload = JSON.stringify(catalogViewExportPayload(visible), null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -1650,7 +1687,7 @@
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}.`;
+    if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
@@ -1717,7 +1754,7 @@
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}.`;
+    if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
     window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
