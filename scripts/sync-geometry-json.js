@@ -43,6 +43,12 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character
 const numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 const countLabel = (count) => numberWords[count] || String(count);
 const studyStatus = (study) => study.status || "schematic";
+const statusDisplayName = (status) => String(status ?? "")
+  .trim()
+  .split(/[\s_-]+/)
+  .filter(Boolean)
+  .map((word) => word[0].toUpperCase() + word.slice(1))
+  .join(" ") || "Unknown";
 const axisDisplayLabel = (value) => {
   const axis = String(value ?? "").trim();
   return /axis$/i.test(axis) ? axis : `${axis} axis`;
@@ -211,8 +217,21 @@ function noScriptFallback() {
   const provenanceLabel = activeStatuses.length ? activeStatuses.join(" and ") : "unlabelled";
   const customStatuses = activeStatuses.filter((status) => !["schematic", "measured"].includes(status));
   const statusDefinitionSummary = activeStatuses
-    .map((status) => `${status[0].toUpperCase()}${status.slice(1)} = ${statusDefinitions[status] || "Data status is not documented."}`)
+    .map((status) => `${statusDisplayName(status)} = ${statusDefinitions[status] || "Data status is not documented."}`)
     .join(" ");
+  const statusKeyStatuses = [...new Set([...schemaStatuses, ...Object.keys(counts)])];
+  const statusKey = statusKeyStatuses.length
+    ? [
+        '        <section class="noscript-status-key" aria-labelledby="noscript-status-key-heading">',
+        '          <p class="noscript-status-key-kicker">Evidence labels</p>',
+        '          <h2 id="noscript-status-key-heading">Data status key</h2>',
+        `          <p class="noscript-status-key-intro">The published schema defines ${statusKeyStatuses.length} data ${statusKeyStatuses.length === 1 ? "status" : "statuses"}; each record carries one label and a provenance note.</p>`,
+        '          <dl class="noscript-status-key-grid">',
+        ...statusKeyStatuses.map((status) => `            <div><dt><span class="noscript-status-key-label" data-status="${escapeHtml(status)}">${escapeHtml(statusDisplayName(status))}</span> <code>${escapeHtml(status)}</code></dt><dd>${escapeHtml(statusDefinitions[status] || "Data status is not documented.")}<span class="noscript-status-key-count">${counts[status] || 0} ${counts[status] === 1 ? "record" : "records"}</span></dd></div>`),
+        '          </dl>',
+        '        </section>'
+      ].join("\n")
+    : '        <p class="noscript-status-key-empty">No data-status definitions are published for this collection.</p>';
   const unitName = payload.schema.units || "unspecified";
   const unitSymbol = payload.schema.unitSymbol || "m";
   const schemaNote = `Schema ${payload.schema.version || "unspecified"} · units: ${payload.schema.units || "unspecified"}`;
@@ -262,6 +281,7 @@ function noScriptFallback() {
   return [
     `        <p class="noscript-intro">${intro}</p>`,
     collection,
+    statusKey,
     `        <p class="noscript-note">${escapeHtml(note)}</p>`
   ].join("\n");
 }

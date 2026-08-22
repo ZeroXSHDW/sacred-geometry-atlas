@@ -365,11 +365,35 @@
     return "These readings are analytical aids; use each record's data status and provenance note to interpret their evidence level.";
   }
 
+  function methodStatusKeyIntroText(records = studies) {
+    const statusCount = schemaStatusValues().length;
+    const recordLabel = records.length === 1 ? "record" : "records";
+    const statusLabel = statusCount === 1 ? "status" : "statuses";
+    return `The published schema defines ${statusCount} data ${statusLabel} for ${records.length} ${recordLabel}; each record carries one label and a provenance note.`;
+  }
+
+  function renderMethodStatusKey(records = studies) {
+    const intro = $("#methodStatusKeyIntro");
+    const list = $("#methodStatusKeyList");
+    const statuses = schemaStatusValues();
+    const counts = studyStatusCounts(records);
+    const definitions = dataStatusDefinitions();
+    if (intro) intro.textContent = methodStatusKeyIntroText(records);
+    if (!list) return;
+    list.innerHTML = statuses.length
+      ? statuses.map((status) => {
+          const count = counts[status] || 0;
+          return `<div class="method-status-key-item" role="listitem"><div class="method-status-key-meta"><span class="method-status-key-label" data-status="${escapeHtml(status)}">${escapeHtml(statusDisplayName(status))}</span><code>${escapeHtml(status)}</code><span class="method-status-key-count">${count} ${count === 1 ? "record" : "records"}</span></div><p>${escapeHtml(definitions[status] || "Data status is not documented.")}</p></div>`;
+        }).join("")
+      : `<p class="method-status-key-empty">No data-status definitions are published for this collection.</p>`;
+  }
+
   function renderMethodProvenance() {
     const target = $("#methodProvenanceNote");
     if (target) target.textContent = methodProvenanceText();
     const intro = $("#methodReadingsIntro");
     if (intro) intro.textContent = methodReadingsIntroText();
+    renderMethodStatusKey();
   }
 
   function studyStatusCounts(records = studies) {

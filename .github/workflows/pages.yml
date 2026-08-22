@@ -101,6 +101,7 @@ jobs:
           const notFound = fs.readFileSync('404.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
+          const syncScript = fs.readFileSync('scripts/sync-geometry-json.js', 'utf8');
           const robots = fs.readFileSync('robots.txt', 'utf8');
           const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
           const readme = fs.readFileSync('README.md', 'utf8');
@@ -248,6 +249,7 @@ jobs:
           if (!html.includes('<button class="clear-search" id="clearSearch" type="button">Clear filters</button>') || !html.includes('id="clearVisualFilters" type="button" aria-label="Clear catalog filters"')) throw new Error('Catalog empty-state recovery actions must remain wired to their accessible styling contracts');
           if (!html.includes('<a class="hero-action" data-method-link href="#methodView">Read the method')) throw new Error('Method link must target the real section');
           if (!html.includes('<section class="method-readings" aria-labelledby="derived-readings-heading">') || !html.includes('id="derived-readings-heading"') || !html.includes('id="methodReadingsIntro"') || !html.includes('id="methodVolumeDefinition"') || !html.includes('class="noscript-method-intro">Each record’s data status and provenance note describe its evidence level;') || !html.includes('<dt>Estimated volume</dt><dd>An optional estimate; its calculation basis and provenance travel with the record.</dd>') || !html.includes('Bounding area') || !html.includes('Reading profile') || !styles.includes('.method-readings-grid')) throw new Error('Method view must explain derived readings and their evidence context');
+          if (!html.includes('<section class="method-status-key" aria-labelledby="status-key-heading">') || !html.includes('id="status-key-heading"') || !html.includes('id="methodStatusKeyIntro"') || !html.includes('id="methodStatusKeyList" role="list" aria-label="Data status definitions"') || !app.includes('function methodStatusKeyIntroText(records = studies)') || !app.includes('function renderMethodStatusKey(records = studies)') || !app.includes('renderMethodStatusKey();') || !styles.includes('.method-status-key {') || !styles.includes('.method-status-key-label:not([data-status="schematic"]):not([data-status="measured"])') || !syncScript.includes('const statusKeyStatuses =') || !syncScript.includes('noscript-status-key-grid') || !styles.includes('.noscript-status-key {') || !styles.includes('.noscript-status-key-label:not([data-status="schematic"]):not([data-status="measured"])')) throw new Error('Method view and its no-script fallback must provide schema-driven data-status evidence keys');
           if (!html.includes('<a class="share-button method-return-button" id="methodBackToStudy" href="#atlas" aria-controls="atlas" aria-label="Open current study in Atlas"') || !app.includes('function renderMethodReturnAction(study = activeStudy(), visible = visibleStudies())') || !app.includes('visible.some((candidate) => candidate.id === study.id)') || !app.includes('const methodBackToStudy = $("#methodBackToStudy");') || !app.includes('methodBackToStudy.addEventListener("click", (event) =>') || !app.includes('const catalogRoute = catalogViewRouteUrl();') || !app.includes('button.setAttribute("href", canOpenStudy ? atlasStudyNavigationUrl(study.id) : `${catalogRoute.pathname}${catalogRoute.search}${catalogRoute.hash}`);') || !styles.includes('.section-heading-actions {') || !styles.includes('.method-return-button {')) throw new Error('Method view must provide a context-aware route-native return-to-study action');
           if (!app.includes('function methodNavigationUrl()') || !app.includes('function comparisonNavigationUrl()') || !app.includes('function viewNavigationUrl(page)') || !app.includes('function updateViewNavigationLinks()') || !app.includes('const methodLink = $("[data-method-link]");') || !app.includes('showPage(link.dataset.view, { routeStudy: link.dataset.view === "method" });') || !app.includes('showPage("method", { routeStudy: true });') || !app.includes('showPage("atlas", { routeStudy: canOpenStudy });') || !app.includes('document.title = contextStudy')) throw new Error('Context-aware view navigation must preserve study and comparison routes and return cleanly from filtered views');
           if (!html.includes('<p class="section-note" id="methodContextNote">Notes on the atlas model</p>') || !app.includes('function renderMethodContext(study = activeStudy(), visible = visibleStudies())') || !app.includes('Current study · ${studyShortName(study)}') || !app.includes('outside current catalog') || !app.includes('if (page === "method") renderMethodContext();')) throw new Error('Method view must identify its preserved study context visibly');
@@ -591,6 +593,7 @@ jobs:
               throw new Error('Generated no-script fallback did not reflect escaped route links, content, and mixed provenance');
             }
             if (!generated.includes('<section class="noscript-method" aria-labelledby="noscript-method-heading">') || !generated.includes('id="noscript-method-grid"') || !generated.includes('class="noscript-artifact-actions" role="group" aria-label="Open static atlas artifacts"')) throw new Error('Generated no-script fallback did not preserve its accessible reading key');
+            if (!generated.includes('<section class="noscript-status-key" aria-labelledby="noscript-status-key-heading">') || !generated.includes('class="noscript-status-key-label" data-status="schematic">Schematic</span> <code>schematic</code>') || !generated.includes('class="noscript-status-key-label" data-status="measured">Measured</span> <code>measured</code>') || !generated.includes('class="noscript-status-key-count">5 records</span>') || !generated.includes('class="noscript-status-key-count">1 record</span>')) throw new Error('Generated no-script fallback did not expose its mixed evidence status key');
             if (!generatedCsv.includes('"Source <note>"') || !generatedCsv.includes('"measured","Source-supported dimensions."') || !generatedCsv.includes('"Schema URL"') || !generatedCsv.includes('"data/geometry.schema.json"')) throw new Error('Generated CSV did not preserve provenance, status context, and schema URL');
             const customStatusSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('statusValues: ["schematic", "measured"],', 'statusValues: ["schematic", "measured", "estimated"],')
@@ -604,6 +607,7 @@ jobs:
             if (!customStatusGenerated.includes('Six schematic and estimated studies') || !customStatusGenerated.includes('Estimated = Proportional estimate pending source review.') || !customStatusGenerated.includes('5 schematic · 1 estimated')) {
               throw new Error('Generated no-script fallback did not preserve a schema-defined custom status');
             }
+            if (!customStatusGenerated.includes('class="noscript-status-key-label" data-status="estimated">Estimated</span> <code>estimated</code>') || !customStatusGenerated.includes('Proportional estimate pending source review.') || !customStatusGenerated.includes('class="noscript-status-key-count">1 record</span>')) throw new Error('Generated no-script fallback did not expose a custom evidence status key');
             if (!customStatusCsv.includes('"estimated","Proportional estimate pending source review."')) throw new Error('Generated CSV did not preserve a schema-defined custom status');
             const noteSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('note: "The current collection is a schematic proportional study, not a measured survey or a claim about every church."', 'note: "Custom <note> disclaimer."');
@@ -2792,11 +2796,13 @@ jobs:
           elements.set('#atlasSchemaNote', { textContent: '' });
           elements.set('#methodProvenanceNote', { textContent: '' });
           elements.set('#methodReadingsIntro', { textContent: '' });
+          elements.set('#methodStatusKeyIntro', { textContent: '' });
+          elements.set('#methodStatusKeyList', { innerHTML: '' });
           const context = { window: {}, document: { querySelector(selector) { return elements.get(selector) || null; } }, navigator: {} };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodProvenance };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, methodStatusKeyIntroText, renderMethodStatusKey, renderMethodProvenance };\n})();');
           vm.runInNewContext(app, context);
-          const { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodProvenance } = context.window.__atlasTest;
+          const { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, methodStatusKeyIntroText, renderMethodStatusKey, renderMethodProvenance } = context.window.__atlasTest;
           const definitions = dataStatusDefinitions();
           if (definitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic || definitions.measured !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.measured) throw new Error('Status definitions did not come from the dataset schema');
           if (studyStatusDescription({ status: 'schematic' }) !== definitions.schematic || studyStatusDescription({ status: 'measured' }) !== definitions.measured) throw new Error('Study status descriptions are not schema-backed');
@@ -2805,6 +2811,7 @@ jobs:
           if (methodReadingsIntroText() !== 'These readings describe the proportional model; they are analytical aids, not measured survey results.' || methodReadingsIntroText([{ status: 'measured' }]) !== "These readings use records labeled measured; each record's provenance note identifies its source context." || methodReadingsIntroText([{ status: 'schematic' }, { status: 'measured' }]) !== 'These readings combine multiple data-status categories; use each record\'s status definition and provenance note to distinguish analytical aids from source-supported values.') throw new Error('Derived-reading guidance did not follow the collection status mix');
           renderMethodProvenance();
           if (elements.get('#methodReadingsIntro').textContent !== 'These readings describe the proportional model; they are analytical aids, not measured survey results.') throw new Error('Rendered derived-reading guidance did not expose the current schema-backed evidence context');
+          if (methodStatusKeyIntroText() !== 'The published schema defines 2 data statuses for 6 records; each record carries one label and a provenance note.' || elements.get('#methodStatusKeyIntro').textContent !== methodStatusKeyIntroText() || !elements.get('#methodStatusKeyList').innerHTML.includes('Schematic') || !elements.get('#methodStatusKeyList').innerHTML.includes('6 records') || !elements.get('#methodStatusKeyList').innerHTML.includes('Illustrative proportions; not a measured survey.') || !elements.get('#methodStatusKeyList').innerHTML.includes('data-status="measured"')) throw new Error('Method evidence key did not expose schema labels, definitions, and counts');
           const originalCollectionNote = context.window.CHURCH_GEOMETRY_SCHEMA.note;
           context.window.CHURCH_GEOMETRY_SCHEMA.note = 'Custom collection note.';
           if (methodProvenanceText([{ status: 'schematic' }]) !== 'Custom collection note. Each record carries a status and provenance note.') throw new Error('Method provenance warning did not use the schema collection note');
@@ -2829,6 +2836,8 @@ jobs:
           const makeSelect = (options = []) => ({ options, value: '', appendChild(option) { this.options.push(option); } });
           elements.set('#searchInput', { value: '' });
           ['filterSelect', 'filterPlace', 'filterEra', 'filterAxis', 'filterStatus', 'sortSelect'].forEach((id) => elements.set(`#${id}`, makeSelect(id === 'sortSelect' ? [{ value: 'index' }] : [])));
+          elements.set('#methodStatusKeyIntro', { textContent: '' });
+          elements.set('#methodStatusKeyList', { innerHTML: '' });
           const context = {
             URL,
             window: { location: { href: 'https://example.test/atlas/#atlas/basilica' } },
@@ -2848,14 +2857,16 @@ jobs:
             }
           };
           context.window.CHURCH_GEOMETRY = context.window.CHURCH_GEOMETRY.map((study, index) => index === 0 ? { ...study, status: 'estimated' } : study);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, populateFilter, state, syncCatalogFromUrl, visibleStudies };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodStatusKey, populateFilter, state, syncCatalogFromUrl, visibleStudies };\n})();');
           vm.runInNewContext(app, context);
-          const { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, populateFilter, state, syncCatalogFromUrl, visibleStudies } = context.window.__atlasTest;
+          const { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, renderMethodStatusKey, populateFilter, state, syncCatalogFromUrl, visibleStudies } = context.window.__atlasTest;
           if (dataIssue || !validStatuses.has('estimated')) throw new Error('A schema-defined custom status was rejected by runtime validation');
           if (dataStatusDefinitions().estimated !== 'Proportional estimate pending source review.') throw new Error('Custom status definition was not read from the schema');
           if (studyStatusCounts().estimated !== 1 || !statusGuidanceText().includes('Estimated = Proportional estimate pending source review.') || !statusGuidanceText().includes('1 estimated')) throw new Error('Custom status guidance did not expose its definition and count');
           if (atlasSchemaNoteText() !== 'Mixed data status · metric units · v1.1' || !methodProvenanceText().startsWith('The current collection uses schematic records and estimated records.')) throw new Error('Custom status was not reflected in collection provenance summaries');
           if (methodReadingsIntroText([{ status: 'estimated' }]) !== 'These readings use records labeled Estimated; use the status definition and provenance note to interpret their evidence level.') throw new Error('Custom status was not reflected in derived-reading guidance');
+          renderMethodStatusKey();
+          if (!elements.get('#methodStatusKeyIntro').textContent.includes('3 data statuses') || !elements.get('#methodStatusKeyList').innerHTML.includes('Estimated') || !elements.get('#methodStatusKeyList').innerHTML.includes('estimated') || !elements.get('#methodStatusKeyList').innerHTML.includes('1 record') || !elements.get('#methodStatusKeyList').innerHTML.includes('Proportional estimate pending source review.')) throw new Error('Custom status was not reflected in the Method evidence key');
           populateFilter();
           const filterStatus = elements.get('#filterStatus');
           if (!filterStatus.options.some((option) => option.value === 'estimated' && option.textContent === 'Estimated · 1')) throw new Error('Custom status was not added to the filter options');

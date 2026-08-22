@@ -85,6 +85,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Print-ready comparison sheets that preserve the active full-collection or focused comparison, visible provenance context, charts, the complete comparison table, and a reproducible route.
 - Study and comparison print surfaces expose those reproducible routes as native links, so a researcher can reopen or copy the exact view before printing.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
+- A schema-driven Method evidence key that pairs each data-status label with its definition and live record count, including custom statuses.
 - A Method data dictionary that explains the stable identity, context, geometry, rhythm, interpretation, provenance, and optional-estimate fields behind the JSON/CSV records, with direct links to both artifacts.
 - The Method view keeps the current study in context with a study-aware deep link, a visible context label, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
