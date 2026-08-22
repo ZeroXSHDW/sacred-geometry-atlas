@@ -85,6 +85,14 @@
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
   const GEOMETRY_SCHEMA_URL = "data/geometry.schema.json";
+  const publishedGeometrySchemaUrl = () => {
+    if (typeof document === "undefined" || typeof document.baseURI !== "string" || !document.baseURI || typeof URL !== "function") return GEOMETRY_SCHEMA_URL;
+    try {
+      return new URL(GEOMETRY_SCHEMA_URL, document.baseURI).href;
+    } catch (error) {
+      return GEOMETRY_SCHEMA_URL;
+    }
+  };
   const geometrySchema = () => window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters", unitSymbol: "m" };
   const collectionProvenanceNote = () => {
     const note = geometrySchema().note;
@@ -2379,7 +2387,7 @@
     return {
       title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
-      schemaUrl: GEOMETRY_SCHEMA_URL,
+      schemaUrl: publishedGeometrySchemaUrl(),
       provenance: exportProvenance([study], "active study"),
       view: {
         studyId: study.id,
@@ -2398,7 +2406,7 @@
     return {
       title: "Sacred Geometry Atlas",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
-      schemaUrl: GEOMETRY_SCHEMA_URL,
+      schemaUrl: publishedGeometrySchemaUrl(),
       provenance: exportProvenance(studies, "full collection"),
       studies
     };
@@ -2409,7 +2417,7 @@
     return {
       title: "Sacred Geometry Atlas · catalog view",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
-      schemaUrl: GEOMETRY_SCHEMA_URL,
+      schemaUrl: publishedGeometrySchemaUrl(),
       provenance: exportProvenance(visible, catalogScopeLabel()),
       view: {
         scope: catalogScopeLabel(),
@@ -2514,6 +2522,7 @@
     const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
+    const schemaUrl = publishedGeometrySchemaUrl();
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
@@ -2550,7 +2559,7 @@
         route,
         schema.version,
         schema.units,
-        GEOMETRY_SCHEMA_URL
+        schemaUrl
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -2562,6 +2571,7 @@
     const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
+    const schemaUrl = publishedGeometrySchemaUrl();
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
@@ -2598,7 +2608,7 @@
         route,
         schema.version,
         schema.units,
-        GEOMETRY_SCHEMA_URL
+        schemaUrl
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -2609,7 +2619,7 @@
     return {
       title: "Sacred Geometry Atlas · comparison",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
-      schemaUrl: GEOMETRY_SCHEMA_URL,
+      schemaUrl: publishedGeometrySchemaUrl(),
       provenance: exportProvenance(comparison, scope),
       view: {
         scope,

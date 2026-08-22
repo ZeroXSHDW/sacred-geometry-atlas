@@ -139,10 +139,10 @@ jobs:
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>') || !sitemap.includes('<loc>./data/geometry.json</loc>') || !sitemap.includes('<loc>./data/geometry.csv</loc>') || !sitemap.includes('<loc>./data/geometry.schema.json</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
           if (!notFound.includes('@media (pointer: coarse)') || !notFound.includes('.home-link { min-height: 44px; }') || !notFound.includes('@media (forced-colors: active)') || !notFound.includes('border-color: ButtonText; color: ButtonText; background: ButtonFace;') || !notFound.includes('color: HighlightText; background: Highlight;') || !notFound.includes('.error-footer strong { color: Highlight; }')) throw new Error('404 recovery actions must preserve touch targets and forced-colors affordances');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'JSON, CSV, and JSON Schema distributions', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
-          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>']) {
+          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
           if (!workflow.includes("permissions:\n  contents: read\n\nconcurrency:") || !workflow.includes("  deploy:\n    needs: validate\n    if: github.event_name != 'pull_request'\n    permissions:\n      contents: read\n      pages: write\n      id-token: write")) throw new Error('Pages write and OIDC permissions must be scoped to the deploy job');
@@ -319,7 +319,7 @@ jobs:
           if (!html.includes('<p class="drawing-state" id="drawingState">Outside · Plan · all geometry · 100% zoom</p>') || !styles.includes('.drawing-caption .drawing-state') || !app.includes('const drawingStateLabel = () =>') || !app.includes('const drawingState = $("#drawingState");') || !app.includes('drawingState.textContent = drawingStateLabel();')) throw new Error('Drawing caption must expose the active view context');
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable" aria-describedby="comparisonStatusHelp">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="downloadComparison" type="button" aria-label="Download comparison data as CSV"') || !html.includes('id="downloadComparisonJson" type="button" aria-label="Download comparison data as JSON"') || !html.includes('class="comparison-export-actions" role="group" aria-label="Download comparison data"') || !html.includes('id="comparisonDownloadStatus" role="status" aria-live="polite"')) throw new Error('Missing accessible comparison exports');
-          if (!html.includes('Both exports carry the schema version, unit system, published schema URL, route, and data-status context.') || !app.includes('const GEOMETRY_SCHEMA_URL = "data/geometry.schema.json";') || !app.includes('schemaUrl: GEOMETRY_SCHEMA_URL') || !app.includes('function csvCell(value)') || !app.includes('const safeText = typeof value === "string"') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function catalogCsvPayload(visible)') || !app.includes('function comparisonJsonPayload(comparison)') || !app.includes('records: comparison.map((study) => ({') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };') || !app.includes('const statusDefinitions = dataStatusDefinitions();') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('"Status definition"') || !app.includes('"Schema version", "Units", "Schema URL"') || !app.includes('`Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis"') || !app.includes('floorArea.numeric !== null ? number(floorArea.numeric, 0) : ""') || !app.includes('volume.numeric !== null ? number(volume.numeric, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('const route = catalogViewRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('application/json') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('sacred-geometry-comparison.json') || !app.includes('sacred-geometry-atlas-view.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison JSON downloaded"') || !app.includes('temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"')) throw new Error('Missing self-describing catalog or comparison export behavior');
+          if (!html.includes('Both exports carry the schema version, unit system, published schema URL, route, and data-status context.') || !app.includes('const GEOMETRY_SCHEMA_URL = "data/geometry.schema.json";') || !app.includes('const publishedGeometrySchemaUrl = () =>') || !app.includes('schemaUrl: publishedGeometrySchemaUrl()') || !app.includes('function csvCell(value)') || !app.includes('const safeText = typeof value === "string"') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function catalogCsvPayload(visible)') || !app.includes('function comparisonJsonPayload(comparison)') || !app.includes('records: comparison.map((study) => ({') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };') || !app.includes('const statusDefinitions = dataStatusDefinitions();') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('"Status definition"') || !app.includes('"Schema version", "Units", "Schema URL"') || !app.includes('`Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis"') || !app.includes('floorArea.numeric !== null ? number(floorArea.numeric, 0) : ""') || !app.includes('volume.numeric !== null ? number(volume.numeric, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('const route = catalogViewRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('application/json') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('sacred-geometry-comparison.json') || !app.includes('sacred-geometry-atlas-view.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison JSON downloaded"') || !app.includes('temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"')) throw new Error('Missing self-describing catalog or comparison export behavior');
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }
@@ -414,7 +414,7 @@ jobs:
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"') || !app.includes('activeStudyOutsideCatalog') || !app.includes('The active study, ${studyShortName(study)}, is outside the current catalog view.') || !app.includes('Clear the catalog filters to restore ${studyShortName(study)}.') || !styles.includes('.visual-empty-context')) throw new Error('Missing contextual visual empty-state behavior');
           if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all" || state.filterAxis !== "all";') || !app.includes('if (state.filterStatus !== "all" && !hasSecondaryFilters)') || !app.includes('state.filterStatus === "measured"')) throw new Error('Data-status empty-state messaging must respect secondary filters');
-          if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('function dataStatusDefinitions()') || !app.includes('window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions') || !app.includes('schemaUrl: GEOMETRY_SCHEMA_URL') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
+          if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('function dataStatusDefinitions()') || !app.includes('window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions') || !app.includes('const publishedGeometrySchemaUrl = ()') || !app.includes('schemaUrl: publishedGeometrySchemaUrl()') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
           const catalogExportStart = app.indexOf('function downloadCatalogView()');
           const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
           const catalogPayloadStart = app.indexOf('function catalogViewExportPayload(visible)');
@@ -1544,7 +1544,7 @@ jobs:
             window: {
               location: { href: 'https://example.test/atlas/?q=central%20plan#compare/basilica,gothic' }
             },
-            document: { querySelectorAll() { return []; } },
+            document: { baseURI: 'https://example.test/atlas/', querySelectorAll() { return []; } },
             navigator: {}
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
@@ -1561,18 +1561,18 @@ jobs:
             throw new Error('Focused comparison citation did not preserve selected records, status definitions, schema, scope, and route');
           }
           const focusedCsv = comparisonCsvPayload(comparisonStudies());
-          if (!focusedCsv.includes('"Era","Axis","Status","Status definition","Reference"') || !focusedCsv.includes('"4th–6th century","Longitudinal","schematic"') || !focusedCsv.includes('"schematic","Illustrative proportions; not a measured survey."') || !focusedCsv.includes('"Floor area estimate (m²)","Volume estimate (m³)","Volume basis","Symmetry index","Scope","Route","Schema version","Units","Schema URL"') || !focusedCsv.includes('"1276","14239","Bounding area × height × 0.62"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic","1.1","meters","data/geometry.schema.json"')) {
+          if (!focusedCsv.includes('"Era","Axis","Status","Status definition","Reference"') || !focusedCsv.includes('"4th–6th century","Longitudinal","schematic"') || !focusedCsv.includes('"schematic","Illustrative proportions; not a measured survey."') || !focusedCsv.includes('"Floor area estimate (m²)","Volume estimate (m³)","Volume basis","Symmetry index","Scope","Route","Schema version","Units","Schema URL"') || !focusedCsv.includes('"1276","14239","Bounding area × height × 0.62"') || !focusedCsv.includes('"2 selected studies","https://example.test/atlas/#compare/basilica,gothic","1.1","meters","https://example.test/atlas/data/geometry.schema.json"')) {
             throw new Error('Focused comparison CSV did not preserve axis, estimates, provenance, scope, and route');
           }
           const focusedJson = comparisonJsonPayload(comparisonStudies());
-          if (focusedJson.schemaUrl !== 'data/geometry.schema.json' || focusedJson.provenance.scope !== '2 selected studies' || focusedJson.provenance.recordCount !== 2 || focusedJson.provenance.statusCounts.schematic !== 2 || focusedJson.view.route !== 'https://example.test/atlas/#compare/basilica,gothic' || focusedJson.view.compareIds.join(',') !== 'basilica,gothic' || focusedJson.records[0].study.id !== 'basilica' || focusedJson.records[0].derived.ratios.lengthToSpan !== 58 / 22 || focusedJson.records[0].derived.volumeBasis !== 'Bounding area × height × 0.62') throw new Error('Focused comparison JSON did not preserve selected order, route, provenance, schema URL, and derived readings');
+          if (focusedJson.schemaUrl !== 'https://example.test/atlas/data/geometry.schema.json' || focusedJson.provenance.scope !== '2 selected studies' || focusedJson.provenance.recordCount !== 2 || focusedJson.provenance.statusCounts.schematic !== 2 || focusedJson.view.route !== 'https://example.test/atlas/#compare/basilica,gothic' || focusedJson.view.compareIds.join(',') !== 'basilica,gothic' || focusedJson.records[0].study.id !== 'basilica' || focusedJson.records[0].derived.ratios.lengthToSpan !== 58 / 22 || focusedJson.records[0].derived.volumeBasis !== 'Bounding area × height × 0.62') throw new Error('Focused comparison JSON did not preserve selected order, route, provenance, schema URL, and derived readings');
           state.compareIds = [];
           const fullCitation = comparisonCitationText(comparisonStudies());
           if (!fullCitation.includes('Scope: full collection') || !fullCitation.endsWith('https://example.test/atlas/#compare')) throw new Error('Full comparison citation did not preserve collection scope and route');
           const fullCsv = comparisonCsvPayload(comparisonStudies());
           if (!fullCsv.includes('"full collection","https://example.test/atlas/#compare"')) throw new Error('Full comparison CSV did not preserve its route');
           const fullJson = comparisonJsonPayload(comparisonStudies());
-          if (fullJson.schemaUrl !== 'data/geometry.schema.json' || fullJson.provenance.scope !== 'full collection' || fullJson.provenance.recordCount !== 6 || fullJson.view.route !== 'https://example.test/atlas/#compare' || fullJson.view.compareIds.length !== 0 || fullJson.records.length !== 6) throw new Error('Full comparison JSON did not preserve collection scope, route, and schema URL');
+          if (fullJson.schemaUrl !== 'https://example.test/atlas/data/geometry.schema.json' || fullJson.provenance.scope !== 'full collection' || fullJson.provenance.recordCount !== 6 || fullJson.view.route !== 'https://example.test/atlas/#compare' || fullJson.view.compareIds.length !== 0 || fullJson.records.length !== 6) throw new Error('Full comparison JSON did not preserve collection scope, route, and schema URL');
           const missingEstimateStudy = { ...context.window.CHURCH_GEOMETRY[0], floorAreaEstimate: undefined, volumeEstimate: undefined, volumeBasis: undefined };
           const missingEstimateCsv = comparisonCsvPayload([missingEstimateStudy]);
           if (!missingEstimateCsv.includes('"11.0","","","No estimate supplied","1.00"')) throw new Error('Comparison CSV did not describe missing volume estimates consistently');
@@ -1580,7 +1580,7 @@ jobs:
           const staleBasisCsv = comparisonCsvPayload([staleBasisStudy]);
           if (!staleBasisCsv.includes('"No estimate supplied"') || staleBasisCsv.includes('"stale basis without estimate"')) throw new Error('Comparison CSV exposed a volume basis without its estimate');
           const fullExport = fullAtlasExportPayload();
-          if (fullExport.schemaUrl !== 'data/geometry.schema.json' || fullExport.provenance.scope !== 'full collection' || fullExport.provenance.recordCount !== 6 || fullExport.provenance.statusCounts.schematic !== 6 || fullExport.provenance.statusCounts.measured !== 0 || fullExport.provenance.statusDefinitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic) throw new Error('Full JSON export did not preserve schema-backed collection provenance and schema URL');
+          if (fullExport.schemaUrl !== 'https://example.test/atlas/data/geometry.schema.json' || fullExport.provenance.scope !== 'full collection' || fullExport.provenance.recordCount !== 6 || fullExport.provenance.statusCounts.schematic !== 6 || fullExport.provenance.statusCounts.measured !== 0 || fullExport.provenance.statusDefinitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic) throw new Error('Full JSON export did not preserve schema-backed collection provenance and schema URL');
           state.query = 'basilica';
           state.filterAxis = 'Longitudinal';
           state.page = 'atlas';
@@ -1589,7 +1589,7 @@ jobs:
           if (!catalogCitation.includes('Catalog view: results matching “basilica”, Longitudinal, sorted by name (A–Z); 1 record') || !catalogCitation.includes('Status definitions: Schematic = Illustrative proportions; not a measured survey.') || !catalogCitation.includes('Schema v1.1; units: meters') || !catalogCitation.endsWith('https://example.test/atlas/?q=basilica&axis=Longitudinal&sort=name#atlas')) throw new Error('Catalog citation did not preserve query, filters, sort, status definitions, schema, and route');
           state.sort = 'index';
           const viewExport = catalogViewExportPayload([context.window.CHURCH_GEOMETRY[0]]);
-          if (viewExport.schemaUrl !== 'data/geometry.schema.json' || viewExport.provenance.scope !== 'results matching “basilica”, Longitudinal' || viewExport.provenance.recordCount !== 1 || viewExport.provenance.statusCounts.schematic !== 1 || viewExport.view.query !== 'basilica' || viewExport.view.axis !== 'Longitudinal' || !viewExport.view.route.includes('axis=Longitudinal')) throw new Error('Catalog JSON export did not preserve filtered provenance and schema URL');
+          if (viewExport.schemaUrl !== 'https://example.test/atlas/data/geometry.schema.json' || viewExport.provenance.scope !== 'results matching “basilica”, Longitudinal' || viewExport.provenance.recordCount !== 1 || viewExport.provenance.statusCounts.schematic !== 1 || viewExport.view.query !== 'basilica' || viewExport.view.axis !== 'Longitudinal' || !viewExport.view.route.includes('axis=Longitudinal')) throw new Error('Catalog JSON export did not preserve filtered provenance and schema URL');
           const viewCsv = catalogCsvPayload([context.window.CHURCH_GEOMETRY[0]]);
           if (!viewCsv.includes('"Era","Axis","Status","Status definition","Reference"') || !viewCsv.includes('"results matching “basilica”, Longitudinal","https://example.test/atlas/?q=basilica&axis=Longitudinal#atlas"') || !viewCsv.includes('"schematic","Illustrative proportions; not a measured survey."') || !viewCsv.includes('"1276","14239","Bounding area × height × 0.62"')) throw new Error('Catalog CSV did not preserve filtered route, estimates, and provenance');
           state.query = '';
@@ -1600,9 +1600,9 @@ jobs:
           state.layer = 'axis';
           state.zoom = 1.3;
           const studyExport = activeStudyExportPayload(context.window.CHURCH_GEOMETRY[0]);
-          if (studyExport.schemaUrl !== 'data/geometry.schema.json' || studyExport.view.route !== 'https://example.test/atlas/#atlas/basilica/section/interior/axis/1.3' || studyExport.provenance.scope !== 'active study' || studyExport.provenance.statusCounts.schematic !== 1 || studyExport.derived.boundingArea !== 1276 || studyExport.derived.volumeEstimate !== 14239 || studyExport.derived.ratios.lengthToSpan !== 58 / 22 || studyExport.derived.readingProfile.radiality !== 48) throw new Error('Active-study JSON did not preserve view state, provenance, schema URL, and derived readings');
+          if (studyExport.schemaUrl !== 'https://example.test/atlas/data/geometry.schema.json' || studyExport.view.route !== 'https://example.test/atlas/#atlas/basilica/section/interior/axis/1.3' || studyExport.provenance.scope !== 'active study' || studyExport.provenance.statusCounts.schematic !== 1 || studyExport.derived.boundingArea !== 1276 || studyExport.derived.volumeEstimate !== 14239 || studyExport.derived.ratios.lengthToSpan !== 58 / 22 || studyExport.derived.readingProfile.radiality !== 48) throw new Error('Active-study JSON did not preserve view state, provenance, schema URL, and derived readings');
           const missingStudyExport = activeStudyExportPayload(missingEstimateStudy);
-          if (missingStudyExport.schemaUrl !== 'data/geometry.schema.json' || missingStudyExport.derived.floorAreaEstimate !== null || missingStudyExport.derived.volumeEstimate !== null || missingStudyExport.derived.volumeBasis !== 'No estimate supplied') throw new Error('Active-study JSON did not make missing estimates explicit or preserve its schema URL');
+          if (missingStudyExport.schemaUrl !== 'https://example.test/atlas/data/geometry.schema.json' || missingStudyExport.derived.floorAreaEstimate !== null || missingStudyExport.derived.volumeEstimate !== null || missingStudyExport.derived.volumeBasis !== 'No estimate supplied') throw new Error('Active-study JSON did not make missing estimates explicit or preserve its schema URL');
           const tableBody = { innerHTML: '' };
           context.document.querySelector = (selector) => selector === '#comparisonTableBody' ? tableBody : null;
           renderComparisonTable();
@@ -2521,7 +2521,8 @@ jobs:
           base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
           dataset_url = html.escape(base_url + "data/geometry.json", quote=True)
           csv_url = html.escape(base_url + "data/geometry.csv", quote=True)
-          schema_url = html.escape(base_url + "data/geometry.schema.json", quote=True)
+          schema_target = base_url + "data/geometry.schema.json"
+          schema_url = html.escape(schema_target, quote=True)
           page = Path("index.html")
           source = page.read_text()
           replacements = {
@@ -2538,6 +2539,32 @@ jobs:
                   raise SystemExit(f"Missing repository-relative metadata: {old}")
               source = source.replace(old, new)
           page.write_text(source)
+
+          dataset = Path("data/geometry.json")
+          dataset_source = dataset.read_text()
+          dataset_marker = '"schemaUrl": "data/geometry.schema.json"'
+          if dataset_marker not in dataset_source:
+              raise SystemExit(f"Missing repository-relative dataset schema URL: {dataset_marker}")
+          dataset.write_text(dataset_source.replace(dataset_marker, f'"schemaUrl": "{schema_target}"', 1))
+
+          csv = Path("data/geometry.csv")
+          csv_source = csv.read_text()
+          csv_marker = '"data/geometry.schema.json"'
+          if csv_marker not in csv_source:
+              raise SystemExit(f"Missing repository-relative CSV schema URL: {csv_marker}")
+          csv.write_text(csv_source.replace(csv_marker, f'"{schema_target}"'))
+
+          schema = Path("data/geometry.schema.json")
+          schema_source = schema.read_text()
+          schema_replacements = {
+              '"$id": "./geometry.schema.json"': f'"$id": "{schema_target}"',
+              '"const": "data/geometry.schema.json"': f'"const": "{schema_target}"',
+          }
+          for old, new in schema_replacements.items():
+              if old not in schema_source:
+                  raise SystemExit(f"Missing repository-relative schema metadata: {old}")
+              schema_source = schema_source.replace(old, new, 1)
+          schema.write_text(schema_source)
 
           not_found = Path("404.html")
           not_found_source = not_found.read_text()
@@ -2589,6 +2616,9 @@ jobs:
           not_found = Path("404.html").read_text()
           robots = Path("robots.txt").read_text()
           sitemap = Path("sitemap.xml").read_text()
+          dataset = Path("data/geometry.json").read_text()
+          csv = Path("data/geometry.csv").read_text()
+          schema = Path("data/geometry.schema.json").read_text()
           expected = [
               f'<link rel="canonical" href="{base_url}" />',
               f'<meta property="og:url" content="{base_url}" />',
@@ -2605,6 +2635,15 @@ jobs:
           ]
           missing = [token for token in expected[:7] if token not in page]
           missing.extend(token for token in expected[7:] if token not in (robots + sitemap))
+          expected_artifacts = [
+              f'"schemaUrl": "{base_url}data/geometry.schema.json"',
+              f'"{base_url}data/geometry.schema.json"',
+              f'"$id": "{base_url}data/geometry.schema.json"',
+              f'"const": "{base_url}data/geometry.schema.json"',
+          ]
+          missing.extend(token for token in expected_artifacts[:1] if token not in dataset)
+          missing.extend(token for token in expected_artifacts[1:2] if token not in csv)
+          missing.extend(token for token in expected_artifacts[2:] if token not in schema)
           expected_404 = [
               f'<a class="home-link" data-site-root href="{base_url}">',
               f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
