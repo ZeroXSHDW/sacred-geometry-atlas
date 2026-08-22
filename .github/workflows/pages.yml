@@ -1183,14 +1183,18 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, printComparison } ;\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, printComparison, printStudy } ;\n})();');
           vm.runInNewContext(app, context);
-          const { state, printComparison } = context.window.__atlasTest;
+          const { state, printComparison, printStudy } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic'];
           printComparison();
           if (printCalls !== 1 || !classes.has('print-comparison') || !panel.open || keyboardStatus.textContent !== 'Printing 2 study comparison.' || typeof afterPrint !== 'function') throw new Error('Comparison printing did not prepare its scoped print state');
           afterPrint();
           if (classes.has('print-comparison') || panel.open || afterPrint !== null) throw new Error('Comparison printing did not restore the interactive state after printing');
+          context.window.print = () => { throw new Error('Print dialog blocked'); };
+          state.compareIds = [];
+          printStudy();
+          if (keyboardStatus.textContent !== 'Printing is unavailable in this browser.') throw new Error('Study printing did not recover from a blocked print dialog');
           console.log('Comparison printing smoke test passed.');
           NODE
 

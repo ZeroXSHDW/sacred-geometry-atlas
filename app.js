@@ -1944,7 +1944,11 @@
       return;
     }
     announceKeyboard(`Printing ${study.name} study sheet.`);
-    window.print();
+    try {
+      window.print();
+    } catch (error) {
+      announceKeyboard("Printing is unavailable in this browser.");
+    }
   }
 
   function printComparison() {
