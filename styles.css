@@ -438,6 +438,7 @@ h3 { letter-spacing: -0.04em; }
 .compare-tray-label { display: block; color: var(--amber); font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .compare-tray strong { display: block; margin-top: 0.2rem; color: var(--ink); font-family: var(--serif); font-size: 0.9rem; font-weight: 500; }
 .compare-tray-summary { display: block; overflow: hidden; max-width: 22ch; margin-top: 0.18rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.49rem; text-overflow: ellipsis; white-space: nowrap; }
+.compare-tray-provenance { display: block; margin-top: 0.22rem; color: var(--amber); font-family: var(--mono); font-size: 0.48rem; letter-spacing: 0.03em; line-height: 1.35; }
 .compare-tray-actions { display: flex; align-items: center; gap: 0.7rem; }
 .compare-tray button { border: 0; background: transparent; color: var(--ink-muted); font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase; }
 .compare-tray button:hover { color: var(--ink); }
@@ -1055,6 +1056,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-study-card.is-active { border-color: Highlight; box-shadow: inset 3px 0 0 Highlight; }
   .compare-study-card.is-active .compare-study-open { color: Highlight; }
   .compare-tray-summary { color: ButtonText; }
+  .compare-tray-provenance { color: ButtonText; }
   .noscript-derived { color: Highlight; }
   .noscript-provenance { color: Highlight; }
   .noscript-method { border-color: ButtonText; background: Canvas; }

@@ -2857,6 +2857,7 @@
     const tray = $("#compareTray");
     const count = $("#compareCount");
     const summary = $("#compareSummary");
+    const provenance = $("#compareProvenance");
     const open = $("#openCompare");
     const clear = $("#clearCompare");
     if (!tray || !count || !open) return;
@@ -2866,6 +2867,11 @@
       .map((id) => studies.find((study) => study.id === id))
       .filter(Boolean);
     const selectedNames = selectedStudies.map(studyShortName);
+    const selectedStatuses = selectedStudies.map((study) => `${studyShortName(study)} (${studyStatus(study)})`);
+    const statusSummary = studyStatusSummary(selectedStudies);
+    const statusDefinitions = schemaStatusValues()
+      .map((status) => `${statusDisplayName(status)}: ${dataStatusDefinitions()[status]}`)
+      .join(" ");
     const preview = selectedNames.slice(0, 2).join(" · ");
     const extra = selectedNames.length > 2 ? ` · +${selectedNames.length - 2} more` : "";
     const compareLabel = selectedCount >= 2
@@ -2875,11 +2881,17 @@
         : "Compare selected studies (select at least two)";
     tray.hidden = selectedCount === 0;
     count.textContent = `${selectedCount} selected`;
-    count.setAttribute("aria-label", selectedNames.length ? `${selectedLabel}: ${selectedNames.join(", ")}` : selectedLabel);
+    count.setAttribute("aria-label", selectedStatuses.length ? `${selectedLabel}: ${selectedStatuses.join(", ")}` : selectedLabel);
     if (summary) {
       summary.textContent = preview + extra;
       summary.title = selectedNames.join(" · ");
       summary.hidden = !preview;
+    }
+    if (provenance) {
+      provenance.textContent = selectedCount ? `Data status · ${statusSummary}` : "";
+      provenance.title = selectedCount ? statusDefinitions : "";
+      provenance.setAttribute("aria-label", selectedCount ? `Data status: ${statusSummary}. ${statusDefinitions}` : "");
+      provenance.hidden = selectedCount === 0;
     }
     open.disabled = selectedCount < 2;
     const openText = open.querySelector(".compare-action-label");

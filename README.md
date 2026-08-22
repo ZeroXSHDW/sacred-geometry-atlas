@@ -32,7 +32,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search cards identify when a query matched a reference, reading, dimension, or derived-ratio field that is not shown in the compact card.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
-- The Atlas comparison tray previews selected study names, including selections outside the current filter view.
+- The Atlas comparison tray previews selected study names and a compact schematic/measured status summary, including selections outside the current filter view; its live selection label keeps each study's status attached for assistive technology.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
 - Catalog and comparison cards keep typology, place, era, envelope dimensions, radius, exact geometric axis, emphasis, and dedicated schematic/measured provenance badges visible at a glance; their accessible labels include the explicit data-status name and definition plus the same radius context, and the active study header repeats that status, axis, and envelope context when its title receives keyboard focus.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
