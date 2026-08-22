@@ -973,6 +973,20 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   select:focus-visible,
   textarea:focus-visible,
   summary:focus-visible { outline-color: Highlight; }
+  .download-button,
+  .share-button,
+  .segment-button,
+  .mode-button,
+  .layer-button,
+  .compare-tray button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .download-button:hover,
+  .share-button:hover,
+  .segment-button:hover,
+  .mode-button:hover,
+  .layer-button:hover,
+  .compare-tray button:hover { border-color: Highlight; color: HighlightText; background: Highlight; }
+  .share-button span:first-child { color: ButtonText; }
+  .compare-tray button:last-child:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }
   #runtimeFallback:focus { outline-color: Highlight; }
   #visualEmptyHeading:focus-visible { outline-color: Highlight; }
   #dataErrorHeading:focus { outline-color: Highlight; }
