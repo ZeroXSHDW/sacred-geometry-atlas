@@ -157,11 +157,11 @@ jobs:
           if (!html.includes('<span id="methodProvenanceNote">The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.</span>') || !app.includes('const collectionProvenanceNote = () =>') || !app.includes('const note = geometrySchema().note;') || !app.includes('function methodProvenanceText(records = studies)') || !app.includes('function renderMethodProvenance()') || !app.includes('renderMethodProvenance();')) throw new Error('Method provenance warning must adapt to the schema collection note and live dataset status');
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
-          if (!notFound.includes('data-site-root') || !notFound.includes('data-site-dataset')) throw new Error('Missing GitHub Pages recovery navigation');
+          if (!notFound.includes('data-site-root') || !notFound.includes('data-site-dataset') || !notFound.includes('data-site-csv')) throw new Error('Missing GitHub Pages recovery navigation');
           if (!notFound.includes("hostname.endsWith('.github.io')")) throw new Error('Missing project-site root resolver');
           if (!notFound.includes('<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing 404 favicon link');
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
-          if (!notFound.includes('link.href = `${siteRoot}data/geometry.json`')) throw new Error('Missing 404 dataset root resolver');
+          if (!notFound.includes('link.href = `${siteRoot}data/geometry.json`') || !notFound.includes('link.href = `${siteRoot}data/geometry.csv`')) throw new Error('Missing 404 dataset root resolver');
           if (!html.includes('<div class="data-error" id="dataError" role="main" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" tabindex="-1" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">') || !html.includes('<p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset.')) throw new Error('Data-load recovery must expose a main landmark and announce its recovery explanation assertively');
           if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="main" aria-labelledby="runtimeFallbackHeading" tabindex="-1">') || !html.includes('<p id="runtimeFallbackHeading" role="status" aria-live="polite" aria-atomic="true"><strong>The atlas is still loading.</strong>')) throw new Error('Missing polite runtime script-failure recovery panel');
           if (!html.includes('<div class="runtime-fallback-actions">') || !html.includes('<a class="hero-action hero-action-primary" href="./">Reload the interactive atlas') || !html.includes('<a class="hero-action" href="data/geometry.json">Open the static JSON dataset') || !html.includes('<a class="hero-action" href="data/geometry.csv">Open the static CSV dataset') || !html.includes('<a class="noscript-link" href="data/geometry.json">Open the JSON dataset') || !html.includes('<a class="noscript-link" href="data/geometry.csv">Open the CSV dataset') || html.includes('href="data/geometry.json" download=')) throw new Error('Static recovery links must provide a reload path and open the JSON and CSV artifacts without forcing a download');
@@ -633,24 +633,25 @@ jobs:
           function resolveLinks(pathname, hostname, configuredRoot) {
             const rootLink = { href: '', getAttribute() { return configuredRoot; } };
             const datasetLink = { href: '' };
+            const csvLink = { href: '' };
             const context = {
               window: { location: { pathname, hostname } },
               document: {
                 querySelector(selector) { return selector === '#site-favicon' ? { href: '' } : selector === '[data-site-root]' ? rootLink : null; },
                 querySelectorAll(selector) {
-                  return selector === '[data-site-root]' ? [rootLink] : selector === '[data-site-dataset]' ? [datasetLink] : [];
+                  return selector === '[data-site-root]' ? [rootLink] : selector === '[data-site-dataset]' ? [datasetLink] : selector === '[data-site-csv]' ? [csvLink] : [];
                 }
               }
             };
             vm.runInNewContext(script, context);
-            return { root: rootLink.href, dataset: datasetLink.href };
+            return { root: rootLink.href, dataset: datasetLink.href, csv: csvLink.href };
           }
           const sourceLinks = resolveLinks('/sacred-geometry-atlas/missing/study', 'someone.github.io', '../');
-          if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.dataset}`);
+          if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || sourceLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.dataset} / ${sourceLinks.csv}`);
           const rootLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', '../');
-          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.dataset}`);
+          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || rootLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.dataset} / ${rootLinks.csv}`);
           const deployedLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', 'https://someone.github.io/sacred-geometry-atlas/');
-          if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.dataset}`);
+          if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json' || deployedLinks.csv !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.csv') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.dataset} / ${deployedLinks.csv}`);
           console.log('404 project root resolver smoke test passed.');
           NODE
       - name: Smoke-test route-native catalog links

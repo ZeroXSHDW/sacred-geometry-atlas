@@ -72,7 +72,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The Method view keeps the current study in context with a study-aware deep link, a visible context label, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
-- A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with a direct route to the static dataset.
+- A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON and CSV datasets.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
 - Forced-colors mode maps meter tracks, fills, and chart guides to system colors so quantitative readings remain legible in high-contrast themes.
