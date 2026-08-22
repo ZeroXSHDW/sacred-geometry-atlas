@@ -1525,6 +1525,47 @@
     window.print();
   }
 
+  function triggerDownload(filename, contents, type) {
+    if (
+      typeof Blob !== "function"
+      || typeof URL === "undefined"
+      || typeof URL.createObjectURL !== "function"
+      || !document.body
+      || typeof document.createElement !== "function"
+    ) return false;
+    let objectUrl = "";
+    let anchor = null;
+    const revoke = () => {
+      if (!objectUrl || typeof URL.revokeObjectURL !== "function") return;
+      try {
+        URL.revokeObjectURL(objectUrl);
+      } catch (error) {
+        // Cleanup is best effort; the download itself has already completed or failed.
+      }
+    };
+    try {
+      const blob = new Blob([contents], { type });
+      objectUrl = URL.createObjectURL(blob);
+      anchor = document.createElement("a");
+      anchor.href = objectUrl;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      if (typeof anchor.click !== "function") throw new Error("Download activation is unavailable");
+      anchor.click();
+      if (typeof anchor.remove === "function") anchor.remove();
+      if (typeof window !== "undefined" && typeof window.setTimeout === "function") {
+        window.setTimeout(revoke, 500);
+      } else {
+        revoke();
+      }
+      return true;
+    } catch (error) {
+      if (anchor && typeof anchor.remove === "function") anchor.remove();
+      revoke();
+      return false;
+    }
+  }
+
   function downloadDrawing() {
     const study = activeStudy();
     const svgElement = $("#geometryCanvas svg");
@@ -1567,17 +1608,13 @@
       return `<svg${attributes}${namespace}><style>${exportStyles}</style>`;
     });
     const filename = `${study.id}-${state.surface}-${state.mode}-${state.layer}.svg`;
-    const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n${source}`], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    const downloaded = triggerDownload(filename, `<?xml version="1.0" encoding="UTF-8"?>\n${source}`, "image/svg+xml;charset=utf-8");
+    if (!downloaded) {
+      if (status) status.textContent = "SVG download is unavailable in this browser. Use Print sheet to preserve the current view instead.";
+      return;
+    }
     if (status) status.textContent = `Current drawing exported as ${filename}.`;
     temporaryButtonFeedback(button, "Exported", "Drawing exported", "SVG", "Export the current drawing as SVG", "drawing-export");
-    window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
@@ -1591,17 +1628,13 @@
     try {
     const filename = `${study.id}-sacred-geometry-study.json`;
     const payload = JSON.stringify(activeStudyExportPayload(study), null, 2);
-    const blob = new Blob([payload], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    const downloaded = triggerDownload(filename, payload, "application/json");
+    if (!downloaded) {
+      if (status) status.textContent = "Study JSON download is unavailable in this browser. Use the static dataset link instead.";
+      return;
+    }
     if (status) status.textContent = `Active study exported as ${filename}. Data status: ${studyStatusSummary([study])}.`;
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
-    window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
@@ -1663,17 +1696,13 @@
     if (!beginAsyncAction(button)) return;
     try {
     const payload = JSON.stringify(fullAtlasExportPayload(), null, 2);
-    const blob = new Blob([payload], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "sacred-geometry-atlas.json";
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    const downloaded = triggerDownload("sacred-geometry-atlas.json", payload, "application/json");
+    if (!downloaded) {
+      $("#downloadStatus").textContent = "Atlas data download is unavailable in this browser. Open the static JSON dataset link instead.";
+      return;
+    }
     $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. Data status: ${studyStatusSummary()}.`;
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
-    window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
@@ -1691,17 +1720,13 @@
     try {
     const filename = "sacred-geometry-atlas-view.json";
     const payload = JSON.stringify(catalogViewExportPayload(visible), null, 2);
-    const blob = new Blob([payload], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    const downloaded = triggerDownload(filename, payload, "application/json");
+    if (!downloaded) {
+      if (status) status.textContent = "Catalog view download is unavailable in this browser. Share the catalog URL instead.";
+      return;
+    }
     if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
-    window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
@@ -1760,17 +1785,13 @@
     if (!beginAsyncAction(button)) return;
     try {
     const filename = "sacred-geometry-comparison.csv";
-    const blob = new Blob([`\uFEFF${comparisonCsvPayload(comparison)}`], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    const downloaded = triggerDownload(filename, `\uFEFF${comparisonCsvPayload(comparison)}`, "text/csv;charset=utf-8");
+    if (!downloaded) {
+      if (status) status.textContent = "Comparison CSV download is unavailable in this browser. Share the comparison URL instead.";
+      return;
+    }
     if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
-    window.setTimeout(() => URL.revokeObjectURL(url), 500);
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
