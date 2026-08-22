@@ -88,7 +88,7 @@
         const configuredRoot = rootLink && typeof rootLink.getAttribute === 'function' ? rootLink.getAttribute('href') : '';
         const siteRoot = /^(?:[a-z]+:)?\/\//i.test(configuredRoot)
           ? configuredRoot
-          : isGitHubPages && segments.length > 1 ? `/${segments[0]}/` : '/';
+          : isGitHubPages && segments.length ? `/${segments[0]}/` : '/';
         const favicon = document.querySelector('#site-favicon');
         if (favicon) favicon.href = `${siteRoot}favicon.svg`;
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });

@@ -546,6 +546,8 @@ jobs:
           }
           const sourceLinks = resolveLinks('/sacred-geometry-atlas/missing/study', 'someone.github.io', '../');
           if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.dataset}`);
+          const rootLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', '../');
+          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.dataset}`);
           const deployedLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', 'https://someone.github.io/sacred-geometry-atlas/');
           if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.dataset}`);
           console.log('404 project root resolver smoke test passed.');
