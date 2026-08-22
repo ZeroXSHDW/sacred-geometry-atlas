@@ -2124,7 +2124,7 @@
     const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const statusDefinitions = dataStatusDefinitions();
     const headers = [
-      "ID", "Study", "Typology", "Place", "Era", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
       "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
     ];
@@ -2137,6 +2137,7 @@
         study.typology,
         study.place,
         study.era,
+        study.axis,
         studyStatus(study),
         statusDefinitions[studyStatus(study)] || "",
         study.churchName || study.name,
@@ -2434,6 +2435,7 @@
       return `
         <tr>
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
+          <td>${escapeHtml(study.axis)}</td>
           <td class="comparison-status" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${number(study.length)} m</td>
           <td>${number(study.span)} m</td>
@@ -2467,7 +2469,7 @@
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
-        <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)}</span>
+        <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.axis)}</span>
         <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
         <span class="compare-study-open">${isActive ? "Current Atlas study · open in Atlas" : "Open in Atlas"} <span aria-hidden="true">↗</span></span>
       </button>
@@ -2476,7 +2478,7 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
