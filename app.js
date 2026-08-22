@@ -799,7 +799,12 @@
     $("#clearCompare").addEventListener("click", () => clearComparisonSelection({ focus: true }));
     $("#selectVisibleCompare").addEventListener("click", () => addVisibleToComparison({ focus: true }));
     $("#openCompare").addEventListener("click", () => showPage("compare"));
-    $("#editCompare").addEventListener("click", () => showPage("atlas"));
+    const editCompare = $("#editCompare");
+    if (editCompare) editCompare.addEventListener("click", (event) => {
+      if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      showPage("atlas");
+    });
     $("#methodBackToStudy").addEventListener("click", () => {
       const study = activeStudy();
       const visible = visibleStudies();
@@ -2828,6 +2833,7 @@
       const editLabel = selected >= 2 ? "Edit comparison selection in Atlas" : "Browse studies in Atlas";
       edit.setAttribute("aria-label", editLabel);
       edit.title = editLabel;
+      edit.setAttribute("href", atlasStudyNavigationUrl(state.activeId));
       const editText = edit.querySelector("span:last-child");
       if (editText) editText.textContent = selected >= 2 ? "Edit selection" : "Browse Atlas";
     }

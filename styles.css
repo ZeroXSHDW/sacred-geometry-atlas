@@ -478,7 +478,7 @@ h3 { letter-spacing: -0.04em; }
 .study-nav button:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
 .study-nav button:disabled { cursor: not-allowed; border-color: var(--line); color: var(--ink-muted); opacity: 0.42; }
 .study-share-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: 0.5rem; }
-.share-button { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.62rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.03em; text-transform: uppercase; transition: 180ms ease; }
+.share-button { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.62rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.03em; text-decoration: none; text-transform: uppercase; transition: 180ms ease; }
 .share-button span:first-child { color: var(--teal); font-size: 0.85rem; line-height: 0; }
 .share-button:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
 .share-button[aria-expanded="true"] { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
