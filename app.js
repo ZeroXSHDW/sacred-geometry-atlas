@@ -645,6 +645,7 @@
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);
+    $("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
     $("#shareCompare").addEventListener("click", shareComparison);
@@ -891,6 +892,12 @@
         // Focus restoration is best-effort; the recovery actions remain available.
       }
     }
+  }
+
+  function handleDownloadRecoveryKeydown(event) {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    dismissDownloadRecovery();
   }
 
   function dismissManualCopyFallback(fallbackSelector) {
