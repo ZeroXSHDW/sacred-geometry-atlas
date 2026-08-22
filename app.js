@@ -2420,6 +2420,8 @@
       : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.";
     const comparisonStatusHelp = $("#comparisonStatusHelp");
     if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
+    const printRoute = $("#comparisonPrintRoute");
+    if (printRoute) printRoute.textContent = `Route · ${comparisonRouteUrl().href}`;
   }
 
   function renderCompareSelection() {

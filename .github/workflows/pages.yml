@@ -227,7 +227,7 @@ jobs:
             if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
           }
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route" id="printRoute">') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;')) throw new Error('Print output must preserve active study provenance and its reproducible route');
-          if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, and table');
+          if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !html.includes('<p class="comparison-print-route" id="comparisonPrintRoute">Route · #compare</p>') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !app.includes('printRoute.textContent = `Route · ${comparisonRouteUrl().href}`;') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('body.print-comparison .comparison-print-route { display: block;') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, table, and route');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="selectVisibleCompare" type="button" aria-label="Add visible studies to comparison"') || !app.includes('function addVisibleToComparison({ focus = false } = {})') || !app.includes('renderVisibleComparisonAction(visible);') || !styles.includes('.catalog-batch-action')) throw new Error('Missing filter-aware batch comparison action');
@@ -968,10 +968,12 @@ jobs:
           const geometryKicker = { textContent: '' };
           const compareScope = { textContent: '' };
           const compareHelper = { textContent: '' };
+          const comparisonPrintRoute = { textContent: '' };
           elements.set('#compareSectionNote', sectionNote);
           elements.set('#geometryCompareKicker', geometryKicker);
           elements.set('#compareScope', compareScope);
           elements.set('#compareHelper', compareHelper);
+          elements.set('#comparisonPrintRoute', comparisonPrintRoute);
           const geometryCompare = { innerHTML: '', setAttribute(name, value) { this[name] = value; } };
           const ratioChart = { innerHTML: '' };
           const heightChart = { innerHTML: '' };
@@ -987,7 +989,7 @@ jobs:
           elements.set('#comparisonTableCaption', tableCaption);
           elements.set('#comparisonTableSummary', tableSummary);
           renderCompareContext();
-          if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison')) throw new Error('Focused comparison scope copy did not update');
+          if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison') || comparisonPrintRoute.textContent !== 'Route · https://example.test/atlas/#compare/basilica,gothic') throw new Error('Focused comparison scope or reproducible print route did not update');
           renderCharts();
           if (!ratioChart.innerHTML.includes('Longitudinal axis') || !heightChart.innerHTML.includes('Longitudinal axis') || !moduleChart.innerHTML.includes('Longitudinal axis') || !ratioChart.innerHTML.includes('class="chart-status" data-status="schematic"') || !heightChart.innerHTML.includes('class="chart-status" data-status="schematic"') || !moduleChart.innerHTML.includes('class="chart-status" data-status="schematic"')) throw new Error('Comparison charts did not expose axis context and visible provenance chips');
           const originalGothicStatus = context.window.CHURCH_GEOMETRY[1].status;
@@ -1002,7 +1004,7 @@ jobs:
           if (tableSummary.textContent !== 'Read the 2 selected study records as a table' || !tableCaption.textContent.includes('2 selected studies') || !tableBody.innerHTML.includes('class="comparison-table-study-link"') || !tableBody.innerHTML.includes('data-table-study="basilica"') || !tableBody.innerHTML.includes('aria-label="Open Longitudinal basilica in Atlas"') || !tableBody.innerHTML.includes('<td>Longitudinal</td>')) throw new Error('Focused comparison table scope, axis context, or Atlas links did not update');
           state.compareIds = [];
           renderCompareContext();
-          if (sectionNote.textContent !== 'Relative readings · full collection' || geometryKicker.textContent !== '00 / collection geometry' || compareScope.textContent !== 'Full collection' || !compareHelper.textContent.includes('full collection')) throw new Error('Full collection scope copy did not update');
+          if (sectionNote.textContent !== 'Relative readings · full collection' || geometryKicker.textContent !== '00 / collection geometry' || compareScope.textContent !== 'Full collection' || !compareHelper.textContent.includes('full collection') || comparisonPrintRoute.textContent !== 'Route · https://example.test/atlas/#compare') throw new Error('Full collection scope or reproducible print route did not update');
           renderComparisonTable();
           if (tableSummary.textContent !== 'Read the 6 study records as a table' || !tableCaption.textContent.includes('full collection')) throw new Error('Full collection table scope copy did not update');
           state.compareIds = ['basilica', 'gothic'];

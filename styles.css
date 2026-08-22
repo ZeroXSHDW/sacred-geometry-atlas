@@ -635,6 +635,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .compare-selection-chip span:first-child { overflow: hidden; max-width: 22ch; text-overflow: ellipsis; white-space: nowrap; }
 .compare-selection-chip span:last-child { color: var(--coral); font-size: 0.9rem; line-height: 0.8; }
 .compare-status-note { margin: 0 0 2rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.5; }
+.comparison-print-route { display: none; }
 .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .comparison-card { min-height: 340px; padding: 1.35rem; border: 1px solid var(--line); background: var(--panel); }
 .wide-card { grid-column: 1 / -1; min-height: 280px; }
@@ -1055,6 +1056,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-comparison .compare-callout { width: fit-content; min-width: 0; padding: 0.5rem 0.7rem; }
   body.print-comparison .compare-selection { margin-bottom: 1rem; }
   body.print-comparison .compare-selection-clear { display: none; }
+  body.print-comparison .comparison-print-route { display: block; margin: -1.4rem 0 1rem; color: var(--ink-muted); font-family: var(--mono); font-size: 7.5pt; line-height: 1.45; overflow-wrap: anywhere; }
   body.print-comparison .comparison-grid { gap: 0.65rem; }
   body.print-comparison .comparison-card { min-height: 0; padding: 0.8rem; break-inside: avoid; }
   body.print-comparison .wide-card { min-height: 0; }
