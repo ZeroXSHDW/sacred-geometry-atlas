@@ -13,6 +13,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Zoom and reset controls for the SVG drawing instrument.
 - A plain-language drawing context line that keeps the active surface, mode, layer focus, and zoom visible beside the interpretive caption.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
+- The data-status vocabulary is read from the schema, so documented statuses beyond schematic/measured remain filterable, counted, announced, and preserved in exports.
 - Displayed dimensions, SVG labels, citations, comparison tables, and CSV headers use the schema-backed unit symbol, so a changed unit system cannot silently retain metre labels.
 - The Method warning adapts when a collection mixes schematic and source-supported records, so its limitations stay accurate as the atlas grows.
 - A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON artifact and the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
@@ -145,7 +146,7 @@ Each record should include:
   place: "Region or location",
   era: "Date or period",
   emphasis: "Processional axis",
-  status: "schematic", // use "measured" when supported by a source
+  status: "schematic", // use a value declared in CHURCH_GEOMETRY_SCHEMA.statusValues
   source: "Survey, archive, publication, or atlas model",
   sourceNote: "Short provenance note",
   length: 58,

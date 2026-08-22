@@ -51,21 +51,26 @@ function noScriptFallback() {
   }, {});
   const schematicCount = counts.schematic || 0;
   const measuredCount = counts.measured || 0;
-  const provenanceLabel = schematicCount && measuredCount
-    ? "schematic and measured"
-    : measuredCount
-      ? "measured"
-      : "schematic";
-  const statusSummary = Object.entries(counts)
-    .filter(([, count]) => count > 0)
-    .map(([status, count]) => `${count} ${status}`)
-    .join(" · ");
   const statusDefinitions = payload.schema.statusDefinitions || {};
+  const schemaStatuses = Array.isArray(payload.schema.statusValues)
+    ? payload.schema.statusValues.filter((status) => typeof status === "string" && status.trim())
+    : [];
+  const activeStatuses = [...new Set([...schemaStatuses, ...Object.keys(counts)])].filter((status) => counts[status] > 0);
+  const statusSummary = activeStatuses
+    .map((status) => `${counts[status]} ${status}`)
+    .join(" · ");
+  const provenanceLabel = activeStatuses.length ? activeStatuses.join(" and ") : "unlabelled";
+  const customStatuses = activeStatuses.filter((status) => !["schematic", "measured"].includes(status));
+  const statusDefinitionSummary = activeStatuses
+    .map((status) => `${status[0].toUpperCase()}${status.slice(1)} = ${statusDefinitions[status] || "Data status is not documented."}`)
+    .join(" ");
   const unitName = payload.schema.units || "unspecified";
   const unitSymbol = payload.schema.unitSymbol || "m";
   const schemaNote = `Schema ${payload.schema.version || "unspecified"} · units: ${payload.schema.units || "unspecified"}`;
   const note = !hasStudies
     ? `The collection is currently empty. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
+    : customStatuses.length
+    ? `The collection uses ${statusSummary} records. ${statusDefinitionSummary} ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
     : schematicCount && measuredCount
     ? `The collection mixes schematic and measured records (${statusSummary}). Schematic = ${statusDefinitions.schematic || "illustrative proportions"} Measured = ${statusDefinitions.measured || "source-supported dimensions"} ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
     : measuredCount

@@ -357,14 +357,14 @@ jobs:
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction must be explained to assistive technology');
-          if (!html.includes('<select id="filterStatus" aria-describedby="statusHelp">') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>') || !styles.includes('.catalog-data-note {') || !app.includes('function studyStatusCounts(records = studies)') || !app.includes('function statusGuidanceText(records = studies, scope = "the full collection")') || !app.includes('function catalogStatusGuidanceText(records = visibleStudies())') || !app.includes('statusHelp.textContent = catalogStatusGuidanceText(visible);') || !app.includes('const statusGuidance = statusGuidanceText(studies, "the full collection");') || !app.includes('comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");') || !app.includes('Schematic · ${statusCounts.schematic}') || !app.includes('Measured · ${statusCounts.measured}')) throw new Error('Data status filter must expose scope-aware counts and provenance');
+          if (!html.includes('<select id="filterStatus" aria-describedby="statusHelp">') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>') || !styles.includes('.catalog-data-note {') || !app.includes('function schemaStatusValues()') || !app.includes('const allowedStatusValues = new Set(schemaStatusValues());') || !app.includes('const validStatuses = new Set(["all", ...schemaStatusValues()]);') || !app.includes('function studyStatusCounts(records = studies)') || !app.includes('function statusGuidanceText(records = studies, scope = "the full collection")') || !app.includes('function catalogStatusGuidanceText(records = visibleStudies())') || !app.includes('const statusOptions = [') || !app.includes('statusSelect.replaceChildren()') || !app.includes('statusHelp.textContent = catalogStatusGuidanceText(visible);') || !app.includes('const statusGuidance = statusGuidanceText(studies, "the full collection");') || !app.includes('comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");') || !app.includes('const countsText = statuses.map((status) =>')) throw new Error('Data status filter must expose schema-driven scope-aware counts and provenance');
           if (!html.includes('<select id="filterEra">') || !html.includes('<span class="sr-only">Filter by era</span>') || !html.includes('<select id="filterAxis">') || !html.includes('<span class="sr-only">Filter by axis</span>') || !app.includes('const eras = new Set(studies.map((study) => study.era));') || !app.includes('const axes = new Set(studies.map((study) => study.axis));') || !app.includes('state.filterEra = eras.has(requestedEra) ? requestedEra : "all";') || !app.includes('state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";')) throw new Error('Era and axis filters must be bookmarkable and accessible');
           if (!app.includes('if (state.filterEra !== "all") filters.push({ key: "era"') || !app.includes('if (key === "era")') || !app.includes('if (state.filterEra !== "all") parts.push(state.filterEra);') || !app.includes('if (state.filterAxis !== "all") filters.push({ key: "axis"') || !app.includes('if (key === "axis")') || !app.includes('if (state.filterAxis !== "all") parts.push(state.filterAxis);')) throw new Error('Era and axis filters must expose clearable catalog scope');
           if (!app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);') || !app.includes('if (state.sort === "length") return b.length - a.length;') || !app.includes('length: "length (longest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Sort direction must persist through filtering and shared catalog scope');
           if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"') || !app.includes('activeStudyOutsideCatalog') || !app.includes('The active study, ${studyShortName(study)}, is outside the current catalog view.') || !app.includes('Clear the catalog filters to restore ${studyShortName(study)}.') || !styles.includes('.visual-empty-context')) throw new Error('Missing contextual visual empty-state behavior');
-          if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all" || state.filterAxis !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
+          if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all" || state.filterAxis !== "all";') || !app.includes('if (state.filterStatus !== "all" && !hasSecondaryFilters)') || !app.includes('state.filterStatus === "measured"')) throw new Error('Data-status empty-state messaging must respect secondary filters');
           if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('function dataStatusDefinitions()') || !app.includes('window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
           const catalogExportStart = app.indexOf('function downloadCatalogView()');
           const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
@@ -439,6 +439,17 @@ jobs:
             const generated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
             if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('Readings: 7 bays · module 7.2 m · radius 11 m · floor area 1,276 m² · volume 14,239 m³') || !generated.includes('Provenance: Sacred Geometry Atlas proportional model · Source &lt;note&gt;') || !generated.includes('Schema 1.1 · units: meters.') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
               throw new Error('Generated no-script fallback did not reflect escaped content and mixed provenance');
+            }
+            const customStatusSource = fs.readFileSync('data/geometry.js', 'utf8')
+              .replace('statusValues: ["schematic", "measured"],', 'statusValues: ["schematic", "measured", "estimated"],')
+              .replace('    measured: "Source-supported dimensions."\n  },', '    measured: "Source-supported dimensions.",\n    estimated: "Proportional estimate pending source review."\n  },')
+              .replace('status: "schematic"', 'status: "estimated"');
+            fs.writeFileSync(sourcePath, customStatusSource);
+            const customStatusResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
+            if (customStatusResult.status !== 0) throw new Error(customStatusResult.stderr || customStatusResult.stdout || 'Custom-status no-script generation failed');
+            const customStatusGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            if (!customStatusGenerated.includes('Six schematic and estimated studies') || !customStatusGenerated.includes('Estimated = Proportional estimate pending source review.') || !customStatusGenerated.includes('5 schematic · 1 estimated')) {
+              throw new Error('Generated no-script fallback did not preserve a schema-defined custom status');
             }
             const unitSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('units: "meters",', 'units: "feet",')
@@ -1970,6 +1981,50 @@ jobs:
           const selectedGuidance = statusGuidanceText(context.window.CHURCH_GEOMETRY.slice(0, 2), '2 selected studies');
           if (!selectedGuidance.includes('Counts for 2 selected studies: 2 schematic · 0 measured')) throw new Error('Focused status guidance did not follow the comparison scope');
           console.log('Schema-backed status guidance smoke test passed.');
+          NODE
+
+      - name: Smoke-test extensible schema statuses
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const makeSelect = (options = []) => ({ options, value: '', appendChild(option) { this.options.push(option); } });
+          elements.set('#searchInput', { value: '' });
+          ['filterSelect', 'filterPlace', 'filterEra', 'filterAxis', 'filterStatus', 'sortSelect'].forEach((id) => elements.set(`#${id}`, makeSelect(id === 'sortSelect' ? [{ value: 'index' }] : [])));
+          const context = {
+            URL,
+            window: { location: { href: 'https://example.test/atlas/#atlas/basilica' } },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; },
+              createElement() { return {}; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          context.window.CHURCH_GEOMETRY_SCHEMA = {
+            ...context.window.CHURCH_GEOMETRY_SCHEMA,
+            statusValues: ['schematic', 'measured', 'estimated'],
+            statusDefinitions: {
+              ...context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions,
+              estimated: 'Proportional estimate pending source review.'
+            }
+          };
+          context.window.CHURCH_GEOMETRY = context.window.CHURCH_GEOMETRY.map((study, index) => index === 0 ? { ...study, status: 'estimated' } : study);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, populateFilter, state, syncCatalogFromUrl, visibleStudies };\n})();');
+          vm.runInNewContext(app, context);
+          const { dataIssue, validStatuses, dataStatusDefinitions, studyStatusCounts, statusGuidanceText, atlasSchemaNoteText, methodProvenanceText, populateFilter, state, syncCatalogFromUrl, visibleStudies } = context.window.__atlasTest;
+          if (dataIssue || !validStatuses.has('estimated')) throw new Error('A schema-defined custom status was rejected by runtime validation');
+          if (dataStatusDefinitions().estimated !== 'Proportional estimate pending source review.') throw new Error('Custom status definition was not read from the schema');
+          if (studyStatusCounts().estimated !== 1 || !statusGuidanceText().includes('Estimated = Proportional estimate pending source review.') || !statusGuidanceText().includes('1 estimated')) throw new Error('Custom status guidance did not expose its definition and count');
+          if (atlasSchemaNoteText() !== 'Mixed data status · metric units · v1.1' || !methodProvenanceText().startsWith('The current collection uses schematic records and estimated records.')) throw new Error('Custom status was not reflected in collection provenance summaries');
+          populateFilter();
+          const filterStatus = elements.get('#filterStatus');
+          if (!filterStatus.options.some((option) => option.value === 'estimated' && option.textContent === 'Estimated · 1')) throw new Error('Custom status was not added to the filter options');
+          context.window.location.href = 'https://example.test/atlas/?status=estimated#atlas/basilica';
+          syncCatalogFromUrl();
+          if (state.filterStatus !== 'estimated' || visibleStudies().length !== 1 || visibleStudies()[0].id !== 'basilica') throw new Error('Custom status URL filter did not narrow the catalog');
+          console.log('Schema-extensible status smoke test passed.');
           NODE
 
       - name: Smoke-test schema-backed unit labels

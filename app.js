@@ -3,11 +3,24 @@
 
   const rawStudies = window.CHURCH_GEOMETRY;
   const studies = Array.isArray(rawStudies) ? rawStudies : [];
+  const FALLBACK_DATA_STATUS_DEFINITIONS = {
+    schematic: "Illustrative proportions; not a measured survey.",
+    measured: "Source-supported dimensions."
+  };
+  function schemaStatusValues() {
+    const schemaValues = window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusValues;
+    const values = Array.isArray(schemaValues)
+      ? [...new Set(schemaValues.filter((status) => typeof status === "string" && status.trim()).map((status) => status.trim()))]
+      : [];
+    return values.length ? values : Object.keys(FALLBACK_DATA_STATUS_DEFINITIONS);
+  }
+  const allowedStatusValues = new Set(schemaStatusValues());
   const requiredStudyTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "status", "source", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
   const requiredStudyNumericFields = ["length", "span", "height", "bayCount", "module", "radius", "symmetry"];
   const isRenderableStudy = (study) => {
     if (!study || typeof study !== "object") return false;
     if (requiredStudyTextFields.some((field) => typeof study[field] !== "string" || !study[field].trim())) return false;
+    if (!allowedStatusValues.has(study.status)) return false;
     if (requiredStudyNumericFields.some((field) => !Number.isFinite(study[field]) || study[field] <= 0)) return false;
     if (!Number.isInteger(study.bayCount) || study.symmetry > 1) return false;
     if (study.floorAreaEstimate !== undefined && (!Number.isFinite(study.floorAreaEstimate) || study.floorAreaEstimate <= 0)) return false;
@@ -57,15 +70,15 @@
   };
   const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
   const studyStatus = (study) => study.status || "schematic";
-  const studyDataLabel = (study) => studyStatus(study) === "measured" ? "measured" : "schematic";
+  const studyDataLabel = (study) => studyStatus(study);
+  const statusDisplayName = (status) => {
+    const value = String(status || "").trim();
+    return value ? value[0].toUpperCase() + value.slice(1) : "Unknown";
+  };
   const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
-  const FALLBACK_DATA_STATUS_DEFINITIONS = {
-    schematic: "Illustrative proportions; not a measured survey.",
-    measured: "Source-supported dimensions."
-  };
   const studySurfaceReading = (study) => state.surface === "interior"
     ? study.interiorNote || study.surfaceNote || study.exteriorNote
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
@@ -94,7 +107,7 @@
     axis: "axis",
     measure: "dimensions"
   };
-  const validStatuses = new Set(["all", "schematic", "measured"]);
+  const validStatuses = new Set(["all", ...schemaStatusValues()]);
   const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);
   const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];
   let shareResetTimer;
@@ -218,11 +231,18 @@
   function atlasSchemaNoteText(records = studies) {
     const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const counts = studyStatusCounts(records);
-    const provenance = counts.schematic && counts.measured
-      ? "Mixed provenance"
-      : counts.measured
+    const activeStatuses = schemaStatusValues().filter((status) => counts[status] > 0);
+    const provenance = activeStatuses.length > 1
+      ? activeStatuses.length === 2 && counts.schematic && counts.measured
+        ? "Mixed provenance"
+        : "Mixed data status"
+      : activeStatuses[0] === "measured"
         ? "Source-supported dimensions"
-        : "Illustrative proportions";
+        : activeStatuses[0] === "schematic"
+          ? "Illustrative proportions"
+          : activeStatuses[0]
+            ? `${statusDisplayName(activeStatuses[0])} status`
+            : "No status records";
     const units = schema.units === "meters" ? "metric units" : `${schema.units || "units"} units`;
     return `${provenance} · ${units} · v${schema.version || "1.1"}`;
   }
@@ -234,9 +254,12 @@
 
   function methodProvenanceText(records = studies) {
     const counts = studyStatusCounts(records);
-    if (counts.schematic && counts.measured) return "The collection mixes schematic proportional studies and source-supported dimensions. Use each record's status and provenance note to distinguish them.";
-    if (counts.measured) return "The current collection uses source-supported dimensions. Each record carries a status and provenance note so its evidence can be identified.";
-    return "The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.";
+    const activeStatuses = schemaStatusValues().filter((status) => counts[status] > 0);
+    if (activeStatuses.length === 2 && counts.schematic && counts.measured) return "The collection mixes schematic proportional studies and source-supported dimensions. Use each record's status and provenance note to distinguish them.";
+    if (activeStatuses.length === 1 && counts.measured) return "The current collection uses source-supported dimensions. Each record carries a status and provenance note so its evidence can be identified.";
+    if (activeStatuses.length === 1 && counts.schematic) return "The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.";
+    const labels = activeStatuses.map((status) => `${statusDisplayName(status).toLowerCase()} records`).join(" and ");
+    return `The current collection uses ${labels || "records without a documented status"}. Each record carries a status and provenance note so its evidence can be identified.`;
   }
 
   function renderMethodProvenance() {
@@ -245,25 +268,29 @@
   }
 
   function studyStatusCounts(records = studies) {
-    return records.reduce((counts, study) => {
+    const counts = schemaStatusValues().reduce((statusCounts, status) => {
+      statusCounts[status] = 0;
+      return statusCounts;
+    }, {});
+    return records.reduce((statusCounts, study) => {
       const status = studyStatus(study);
-      counts[status] = (counts[status] || 0) + 1;
-      return counts;
-    }, { schematic: 0, measured: 0 });
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+      return statusCounts;
+    }, counts);
   }
 
   function studyStatusSummary(records = studies) {
     const counts = studyStatusCounts(records);
-    return `${counts.schematic} schematic · ${counts.measured} measured`;
+    return schemaStatusValues().map((status) => `${counts[status] || 0} ${status}`).join(" · ");
   }
 
   function dataStatusDefinitions() {
     const schemaDefinitions = window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions;
-    return Object.keys(FALLBACK_DATA_STATUS_DEFINITIONS).reduce((definitions, status) => {
+    return schemaStatusValues().reduce((definitions, status) => {
       const value = schemaDefinitions && schemaDefinitions[status];
       definitions[status] = typeof value === "string" && value.trim()
         ? value
-        : FALLBACK_DATA_STATUS_DEFINITIONS[status];
+        : FALLBACK_DATA_STATUS_DEFINITIONS[status] || "Data status is not documented.";
       return definitions;
     }, {});
   }
@@ -271,7 +298,10 @@
   function statusGuidanceText(records = studies, scope = "the full collection") {
     const definitions = dataStatusDefinitions();
     const counts = studyStatusCounts(records);
-    return `Schematic = ${definitions.schematic} Measured = ${definitions.measured} Counts for ${scope}: ${counts.schematic} schematic · ${counts.measured} measured.`;
+    const statuses = [...new Set([...schemaStatusValues(), ...Object.keys(counts)])];
+    const definitionsText = statuses.map((status) => `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`).join(" ");
+    const countsText = statuses.map((status) => `${counts[status] || 0} ${status}`).join(" · ");
+    return `${definitionsText} Counts for ${scope}: ${countsText}.`;
   }
 
   function catalogStatusGuidanceText(records = visibleStudies()) {
@@ -589,14 +619,27 @@
     const statusSelect = $("#filterStatus");
     if (statusSelect) {
       const statusCounts = studyStatusCounts();
-      const statusLabels = {
-        all: `All data status · ${studies.length}`,
-        schematic: `Schematic · ${statusCounts.schematic}`,
-        measured: `Measured · ${statusCounts.measured}`
-      };
-      [...statusSelect.options].forEach((option) => {
-        if (statusLabels[option.value]) option.textContent = statusLabels[option.value];
+      const previousStatus = state.filterStatus;
+      const statusOptions = [
+        { value: "all", label: `All data status · ${studies.length}` },
+        ...schemaStatusValues().map((status) => ({
+          value: status,
+          label: `${statusDisplayName(status)} · ${statusCounts[status] || 0}`
+        }))
+      ];
+      if (typeof statusSelect.replaceChildren === "function") statusSelect.replaceChildren();
+      else if (Array.isArray(statusSelect.options)) statusSelect.options.length = 0;
+      else if (statusSelect.options && typeof statusSelect.remove === "function") {
+        while (statusSelect.options.length) statusSelect.remove(0);
+      }
+      statusOptions.forEach(({ value, label }) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        statusSelect.appendChild(option);
       });
+      state.filterStatus = validStatuses.has(previousStatus) ? previousStatus : "all";
+      statusSelect.value = state.filterStatus;
     }
     const statusGuidance = statusGuidanceText(studies, "the full collection");
     ["#statusHelp", "#comparisonStatusHelp"].forEach((selector) => {
@@ -1418,7 +1461,12 @@
     const hasCatalogFilters = hasSecondaryFilters || state.filterStatus !== "all";
     if (state.query && hasCatalogFilters) return `No studies match “${state.query}” within the selected catalog filters.`;
     if (state.query) return `No studies match “${state.query}”.`;
-    if (state.filterStatus === "measured" && !hasSecondaryFilters) return "No measured studies are in the atlas yet.";
+    if (state.filterStatus !== "all" && !hasSecondaryFilters) {
+      const statusLabel = statusDisplayName(state.filterStatus).toLowerCase();
+      return state.filterStatus === "measured"
+        ? "No measured studies are in the atlas yet."
+        : `No ${statusLabel} studies are in the atlas yet.`;
+    }
     if (hasCatalogFilters) return "No studies match the selected catalog filters.";
     return "No studies are available in the current catalog view.";
   }
