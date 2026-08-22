@@ -424,8 +424,13 @@
       ? requestedStudy
       : null;
     const requestedCompareIds = requestedStudy ? requestedStudy.split(",") : [];
+    const hashCompareIds = [...new Set(requestedCompareIds.filter((id) => studies.some((study) => study.id === id)))];
+    const queryCompareValue = new URL(window.location.href).searchParams.get("compare");
+    const queryCompareIds = queryCompareValue
+      ? [...new Set(queryCompareValue.split(",").map((id) => id.trim()).filter((id) => studies.some((study) => study.id === id)))]
+      : [];
     const compareIds = page === "compare"
-      ? [...new Set(requestedCompareIds.filter((id) => studies.some((study) => study.id === id)))]
+      ? (hashCompareIds.length >= 2 ? hashCompareIds : queryCompareIds)
       : [];
     return {
       page,
@@ -437,7 +442,7 @@
       surface: validSurfaces.has(requestedSurface) ? requestedSurface : null,
       layer: validLayers.has(requestedLayer) ? requestedLayer : null,
       zoom: page === "atlas" && studyId ? parseZoom(requestedZoom) : null,
-      compareIds: compareIds.length >= 2 ? compareIds : []
+      compareIds: compareIds.length ? compareIds : []
     };
   }
 
@@ -489,7 +494,9 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
-  function catalogRouteValues(includeCompare = ["atlas", "method"].includes(state.page)) {
+  const shouldPreserveComparisonQuery = () => state.page !== "compare" || state.compareIds.length < 2;
+
+  function catalogRouteValues(includeCompare = shouldPreserveComparisonQuery()) {
     return {
       q: state.query,
       typology: state.filter === "all" ? "" : state.filter,
@@ -502,7 +509,7 @@
     };
   }
 
-  function applyCatalogRouteState(url, includeCompare = ["atlas", "method"].includes(state.page)) {
+  function applyCatalogRouteState(url, includeCompare = shouldPreserveComparisonQuery()) {
     const values = catalogRouteValues(includeCompare);
     catalogParamKeys.forEach((key) => {
       if (values[key]) url.searchParams.set(key, values[key]);
@@ -591,7 +598,7 @@
   }
 
   function comparisonNavigationUrl() {
-    const url = applyCatalogRouteState(new URL(window.location.href), false);
+    const url = applyCatalogRouteState(new URL(window.location.href), state.compareIds.length < 2);
     url.hash = routeHash("compare", false);
     return `${url.pathname}${url.search}${url.hash}`;
   }
