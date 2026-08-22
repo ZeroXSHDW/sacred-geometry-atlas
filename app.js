@@ -45,6 +45,7 @@
     ? study.interiorNote || study.surfaceNote || study.exteriorNote
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
+  const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
@@ -1129,6 +1130,8 @@
   }
 
   function studySearchDerivedReadings(study) {
+    const floorAreaEstimate = positiveEstimate(study.floorAreaEstimate);
+    const volumeEstimate = positiveEstimate(study.volumeEstimate);
     return [
       `symmetry ${number(study.symmetry, 2)}`,
       `length / span ${number(study.length / study.span, 2)}`,
@@ -1136,10 +1139,10 @@
       `section ratio ${number(study.height / study.span, 2)}`,
       `module / span ${number(study.module / study.span, 2)}`,
       `radial reach ${number(study.radius)} m`,
-      Number.isFinite(study.floorAreaEstimate) ? `floor area ${study.floorAreaEstimate} m²` : "",
-      Number.isFinite(study.floorAreaEstimate) ? `floor area ${number(study.floorAreaEstimate, 0)} m²` : "",
-      Number.isFinite(study.volumeEstimate) ? `volume ${study.volumeEstimate} m³` : "",
-      Number.isFinite(study.volumeEstimate) ? `volume ${Number(study.volumeEstimate).toLocaleString()} m³` : ""
+      floorAreaEstimate !== null ? `floor area ${floorAreaEstimate} m²` : "",
+      floorAreaEstimate !== null ? `floor area ${number(floorAreaEstimate, 0)} m²` : "",
+      volumeEstimate !== null ? `volume ${volumeEstimate} m³` : "",
+      volumeEstimate !== null ? `volume ${Number(volumeEstimate).toLocaleString()} m³` : ""
     ];
   }
 
@@ -1163,10 +1166,11 @@
     const details = Array.isArray(study.details) ? study.details.flat() : [];
     const dimensions = studySearchDimensions(study);
     const derivedReadings = studySearchDerivedReadings(study);
+    const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";
     return [
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
       study.emphasis, study.axis, study.envelope, studySource(study), studySourceNote(study),
-      study.surfaceNote, study.exteriorNote, study.interiorNote, study.volumeBasis, studyStatus(study),
+      study.surfaceNote, study.exteriorNote, study.interiorNote, volumeBasis, studyStatus(study),
       ...dimensions,
       ...derivedReadings,
       ...details
@@ -1450,20 +1454,21 @@
   }
 
   function volumeReading(study) {
-    const hasEstimate = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0;
+    const estimate = positiveEstimate(study.volumeEstimate);
     return {
-      value: hasEstimate ? `${Number(study.volumeEstimate).toLocaleString()} m³` : "Not supplied",
-      basis: hasEstimate
+      numeric: estimate,
+      value: estimate !== null ? `${Number(estimate).toLocaleString()} m³` : "Not supplied",
+      basis: estimate !== null
         ? study.volumeBasis || (studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate")
         : "No estimate supplied"
     };
   }
 
   function floorAreaReading(study) {
-    const hasEstimate = Number.isFinite(study.floorAreaEstimate) && study.floorAreaEstimate > 0;
+    const estimate = positiveEstimate(study.floorAreaEstimate);
     return {
-      numeric: hasEstimate ? study.floorAreaEstimate : null,
-      value: hasEstimate ? `${Number(study.floorAreaEstimate).toLocaleString()} m²` : "Not supplied"
+      numeric: estimate,
+      value: estimate !== null ? `${Number(estimate).toLocaleString()} m²` : "Not supplied"
     };
   }
 
@@ -1479,7 +1484,6 @@
   }
 
   function derivedStudyReadings(study) {
-    const hasVolumeEstimate = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0;
     const floorArea = floorAreaReading(study);
     const volume = volumeReading(study);
     return {
@@ -1492,7 +1496,7 @@
       },
       radialReach: study.radius,
       symmetryIndex: study.symmetry,
-      volumeEstimate: hasVolumeEstimate ? study.volumeEstimate : null,
+      volumeEstimate: volume.numeric,
       volumeBasis: volume.basis,
       readingProfile: Object.fromEntries(profileScores(study).map(([label, score]) => [label, score]))
     };
@@ -2073,6 +2077,7 @@
       "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
     ];
     const rows = comparison.map((study) => {
+      const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
       return [
         study.id,
@@ -2093,8 +2098,8 @@
         study.bayCount,
         number(study.module),
         number(study.radius),
-        Number.isFinite(study.floorAreaEstimate) ? number(study.floorAreaEstimate, 0) : "",
-        Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : "",
+        floorArea.numeric !== null ? number(floorArea.numeric, 0) : "",
+        volume.numeric !== null ? number(volume.numeric, 0) : "",
         volume.basis,
         number(study.symmetry, 2),
         scope,

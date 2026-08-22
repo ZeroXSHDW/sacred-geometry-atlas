@@ -262,7 +262,7 @@ jobs:
           if (!html.includes('<p class="drawing-state" id="drawingState">Outside · Plan · all geometry · 100% zoom</p>') || !styles.includes('.drawing-caption .drawing-state') || !app.includes('const drawingStateLabel = () =>') || !app.includes('const drawingState = $("#drawingState");') || !app.includes('drawingState.textContent = drawingStateLabel();')) throw new Error('Drawing caption must expose the active view context');
           if (!html.includes('<table class="comparison-table" id="comparisonDataTable" aria-describedby="comparisonStatusHelp">')) throw new Error('Missing semantic comparison table');
           if (!html.includes('id="downloadComparison" type="button" aria-label="Download comparison data as CSV"') || !html.includes('id="comparisonDownloadStatus" role="status" aria-live="polite"')) throw new Error('Missing accessible comparison CSV export');
-          if (!html.includes('Each CSV row also carries the schema version and unit system.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };') || !app.includes('const statusDefinitions = dataStatusDefinitions();') || !app.includes('"Status definition"') || !app.includes('"Schema version", "Units"') || !app.includes('"Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis"') || !app.includes('Number.isFinite(study.volumeEstimate) ? number(study.volumeEstimate, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
+          if (!html.includes('Each CSV row also carries the schema version and unit system.') || !app.includes('function csvCell(value)') || !app.includes('function comparisonCsvPayload(comparison)') || !app.includes('function comparisonScopeLabel(comparison = comparisonStudies())') || !app.includes('function comparisonRouteUrl()') || !app.includes('const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };') || !app.includes('const statusDefinitions = dataStatusDefinitions();') || !app.includes('"Status definition"') || !app.includes('"Schema version", "Units"') || !app.includes('"Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis"') || !app.includes('floorArea.numeric !== null ? number(floorArea.numeric, 0) : ""') || !app.includes('volume.numeric !== null ? number(volume.numeric, 0) : ""') || !app.includes('const route = comparisonRouteUrl().href;') || !app.includes('text/csv;charset=utf-8') || !app.includes('sacred-geometry-comparison.csv') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded"')) throw new Error('Missing self-describing comparison CSV export behavior');
           for (const token of ['R = L ÷ span', 'length-to-span ratio', '<small>L × span</small>', '<small>H ÷ span</small>', '<small>M ÷ span</small>', 'R = L ÷ span = ${number(ratio, 2)}']) {
             if (!html.includes(token) && !app.includes(token)) throw new Error('Proportion notation must use span consistently: ' + token);
           }
@@ -299,7 +299,7 @@ jobs:
           if (!html.includes('<label class="sr-only" for="searchInput">Search geometry studies</label>') || !html.includes('placeholder="Search names, ratios, refs"') || !html.includes('id="searchHelp"') || !html.includes('geometry dimensions') || !html.includes('Separate multiple words to match all terms.') || !html.includes('Press Escape to clear the current search.') || !html.includes('aria-describedby="searchHelp"') || !html.includes('aria-keyshortcuts="/ Escape"') || !html.includes('spellcheck="false"') || !html.includes('autocapitalize="none"') || !styles.includes('.search-hit { padding: 0 0.08em;')) throw new Error('Missing catalog search instructions or result highlighting');
           if (!html.includes('<kbd>/</kbd>') || !html.includes('Focus study search') || !html.includes('<kbd>Esc</kbd>') || !html.includes('Clear search when focused')) throw new Error('Missing search keyboard shortcut guidance');
           if (!app.includes('function handleSearchKeydown(event)') || !app.includes('$("#searchInput").addEventListener("keydown", handleSearchKeydown)') || !app.includes('event.key !== "Escape"') || !app.includes('clearButton.click()')) throw new Error('Missing Escape-to-clear search behavior');
-          if (!app.includes('function studySearchDimensions(study)') || !app.includes('function studySearchDerivedReadings(study)') || !app.includes('`length ${study.length} m`') || !app.includes('`length ${number(study.length)} m`') || !app.includes('`${study.bayCount} bays`') || !app.includes('`symmetry ${number(study.symmetry, 2)}`') || !app.includes('`section ratio ${number(study.height / study.span, 2)}`') || !app.includes('`module / span ${number(study.module / study.span, 2)}`') || !app.includes('`radial reach ${number(study.radius)} m`') || !app.includes('floor area ${number(study.floorAreaEstimate, 0)} m²')) throw new Error('Catalog search must include labeled geometry and derived readings');
+          if (!app.includes('function studySearchDimensions(study)') || !app.includes('function studySearchDerivedReadings(study)') || !app.includes('`length ${study.length} m`') || !app.includes('`length ${number(study.length)} m`') || !app.includes('`${study.bayCount} bays`') || !app.includes('`symmetry ${number(study.symmetry, 2)}`') || !app.includes('`section ratio ${number(study.height / study.span, 2)}`') || !app.includes('`module / span ${number(study.module / study.span, 2)}`') || !app.includes('`radial reach ${number(study.radius)} m`') || !app.includes('floor area ${number(floorAreaEstimate, 0)} m²')) throw new Error('Catalog search must include labeled geometry and derived readings');
           if (!styles.includes('.search-field input::-webkit-search-cancel-button') || !styles.includes('.search-field input::-ms-clear')) throw new Error('Search field must expose one consistent clear affordance');
           for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'catalog-card-detail', 'highlightSearchText(`${study.era} · ${study.emphasis}`)', 'compare-study-title', 'Length to span ratio', 'function catalogStudyAriaLabel(study, isActive)', 'study.typology}, ${study.place}, ${study.era};', 'catalogStudyAriaLabel(study, isActive)', 'study.place', 'number(study.length)} meters long, span', 'if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });', 'sort: "#sortSelect"', 'if (key === "sort")', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true })', 'selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true })', 'toggleCompare(compareToggle.dataset.compareId, { focus: true })', 'announceStudy(activeStudy(), visible.length)', 'function focusCatalogControl(key, options = {})', 'const { preventScroll = true } = options;', 'control.focus({ preventScroll })', 'focusCatalogControl(key)', 'clearFilter("query", { focus: true })', 'clearCatalogFilters({ resetSort: true, focus: true })', 'clearFilter(chip.dataset.clearFilter, { focus: true })', 'if (focus) focusCatalogControl("query")', 'focusCompareToggle(id)', 'focusStudyCard(id)', 'focusCatalogControl("query", { preventScroll: false });']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
@@ -362,7 +362,8 @@ jobs:
           if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
           if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript') || !styles.includes('.js-runtime.no-js .skip-link-runtime') || !styles.includes('.skip-link-runtime { display: none; }')) throw new Error('Missing no-JS/runtime skip-link visibility rules');
           if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#analysisReading").textContent')) throw new Error('Missing dynamic study context rendering');
-          if (!app.includes('function volumeReading(study)') || !app.includes('value: hasEstimate ? `${Number(study.volumeEstimate).toLocaleString()} m³` : "Not supplied"') || !app.includes('studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate"') || !app.includes(': "No estimate supplied"')) throw new Error('Optional volume estimates must have an explicit missing-data state');
+          if (!app.includes('function volumeReading(study)') || !app.includes('numeric: estimate') || !app.includes('value: estimate !== null ? `${Number(estimate).toLocaleString()} m³` : "Not supplied"') || !app.includes('studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate"') || !app.includes(': "No estimate supplied"')) throw new Error('Optional volume estimates must have an explicit missing-data state');
+          if (!app.includes('const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;') || !app.includes('const estimate = positiveEstimate(study.volumeEstimate);') || !app.includes('const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";') || !app.includes('floorArea.numeric !== null ? number(floorArea.numeric, 0) : ""')) throw new Error('Optional estimate handling must share one positive-value rule across search, views, and exports');
           if (!html.includes('<th scope="col">Floor area (m²)</th>') || !html.includes('<th scope="col">Est. volume (m³)</th>') || !html.includes('<th scope="col">Volume basis</th>') || !app.includes('function floorAreaReading(study)') || !app.includes('class="comparison-provenance"')) throw new Error('Comparison table must expose optional estimates and provenance');
           if (!styles.includes('.analysis-reading')) throw new Error('Missing interpretive reading style');
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
@@ -1046,6 +1047,45 @@ jobs:
           context.window.CHURCH_GEOMETRY[0] = originalFirstStudy;
           if (!missingTableBody.innerHTML.includes('Not supplied') || !missingTableBody.innerHTML.includes('No estimate supplied')) throw new Error('Comparison table did not make missing estimates explicit');
           console.log('Comparison export context smoke test passed.');
+          NODE
+
+      - name: Smoke-test optional estimate consistency
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' }
+            },
+            document: {},
+            navigator: {}
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, studySearchText, derivedStudyReadings, comparisonCsvPayload };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, studySearchText, derivedStudyReadings, comparisonCsvPayload } = context.window.__atlasTest;
+          const invalidEstimateStudy = {
+            ...context.window.CHURCH_GEOMETRY[0],
+            floorAreaEstimate: 0,
+            volumeEstimate: -5,
+            volumeBasis: 'stale basis without a positive estimate'
+          };
+          const derived = derivedStudyReadings(invalidEstimateStudy);
+          if (derived.floorAreaEstimate !== null || derived.boundingArea !== 1276 || derived.volumeEstimate !== null || derived.volumeBasis !== 'No estimate supplied') {
+            throw new Error('Derived readings did not treat non-positive optional estimates as missing');
+          }
+          const searchText = studySearchText(invalidEstimateStudy);
+          if (searchText.includes('stale basis without a positive estimate') || searchText.includes('floor area 0') || searchText.includes('volume -5')) {
+            throw new Error('Catalog search indexed invalid optional estimates or an orphaned volume basis');
+          }
+          state.compareIds = [];
+          const csv = comparisonCsvPayload([invalidEstimateStudy]);
+          if (!csv.includes('"11.0","","","No estimate supplied","1.00"') || csv.includes('"0","-5"') || csv.includes('"stale basis without a positive estimate"')) {
+            throw new Error('Comparison CSV leaked non-positive optional estimates or their orphaned basis');
+          }
+          console.log('Optional estimate consistency smoke test passed.');
           NODE
 
       - name: Smoke-test comparison tray preview
