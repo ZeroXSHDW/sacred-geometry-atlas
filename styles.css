@@ -447,7 +447,8 @@ h3 { letter-spacing: -0.04em; }
 .empty-state { padding: 3rem 0; color: var(--ink-muted); text-align: center; }
 .empty-state p { margin-bottom: 0.8rem; font-size: 0.78rem; }
 .empty-mark { display: block; margin-bottom: 0.8rem; color: var(--amber); font-family: var(--serif); font-size: 2rem; }
-.clear-search { padding: 0; color: var(--amber); font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; }
+.clear-search { padding: 0; border: 1px solid transparent; color: var(--amber); background: transparent; font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; }
+.clear-search:hover { color: var(--ink); }
 
 .visual-column { min-width: 0; }
 .visual-empty-state { display: grid; min-height: 470px; align-content: center; justify-items: center; gap: 0.65rem; padding: clamp(2rem, 5vw, 4rem); border: 1px solid var(--line); background: var(--panel); text-align: center; }
@@ -947,6 +948,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-context-note button { min-height: 36px; }
   .compare-selection-clear, .compare-selection-chip, .catalog-batch-action { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
+  .clear-search { min-height: 36px; padding: 0.45rem 0.6rem; border-color: var(--amber); background: var(--amber-soft); }
+  .clear-search:hover, .clear-search:focus-visible { color: var(--bg); background: var(--amber); }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
   .search-clear { width: 36px; height: 36px; }
@@ -1042,6 +1045,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
   .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }
+  .clear-search { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .clear-search:hover,
+  .clear-search:focus-visible { color: HighlightText; background: Highlight; }
   .method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .method-dictionary-links a:hover { color: HighlightText; background: Highlight; }
   .method-dictionary-item dt,
