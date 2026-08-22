@@ -805,7 +805,10 @@
       event.preventDefault();
       showPage("atlas");
     });
-    $("#methodBackToStudy").addEventListener("click", () => {
+    const methodBackToStudy = $("#methodBackToStudy");
+    if (methodBackToStudy) methodBackToStudy.addEventListener("click", (event) => {
+      if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
       const study = activeStudy();
       const visible = visibleStudies();
       const canOpenStudy = Boolean(study && visible.some((candidate) => candidate.id === study.id));
@@ -1636,6 +1639,8 @@
     const label = canOpenStudy ? `Open ${studyShortName(study)} in Atlas` : "Return to Atlas catalog";
     button.setAttribute("aria-label", label);
     button.title = label;
+    const catalogRoute = catalogViewRouteUrl();
+    button.setAttribute("href", canOpenStudy ? atlasStudyNavigationUrl(study.id) : `${catalogRoute.pathname}${catalogRoute.search}${catalogRoute.hash}`);
     const text = button.querySelector("span:last-child");
     if (text) text.textContent = canOpenStudy ? "Open current study" : "Return to Atlas";
   }
