@@ -75,6 +75,7 @@
         <a class="home-link" data-site-root href="../">Return to the atlas <span aria-hidden="true">↗</span></a>
         <a class="home-link home-link-secondary" data-site-dataset href="data/geometry.json">Open the static dataset <span aria-hidden="true">↗</span></a>
         <a class="home-link home-link-secondary" data-site-csv href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
+        <a class="home-link home-link-secondary" data-site-schema href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
       </div>
     </main>
     <footer class="error-footer">
@@ -95,6 +96,7 @@
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
         document.querySelectorAll('[data-site-dataset]').forEach((link) => { link.href = `${siteRoot}data/geometry.json`; });
         document.querySelectorAll('[data-site-csv]').forEach((link) => { link.href = `${siteRoot}data/geometry.csv`; });
+        document.querySelectorAll('[data-site-schema]').forEach((link) => { link.href = `${siteRoot}data/geometry.schema.json`; });
       })();
     </script>
   </body>

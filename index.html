@@ -72,6 +72,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json" />
     <link rel="alternate" type="text/csv" title="Sacred Geometry Atlas dataset as CSV" href="data/geometry.csv" />
+    <link rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json" />
   </head>
   <body class="no-js">
     <script>document.body.classList.add("js-runtime");</script>
@@ -84,6 +85,7 @@
         <a class="hero-action hero-action-primary" href="./">Reload the interactive atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
+        <a class="hero-action" href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
       </div>
     </div>
     <noscript>
@@ -93,6 +95,7 @@
         <span>Read the plain-text index below or open the static dataset.</span>
         <a class="noscript-link" href="data/geometry.json">Open the JSON dataset <span aria-hidden="true">→</span></a>
         <a class="noscript-link" href="data/geometry.csv">Open the CSV dataset <span aria-hidden="true">→</span></a>
+        <a class="noscript-link" href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">→</span></a>
       </div>
       <section class="noscript-index" role="main" aria-labelledby="noscript-heading">
         <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Plain-text index</p>
@@ -120,6 +123,7 @@
         <a class="hero-action hero-action-primary" href="./">Reload the atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
+        <a class="hero-action" href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
       </div>
     </div>
 
@@ -809,10 +813,11 @@
               <h3 id="data-dictionary-heading">What each record contains</h3>
             </div>
             <div class="method-dictionary-intro">
-              <p>JSON records and CSV rows describe the same study objects. Dimensions follow the schema unit system; optional estimates stay blank when a source does not supply them.</p>
+              <p>JSON records and CSV rows describe the same study objects, while the published schema makes the contract reusable. Dimensions follow the schema unit system; optional estimates stay blank when a source does not supply them.</p>
               <div class="method-dictionary-links" role="group" aria-label="Open atlas data artifacts">
                 <a href="data/geometry.json">Open JSON <span aria-hidden="true">↗</span></a>
                 <a href="data/geometry.csv">Open CSV <span aria-hidden="true">↗</span></a>
+                <a href="data/geometry.schema.json">Open schema <span aria-hidden="true">↗</span></a>
               </div>
             </div>
           </div>

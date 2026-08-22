@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./geometry.schema.json",
+  "title": "Sacred Geometry Atlas geometry dataset",
+  "description": "Machine-readable contract for the Sacred Geometry Atlas JSON collection, including schema metadata and proportional church geometry studies.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "schema",
+    "studies"
+  ],
+  "properties": {
+    "title": {
+      "const": "Sacred Geometry Atlas"
+    },
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "units",
+        "unitSymbol",
+        "statusValues",
+        "statusDefinitions",
+        "note"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "units": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unitSymbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statusValues": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "schematic",
+              "measured"
+            ]
+          }
+        },
+        "statusDefinitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schematic",
+            "measured"
+          ],
+          "properties": {
+            "schematic": {
+              "type": "string",
+              "minLength": 1
+            },
+            "measured": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "studies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/study"
+      }
+    }
+  },
+  "$defs": {
+    "study": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "index",
+        "name",
+        "shortName",
+        "typology",
+        "place",
+        "era",
+        "emphasis",
+        "type",
+        "churchName",
+        "source",
+        "sourceNote",
+        "envelope",
+        "axis",
+        "surfaceNote",
+        "exteriorNote",
+        "interiorNote",
+        "status",
+        "length",
+        "span",
+        "height",
+        "bayCount",
+        "module",
+        "radius",
+        "symmetry",
+        "details"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "index": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shortName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "typology": {
+          "type": "string",
+          "minLength": 1
+        },
+        "place": {
+          "type": "string",
+          "minLength": 1
+        },
+        "era": {
+          "type": "string",
+          "minLength": 1
+        },
+        "emphasis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "churchName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "envelope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "axis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "surfaceNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exteriorNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interiorNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "schematic",
+            "measured"
+          ]
+        },
+        "length": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "span": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "bayCount": {
+          "type": "integer",
+          "exclusiveMinimum": 0
+        },
+        "module": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "radius": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "symmetry": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "floorAreaEstimate": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "volumeEstimate": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "volumeBasis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "details": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,7 +16,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The data-status vocabulary is read from the schema, so documented statuses beyond schematic/measured remain filterable, counted, announced, and preserved in exports.
 - Displayed dimensions, SVG labels, citations, comparison tables, and CSV headers use the schema-backed unit symbol, so a changed unit system cannot silently retain metre labels.
 - The Method warning adapts when a collection mixes schematic and source-supported records, so its limitations stay accurate as the atlas grows.
-- A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON artifact and the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
+- A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON, CSV, and JSON Schema artifacts plus the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
@@ -64,6 +64,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
 - Downloadable full-atlas JSON, filtered catalog-view JSON/CSV, and context-aware active-study JSON with view state, derived readings, and deterministic `provenance` manifests that record scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) and [`data/geometry.csv`](data/geometry.csv) artifacts remain available for static and no-script use.
 - Visible Raw JSON and Raw CSV links keep the committed collection reachable when a browser cannot trigger a generated download, and the CSV carries schema-backed status, provenance, units, derived ratios, and direct study routes.
+- A published [`data/geometry.schema.json`](data/geometry.schema.json) contract describes the collection envelope, status vocabulary, required study fields, numeric bounds, optional estimates, and detail pairs for downstream validation; the Method view provides an **Open schema** link alongside the JSON and CSV artifacts.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Generated study and SVG filenames normalize dataset IDs, so spaces, separators, and punctuation cannot create ambiguous download paths.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
@@ -74,7 +75,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The Method view keeps the current study in context with a study-aware deep link, a visible context label, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
-- A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON and CSV datasets.
+- A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
 - Forced-colors mode maps meter tracks, fills, and chart guides to system colors so quantitative readings remain legible in high-contrast themes.
@@ -123,7 +124,7 @@ git commit -m "Update Sacred Geometry Atlas"
 
 The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, `twitter:image`, `robots.txt`, and `sitemap.xml` crawl metadata before uploading the site artifact.
 
-The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON and CSV distributions. Deployment resolves both Dataset URLs to the final absolute Pages address.
+The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON and CSV distributions. The HTML advertises the JSON Schema through an `application/schema+json` alternate link. Deployment resolves both Dataset URLs to the final absolute Pages address.
 
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
 
@@ -141,7 +142,7 @@ After editing the source, regenerate the static artifacts with:
 node scripts/sync-geometry-json.js
 ```
 
-Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON, CSV, and no-JavaScript index are current without changing files.
+Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON, CSV, JSON Schema, and no-JavaScript index are current without changing files.
 
 Each record should include:
 

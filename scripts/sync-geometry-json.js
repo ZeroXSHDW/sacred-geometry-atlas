@@ -10,6 +10,7 @@ const projectRoot = path.resolve(__dirname, "..");
 const sourcePath = path.join(projectRoot, "data", "geometry.js");
 const outputPath = path.join(projectRoot, "data", "geometry.json");
 const csvOutputPath = path.join(projectRoot, "data", "geometry.csv");
+const schemaOutputPath = path.join(projectRoot, "data", "geometry.schema.json");
 const htmlPath = path.join(projectRoot, "index.html");
 const noScriptStart = "        <!-- geometry-noscript:start -->";
 const noScriptEnd = "        <!-- geometry-noscript:end -->";
@@ -102,6 +103,85 @@ function staticCsv() {
   return `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n")}\r\n`;
 }
 
+function schemaDocument() {
+  const statusValues = Array.isArray(payload.schema.statusValues)
+    ? payload.schema.statusValues.filter((status) => typeof status === "string" && status.trim())
+    : [];
+  const statusDefinitionProperties = Object.fromEntries(statusValues.map((status) => [status, { type: "string", minLength: 1 }]));
+  const requiredTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "source", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
+  const textProperties = Object.fromEntries(requiredTextFields.map((field) => [field, { type: "string", minLength: 1 }]));
+  return {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "./geometry.schema.json",
+    "title": "Sacred Geometry Atlas geometry dataset",
+    "description": "Machine-readable contract for the Sacred Geometry Atlas JSON collection, including schema metadata and proportional church geometry studies.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["title", "schema", "studies"],
+    "properties": {
+      "title": { "const": "Sacred Geometry Atlas" },
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["version", "units", "unitSymbol", "statusValues", "statusDefinitions", "note"],
+        "properties": {
+          "version": { "type": "string", "minLength": 1 },
+          "units": { "type": "string", "minLength": 1 },
+          "unitSymbol": { "type": "string", "minLength": 1 },
+          "statusValues": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1, "enum": statusValues }
+          },
+          "statusDefinitions": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": statusValues,
+            "properties": statusDefinitionProperties
+          },
+          "note": { "type": "string", "minLength": 1 }
+        }
+      },
+      "studies": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/study" }
+      }
+    },
+    "$defs": {
+      "study": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [...requiredTextFields, "status", "length", "span", "height", "bayCount", "module", "radius", "symmetry", "details"],
+        "properties": {
+          ...textProperties,
+          "status": { "type": "string", "minLength": 1, "enum": statusValues },
+          "length": { "type": "number", "exclusiveMinimum": 0 },
+          "span": { "type": "number", "exclusiveMinimum": 0 },
+          "height": { "type": "number", "exclusiveMinimum": 0 },
+          "bayCount": { "type": "integer", "exclusiveMinimum": 0 },
+          "module": { "type": "number", "exclusiveMinimum": 0 },
+          "radius": { "type": "number", "exclusiveMinimum": 0 },
+          "symmetry": { "type": "number", "minimum": 0, "maximum": 1 },
+          "floorAreaEstimate": { "type": "number", "exclusiveMinimum": 0 },
+          "volumeEstimate": { "type": "number", "exclusiveMinimum": 0 },
+          "volumeBasis": { "type": "string", "minLength": 1 },
+          "details": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
 function noScriptFallback() {
   const hasStudies = payload.studies.length > 0;
   const collectionCount = countLabel(payload.studies.length);
@@ -186,19 +266,22 @@ function renderNoScriptIndex(source) {
 const currentHtml = fs.readFileSync(htmlPath, "utf8");
 const renderedHtml = renderNoScriptIndex(currentHtml);
 const renderedCsv = staticCsv();
+const renderedSchema = `${JSON.stringify(schemaDocument(), null, 2)}\n`;
 
 if (isCheck) {
   const current = fs.readFileSync(outputPath, "utf8");
   const currentCsv = fs.readFileSync(csvOutputPath, "utf8");
-  if (current !== rendered || currentCsv !== renderedCsv || currentHtml !== renderedHtml) {
+  const currentSchema = fs.readFileSync(schemaOutputPath, "utf8");
+  if (current !== rendered || currentCsv !== renderedCsv || currentSchema !== renderedSchema || currentHtml !== renderedHtml) {
     console.error("Static data artifacts are out of sync; run node scripts/sync-geometry-json.js");
     process.exitCode = 1;
   } else {
-    console.log(`Geometry JSON, CSV, and no-script index are in sync: ${payload.studies.length} studies.`);
+    console.log(`Geometry JSON, CSV, schema, and no-script index are in sync: ${payload.studies.length} studies.`);
   }
 } else {
   fs.writeFileSync(outputPath, rendered);
   fs.writeFileSync(csvOutputPath, renderedCsv);
+  fs.writeFileSync(schemaOutputPath, renderedSchema);
   fs.writeFileSync(htmlPath, renderedHtml);
-  console.log(`Wrote data/geometry.json, data/geometry.csv, and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
+  console.log(`Wrote data/geometry.json, data/geometry.csv, data/geometry.schema.json, and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
 }
