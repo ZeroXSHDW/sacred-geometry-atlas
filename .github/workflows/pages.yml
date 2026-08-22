@@ -164,6 +164,9 @@ jobs:
           for (const token of ['<section class="method-dictionary" aria-labelledby="data-dictionary-heading">', 'id="data-dictionary-heading"', 'class="method-dictionary-links"', 'href="data/geometry.json">Open JSON', 'href="data/geometry.csv">Open CSV', 'href="data/geometry.schema.json">Open schema', '<code>floorAreaEstimate</code>', '<code>volumeBasis</code>', 'class="method-dictionary-formulas"']) {
             if (!html.includes(token)) throw new Error('Method data dictionary is incomplete: ' + token);
           }
+          for (const token of ['class="shortcut-guide layer-guide"', '<summary>Layer guide</summary>', '<p>Focus layers</p>', '<dt>Envelope</dt><dd>Outer walls and enclosing geometric figure.</dd>', '<dt>Rhythm</dt><dd>Repeated bays, frames, and module marks.</dd>', '<dt>Dimensions</dt><dd>Schematic measures and construction references.</dd>']) {
+            if (!html.includes(token)) throw new Error('Drawing layer guide is incomplete: ' + token);
+          }
           for (const token of ['.method-dictionary {', '.method-dictionary-grid {', '.method-dictionary-links a {', '.method-dictionary-item dd {', '.method-dictionary-formulas {']) {
             if (!styles.includes(token)) throw new Error('Method data dictionary styling is incomplete: ' + token);
           }
