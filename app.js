@@ -833,6 +833,7 @@
     const label = button.querySelector("span:last-child");
     if (label) label.textContent = visibleLabel;
     button.setAttribute("aria-label", accessibleLabel);
+    button.title = accessibleLabel;
   }
 
   const manualCopyFallbackControls = {
