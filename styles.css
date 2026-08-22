@@ -839,6 +839,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .dataset-link-json span:last-child::after { content: "JSON"; font-size: 0.56rem; }
   .dataset-link-csv span:last-child::after { content: "CSV"; font-size: 0.56rem; }
   .dataset-link-schema span:last-child::after { content: "Schema"; font-size: 0.56rem; }
+  .download-button span.download-label { display: inline; font-size: 0; white-space: nowrap; }
+  .download-button span.download-label::after { content: "JSON"; font-size: 0.56rem; }
+  .download-button.is-complete span.download-label::after { content: "Done"; }
   .catalog-action span:last-child { display: none; }
   .catalog-action#downloadCatalogView span:last-child,
   .catalog-action#downloadCatalogCsv span:last-child { display: inline; }

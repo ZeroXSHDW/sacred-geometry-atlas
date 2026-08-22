@@ -94,7 +94,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Forced-colors mode maps meter tracks, fills, chart guides, and the generated SVG drawing instrument to system colors so quantitative and geometric readings remain legible in high-contrast themes.
 - A `prefers-contrast: more` layer strengthens muted text, boundaries, meters, selected-study markers, the drawing instrument, and focus rings across the Atlas and branded 404 recovery page without changing the default dark palette.
 - Compact catalog actions keep JSON and CSV format labels visible at tablet widths, then add short Share and Cite labels at phone widths so identical glyphs remain distinguishable.
-- The full-atlas download keeps a compact JSON label at phone widths, with a visible Done state during export feedback, while its accessible name remains explicit.
+- The full-atlas download keeps a compact JSON label at tablet and phone widths, with a visible Done state during export feedback, while its accessible name remains explicit.
 - Active-study Share, Cite, JSON, and Print actions keep compact visible labels at phone widths, while their full accessible names and live feedback remain intact.
 - Static JSON, CSV, and Schema links keep compact format labels at tablet and phone widths, so raw artifacts remain distinguishable from generated downloads.
 - Fragment targets, view sections, and comparison table headings use larger responsive offsets below the header’s wrap points, keeping mobile jumps and sticky headings visible beneath the multi-row header.
