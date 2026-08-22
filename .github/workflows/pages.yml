@@ -175,6 +175,7 @@ jobs:
           if (!html.includes('<p class="section-note" id="compareSectionNote">Relative readings · full collection</p>') || !html.includes('<span class="card-kicker" id="geometryCompareKicker">00 / collection geometry</span>') || !app.includes('function renderCompareContext()') || !app.includes('const compareScopeLabel = focused ? "selected collection" : "full collection";') || !app.includes('sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;') || !app.includes('geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";')) throw new Error('Comparison copy must identify the active full or focused collection');
           if (!html.includes('<summary id="comparisonTableSummary">Read the 6 study records as a table</summary>') || !app.includes('const summary = $("#comparisonTableSummary");') || !app.includes('Read the ${comparison.length} selected study records as a table') || !app.includes('Read the ${comparison.length} study records as a table')) throw new Error('Comparison table trigger must identify its active record scope');
           if (!app.includes('class="comparison-table-study-link"') || !app.includes('data-table-study') || !app.includes('comparisonTable.addEventListener("click"') || !app.includes('escapeHtml(studyStatusDescription(study))') || !styles.includes('.comparison-table-study-link {')) throw new Error('Comparison table study names must provide route-native Atlas links and escaped comparison labels');
+          if (!app.includes('class="chart-status"') || !styles.includes('.chart-status {') || !styles.includes('.chart-status[data-status="measured"]') || !styles.includes('.chart-status,\n  .chart-status[data-status="measured"]')) throw new Error('Comparison charts must expose visible schema-backed provenance chips');
           for (const token of ['function updateCompareNavigation()', 'const label = selectedCount ? `Compare (${selectedCount} selected)` : "Compare";', 'button.setAttribute("aria-label", label);', 'count.hidden = selectedCount === 0;', 'updateCompareNavigation();']) {
             if (!app.includes(token)) throw new Error('Compare navigation state must reflect the active selection: ' + token);
           }
@@ -987,7 +988,13 @@ jobs:
           renderCompareContext();
           if (sectionNote.textContent !== 'Relative readings · selected collection' || geometryKicker.textContent !== '00 / selected geometry' || compareScope.textContent !== '2 selected' || !compareHelper.textContent.includes('Focused comparison')) throw new Error('Focused comparison scope copy did not update');
           renderCharts();
-          if (!ratioChart.innerHTML.includes('Longitudinal axis') || !heightChart.innerHTML.includes('Longitudinal axis') || !moduleChart.innerHTML.includes('Longitudinal axis')) throw new Error('Comparison chart labels did not expose study axis context');
+          if (!ratioChart.innerHTML.includes('Longitudinal axis') || !heightChart.innerHTML.includes('Longitudinal axis') || !moduleChart.innerHTML.includes('Longitudinal axis') || !ratioChart.innerHTML.includes('class="chart-status" data-status="schematic"') || !heightChart.innerHTML.includes('class="chart-status" data-status="schematic"') || !moduleChart.innerHTML.includes('class="chart-status" data-status="schematic"')) throw new Error('Comparison charts did not expose axis context and visible provenance chips');
+          const originalGothicStatus = context.window.CHURCH_GEOMETRY[1].status;
+          context.window.CHURCH_GEOMETRY[1].status = 'measured';
+          renderCharts();
+          if (!ratioChart.innerHTML.includes('class="chart-status" data-status="measured" title="Source-supported dimensions.">measured</span>') || !heightChart.innerHTML.includes('data-status="measured"') || !moduleChart.innerHTML.includes('data-status="measured"')) throw new Error('Comparison chart provenance chips did not follow a measured record');
+          context.window.CHURCH_GEOMETRY[1].status = originalGothicStatus;
+          renderCharts();
           renderGeometryCompare();
           if (!geometryCompare.innerHTML.includes('Basilica · Mediterranean · 4th–6th century · Longitudinal') || !geometryCompare.innerHTML.includes('Gothic · Northern Europe · 12th–15th century · Longitudinal') || !geometryCompare.innerHTML.includes('Longitudinal axis') || !geometryCompare.innerHTML.includes('Open in Atlas') || !geometryCompare.innerHTML.includes('compare-study-card is-active') || !geometryCompare.innerHTML.includes('aria-current="true"') || !geometryCompare.innerHTML.includes('Current Atlas study · open in Atlas')) throw new Error('Comparison cards did not render place, era, axis, destination context, and current-study state');
           renderComparisonTable();
@@ -1038,7 +1045,7 @@ jobs:
           context.window.CHURCH_GEOMETRY[0].axis = 'Quoted "axis" <tag>';
           context.window.__atlasTest.renderGeometryCompare();
           context.window.__atlasTest.renderCharts();
-          if (!geometryCompare.innerHTML.includes('Quoted &quot;definition&quot; &lt;tag&gt;') || geometryCompare.innerHTML.includes('Quoted "definition" <tag>') || !ratioChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !heightChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !moduleChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || ratioChart.innerHTML.includes('Quoted "axis" <tag> axis')) {
+          if (!geometryCompare.innerHTML.includes('Quoted &quot;definition&quot; &lt;tag&gt;') || geometryCompare.innerHTML.includes('Quoted "definition" <tag>') || !ratioChart.innerHTML.includes('title="Quoted &quot;definition&quot; &lt;tag&gt;"') || !heightChart.innerHTML.includes('title="Quoted &quot;definition&quot; &lt;tag&gt;"') || !moduleChart.innerHTML.includes('title="Quoted &quot;definition&quot; &lt;tag&gt;"') || !ratioChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !heightChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !moduleChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || ratioChart.innerHTML.includes('Quoted "axis" <tag> axis')) {
             throw new Error('Comparison card and chart labels did not escape edited dynamic text');
           }
           console.log('Escaped comparison label smoke test passed.');

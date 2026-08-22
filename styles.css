@@ -661,7 +661,10 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .card-symbol { color: var(--teal); font-family: var(--serif); font-size: 1.8rem; line-height: 1; }
 .bar-chart { display: grid; gap: 0.8rem; }
 .bar-row { display: grid; grid-template-columns: 92px 1fr 44px; align-items: center; gap: 0.7rem; }
-.bar-label { overflow: hidden; color: var(--ink-soft); font-size: 0.65rem; text-overflow: ellipsis; white-space: nowrap; }
+.bar-label { display: flex; min-width: 0; align-items: baseline; gap: 0.35rem; overflow: hidden; color: var(--ink-soft); font-size: 0.65rem; }
+.chart-study-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chart-status { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.22rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.42rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
+.chart-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
 .bar-track { height: 7px; background: rgba(213, 229, 214, 0.1); }
 .bar-fill { display: block; height: 100%; min-width: 3px; background: var(--amber); transition: width 450ms ease; }
 .bar-fill.teal { background: var(--teal); }
@@ -669,7 +672,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .chart-note { margin: 2.2rem 0 0; color: var(--ink-muted); font-size: 0.68rem; }
 .module-chart { display: grid; gap: 0.75rem; }
 .module-row { display: grid; grid-template-columns: 145px 1fr 55px; align-items: center; gap: 0.8rem; }
-.module-name { color: var(--ink-soft); font-size: 0.65rem; }
+.module-name { display: flex; min-width: 0; align-items: baseline; gap: 0.35rem; color: var(--ink-soft); font-size: 0.65rem; }
 .module-bars { display: flex; align-items: end; gap: 3px; height: 22px; }
 .module-bar { flex: 1; min-width: 2px; background: var(--teal); opacity: 0.72; }
 .module-value { color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; text-align: right; }
@@ -905,7 +908,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-nav button:disabled,
   .zoom-control button:disabled { border-color: GrayText; color: GrayText; }
   .catalog-card-status,
-  .catalog-card-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .catalog-card-status[data-status="measured"],
+  .chart-status,
+  .chart-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .segment-button.is-active { color: HighlightText; background: Highlight; }
   .layer-button.is-active { border-color: Highlight; background: Canvas; }
   .catalog-card.is-active { border-inline-start: 3px solid Highlight; }
