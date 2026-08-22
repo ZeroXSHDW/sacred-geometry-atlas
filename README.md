@@ -60,7 +60,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - The branded home link preserves normal modified-click and middle-click behavior, while an ordinary click still returns to the Atlas view in place.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
-- Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state, derived readings, and a deterministic `provenance` manifest that records scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
+- Downloadable full-atlas JSON, filtered catalog-view JSON/CSV, and context-aware active-study JSON with view state, derived readings, and deterministic `provenance` manifests that record scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
 - A visible Raw JSON link keeps the committed dataset reachable when a browser cannot trigger a generated download.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Generated study and SVG filenames normalize dataset IDs, so spaces, separators, and punctuation cannot create ambiguous download paths.

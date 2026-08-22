@@ -787,6 +787,7 @@
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadStudy").addEventListener("click", downloadStudy);
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
+    $("#downloadCatalogCsv").addEventListener("click", downloadCatalogCsv);
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
     $("#downloadComparisonJson").addEventListener("click", downloadComparisonJson);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
@@ -1404,10 +1405,12 @@
     const emptyMessage = $("#emptyStateMessage");
     const visible = visibleStudies();
     const catalogExport = $("#downloadCatalogView");
+    const catalogCsvExport = $("#downloadCatalogCsv");
     renderCatalogResultCount(visible.length);
     const statusHelp = $("#statusHelp");
     if (statusHelp) statusHelp.textContent = catalogStatusGuidanceText(visible);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
+    if (catalogCsvExport) catalogCsvExport.disabled = visible.length === 0;
     if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
     renderVisualState(visible);
     renderActiveFilters();
@@ -2297,7 +2300,33 @@
     }
     hideDownloadRecovery();
     if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
-    temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
+    temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON", "Export current catalog view as JSON", "catalog-download");
+    } finally {
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
+    }
+  }
+
+  function downloadCatalogCsv() {
+    const visible = visibleStudies();
+    const status = $("#catalogDownloadStatus");
+    const button = $("#downloadCatalogCsv");
+    hideDownloadRecovery();
+    if (!visible.length) {
+      if (status) status.textContent = "There are no studies in the current catalog view to export.";
+      return;
+    }
+    if (!beginAsyncAction(button)) return;
+    try {
+      const filename = "sacred-geometry-atlas-view.csv";
+      const downloaded = triggerDownload(filename, `\uFEFF${catalogCsvPayload(visible)}`, "text/csv;charset=utf-8");
+      if (!downloaded) {
+        if (status) status.textContent = "Catalog CSV download is unavailable in this browser. Share the catalog URL instead.";
+        showDownloadRecovery("The catalog CSV export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogCsv");
+        return;
+      }
+      hideDownloadRecovery();
+      if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
+      temporaryButtonFeedback(button, "Exported", "Catalog CSV exported", "CSV", "Export current catalog view as CSV", "catalog-csv-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
@@ -2323,6 +2352,53 @@
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
     ];
     const rows = comparison.map((study) => {
+      const floorArea = floorAreaReading(study);
+      const volume = volumeReading(study);
+      return [
+        study.id,
+        studyShortName(study),
+        study.typology,
+        study.place,
+        study.era,
+        study.axis,
+        studyStatus(study),
+        statusDefinitions[studyStatus(study)] || "",
+        study.churchName || study.name,
+        studySource(study),
+        studySourceNote(study),
+        number(study.length),
+        number(study.span),
+        number(study.length / study.span, 2),
+        number(study.height),
+        number(study.height / study.span, 2),
+        study.bayCount,
+        number(study.module),
+        number(study.radius),
+        floorArea.numeric !== null ? number(floorArea.numeric, 0) : "",
+        volume.numeric !== null ? number(volume.numeric, 0) : "",
+        volume.basis,
+        number(study.symmetry, 2),
+        scope,
+        route,
+        schema.version,
+        schema.units
+      ];
+    });
+    return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
+  }
+
+  function catalogCsvPayload(visible) {
+    const route = catalogViewRouteUrl().href;
+    const scope = catalogScopeLabel();
+    const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
+    const statusDefinitions = dataStatusDefinitions();
+    const unit = geometryUnitSymbol();
+    const headers = [
+      "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
+    ];
+    const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
       return [
