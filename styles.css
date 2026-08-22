@@ -103,6 +103,19 @@ summary:focus-visible {
 .noscript-provenance { display: block; margin-top: 0.22rem; color: var(--teal); font-family: var(--mono); font-size: 0.55rem; line-height: 1.45; }
 .noscript-reading { display: block; margin-top: 0.5rem; color: var(--ink-soft); font-size: 0.69rem; line-height: 1.55; }
 .noscript-note { margin: 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.59rem; }
+.noscript-method { width: min(1440px, calc(100% - 96px)); margin: 2rem auto 0; padding: 1.2rem; border: 1px solid var(--line); background: rgba(136, 198, 186, 0.045); }
+.noscript-method .eyebrow { margin-bottom: 0.8rem; }
+.noscript-method h2 { margin: 0 0 0.65rem; color: var(--ink); font-size: clamp(1.25rem, 2.4vw, 2rem); letter-spacing: -0.05em; line-height: 1.08; }
+.noscript-method-intro { max-width: 52rem; margin: 0; color: var(--ink-soft); font-size: 0.72rem; line-height: 1.65; }
+.noscript-method-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.4rem 0 0; }
+.noscript-method-grid > div { padding-top: 0.75rem; border-top: 1px solid var(--line); }
+.noscript-method-grid dt { color: var(--amber); font-family: var(--mono); font-size: 0.59rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.noscript-method-grid dd { margin: 0.3rem 0 0; color: var(--ink-muted); font-size: 0.66rem; line-height: 1.6; }
+.noscript-artifact-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.3rem; }
+.noscript-artifact-actions a { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.6rem 0.75rem; border: 1px solid var(--teal); color: var(--teal); background: var(--teal-soft); font-family: var(--mono); font-size: 0.59rem; letter-spacing: 0.03em; text-decoration: none; text-transform: uppercase; }
+.noscript-artifact-actions a:hover,
+.noscript-artifact-actions a:focus-visible { color: var(--bg); background: var(--teal); }
+.noscript-artifact-actions a span { font-size: 0.9rem; line-height: 0; }
 
 .data-error-state .site-header,
 .data-error-state main,
@@ -812,6 +825,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .action-recovery { width: min(100% - 32px, 600px); grid-template-columns: 1fr; }
   .action-recovery-actions { justify-content: start; }
   .noscript-list { grid-template-columns: 1fr; margin-top: 1.3rem; }
+  .noscript-method { width: min(100% - 32px, 600px); padding: 1rem; }
+  .noscript-method-grid { grid-template-columns: 1fr 1fr; }
   .site-header { flex-wrap: wrap; gap: 0.8rem; min-height: auto; padding: 1rem 0; }
   .main-nav { order: 3; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); }
   .nav-button { flex: 1; text-align: center; }
@@ -910,6 +925,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-card p { min-height: 0; }
   .analysis-heading { display: block; }
   .equation { width: fit-content; margin-top: 0.8rem; }
+  .noscript-method-grid { grid-template-columns: 1fr; }
+  .noscript-artifact-actions a { flex: 1 1 auto; justify-content: space-between; }
   .bar-row { grid-template-columns: 78px 1fr 37px; gap: 0.45rem; }
   .bar-axis-guide { padding-inline: calc(78px + 0.45rem) calc(37px + 0.45rem); }
   .module-row { grid-template-columns: 108px 1fr 43px; gap: 0.45rem; }
@@ -936,6 +953,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .search-field input, .select-wrap select { min-height: 40px; }
   .manual-copy-fallback-dismiss { min-height: 36px; }
   .action-recovery .hero-action, .action-recovery-dismiss { min-height: 36px; }
+  .noscript-artifact-actions a { min-height: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1005,6 +1023,12 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-tray-summary { color: ButtonText; }
   .noscript-derived { color: Highlight; }
   .noscript-provenance { color: Highlight; }
+  .noscript-method { border-color: ButtonText; background: Canvas; }
+  .noscript-method-grid > div { border-top-color: ButtonText; }
+  .noscript-method-grid dt { color: Highlight; }
+  .noscript-artifact-actions a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .noscript-artifact-actions a:hover,
+  .noscript-artifact-actions a:focus-visible { color: HighlightText; background: Highlight; }
   .noscript-study-link { color: LinkText; text-decoration-color: LinkText; }
   .noscript-study-link:hover { color: Highlight; }
   .noscript-list li:target { outline-color: Highlight; background: Canvas; }
