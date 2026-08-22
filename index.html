@@ -64,6 +64,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <link rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json" />
+    <link rel="alternate" type="text/csv" title="Sacred Geometry Atlas dataset as CSV" href="data/geometry.csv" />
   </head>
   <body class="no-js">
     <script>document.body.classList.add("js-runtime");</script>
@@ -75,6 +76,7 @@
       <div class="runtime-fallback-actions">
         <a class="hero-action hero-action-primary" href="./">Reload the interactive atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
+        <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
       </div>
     </div>
     <noscript>
@@ -83,6 +85,7 @@
         <strong>The interactive drawings need JavaScript.</strong>
         <span>Read the plain-text index below or open the static dataset.</span>
         <a class="noscript-link" href="data/geometry.json">Open the JSON dataset <span aria-hidden="true">→</span></a>
+        <a class="noscript-link" href="data/geometry.csv">Open the CSV dataset <span aria-hidden="true">→</span></a>
       </div>
       <section class="noscript-index" role="main" aria-labelledby="noscript-heading">
         <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Plain-text index</p>
@@ -109,6 +112,7 @@
       <div class="data-error-actions">
         <a class="hero-action hero-action-primary" href="./">Reload the atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
+        <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
       </div>
     </div>
 
@@ -137,6 +141,10 @@
           <span class="dataset-icon" aria-hidden="true">{ }</span>
           <span>Raw JSON</span>
         </a>
+        <a class="dataset-link dataset-link-csv" href="data/geometry.csv" aria-label="Open the static atlas dataset as CSV" title="Open the static atlas dataset as CSV">
+          <span class="dataset-icon" aria-hidden="true">CSV</span>
+          <span>Raw CSV</span>
+        </a>
         <button class="download-button" id="downloadData" type="button" aria-label="Download full atlas data as JSON" title="Download full atlas data as JSON">
           <span class="download-icon" aria-hidden="true">↓</span>
           <span>Download data</span>
@@ -149,6 +157,7 @@
       <p class="action-recovery-message" id="downloadRecoveryHeading" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="action-recovery-actions">
         <a class="hero-action hero-action-primary" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
+        <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
         <button class="action-recovery-dismiss" id="dismissDownloadRecovery" type="button" aria-label="Dismiss download recovery message" aria-keyshortcuts="Escape" title="Dismiss download recovery message">Dismiss</button>
       </div>
     </div>

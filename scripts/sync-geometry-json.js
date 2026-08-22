@@ -9,6 +9,7 @@ const vm = require("vm");
 const projectRoot = path.resolve(__dirname, "..");
 const sourcePath = path.join(projectRoot, "data", "geometry.js");
 const outputPath = path.join(projectRoot, "data", "geometry.json");
+const csvOutputPath = path.join(projectRoot, "data", "geometry.csv");
 const htmlPath = path.join(projectRoot, "index.html");
 const noScriptStart = "        <!-- geometry-noscript:start -->";
 const noScriptEnd = "        <!-- geometry-noscript:end -->";
@@ -40,6 +41,66 @@ const numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seve
 const countLabel = (count) => numberWords[count] || String(count);
 const studyStatus = (study) => study.status || "schematic";
 const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
+const fixed = (value, digits = 1) => Number(value).toFixed(digits);
+const studySource = (study) => study.source || "Unattributed proportional model";
+const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
+const statusDefinition = (study) => {
+  const definitions = payload.schema.statusDefinitions || {};
+  return definitions[studyStatus(study)] || "";
+};
+const csvCell = (value) => {
+  const text = String(value ?? "");
+  const safeText = typeof value === "string" && /^[\t\r\n ]*[=+\-@]/.test(text)
+    ? `'${text}`
+    : text;
+  return `"${safeText.replace(/"/g, '""')}"`;
+};
+
+function staticCsv() {
+  const unit = payload.schema.unitSymbol || "m";
+  const headers = [
+    "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+    `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
+    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
+  ];
+  const rows = payload.studies.map((study) => {
+    const floorArea = positiveEstimate(study.floorAreaEstimate);
+    const volume = positiveEstimate(study.volumeEstimate);
+    const volumeBasis = volume !== null
+      ? study.volumeBasis || (studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate")
+      : "No estimate supplied";
+    return [
+      study.id,
+      study.shortName || study.name,
+      study.typology,
+      study.place,
+      study.era,
+      study.axis,
+      studyStatus(study),
+      statusDefinition(study),
+      study.churchName || study.name,
+      studySource(study),
+      studySourceNote(study),
+      fixed(study.length),
+      fixed(study.span),
+      fixed(study.length / study.span, 2),
+      fixed(study.height),
+      fixed(study.height / study.span, 2),
+      study.bayCount,
+      fixed(study.module),
+      fixed(study.radius),
+      floorArea !== null ? fixed(floorArea, 0) : "",
+      volume !== null ? fixed(volume, 0) : "",
+      volumeBasis,
+      fixed(study.symmetry, 2),
+      "full collection",
+      `#atlas/${encodeURIComponent(study.id)}/plan/exterior/all`,
+      payload.schema.version || "",
+      payload.schema.units || ""
+    ];
+  });
+  return `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n")}\r\n`;
+}
 
 function noScriptFallback() {
   const hasStudies = payload.studies.length > 0;
@@ -123,17 +184,20 @@ function renderNoScriptIndex(source) {
 
 const currentHtml = fs.readFileSync(htmlPath, "utf8");
 const renderedHtml = renderNoScriptIndex(currentHtml);
+const renderedCsv = staticCsv();
 
 if (isCheck) {
   const current = fs.readFileSync(outputPath, "utf8");
-  if (current !== rendered || currentHtml !== renderedHtml) {
+  const currentCsv = fs.readFileSync(csvOutputPath, "utf8");
+  if (current !== rendered || currentCsv !== renderedCsv || currentHtml !== renderedHtml) {
     console.error("Static data artifacts are out of sync; run node scripts/sync-geometry-json.js");
     process.exitCode = 1;
   } else {
-    console.log(`Geometry JSON and no-script index are in sync: ${payload.studies.length} studies.`);
+    console.log(`Geometry JSON, CSV, and no-script index are in sync: ${payload.studies.length} studies.`);
   }
 } else {
   fs.writeFileSync(outputPath, rendered);
+  fs.writeFileSync(csvOutputPath, renderedCsv);
   fs.writeFileSync(htmlPath, renderedHtml);
-  console.log(`Wrote data/geometry.json and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
+  console.log(`Wrote data/geometry.json, data/geometry.csv, and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
 }

@@ -34,6 +34,7 @@ jobs:
           test -s 404.html
           test -s styles.css
           test -s data/geometry.json
+          test -s data/geometry.csv
           test -s scripts/sync-geometry-json.js
           test -f .nojekyll
           test -s og.png
@@ -52,6 +53,12 @@ jobs:
           };
           const exported = JSON.parse(fs.readFileSync('data/geometry.json', 'utf8'));
           if (JSON.stringify(exported) !== JSON.stringify(source)) throw new Error('data/geometry.json is out of sync with data/geometry.js');
+          const csv = fs.readFileSync('data/geometry.csv', 'utf8').replace(/^\uFEFF/, '');
+          const csvRows = csv.trimEnd().split(/\r\n/);
+          if (csvRows.length !== source.studies.length + 1 || !csvRows[0].startsWith('"ID","Study","Typology"') || !csvRows[0].includes(`"Length (${source.schema.unitSymbol})"`) || !csvRows[0].includes('"Status definition"')) throw new Error('data/geometry.csv is missing its schema-backed header or records');
+          source.studies.forEach((study, index) => {
+            if (!csvRows[index + 1].startsWith(`"${study.id}"`) || !csvRows[index + 1].includes(`"#atlas/${encodeURIComponent(study.id)}/plan/exterior/all"`)) throw new Error(`data/geometry.csv is missing the direct route for ${study.id}`);
+          });
           const requiredTextFields = ['id', 'index', 'name', 'shortName', 'typology', 'place', 'era', 'emphasis', 'type', 'churchName', 'status', 'source', 'sourceNote', 'envelope', 'axis', 'surfaceNote', 'exteriorNote', 'interiorNote'];
           const requiredNumericFields = ['length', 'span', 'height', 'bayCount', 'module', 'radius', 'symmetry'];
           const optionalNumericFields = ['floorAreaEstimate', 'volumeEstimate'];
@@ -114,7 +121,8 @@ jobs:
             'property="og:image:height" content="630"',
             'name="robots" content="index, follow"',
             'rel="canonical" href="./"',
-            'rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json"'
+            'rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json"',
+            'rel="alternate" type="text/csv" title="Sacred Geometry Atlas dataset as CSV" href="data/geometry.csv"'
           ];
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
@@ -122,7 +130,7 @@ jobs:
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
           if (!notFound.includes('@media (pointer: coarse)') || !notFound.includes('.home-link { min-height: 44px; }') || !notFound.includes('@media (forced-colors: active)') || !notFound.includes('border-color: ButtonText; color: ButtonText; background: ButtonFace;') || !notFound.includes('color: HighlightText; background: Highlight;') || !notFound.includes('.error-footer strong { color: Highlight; }')) throw new Error('404 recovery actions must preserve touch targets and forced-colors affordances');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'Raw CSV', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>']) {
@@ -156,8 +164,8 @@ jobs:
           if (!notFound.includes('link.href = `${siteRoot}data/geometry.json`')) throw new Error('Missing 404 dataset root resolver');
           if (!html.includes('<div class="data-error" id="dataError" role="main" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" tabindex="-1" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">') || !html.includes('<p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset.')) throw new Error('Data-load recovery must expose a main landmark and announce its recovery explanation assertively');
           if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="main" aria-labelledby="runtimeFallbackHeading" tabindex="-1">') || !html.includes('<p id="runtimeFallbackHeading" role="status" aria-live="polite" aria-atomic="true"><strong>The atlas is still loading.</strong>')) throw new Error('Missing polite runtime script-failure recovery panel');
-          if (!html.includes('<div class="runtime-fallback-actions">') || !html.includes('<a class="hero-action hero-action-primary" href="./">Reload the interactive atlas') || !html.includes('<a class="hero-action" href="data/geometry.json">Open the static JSON dataset') || !html.includes('<a class="noscript-link" href="data/geometry.json">Open the JSON dataset') || html.includes('href="data/geometry.json" download=')) throw new Error('Static recovery links must provide a reload path and open the JSON artifact without forcing a download');
-          if (!html.includes('<a class="dataset-link" href="data/geometry.json" aria-label="Open the static atlas dataset as JSON"') || !styles.includes('.header-actions {') || !styles.includes('.dataset-link {') || !styles.includes('.dataset-link:hover') || !styles.includes('.dataset-link,\n  .download-button { min-height: 40px; }') || !styles.includes('.dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.runtime-fallback-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }')) throw new Error('Normal atlas mode must expose an accessible raw JSON fallback link');
+          if (!html.includes('<div class="runtime-fallback-actions">') || !html.includes('<a class="hero-action hero-action-primary" href="./">Reload the interactive atlas') || !html.includes('<a class="hero-action" href="data/geometry.json">Open the static JSON dataset') || !html.includes('<a class="hero-action" href="data/geometry.csv">Open the static CSV dataset') || !html.includes('<a class="noscript-link" href="data/geometry.json">Open the JSON dataset') || !html.includes('<a class="noscript-link" href="data/geometry.csv">Open the CSV dataset') || html.includes('href="data/geometry.json" download=')) throw new Error('Static recovery links must provide a reload path and open the JSON and CSV artifacts without forcing a download');
+          if (!html.includes('<a class="dataset-link" href="data/geometry.json" aria-label="Open the static atlas dataset as JSON"') || !html.includes('<a class="dataset-link dataset-link-csv" href="data/geometry.csv" aria-label="Open the static atlas dataset as CSV"') || !styles.includes('.header-actions {') || !styles.includes('.dataset-link {') || !styles.includes('.dataset-link:hover') || !styles.includes('.dataset-link-csv .dataset-icon') || !styles.includes('.dataset-link,\n  .download-button { min-height: 40px; }') || !styles.includes('.dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.runtime-fallback-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }')) throw new Error('Normal atlas mode must expose accessible raw JSON and CSV fallback links');
           if (!html.includes('<div class="action-recovery" id="downloadRecovery" role="region" aria-labelledby="downloadRecoveryHeading" tabindex="-1" hidden>') || !html.includes('<p class="action-recovery-message" id="downloadRecoveryHeading" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('id="dismissDownloadRecovery" type="button" aria-label="Dismiss download recovery message" aria-keyshortcuts="Escape" title="Dismiss download recovery message"') || !styles.includes('.action-recovery {') || !styles.includes('.action-recovery-actions {') || !styles.includes('.action-recovery-dismiss:hover') || !styles.includes('#downloadRecovery:focus { outline: 2px solid var(--teal); outline-offset: 4px; }') || !styles.includes('.action-recovery { border-color: ButtonText; background: Canvas; }') || !styles.includes('#downloadRecovery:focus { outline-color: Highlight; }') || !styles.includes('.action-recovery,')) throw new Error('Blocked exports must expose a visible, responsive recovery panel');
           for (const token of ['function hideDownloadRecovery()', 'function showDownloadRecovery(message, focusSelector)', 'function dismissDownloadRecovery()', 'function handleDownloadRecoveryKeydown(event)', '$("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);', '$("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);', 'showDownloadRecovery("SVG export was blocked.', 'showDownloadRecovery("The study export was blocked.', 'showDownloadRecovery("The file download was blocked.', 'showDownloadRecovery("The catalog export was blocked.', 'showDownloadRecovery("The comparison export was blocked.']) {
             if (!app.includes(token)) throw new Error('Download recovery behavior is incomplete: ' + token);
@@ -456,9 +464,11 @@ jobs:
             const result = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (result.status !== 0) throw new Error(result.stderr || result.stdout || 'Temporary no-script generation failed');
             const generated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            const generatedCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
             if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('Readings: 7 bays · module 7.2 m · radius 11 m · floor area 1,276 m² · volume 14,239 m³') || !generated.includes('Provenance: Sacred Geometry Atlas proportional model · Source &lt;note&gt;') || !generated.includes('Schema 1.1 · units: meters.') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
               throw new Error('Generated no-script fallback did not reflect escaped content and mixed provenance');
             }
+            if (!generatedCsv.includes('"Source <note>"') || !generatedCsv.includes('"measured","Source-supported dimensions."')) throw new Error('Generated CSV did not preserve provenance and status context');
             const customStatusSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('statusValues: ["schematic", "measured"],', 'statusValues: ["schematic", "measured", "estimated"],')
               .replace('    measured: "Source-supported dimensions."\n  },', '    measured: "Source-supported dimensions.",\n    estimated: "Proportional estimate pending source review."\n  },')
@@ -467,9 +477,11 @@ jobs:
             const customStatusResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (customStatusResult.status !== 0) throw new Error(customStatusResult.stderr || customStatusResult.stdout || 'Custom-status no-script generation failed');
             const customStatusGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            const customStatusCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
             if (!customStatusGenerated.includes('Six schematic and estimated studies') || !customStatusGenerated.includes('Estimated = Proportional estimate pending source review.') || !customStatusGenerated.includes('5 schematic · 1 estimated')) {
               throw new Error('Generated no-script fallback did not preserve a schema-defined custom status');
             }
+            if (!customStatusCsv.includes('"estimated","Proportional estimate pending source review."')) throw new Error('Generated CSV did not preserve a schema-defined custom status');
             const noteSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('note: "The current collection is a schematic proportional study, not a measured survey or a claim about every church."', 'note: "Custom <note> disclaimer."');
             fs.writeFileSync(sourcePath, noteSource);
@@ -486,15 +498,26 @@ jobs:
             const unitResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (unitResult.status !== 0) throw new Error(unitResult.stderr || unitResult.stdout || 'Custom-unit no-script generation failed');
             const unitGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            const unitCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
             if (!unitGenerated.includes('Dimensions are shown as length × span × height in feet. Schema 1.1 · units: feet.') || !unitGenerated.includes('Readings: 7 bays · module 7.2 ft · radius 11 ft · floor area 1,276 ft² · volume 14,239 ft³')) {
               throw new Error('Generated no-script fallback did not follow a custom schema unit name and symbol');
             }
+            if (!unitCsv.includes('"Length (ft)"') || !unitCsv.includes('"Units"')) throw new Error('Generated CSV did not follow a custom schema unit symbol');
+            const missingEstimateSource = fs.readFileSync('data/geometry.js', 'utf8')
+              .replace('volumeEstimate: 14239', 'volumeEstimate: 0')
+              .replace('volumeBasis: "Bounding area × height × 0.62"', 'volumeBasis: "stale basis without estimate"');
+            fs.writeFileSync(sourcePath, missingEstimateSource);
+            const missingEstimateResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
+            if (missingEstimateResult.status !== 0) throw new Error(missingEstimateResult.stderr || missingEstimateResult.stdout || 'Missing-estimate CSV generation failed');
+            const missingEstimateCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
+            if (!missingEstimateCsv.includes('"No estimate supplied"') || missingEstimateCsv.includes('"stale basis without estimate"')) throw new Error('Generated CSV exposed a volume basis without its estimate');
             const emptySource = fs.readFileSync('data/geometry.js', 'utf8').replace(/window\.CHURCH_GEOMETRY = \[[\s\S]*?\n\];/, 'window.CHURCH_GEOMETRY = [];');
             fs.writeFileSync(sourcePath, emptySource);
             const emptyResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (emptyResult.status !== 0) throw new Error(emptyResult.stderr || emptyResult.stdout || 'Empty no-script generation failed');
             const emptyGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
-            if (!emptyGenerated.includes('No studies are currently available in the church geometry collection. Schema 1.1 · units: meters.') || !emptyGenerated.includes('No study records are currently available.') || !emptyGenerated.includes('The collection is currently empty. Schema 1.1 · units: meters.') || emptyGenerated.includes('<ol class="noscript-list">') || emptyGenerated.includes('Zero schematic studies')) {
+            const emptyCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
+            if (!emptyGenerated.includes('No studies are currently available in the church geometry collection. Schema 1.1 · units: meters.') || !emptyGenerated.includes('No study records are currently available.') || !emptyGenerated.includes('The collection is currently empty. Schema 1.1 · units: meters.') || emptyGenerated.includes('<ol class="noscript-list">') || emptyGenerated.includes('Zero schematic studies') || emptyCsv.replace(/^\uFEFF/, '').trim().split(/\r\n/).length !== 1) {
               throw new Error('Empty no-script fallback did not render an honest collection state');
             }
             console.log('Generated no-script fallback smoke test passed.');

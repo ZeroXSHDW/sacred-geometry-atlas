@@ -61,8 +61,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Primary Atlas, Compare, and Method navigation uses real, context-aware hash links, preserving the active catalog scope, comparison selection, and study context for open-in-new-tab, middle-click, and copy-link behavior while ordinary clicks retain in-place focus and history handling.
 - The branded home link preserves normal modified-click and middle-click behavior, while an ordinary click still returns to the Atlas view in place.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
-- Downloadable full-atlas JSON, filtered catalog-view JSON/CSV, and context-aware active-study JSON with view state, derived readings, and deterministic `provenance` manifests that record scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
-- A visible Raw JSON link keeps the committed dataset reachable when a browser cannot trigger a generated download.
+- Downloadable full-atlas JSON, filtered catalog-view JSON/CSV, and context-aware active-study JSON with view state, derived readings, and deterministic `provenance` manifests that record scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) and [`data/geometry.csv`](data/geometry.csv) artifacts remain available for static and no-script use.
+- Visible Raw JSON and Raw CSV links keep the committed collection reachable when a browser cannot trigger a generated download, and the CSV carries schema-backed status, provenance, units, derived ratios, and direct study routes.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Generated study and SVG filenames normalize dataset IDs, so spaces, separators, and punctuation cannot create ambiguous download paths.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
@@ -180,7 +180,7 @@ Each record should include:
 }
 ```
 
-The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status and the collection-level `note`. Those same definitions and the note drive the visible filter/comparison guidance, Method warning, no-JavaScript fallback, and accessible study labels, with comparison counts following the focused selection when one is active, so the interface and exports use one provenance vocabulary. Each generated JSON export also includes a `provenance` object with its scope, record count, status counts, and those schema-backed definitions. The committed [`data/geometry.json`](data/geometry.json) is generated from the same source and checked in CI so it cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
+The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status and the collection-level `note`. Those same definitions and the note drive the visible filter/comparison guidance, Method warning, no-JavaScript fallback, and accessible study labels, with comparison counts following the focused selection when one is active, so the interface and exports use one provenance vocabulary. Each generated JSON export also includes a `provenance` object with its scope, record count, status counts, and those schema-backed definitions. The committed [`data/geometry.json`](data/geometry.json) and [`data/geometry.csv`](data/geometry.csv) artifacts are generated from the same source and checked in CI so they cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
 
 ## Test locally
 
@@ -192,6 +192,7 @@ node --check data/geometry.js
 node --check scripts/sync-geometry-json.js
 node scripts/sync-geometry-json.js --check
 node -e "JSON.parse(require('fs').readFileSync('data/geometry.json', 'utf8'))"
+node -e "if (!require('fs').readFileSync('data/geometry.csv', 'utf8').trim().split(/\r?\n/).length) process.exit(1)"
 python3 -c "import xml.etree.ElementTree as ET; ET.parse('sitemap.xml')"
 python3 -m http.server 8000
 ```
