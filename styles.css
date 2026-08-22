@@ -256,6 +256,7 @@ main,
 .dataset-link:hover { border-color: var(--teal); color: var(--ink); background: var(--teal-soft); }
 .dataset-icon { color: var(--teal); font-size: 0.7rem; letter-spacing: -0.12em; }
 .dataset-link-csv .dataset-icon { color: var(--amber); font-size: 0.56rem; letter-spacing: 0.02em; }
+.dataset-link-schema .dataset-icon { color: var(--coral); font-size: 0.56rem; letter-spacing: 0.02em; }
 
 .download-button {
   display: inline-flex;
@@ -956,6 +957,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }
   .dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .dataset-icon { color: ButtonText; }
+  .dataset-link-schema .dataset-icon { color: ButtonText; }
   .runtime-fallback-actions .hero-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .study-status,
   .study-provenance summary,
