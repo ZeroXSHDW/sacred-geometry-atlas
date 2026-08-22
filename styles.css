@@ -847,11 +847,20 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-action#downloadCatalogCsv span:last-child { display: inline; }
 }
 
-@media (max-width: 740px) {
+@media (max-width: 800px) {
   html { scroll-padding-top: 9rem; }
   .route-anchor, .workspace, .page-view { scroll-margin-top: 9rem; }
   #activeName { scroll-margin-top: 9rem; }
   .comparison-table thead th { top: 9rem; }
+  .site-header { flex-wrap: wrap; gap: 0.8rem; min-height: auto; padding: 1rem 0; }
+  .main-nav { order: 3; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); }
+  .nav-button { flex: 1; text-align: center; }
+  .header-actions { margin-left: auto; }
+  .download-button { margin-left: 0; }
+  .catalog-panel { top: 9rem; }
+}
+
+@media (max-width: 740px) {
   .site-header, main, .site-footer { width: min(100% - 32px, 600px); }
   .noscript-index { width: min(100% - 32px, 600px); padding: 1.3rem; }
   .data-error { width: min(100% - 32px, 600px); min-height: auto; margin: 2rem auto; padding: 2rem 1.3rem; }
@@ -861,11 +870,6 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .noscript-list { grid-template-columns: 1fr; margin-top: 1.3rem; }
   .noscript-method { width: min(100% - 32px, 600px); padding: 1rem; }
   .noscript-method-grid { grid-template-columns: 1fr 1fr; }
-  .site-header { flex-wrap: wrap; gap: 0.8rem; min-height: auto; padding: 1rem 0; }
-  .main-nav { order: 3; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); }
-  .nav-button { flex: 1; text-align: center; }
-  .header-actions { margin-left: auto; }
-  .download-button { margin-left: 0; }
   .hero { display: block; min-height: auto; padding: 56px 0 48px; }
   h1 { font-size: clamp(3.25rem, 16vw, 5.6rem); }
   .hero-stats { gap: 2rem; margin-top: 3rem; }

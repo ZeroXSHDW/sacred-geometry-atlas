@@ -1082,7 +1082,7 @@
 
   function isCompactAtlasViewport() {
     if (typeof window.matchMedia !== "function") return false;
-    return window.matchMedia("(max-width: 740px)").matches;
+    return window.matchMedia("(max-width: 800px)").matches;
   }
 
   function scrollActiveStudyIntoView() {
