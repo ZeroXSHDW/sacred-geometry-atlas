@@ -168,6 +168,8 @@ main,
   margin-inline: auto;
 }
 
+.route-anchor { display: block; height: 0; scroll-margin-top: 7rem; }
+
 .site-header {
   position: sticky;
   top: 0;
