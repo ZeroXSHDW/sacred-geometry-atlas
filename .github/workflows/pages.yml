@@ -443,10 +443,10 @@ jobs:
           for (const token of ['role="listitem"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${score} out of 100"']) {
             if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);
           }
-          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'const shouldPreserveComparisonQuery = () => state.page !== "compare" || state.compareIds.length < 2;', 'function catalogRouteValues(includeCompare = shouldPreserveComparisonQuery())', 'function applyCatalogRouteState(url, includeCompare = shouldPreserveComparisonQuery())', 'function replaceCatalogRoute()', 'function pushCatalogRoute()', 'function updateCatalogRoute(historyMethod = "replaceState")', 'const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];', 'requestedEra', 'state.filterEra = eras.has(requestedEra) ? requestedEra : "all";', 'requestedAxis', 'state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";', 'requestedCompare', 'state.compareIds = requestedCompare', 'compare: includeCompare && state.compareIds.length', 'window.history[historyMethod]', 'navigationUrl(nextHash)', 'atlasStudyNavigationUrl(study.id)', 'function catalogViewRouteUrl()', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas") {', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', 'if (key === "/") {', 'focusCatalogControl("query");', '\"a\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
+          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'const shouldPreserveComparisonQuery = () => state.page !== "compare" || state.compareIds.length < 2;', 'function catalogRouteValues(includeCompare = shouldPreserveComparisonQuery())', 'function applyCatalogRouteState(url, includeCompare = shouldPreserveComparisonQuery())', 'function replaceCatalogRoute()', 'function pushCatalogRoute()', 'function updateCatalogRoute(historyMethod = "replaceState")', 'const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];', 'requestedEra', 'state.filterEra = eras.has(requestedEra) ? requestedEra : "all";', 'requestedAxis', 'state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";', 'function queryComparisonIds()', 'state.compareIds = queryComparisonIds();', 'compare: includeCompare && state.compareIds.length', 'window.history[historyMethod]', 'navigationUrl(nextHash)', 'atlasStudyNavigationUrl(study.id)', 'function catalogViewRouteUrl()', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas") {', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', 'if (key === "/") {', 'focusCatalogControl("query");', '\"a\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map(studyShortName).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
             if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
           }
-          if (!app.includes('const queryCompareValue = new URL(window.location.href).searchParams.get("compare");') || !app.includes('compareIds: compareIds.length ? compareIds : []')) throw new Error('Compare routes must preserve partial query selections alongside focused hash selections');
+          if (!app.includes('const queryCompareIds = queryComparisonIds();') || !app.includes('compareIds: compareIds.length ? compareIds : []')) throw new Error('Compare routes must preserve partial query selections alongside focused hash selections');
           if (!app.includes('["input", "select", "textarea", "summary", "a"].includes(tagName)') || !styles.includes('#visualEmptyHeading:focus-visible { outline-color: Highlight; }') || !styles.includes('#dataErrorHeading:focus { outline-color: Highlight; }') || !styles.includes('.page-view h2:focus-visible,')) throw new Error('Atlas shortcuts and focused recovery headings must remain accessible');
           for (const token of ['state.filter = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterPlace = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterEra = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterAxis = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterStatus = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.sort = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();']) {
             if (!app.includes(token)) throw new Error('Discrete catalog changes must create browser history entries: ' + token.split('\n')[0]);
@@ -877,17 +877,17 @@ jobs:
           updateViewNavigationLinks();
           const compareNavLink = navLinks.find((link) => link.dataset.view === 'compare');
           const methodNavLink = navLinks.find((link) => link.dataset.view === 'method');
-          if (methodNavigationUrl() !== '/atlas/?q=gothic+northern&compare=basilica%2Cgothic#method/gothic' || methodNavLink.href !== methodNavigationUrl() || methodLink.href !== methodNavigationUrl()) throw new Error(`Method links did not preserve the active study, catalog scope, and comparison selection: ${methodNavigationUrl()} / ${methodNavLink.href} / ${methodLink.href}`);
+          if (methodNavigationUrl() !== '/atlas/?q=gothic+northern&compare=basilica,gothic#method/gothic' || methodNavLink.href !== methodNavigationUrl() || methodLink.href !== methodNavigationUrl()) throw new Error(`Method links did not preserve the active study, catalog scope, and comparison selection: ${methodNavigationUrl()} / ${methodNavLink.href} / ${methodLink.href}`);
           if (comparisonNavigationUrl() !== '/atlas/?q=gothic+northern#compare/basilica,gothic' || viewNavigationUrl('compare') !== comparisonNavigationUrl() || compareNavLink.href !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve the focused selection: ${comparisonNavigationUrl()} / ${compareNavLink.href}`);
           state.compareIds = ['basilica'];
           if (comparisonNavigationUrl() !== '/atlas/?q=gothic+northern&compare=basilica#compare' || viewNavigationUrl('compare') !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve a partial selection: ${comparisonNavigationUrl()}`);
           state.compareIds = ['basilica', 'gothic'];
           const contextualAtlasHref = viewNavigationUrl('atlas');
-          if (contextualAtlasHref !== '/atlas/?q=gothic+northern&compare=basilica%2Cgothic#atlas' || navLinks.find((link) => link.dataset.view === 'atlas').href !== contextualAtlasHref) throw new Error(`Atlas link did not preserve the catalog scope: ${contextualAtlasHref}`);
+          if (contextualAtlasHref !== '/atlas/?q=gothic+northern&compare=basilica,gothic#atlas' || navLinks.find((link) => link.dataset.view === 'atlas').href !== contextualAtlasHref) throw new Error(`Atlas link did not preserve the catalog scope: ${contextualAtlasHref}`);
           context.window.location.href = 'https://example.test/atlas/?q=central%20plan#atlas/basilica/plan/exterior/all';
           const stateAwareStudyHref = atlasStudyNavigationUrl('gothic');
           const stateAwareCatalogHref = catalogViewRouteUrl();
-          if (!stateAwareStudyHref.includes('q=gothic+northern') || !stateAwareStudyHref.includes('compare=basilica%2Cgothic') || !stateAwareCatalogHref.href.includes('q=gothic+northern') || !stateAwareCatalogHref.href.includes('compare=basilica%2Cgothic')) throw new Error(`Route links did not use current catalog state: ${stateAwareStudyHref} / ${stateAwareCatalogHref.href}`);
+          if (!stateAwareStudyHref.includes('q=gothic+northern') || !stateAwareStudyHref.includes('compare=basilica,gothic') || !stateAwareCatalogHref.href.includes('q=gothic+northern') || !stateAwareCatalogHref.href.includes('compare=basilica,gothic')) throw new Error(`Route links did not use current catalog state: ${stateAwareStudyHref} / ${stateAwareCatalogHref.href}`);
           state.compareIds = [];
           const highlighted = highlightSearchText('Gothic · Northern Europe');
           if (!highlighted.includes('<mark class="search-hit">Gothic</mark>') || !highlighted.includes('<mark class="search-hit">Northern</mark>')) throw new Error('Catalog search did not highlight matching terms');
@@ -932,7 +932,7 @@ jobs:
           if (hash !== '#atlas/gothic/section/interior/axis/1.3') throw new Error(`Unexpected study route: ${hash}`);
           if (href !== '/atlas/?q=central%20plan#atlas/gothic/section/interior/axis/1.3') throw new Error(`Catalog scope was not preserved: ${href}`);
           const comparisonHref = atlasStudyNavigationUrl('gothic');
-          if (comparisonHref !== '/atlas/?q=central+plan&compare=basilica%2Cgothic#atlas/gothic/section/interior/axis/1.3') throw new Error(`Focused comparison context was not preserved: ${comparisonHref}`);
+          if (comparisonHref !== '/atlas/?q=central+plan&compare=basilica,gothic#atlas/gothic/section/interior/axis/1.3') throw new Error(`Focused comparison context was not preserved: ${comparisonHref}`);
           const printRoute = studyRoutePath('gothic');
           if (printRoute !== '/atlas/#atlas/gothic/section/interior/axis/1.3' || studyRouteUrl('gothic').searchParams.has('q')) throw new Error(`Reproducible study route did not clear catalog scope: ${printRoute}`);
           const navigation = { setAttribute(name, value) { this[name] = value; } };
@@ -985,9 +985,11 @@ jobs:
               querySelectorAll() { return []; }
             }
           };
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { parseRoute, routeHash, catalogRouteValues, state };\n})();');
+          const controls = new Map(['#searchInput', '#filterSelect', '#filterPlace', '#filterEra', '#filterAxis', '#filterStatus', '#sortSelect'].map((selector) => [selector, { value: '' }]));
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { parseRoute, routeHash, catalogRouteValues, applyCatalogRouteState, syncCatalogFromUrl, state };\n})();');
+          context.document.querySelector = (selector) => controls.get(selector) || null;
           vm.runInNewContext(app, context);
-          const { parseRoute, routeHash, catalogRouteValues, state } = context.window.__atlasTest;
+          const { parseRoute, routeHash, catalogRouteValues, applyCatalogRouteState, syncCatalogFromUrl, state } = context.window.__atlasTest;
           let route = parseRoute();
           state.compareIds = route.compareIds;
           if (route.compareIds.join('|') !== 'choir,annex|basilica' || routeHash('compare', false) !== '#compare/choir%2Cannex,basilica') throw new Error(`Encoded hash comparison route did not round-trip: ${route.compareIds.join('|')} / ${routeHash('compare', false)}`);
@@ -996,13 +998,22 @@ jobs:
           state.compareIds = ['choir,annex', 'basilica'];
           const encodedQueryValue = catalogRouteValues(true).compare;
           if (encodedQueryValue !== 'choir%2Cannex,basilica') throw new Error(`Comparison query ID was not encoded safely: ${encodedQueryValue}`);
+          state.page = 'atlas';
+          const publishedUrl = applyCatalogRouteState(new URL('https://example.test/atlas/'), true);
+          if (publishedUrl.search !== '?compare=choir%2Cannex,basilica') throw new Error(`Comparison query route was double-encoded: ${publishedUrl.search}`);
           const queryUrl = new URL('https://example.test/atlas/');
-          queryUrl.searchParams.set('compare', encodedQueryValue);
+          queryUrl.search = `?compare=${encodedQueryValue}`;
           queryUrl.hash = '#compare';
           context.window.location.href = queryUrl.href;
           context.window.location.hash = queryUrl.hash;
           route = parseRoute();
           if (route.compareIds.join('|') !== 'choir,annex|basilica') throw new Error(`Encoded query comparison route did not round-trip: ${route.compareIds.join('|')}`);
+          syncCatalogFromUrl();
+          if (state.compareIds.join('|') !== 'choir,annex|basilica') throw new Error(`Encoded pending comparison query did not round-trip: ${state.compareIds.join('|')}`);
+          queryUrl.search = '?compare=choir%252Cannex,basilica';
+          context.window.location.href = queryUrl.href;
+          route = parseRoute();
+          if (route.compareIds.join('|') !== 'choir,annex|basilica') throw new Error(`Legacy double-encoded comparison query did not remain compatible: ${route.compareIds.join('|')}`);
           console.log('Encoded comparison route smoke test passed.');
           NODE
       - name: Smoke-test study selection announcement
@@ -1792,9 +1803,9 @@ jobs:
           if (!catalogCitation.includes('Catalog view: results matching “basilica”, Longitudinal, sorted by name (A–Z); 1 record') || !catalogCitation.includes('Status definitions: Schematic = Illustrative proportions; not a measured survey.') || !catalogCitation.includes('Schema v1.1; units: meters') || !catalogCitation.endsWith('https://example.test/atlas/?q=basilica&axis=Longitudinal&sort=name#atlas')) throw new Error('Catalog citation did not preserve query, filters, sort, status definitions, schema, and route');
           state.compareIds = ['basilica', 'gothic'];
           const selectedCatalogCitation = catalogCitationText([context.window.CHURCH_GEOMETRY[0]]);
-          if (!selectedCatalogCitation.includes('Comparison selection: Longitudinal basilica (schematic); High gothic cathedral (schematic).') || !selectedCatalogCitation.includes('compare=basilica%2Cgothic')) throw new Error('Catalog citation did not preserve selected comparison identities and route context');
+          if (!selectedCatalogCitation.includes('Comparison selection: Longitudinal basilica (schematic); High gothic cathedral (schematic).') || !selectedCatalogCitation.includes('compare=basilica,gothic')) throw new Error('Catalog citation did not preserve selected comparison identities and route context');
           const selectedViewExport = catalogViewExportPayload([context.window.CHURCH_GEOMETRY[0]]);
-          if (selectedViewExport.view.compareIds.join(',') !== 'basilica,gothic' || selectedViewExport.view.comparisonSelection.length !== 2 || selectedViewExport.view.comparisonSelection[0].name !== 'Longitudinal basilica' || selectedViewExport.view.comparisonSelection[1].axis !== 'Longitudinal' || selectedViewExport.view.comparisonSelection[1].status !== 'schematic' || selectedViewExport.view.comparisonSelection[1].statusDefinition !== 'Illustrative proportions; not a measured survey.' || !selectedViewExport.view.route.includes('compare=basilica%2Cgothic')) throw new Error('Catalog JSON export did not preserve human-readable comparison selection context');
+          if (selectedViewExport.view.compareIds.join(',') !== 'basilica,gothic' || selectedViewExport.view.comparisonSelection.length !== 2 || selectedViewExport.view.comparisonSelection[0].name !== 'Longitudinal basilica' || selectedViewExport.view.comparisonSelection[1].axis !== 'Longitudinal' || selectedViewExport.view.comparisonSelection[1].status !== 'schematic' || selectedViewExport.view.comparisonSelection[1].statusDefinition !== 'Illustrative proportions; not a measured survey.' || !selectedViewExport.view.route.includes('compare=basilica,gothic')) throw new Error('Catalog JSON export did not preserve human-readable comparison selection context');
           const selectedViewCsv = catalogCsvPayload([context.window.CHURCH_GEOMETRY[0]]);
           if (!selectedViewCsv.includes('"Scope","Comparison IDs","Comparison selection context","Route"') || !selectedViewCsv.includes('"basilica,gothic","Longitudinal basilica (Longitudinal axis; schematic; Illustrative proportions; not a measured survey.); High gothic cathedral (Longitudinal axis; schematic; Illustrative proportions; not a measured survey.)"')) throw new Error('Catalog CSV did not preserve human-readable comparison selection context');
           state.compareIds = [];

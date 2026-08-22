@@ -424,6 +424,79 @@
     return routeSafeStudyIdPattern.test(value) ? value : encodeURIComponent(value);
   };
 
+  function rawQueryParam(name) {
+    const href = window.location && typeof window.location.href === "string" ? window.location.href : "";
+    let search = "";
+    try {
+      search = new URL(href).search;
+    } catch (error) {
+      search = window.location && typeof window.location.search === "string" ? window.location.search : "";
+    }
+    const entries = search.replace(/^\?/, "").split("&");
+    for (const entry of entries) {
+      if (!entry) continue;
+      const separator = entry.indexOf("=");
+      const rawKey = separator === -1 ? entry : entry.slice(0, separator);
+      if (decodeRouteSegment(rawKey.replace(/\+/g, " ")) !== name) continue;
+      return separator === -1 ? "" : entry.slice(separator + 1);
+    }
+    return null;
+  }
+
+  function comparisonRouteId(value) {
+    let candidate = String(value ?? "").trim().replace(/\+/g, " ");
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const decoded = decodeRouteSegment(candidate);
+      if (studies.some((study) => study.id === decoded)) return decoded;
+      if (decoded === candidate) break;
+      candidate = decoded;
+    }
+    return candidate;
+  }
+
+  function knownComparisonIds(value) {
+    const text = String(value ?? "");
+    const memo = new Map();
+    const match = (offset) => {
+      if (offset === text.length) return [];
+      if (memo.has(offset)) return memo.get(offset);
+      const candidates = studies
+        .filter((study) => text.startsWith(study.id, offset))
+        .sort((a, b) => b.id.length - a.id.length);
+      for (const study of candidates) {
+        const nextOffset = offset + study.id.length;
+        if (nextOffset < text.length && text[nextOffset] !== ",") continue;
+        const remainder = nextOffset === text.length ? [] : match(nextOffset + 1);
+        if (remainder) {
+          const result = [study.id, ...remainder];
+          memo.set(offset, result);
+          return result;
+        }
+      }
+      memo.set(offset, null);
+      return null;
+    };
+    return match(0) || [];
+  }
+
+  function queryComparisonIds() {
+    const rawValue = rawQueryParam("compare");
+    if (!rawValue) return [];
+    const directIds = rawValue.split(",").map(comparisonRouteId);
+    if (directIds.length && directIds.every((id) => studies.some((study) => study.id === id))) {
+      return [...new Set(directIds)];
+    }
+    let candidate = rawValue.replace(/\+/g, " ");
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const matchedIds = knownComparisonIds(candidate);
+      if (matchedIds.length) return [...new Set(matchedIds)];
+      const decoded = decodeRouteSegment(candidate);
+      if (decoded === candidate) break;
+      candidate = decoded;
+    }
+    return [];
+  }
+
   function parseRoute() {
     const rawSegments = window.location.hash.replace(/^#/, "").replace(/^\/+/, "").split("/");
     const segments = rawSegments.map(decodeRouteSegment);
@@ -436,12 +509,9 @@
     const contextStudyId = ["atlas", "method"].includes(page) && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
       : null;
-    const requestedCompareIds = rawRequestedStudy ? rawRequestedStudy.split(",").map(decodeRouteSegment) : [];
+    const requestedCompareIds = rawRequestedStudy ? rawRequestedStudy.split(",").map(comparisonRouteId) : [];
     const hashCompareIds = [...new Set(requestedCompareIds.filter((id) => studies.some((study) => study.id === id)))];
-    const queryCompareValue = new URL(window.location.href).searchParams.get("compare");
-    const queryCompareIds = queryCompareValue
-      ? [...new Set(queryCompareValue.split(",").map((id) => decodeRouteSegment(id.trim())).filter((id) => studies.some((study) => study.id === id)))]
-      : [];
+    const queryCompareIds = queryComparisonIds();
     const compareIds = page === "compare"
       ? (hashCompareIds.length ? hashCompareIds : queryCompareIds)
       : [];
@@ -482,7 +552,6 @@
     const requestedAxis = params.get("axis");
     const requestedStatus = params.get("status");
     const requestedSort = params.get("sort");
-    const requestedCompare = params.get("compare");
     state.query = requestedQuery ? requestedQuery.trim().toLowerCase() : "";
     state.filter = typologies.has(requestedTypology) ? requestedTypology : "all";
     state.filterPlace = places.has(requestedPlace) ? requestedPlace : "all";
@@ -490,9 +559,7 @@
     state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";
     state.filterStatus = validStatuses.has(requestedStatus) ? requestedStatus : "all";
     state.sort = validSorts.has(requestedSort) ? requestedSort : "index";
-    state.compareIds = requestedCompare
-      ? [...new Set(requestedCompare.split(",").map((id) => id.trim()).filter((id) => studies.some((study) => study.id === id)))]
-      : [];
+    state.compareIds = queryComparisonIds();
     syncCatalogControls();
   }
 
@@ -524,10 +591,14 @@
 
   function applyCatalogRouteState(url, includeCompare = shouldPreserveComparisonQuery()) {
     const values = catalogRouteValues(includeCompare);
-    catalogParamKeys.forEach((key) => {
+    catalogParamKeys.filter((key) => key !== "compare").forEach((key) => {
       if (values[key]) url.searchParams.set(key, values[key]);
       else url.searchParams.delete(key);
     });
+    url.searchParams.delete("compare");
+    if (values.compare) {
+      url.search = `${url.search || "?"}${url.search ? "&" : ""}compare=${values.compare}`;
+    }
     return url;
   }
 
