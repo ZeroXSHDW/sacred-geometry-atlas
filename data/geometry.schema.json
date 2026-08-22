@@ -8,11 +8,15 @@
   "required": [
     "title",
     "schema",
+    "schemaUrl",
     "studies"
   ],
   "properties": {
     "title": {
       "const": "Sacred Geometry Atlas"
+    },
+    "schemaUrl": {
+      "const": "data/geometry.schema.json"
     },
     "schema": {
       "type": "object",

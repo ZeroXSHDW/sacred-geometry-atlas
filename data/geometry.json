@@ -14,6 +14,7 @@
     },
     "note": "The current collection is a schematic proportional study, not a measured survey or a claim about every church."
   },
+  "schemaUrl": "data/geometry.schema.json",
   "studies": [
     {
       "id": "basilica",

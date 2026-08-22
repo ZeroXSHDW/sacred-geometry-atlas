@@ -11,6 +11,7 @@ const sourcePath = path.join(projectRoot, "data", "geometry.js");
 const outputPath = path.join(projectRoot, "data", "geometry.json");
 const csvOutputPath = path.join(projectRoot, "data", "geometry.csv");
 const schemaOutputPath = path.join(projectRoot, "data", "geometry.schema.json");
+const schemaUrl = "data/geometry.schema.json";
 const htmlPath = path.join(projectRoot, "index.html");
 const noScriptStart = "        <!-- geometry-noscript:start -->";
 const noScriptEnd = "        <!-- geometry-noscript:end -->";
@@ -21,6 +22,7 @@ vm.runInNewContext(fs.readFileSync(sourcePath, "utf8"), context, { filename: sou
 const payload = {
   title: "Sacred Geometry Atlas",
   schema: context.window.CHURCH_GEOMETRY_SCHEMA,
+  schemaUrl,
   studies: context.window.CHURCH_GEOMETRY
 };
 
@@ -62,7 +64,7 @@ function staticCsv() {
   const headers = [
     "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
     `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
+    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
   ];
   const rows = payload.studies.map((study) => {
     const floorArea = positiveEstimate(study.floorAreaEstimate);
@@ -97,10 +99,11 @@ function staticCsv() {
       "full collection",
       `#atlas/${encodeURIComponent(study.id)}/plan/exterior/all`,
       payload.schema.version || "",
-      payload.schema.units || ""
+      payload.schema.units || "",
+      schemaUrl
     ];
   });
-  return `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n")}\r\n`;
+  return `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\n")}\n`;
 }
 
 function schemaDocument() {
@@ -117,9 +120,10 @@ function schemaDocument() {
     "description": "Machine-readable contract for the Sacred Geometry Atlas JSON collection, including schema metadata and proportional church geometry studies.",
     "type": "object",
     "additionalProperties": false,
-    "required": ["title", "schema", "studies"],
+    "required": ["title", "schema", "schemaUrl", "studies"],
     "properties": {
       "title": { "const": "Sacred Geometry Atlas" },
+      "schemaUrl": { "const": schemaUrl },
       "schema": {
         "type": "object",
         "additionalProperties": false,

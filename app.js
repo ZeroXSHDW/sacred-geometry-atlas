@@ -84,6 +84,7 @@
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
+  const GEOMETRY_SCHEMA_URL = "data/geometry.schema.json";
   const geometrySchema = () => window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters", unitSymbol: "m" };
   const collectionProvenanceNote = () => {
     const note = geometrySchema().note;
@@ -2378,6 +2379,7 @@
     return {
       title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      schemaUrl: GEOMETRY_SCHEMA_URL,
       provenance: exportProvenance([study], "active study"),
       view: {
         studyId: study.id,
@@ -2396,6 +2398,7 @@
     return {
       title: "Sacred Geometry Atlas",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      schemaUrl: GEOMETRY_SCHEMA_URL,
       provenance: exportProvenance(studies, "full collection"),
       studies
     };
@@ -2406,6 +2409,7 @@
     return {
       title: "Sacred Geometry Atlas · catalog view",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      schemaUrl: GEOMETRY_SCHEMA_URL,
       provenance: exportProvenance(visible, catalogScopeLabel()),
       view: {
         scope: catalogScopeLabel(),
@@ -2513,7 +2517,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
     ];
     const rows = comparison.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -2545,7 +2549,8 @@
         scope,
         route,
         schema.version,
-        schema.units
+        schema.units,
+        GEOMETRY_SCHEMA_URL
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -2560,7 +2565,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
     ];
     const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -2592,7 +2597,8 @@
         scope,
         route,
         schema.version,
-        schema.units
+        schema.units,
+        GEOMETRY_SCHEMA_URL
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -2603,6 +2609,7 @@
     return {
       title: "Sacred Geometry Atlas · comparison",
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
+      schemaUrl: GEOMETRY_SCHEMA_URL,
       provenance: exportProvenance(comparison, scope),
       view: {
         scope,
