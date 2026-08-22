@@ -752,9 +752,7 @@
       if (state.page === "atlas") replaceRoute("atlas");
     });
     $("#resetDrawing").addEventListener("click", resetDrawingView);
-    $$("[data-view]").forEach((button) => button.addEventListener("click", () => {
-      showPage(button.dataset.view, { routeStudy: button.dataset.view === "method" });
-    }));
+    $$("[data-view]").forEach((link) => link.addEventListener("click", handleViewNavigation));
     const methodLink = $('.hero-action[href="#methodView"]');
     if (methodLink) methodLink.addEventListener("click", (event) => {
       if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -1782,6 +1780,14 @@
       focusPageHeading(page);
     }
     updateDocumentTitle(page);
+  }
+
+  function handleViewNavigation(event) {
+    const link = event.currentTarget || (event.target && typeof event.target.closest === "function" ? event.target.closest('[data-view]') : null);
+    if (!link) return;
+    if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    showPage(link.dataset.view, { routeStudy: link.dataset.view === "method" });
   }
 
   function focusPageHeading(page, preventScroll = true) {
