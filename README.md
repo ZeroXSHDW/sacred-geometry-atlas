@@ -39,7 +39,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Browser history restores each route once, even when a traversal emits both hash and history events, so focus and live announcements do not repeat for the same URL.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
-- Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state, derived readings, and a deterministic `provenance` manifest that records scope, record count, and schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
+- Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state, derived readings, and a deterministic `provenance` manifest that records scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Download and export actions hold a brief busy state to guard duplicate activation and announce completion through live status feedback.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet.
@@ -135,7 +135,7 @@ Each record should include:
 }
 ```
 
-The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`. Each generated JSON export also includes a `provenance` object with its scope, record count, status counts, and the meaning of `schematic` versus `measured`. The committed [`data/geometry.json`](data/geometry.json) is generated from the same source and checked in CI so it cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
+The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status. Each generated JSON export also includes a `provenance` object with its scope, record count, status counts, and those schema-backed definitions. The committed [`data/geometry.json`](data/geometry.json) is generated from the same source and checked in CI so it cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
 
 ## Test locally
 

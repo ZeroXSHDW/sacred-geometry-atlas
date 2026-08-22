@@ -51,6 +51,10 @@ jobs:
           const requiredNumericFields = ['length', 'span', 'height', 'bayCount', 'module', 'radius', 'symmetry'];
           const optionalNumericFields = ['floorAreaEstimate', 'volumeEstimate'];
           const statusValues = new Set((source.schema && source.schema.statusValues) || []);
+          const statusDefinitions = (source.schema && source.schema.statusDefinitions) || {};
+          for (const status of statusValues) {
+            if (typeof statusDefinitions[status] !== 'string' || !statusDefinitions[status].trim()) throw new Error(`Schema is missing a definition for status: ${status}`);
+          }
           const ids = new Set();
           const indexes = new Set();
           source.studies.forEach((study, index) => {
@@ -319,7 +323,7 @@ jobs:
           if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
           if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"')) throw new Error('Missing visual empty-state behavior');
           if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all";') || !app.includes('state.filterStatus === "measured" && !hasSecondaryFilters')) throw new Error('Measured empty-state messaging must respect secondary filters');
-          if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
+          if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('function dataStatusDefinitions()') || !app.includes('window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
           const catalogExportStart = app.indexOf('function downloadCatalogView()');
           const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
           const catalogPayloadStart = app.indexOf('function catalogViewExportPayload(visible)');
@@ -759,7 +763,7 @@ jobs:
           const missingEstimateCsv = comparisonCsvPayload([missingEstimateStudy]);
           if (!missingEstimateCsv.includes('"11.0","","","","1.00"')) throw new Error('Comparison CSV did not leave optional estimate fields explicitly blank');
           const fullExport = fullAtlasExportPayload();
-          if (fullExport.provenance.scope !== 'full collection' || fullExport.provenance.recordCount !== 6 || fullExport.provenance.statusCounts.schematic !== 6 || fullExport.provenance.statusCounts.measured !== 0 || fullExport.provenance.statusDefinitions.schematic !== 'Illustrative proportions; not a measured survey.') throw new Error('Full JSON export did not preserve collection provenance');
+          if (fullExport.provenance.scope !== 'full collection' || fullExport.provenance.recordCount !== 6 || fullExport.provenance.statusCounts.schematic !== 6 || fullExport.provenance.statusCounts.measured !== 0 || fullExport.provenance.statusDefinitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic) throw new Error('Full JSON export did not preserve schema-backed collection provenance');
           state.query = 'basilica';
           const viewExport = catalogViewExportPayload([context.window.CHURCH_GEOMETRY[0]]);
           if (viewExport.provenance.scope !== 'results matching “basilica”' || viewExport.provenance.recordCount !== 1 || viewExport.provenance.statusCounts.schematic !== 1 || viewExport.view.query !== 'basilica') throw new Error('Catalog JSON export did not preserve filtered provenance');

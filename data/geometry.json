@@ -7,6 +7,10 @@
       "schematic",
       "measured"
     ],
+    "statusDefinitions": {
+      "schematic": "Illustrative proportions; not a measured survey.",
+      "measured": "Source-supported dimensions."
+    },
     "note": "Schematic records are illustrative proportional models, not measured surveys."
   },
   "studies": [

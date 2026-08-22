@@ -2,6 +2,10 @@ window.CHURCH_GEOMETRY_SCHEMA = {
   version: "1.1",
   units: "meters",
   statusValues: ["schematic", "measured"],
+  statusDefinitions: {
+    schematic: "Illustrative proportions; not a measured survey.",
+    measured: "Source-supported dimensions."
+  },
   note: "Schematic records are illustrative proportional models, not measured surveys."
 };
 

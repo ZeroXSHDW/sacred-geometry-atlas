@@ -39,7 +39,7 @@
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
-  const DATA_STATUS_DEFINITIONS = {
+  const FALLBACK_DATA_STATUS_DEFINITIONS = {
     schematic: "Illustrative proportions; not a measured survey.",
     measured: "Source-supported dimensions."
   };
@@ -167,12 +167,23 @@
     return `${counts.schematic} schematic · ${counts.measured} measured`;
   }
 
+  function dataStatusDefinitions() {
+    const schemaDefinitions = window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions;
+    return Object.keys(FALLBACK_DATA_STATUS_DEFINITIONS).reduce((definitions, status) => {
+      const value = schemaDefinitions && schemaDefinitions[status];
+      definitions[status] = typeof value === "string" && value.trim()
+        ? value
+        : FALLBACK_DATA_STATUS_DEFINITIONS[status];
+      return definitions;
+    }, {});
+  }
+
   function exportProvenance(records, scope) {
     return {
       scope,
       recordCount: records.length,
       statusCounts: studyStatusCounts(records),
-      statusDefinitions: { ...DATA_STATUS_DEFINITIONS }
+      statusDefinitions: dataStatusDefinitions()
     };
   }
 
