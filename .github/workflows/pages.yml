@@ -111,7 +111,10 @@ jobs:
             throw new Error('Collection JSON-LD metadata is not valid JSON');
           }
           const structuredDataset = structuredData && structuredData.mainEntity;
-          if (structuredData['@context'] !== 'https://schema.org' || structuredData['@type'] !== 'CollectionPage' || structuredData.name !== 'Sacred Geometry Atlas' || !structuredDataset || structuredDataset['@type'] !== 'Dataset' || structuredDataset['@id'] !== 'data/geometry.json' || structuredDataset.encodingFormat !== 'application/json' || !structuredDataset.distribution || structuredDataset.distribution.contentUrl !== 'data/geometry.json') throw new Error('Collection JSON-LD metadata is incomplete');
+          const distributions = structuredDataset && Array.isArray(structuredDataset.distribution) ? structuredDataset.distribution : [];
+          const jsonDistribution = distributions.find((distribution) => distribution && distribution.encodingFormat === 'application/json');
+          const csvDistribution = distributions.find((distribution) => distribution && distribution.encodingFormat === 'text/csv');
+          if (structuredData['@context'] !== 'https://schema.org' || structuredData['@type'] !== 'CollectionPage' || structuredData.name !== 'Sacred Geometry Atlas' || !structuredDataset || structuredDataset['@type'] !== 'Dataset' || structuredDataset['@id'] !== 'data/geometry.json' || !jsonDistribution || jsonDistribution.contentUrl !== 'data/geometry.json' || !csvDistribution || csvDistribution.contentUrl !== 'data/geometry.csv') throw new Error('Collection JSON-LD metadata is incomplete');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
             'property="og:url" content="./"',
@@ -130,7 +133,7 @@ jobs:
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
           if (!notFound.includes('<meta name="robots" content="noindex, nofollow" />')) throw new Error('404 pages must opt out of search indexing');
           if (!notFound.includes('@media (pointer: coarse)') || !notFound.includes('.home-link { min-height: 44px; }') || !notFound.includes('@media (forced-colors: active)') || !notFound.includes('border-color: ButtonText; color: ButtonText; background: ButtonFace;') || !notFound.includes('color: HighlightText; background: Highlight;') || !notFound.includes('.error-footer strong { color: Highlight; }')) throw new Error('404 recovery actions must preserve touch targets and forced-colors affordances');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'Raw CSV', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'Raw CSV', 'JSON and CSV distributions', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'Sitemap: ./sitemap.xml', '<loc>./</loc>']) {
@@ -2454,6 +2457,7 @@ jobs:
 
           base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
           dataset_url = html.escape(base_url + "data/geometry.json", quote=True)
+          csv_url = html.escape(base_url + "data/geometry.csv", quote=True)
           page = Path("index.html")
           source = page.read_text()
           replacements = {
@@ -2463,6 +2467,7 @@ jobs:
               '<meta name="twitter:image" content="og.png" />': f'<meta name="twitter:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
               '"@id": "data/geometry.json"': f'"@id": "{dataset_url}"',
               '"contentUrl": "data/geometry.json"': f'"contentUrl": "{dataset_url}"',
+              '"contentUrl": "data/geometry.csv"': f'"contentUrl": "{csv_url}"',
           }
           for old, new in replacements.items():
               if old not in source:
@@ -2475,6 +2480,7 @@ jobs:
           not_found_replacements = {
               '<a class="home-link" data-site-root href="../">': f'<a class="home-link" data-site-root href="{html.escape(base_url, quote=True)}">',
               '<a class="home-link home-link-secondary" data-site-dataset href="data/geometry.json">': f'<a class="home-link home-link-secondary" data-site-dataset href="{html.escape(base_url + "data/geometry.json", quote=True)}">',
+              '<a class="home-link home-link-secondary" data-site-csv href="data/geometry.csv">': f'<a class="home-link home-link-secondary" data-site-csv href="{html.escape(base_url + "data/geometry.csv", quote=True)}">',
           }
           for old, new in not_found_replacements.items():
               if old not in not_found_source:
@@ -2519,14 +2525,16 @@ jobs:
               f'<meta name="twitter:image" content="{base_url}og.png" />',
               f'"@id": "{base_url}data/geometry.json"',
               f'"contentUrl": "{base_url}data/geometry.json"',
+              f'"contentUrl": "{base_url}data/geometry.csv"',
               f'Sitemap: {base_url}sitemap.xml',
               f'<loc>{base_url}</loc>',
           ]
-          missing = [token for token in expected[:6] if token not in page]
-          missing.extend(token for token in expected[6:] if token not in (robots + sitemap))
+          missing = [token for token in expected[:7] if token not in page]
+          missing.extend(token for token in expected[7:] if token not in (robots + sitemap))
           expected_404 = [
               f'<a class="home-link" data-site-root href="{base_url}">',
               f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
+              f'<a class="home-link home-link-secondary" data-site-csv href="{base_url}data/geometry.csv">',
           ]
           missing.extend(token for token in expected_404 if token not in not_found)
           if missing:

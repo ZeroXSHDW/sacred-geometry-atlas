@@ -121,7 +121,7 @@ git commit -m "Update Sacred Geometry Atlas"
 
 The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, `twitter:image`, `robots.txt`, and `sitemap.xml` crawl metadata before uploading the site artifact.
 
-The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON distribution. Deployment resolves both Dataset URLs to the final absolute Pages address.
+The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON and CSV distributions. Deployment resolves both Dataset URLs to the final absolute Pages address.
 
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
 
@@ -139,7 +139,7 @@ After editing the source, regenerate the static artifacts with:
 node scripts/sync-geometry-json.js
 ```
 
-Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON and no-JavaScript index are current without changing files.
+Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON, CSV, and no-JavaScript index are current without changing files.
 
 Each record should include:
 

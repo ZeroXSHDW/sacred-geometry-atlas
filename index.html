@@ -47,11 +47,18 @@
           "name": "Sacred Geometry Atlas geometry dataset",
           "description": "Schematic proportional studies of church geometry with plans, sections, modules, axes, and enclosing forms.",
           "encodingFormat": "application/json",
-          "distribution": {
-            "@type": "DataDownload",
-            "encodingFormat": "application/json",
-            "contentUrl": "data/geometry.json"
-          }
+          "distribution": [
+            {
+              "@type": "DataDownload",
+              "encodingFormat": "application/json",
+              "contentUrl": "data/geometry.json"
+            },
+            {
+              "@type": "DataDownload",
+              "encodingFormat": "text/csv",
+              "contentUrl": "data/geometry.csv"
+            }
+          ]
         }
       }
     </script>
