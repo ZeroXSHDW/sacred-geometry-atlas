@@ -38,7 +38,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Human-facing axis labels normalize source values that already include the word “axis,” keeping catalog cards and filters, comparison, no-script, share, citation, and assistive labels consistent while raw exports retain the source value.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
-- A visible runtime recovery panel offers a one-click retry and preserves a usable static-data path if the app script is blocked or fails before initialization.
+- A visible runtime recovery panel offers a one-click retry that preserves the current study, comparison, or catalog route, plus a usable static-data path if the app script is blocked or fails before initialization.
 - Runtime recovery distinguishes a missing dataset, an empty collection, and an incomplete record shape, so its explanation stays accurate while the static JSON path remains available.
 - The no-script collection index includes schema/unit metadata, each record’s source note, and clearly labelled key derived readings (bays, module, radius, length/span ratio, height/span ratio, symmetry, area, and volume), keeping the static fallback research-ready.
 - The no-script collection index also includes a compact reading key for axes, ratios, modules, symmetry, and optional volume estimates, with direct JSON, CSV, and schema links so the static fallback explains its vocabulary before a visitor opens an artifact.

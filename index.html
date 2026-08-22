@@ -80,14 +80,20 @@
     <link rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json" />
   </head>
   <body class="no-js">
-    <script>document.body.classList.add("js-runtime");</script>
+    <script>
+      document.body.classList.add("js-runtime");
+      document.addEventListener("DOMContentLoaded", () => {
+        const runtimeReload = document.querySelector("[data-runtime-reload]");
+        if (runtimeReload && window.location && typeof window.location.href === "string") runtimeReload.href = window.location.href;
+      }, { once: true });
+    </script>
     <a class="skip-link skip-link-app" href="#main-content">Skip to content</a>
     <a class="skip-link skip-link-runtime" href="#runtimeFallback">Skip to recovery</a>
     <div class="runtime-fallback" id="runtimeFallback" role="main" aria-labelledby="runtimeFallbackHeading" tabindex="-1">
       <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Interactive mode</p>
       <p id="runtimeFallbackHeading" role="status" aria-live="polite" aria-atomic="true"><strong>The atlas is still loading.</strong> If this message remains, enable JavaScript or open the static dataset below.</p>
       <div class="runtime-fallback-actions">
-        <a class="hero-action hero-action-primary" href="./">Reload the interactive atlas <span aria-hidden="true">↻</span></a>
+        <a class="hero-action hero-action-primary" href="./" data-runtime-reload>Reload the interactive atlas <span aria-hidden="true">↻</span></a>
         <a class="hero-action" href="data/geometry.json">Open the static JSON dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
         <a class="hero-action" href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
