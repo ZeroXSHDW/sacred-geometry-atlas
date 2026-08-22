@@ -1899,6 +1899,7 @@
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
+        <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)}</span>
         <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
       </button>
     `;
@@ -1906,7 +1907,7 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}; ${studyStatusDescription(study)} Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${studyStatusDescription(study)} Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
