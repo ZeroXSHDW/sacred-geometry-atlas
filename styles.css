@@ -1032,6 +1032,13 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .bar-track,
   .profile-track,
   .module-bars { border: 1px solid var(--line-strong); }
+  .geometry-svg .grid-line { stroke: var(--line-strong); opacity: 0.55; }
+  .geometry-svg .faint-line { stroke: var(--line-strong); }
+  .geometry-svg .axis-line { opacity: 1; }
+  .geometry-svg .label-text,
+  .geometry-svg .small-label { fill: var(--ink-soft); }
+  .geometry-svg .dimension-bracket,
+  .geometry-svg .dimension-arrow { stroke-width: 1.4; }
   .catalog-card.is-active { border-inline-start: 3px solid var(--amber); }
 }
 
@@ -1189,6 +1196,28 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .profile-fill,
   .bar-fill,
   .module-bar { background: Highlight; opacity: 1; }
+  .svg-wrap { background: Canvas; }
+  .geometry-svg { color: CanvasText; forced-color-adjust: none; }
+  .geometry-svg .grid-line { stroke: ButtonText; opacity: 0.35; }
+  .geometry-svg .axis-line,
+  .geometry-svg .secondary-line,
+  .geometry-svg .tertiary-line,
+  .geometry-svg .crosshair,
+  .geometry-svg .dimension-bracket,
+  .geometry-svg .dimension-arrow,
+  .geometry-svg .primary-line,
+  .geometry-svg .primary-fill,
+  .geometry-svg .interior-fill { stroke: Highlight; }
+  .geometry-svg .axis-line { opacity: 1; }
+  .geometry-svg .primary-fill,
+  .geometry-svg .interior-fill { fill: Canvas; }
+  .geometry-svg .faint-line { stroke: ButtonText; opacity: 1; }
+  .geometry-svg .dim-text,
+  .geometry-svg .label-text,
+  .geometry-svg .small-label,
+  .geometry-svg .watermark { fill: CanvasText; }
+  .geometry-svg .stone-dot { fill: Highlight; }
+  .geometry-svg .column { fill: Canvas; stroke: Highlight; }
   .bar-value,
   .module-value,
   .chart-axis-guide,

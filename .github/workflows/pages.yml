@@ -484,6 +484,33 @@ jobs:
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
           if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');
           NODE
+      - name: Validate high-contrast drawing affordances
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const app = fs.readFileSync('app.js', 'utf8');
+          const styles = fs.readFileSync('styles.css', 'utf8');
+          for (const token of [
+            'class="dimension-arrow"',
+            '@media (prefers-contrast: more)',
+            '.geometry-svg .grid-line { stroke: var(--line-strong); opacity: 0.55; }',
+            '.geometry-svg .dimension-arrow { stroke-width: 1.4; }',
+            '@media (forced-colors: active)',
+            '.svg-wrap { background: Canvas; }',
+            '.geometry-svg { color: CanvasText; forced-color-adjust: none; }',
+            '.geometry-svg .grid-line { stroke: ButtonText; opacity: 0.35; }',
+            '.geometry-svg .dimension-arrow,',
+            '.geometry-svg .primary-fill,',
+            '.geometry-svg .interior-fill { fill: Canvas; }',
+            '.geometry-svg .dim-text,',
+            '.geometry-svg .label-text,',
+            '.geometry-svg .small-label,',
+            '.geometry-svg .watermark { fill: CanvasText; }'
+          ]) {
+            if (!app.includes(token) && !styles.includes(token)) throw new Error(`Missing high-contrast drawing affordance: ${token}`);
+          }
+          console.log('High-contrast drawing affordances validated.');
+          NODE
       - name: Smoke-test schema-valid zero symmetry
         run: |
           node - <<'NODE'
