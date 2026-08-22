@@ -843,6 +843,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .share-button { padding: 0.5rem; }
   .share-button span:last-child { display: none; }
   .method-return-button span:last-child { display: inline; }
+  .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
+  .drawing-scale { flex: 0 0 100%; }
   .compare-tray { align-items: start; flex-direction: column; }
   .compare-tray-actions { width: 100%; justify-content: space-between; }
   .compare-tray-summary { max-width: min(100%, 32ch); }
