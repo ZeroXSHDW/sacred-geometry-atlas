@@ -1171,7 +1171,8 @@
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
-              <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place} · ${studyStatus(study)}`)}</span>
+              <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place}`)}</span>
+              <span class="catalog-card-status" data-status="${escapeHtml(studyDataLabel(study))}" title="${escapeHtml(studyStatusDescription(study))}">${highlightSearchText(studyDataLabel(study))}</span>
               <span class="catalog-card-detail">${highlightSearchText(`${study.era} · ${study.emphasis}`)}</span>
               ${matchContext ? `<span class="catalog-card-match">${escapeHtml(matchContext)}</span>` : ""}
             </span>
