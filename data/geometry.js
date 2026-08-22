@@ -7,7 +7,7 @@ window.CHURCH_GEOMETRY_SCHEMA = {
     schematic: "Illustrative proportions; not a measured survey.",
     measured: "Source-supported dimensions."
   },
-  note: "Schematic records are illustrative proportional models, not measured surveys."
+  note: "The current collection is a schematic proportional study, not a measured survey or a claim about every church."
 };
 
 window.CHURCH_GEOMETRY = [

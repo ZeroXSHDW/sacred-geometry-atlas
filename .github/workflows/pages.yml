@@ -146,7 +146,7 @@ jobs:
             if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
           }
           if (!html.includes('<p class="section-note" id="atlasSchemaNote">Illustrative proportions · metric units · v1.1</p>')) throw new Error('Atlas collection note must expose a dynamic schema target');
-          if (!html.includes('<span id="methodProvenanceNote">The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.</span>') || !app.includes('function methodProvenanceText(records = studies)') || !app.includes('function renderMethodProvenance()') || !app.includes('renderMethodProvenance();')) throw new Error('Method provenance warning must adapt to live dataset status');
+          if (!html.includes('<span id="methodProvenanceNote">The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.</span>') || !app.includes('const collectionProvenanceNote = () =>') || !app.includes('const note = geometrySchema().note;') || !app.includes('function methodProvenanceText(records = studies)') || !app.includes('function renderMethodProvenance()') || !app.includes('renderMethodProvenance();')) throw new Error('Method provenance warning must adapt to the schema collection note and live dataset status');
           if (!notFound.includes('<main class="error-page" aria-labelledby="error-title">')) throw new Error('Missing branded 404 main landmark');
           if (!notFound.includes('id="error-title"')) throw new Error('Missing branded 404 heading');
           if (!notFound.includes('data-site-root') || !notFound.includes('data-site-dataset')) throw new Error('Missing GitHub Pages recovery navigation');
@@ -171,7 +171,7 @@ jobs:
           if (!app.includes('const revealPending = document.body.classList.contains("no-js");') || !app.includes('previousPage === route.page || revealPending') || !app.includes('pageChanged && !document.body.classList.contains("no-js")')) throw new Error('Initial deep-link focus must wait until the app is visible');
           if (!styles.includes('.no-js .runtime-fallback { display: none; }') || !styles.includes('.js-runtime.no-js .runtime-fallback { display: block; }') || !styles.includes('.data-error-state .runtime-fallback { display: none; }')) throw new Error('Runtime recovery panel must not compete with no-script or data-error states');
           if (!html.includes('<link rel="icon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing branded favicon link');
-          if (!html.includes('Dimensions are shown as length × span × height in meters. Schema 1.1 · units: meters.') || !html.includes('The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey. Schema 1.1 · units: meters.') || !html.includes('class="noscript-derived"') || !styles.includes('.noscript-derived {') || !styles.includes('.noscript-derived { color: Highlight; }') || !html.includes('class="noscript-provenance"') || !styles.includes('.noscript-provenance {') || !styles.includes('.noscript-provenance { color: Highlight; }')) throw new Error('Missing no-script dimensions, derived readings, schema context, or record provenance note');
+          if (!html.includes('Dimensions are shown as length × span × height in meters. Schema 1.1 · units: meters.') || !html.includes('The records are labeled schematic. The current collection is a schematic proportional study, not a measured survey or a claim about every church. Schema 1.1 · units: meters.') || !html.includes('class="noscript-derived"') || !styles.includes('.noscript-derived {') || !styles.includes('.noscript-derived { color: Highlight; }') || !html.includes('class="noscript-provenance"') || !styles.includes('.noscript-provenance {') || !styles.includes('.noscript-provenance { color: Highlight; }')) throw new Error('Missing no-script dimensions, derived readings, schema context, or schema-backed collection note');
           const noScriptList = html.match(/<ol class="noscript-list">([\s\S]*?)<\/ol>/);
           if (!noScriptList) throw new Error('Missing no-script study list');
           const noScriptEntries = [...noScriptList[1].matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1]);
@@ -465,6 +465,15 @@ jobs:
             const customStatusGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
             if (!customStatusGenerated.includes('Six schematic and estimated studies') || !customStatusGenerated.includes('Estimated = Proportional estimate pending source review.') || !customStatusGenerated.includes('5 schematic · 1 estimated')) {
               throw new Error('Generated no-script fallback did not preserve a schema-defined custom status');
+            }
+            const noteSource = fs.readFileSync('data/geometry.js', 'utf8')
+              .replace('note: "The current collection is a schematic proportional study, not a measured survey or a claim about every church."', 'note: "Custom <note> disclaimer."');
+            fs.writeFileSync(sourcePath, noteSource);
+            const noteResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
+            if (noteResult.status !== 0) throw new Error(noteResult.stderr || noteResult.stdout || 'Custom-note no-script generation failed');
+            const noteGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            if (!noteGenerated.includes('The records are labeled schematic. Custom &lt;note&gt; disclaimer. Schema 1.1 · units: meters.')) {
+              throw new Error('Generated no-script fallback did not use the schema collection note');
             }
             const unitSource = fs.readFileSync('data/geometry.js', 'utf8')
               .replace('units: "meters",', 'units: "feet",')
@@ -1995,6 +2004,10 @@ jobs:
           if (studyStatusDescription({ status: 'schematic' }) !== definitions.schematic || studyStatusDescription({ status: 'measured' }) !== definitions.measured) throw new Error('Study status descriptions are not schema-backed');
           if (atlasSchemaNoteText() !== 'Illustrative proportions · metric units · v1.1' || atlasSchemaNoteText([{ status: 'schematic' }, { status: 'measured' }]) !== 'Mixed provenance · metric units · v1.1') throw new Error('Atlas collection note did not follow schema units, version, and status mix');
           if (!methodProvenanceText().startsWith('The current collection is a schematic') || !methodProvenanceText([{ status: 'measured' }]).startsWith('The current collection uses source-supported dimensions') || !methodProvenanceText([{ status: 'schematic' }, { status: 'measured' }]).startsWith('The collection mixes schematic proportional studies')) throw new Error('Method provenance warning did not follow the collection status mix');
+          const originalCollectionNote = context.window.CHURCH_GEOMETRY_SCHEMA.note;
+          context.window.CHURCH_GEOMETRY_SCHEMA.note = 'Custom collection note.';
+          if (methodProvenanceText([{ status: 'schematic' }]) !== 'Custom collection note. Each record carries a status and provenance note.') throw new Error('Method provenance warning did not use the schema collection note');
+          context.window.CHURCH_GEOMETRY_SCHEMA.note = originalCollectionNote;
           renderActiveProvenance({ status: 'schematic' });
           if (elements.get('#activeProvenanceSummary').textContent !== 'Data status · schematic' || elements.get('#activeProvenanceDefinition').textContent !== definitions.schematic || elements.get('#activeSchemaNote').textContent !== 'Schema 1.1 · units: meters' || status.title !== definitions.schematic || status.attributes['data-status'] !== 'schematic' || status.attributes['aria-label'] !== `schematic: ${definitions.schematic}`) throw new Error('Active study provenance disclosure did not follow the schema');
           renderActiveProvenance({ status: 'measured' });

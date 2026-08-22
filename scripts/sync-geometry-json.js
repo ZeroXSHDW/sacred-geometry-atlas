@@ -67,6 +67,9 @@ function noScriptFallback() {
   const unitName = payload.schema.units || "unspecified";
   const unitSymbol = payload.schema.unitSymbol || "m";
   const schemaNote = `Schema ${payload.schema.version || "unspecified"} · units: ${payload.schema.units || "unspecified"}`;
+  const collectionProvenanceNote = typeof payload.schema.note === "string" && payload.schema.note.trim()
+    ? payload.schema.note.trim()
+    : "The current collection is a schematic proportional study, not a measured survey or a claim about every church.";
   const note = !hasStudies
     ? `The collection is currently empty. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
     : customStatuses.length
@@ -75,7 +78,7 @@ function noScriptFallback() {
     ? `The collection mixes schematic and measured records (${statusSummary}). Schematic = ${statusDefinitions.schematic || "illustrative proportions"} Measured = ${statusDefinitions.measured || "source-supported dimensions"} ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
     : measuredCount
       ? `The records are labeled measured and use source-supported dimensions. Counts: ${statusSummary}. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
-      : `The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`;
+      : `The records are labeled schematic. ${collectionProvenanceNote} ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`;
   const list = payload.studies.map((study) => {
     const dimensions = [study.length, study.span, study.height].join(" × ") + ` ${unitSymbol}`;
     const floorArea = positiveEstimate(study.floorAreaEstimate);

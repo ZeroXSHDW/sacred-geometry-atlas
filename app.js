@@ -85,6 +85,12 @@
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
   const geometrySchema = () => window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters", unitSymbol: "m" };
+  const collectionProvenanceNote = () => {
+    const note = geometrySchema().note;
+    return typeof note === "string" && note.trim()
+      ? note.trim()
+      : "The current collection is a schematic proportional study, not a measured survey or a claim about every church.";
+  };
   const geometryUnitName = () => geometrySchema().units || "units";
   const geometryUnitSymbol = () => geometrySchema().unitSymbol || "m";
   const linearMeasure = (value, digits = 1) => `${number(value, digits)} ${geometryUnitSymbol()}`;
@@ -257,7 +263,7 @@
     const activeStatuses = schemaStatusValues().filter((status) => counts[status] > 0);
     if (activeStatuses.length === 2 && counts.schematic && counts.measured) return "The collection mixes schematic proportional studies and source-supported dimensions. Use each record's status and provenance note to distinguish them.";
     if (activeStatuses.length === 1 && counts.measured) return "The current collection uses source-supported dimensions. Each record carries a status and provenance note so its evidence can be identified.";
-    if (activeStatuses.length === 1 && counts.schematic) return "The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.";
+    if (activeStatuses.length === 1 && counts.schematic) return `${collectionProvenanceNote()} Each record carries a status and provenance note.`;
     const labels = activeStatuses.map((status) => `${statusDisplayName(status).toLowerCase()} records`).join(" and ");
     return `The current collection uses ${labels || "records without a documented status"}. Each record carries a status and provenance note so its evidence can be identified.`;
   }
