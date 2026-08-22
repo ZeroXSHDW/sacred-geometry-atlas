@@ -362,6 +362,7 @@ h3 { letter-spacing: -0.04em; }
 .catalog-number { color: var(--ink-muted); font-family: var(--mono); font-size: 0.62rem; }
 .catalog-card-title { display: block; margin-bottom: 0.23rem; color: var(--ink); font-size: 0.82rem; font-weight: 700; line-height: 1.25; }
 .catalog-card-meta { display: block; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.4; }
+.catalog-card-detail { display: block; margin-top: 0.16rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.35; }
 .catalog-glyph { width: 38px; height: 38px; color: var(--amber); }
 .catalog-glyph path, .catalog-glyph circle, .catalog-glyph rect, .catalog-glyph ellipse, .catalog-glyph line, .catalog-glyph polygon { fill: none; stroke: currentColor; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
 .catalog-glyph .soft { stroke: var(--teal); stroke-dasharray: 2 2; }

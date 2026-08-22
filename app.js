@@ -919,7 +919,8 @@
             <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${escapeHtml(study.name)}</span>
-              <span class="catalog-card-meta">${escapeHtml(study.typology)} · ${escapeHtml(study.emphasis)} · ${escapeHtml(studyStatus(study))}</span>
+              <span class="catalog-card-meta">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(studyStatus(study))}</span>
+              <span class="catalog-card-detail">${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)}</span>
             </span>
             ${catalogGlyph(study)}
           </a>
