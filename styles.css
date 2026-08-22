@@ -416,6 +416,15 @@ h3 { letter-spacing: -0.04em; }
 .study-meta { margin: 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.63rem; }
 .study-reference { margin: 0.35rem 0 0; color: var(--ink-soft); font-family: var(--serif); font-size: 0.72rem; font-style: italic; }
 .study-source { margin: 0.18rem 0 0; color: var(--ink-muted); font-size: 0.62rem; }
+.study-provenance { width: fit-content; max-width: 100%; margin-top: 0.55rem; }
+.study-provenance summary { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 28px; padding: 0.32rem 0.48rem; border: 1px solid var(--line-strong); color: var(--teal); background: rgba(136, 198, 186, 0.06); cursor: pointer; font-family: var(--mono); font-size: 0.51rem; letter-spacing: 0.04em; list-style: none; text-transform: uppercase; }
+.study-provenance summary::-webkit-details-marker { display: none; }
+.study-provenance summary::after { color: var(--amber); content: '+'; font-size: 0.9rem; line-height: 1; }
+.study-provenance[open] summary { border-color: var(--teal); }
+.study-provenance[open] summary::after { content: '−'; }
+.study-provenance-body { max-width: 38rem; margin-top: 0.45rem; padding: 0.55rem 0.7rem; border-left: 2px solid var(--teal); background: var(--teal-soft); }
+.study-provenance-body p { margin: 0; color: var(--ink-soft); font-family: var(--mono); font-size: 0.56rem; line-height: 1.5; }
+.study-provenance-body p + p { margin-top: 0.25rem; color: var(--ink-muted); }
 .study-header-actions { display: flex; flex-direction: column; align-items: end; gap: 1.25rem; }
 .study-nav { display: inline-flex; align-items: center; gap: 0.35rem; }
 .study-nav-position { color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
@@ -804,7 +813,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .share-button,
   .drawing-export,
   .drawing-reset { min-height: 36px; }
-  .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }
+  .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }
   .compare-selection-clear, .compare-selection-chip, .catalog-batch-action { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .study-nav button { width: 40px; height: 40px; }

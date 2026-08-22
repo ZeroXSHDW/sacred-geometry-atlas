@@ -1123,13 +1123,7 @@
     $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
     $("#activeName").textContent = study.name;
     $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
-    const activeStatus = $("#activeStatus");
-    if (activeStatus) {
-      activeStatus.textContent = studyStatus(study);
-      activeStatus.title = studyStatusDescription(study);
-    }
-    const activeStatusHelp = $("#activeStatusHelp");
-    if (activeStatusHelp) activeStatusHelp.textContent = studyStatusDescription(study);
+    renderActiveProvenance(study);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -1158,6 +1152,27 @@
     $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
       <div class="profile-item" role="listitem"><div class="profile-label"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
     `).join("");
+  }
+
+  function renderActiveProvenance(study) {
+    if (!study) return;
+    const status = studyStatus(study);
+    const statusDefinition = studyStatusDescription(study);
+    const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
+    const activeStatus = $("#activeStatus");
+    const summary = $("#activeProvenanceSummary");
+    const explanation = $("#activeProvenanceDefinition");
+    const schemaNote = $("#activeSchemaNote");
+    if (activeStatus) {
+      activeStatus.textContent = status;
+      activeStatus.title = statusDefinition;
+      activeStatus.setAttribute("aria-label", `${status}: ${statusDefinition}`);
+    }
+    const activeStatusHelp = $("#activeStatusHelp");
+    if (activeStatusHelp) activeStatusHelp.textContent = statusDefinition;
+    if (summary) summary.textContent = `Data status · ${status}`;
+    if (explanation) explanation.textContent = statusDefinition;
+    if (schemaNote) schemaNote.textContent = `Schema ${schema.version || "1.1"} · units: ${schema.units || "meters"}`;
   }
 
   function volumeReading(study) {
