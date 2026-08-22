@@ -2500,14 +2500,14 @@
     const maxHeightRatio = Math.max(...comparison.map((study) => study.height / study.span));
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
-      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${study.axis} axis; ${studyDataLabel(study)} record"><span class="bar-label">${escapeHtml(studyShortName(study))}</span><span class="bar-track"><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"><span class="bar-label">${escapeHtml(studyShortName(study))}</span><span class="bar-track"><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#heightChart").innerHTML = comparison.map((study) => {
       const ratio = study.height / study.span;
-      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${study.axis} axis; ${studyDataLabel(study)} record"><span class="bar-label">${escapeHtml(studyShortName(study))}</span><span class="bar-track"><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"><span class="bar-label">${escapeHtml(studyShortName(study))}</span><span class="bar-track"><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#moduleChart").innerHTML = comparison.map((study) => `
-      <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} meters; ${study.axis} axis; ${studyDataLabel(study)} record">
+      <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} meters; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record">
         <span class="module-name">${escapeHtml(studyShortName(study))}</span>
         <span class="module-bars">${Array.from({ length: study.bayCount }, (_, index) => `<i class="module-bar" style="height:${10 + ((index + study.module) % 5) * 3}px"></i>`).join("")}</span>
         <span class="module-value">${number(study.module)} m</span>

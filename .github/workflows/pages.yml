@@ -331,7 +331,7 @@ jobs:
           for (const token of ['if (!study || !button || !status || !beginAsyncAction(button)) return;', 'if (!button || !status || !beginAsyncAction(button)) return;', 'endAsyncAction(button);']) {
             if (!app.includes(token)) throw new Error('Async share and citation actions must use the busy-state guard: ' + token);
           }
-          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${study.axis} axis; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${study.axis} axis; ${studyDataLabel(study)} record"', 'module ${number(study.module)} meters; ${study.axis} axis; ${studyDataLabel(study)} record']) {
+          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"', 'module ${number(study.module)} meters; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record']) {
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
@@ -971,10 +971,10 @@ jobs:
           elements.set('#compareScope', compareScope);
           elements.set('#compareHelper', compareHelper);
           const geometryCompare = { innerHTML: '', setAttribute(name, value) { this[name] = value; } };
-          elements.set('#geometryCompare', geometryCompare);
           const ratioChart = { innerHTML: '' };
           const heightChart = { innerHTML: '' };
           const moduleChart = { innerHTML: '' };
+          elements.set('#geometryCompare', geometryCompare);
           elements.set('#ratioChart', ratioChart);
           elements.set('#heightChart', heightChart);
           elements.set('#moduleChart', moduleChart);
@@ -1013,7 +1013,13 @@ jobs:
           const vm = require('vm');
           const elements = new Map();
           const geometryCompare = { innerHTML: '', setAttribute(name, value) { this[name] = value; } };
+          const ratioChart = { innerHTML: '' };
+          const heightChart = { innerHTML: '' };
+          const moduleChart = { innerHTML: '' };
           elements.set('#geometryCompare', geometryCompare);
+          elements.set('#ratioChart', ratioChart);
+          elements.set('#heightChart', heightChart);
+          elements.set('#moduleChart', moduleChart);
           const context = {
             URL,
             window: {
@@ -1027,11 +1033,13 @@ jobs:
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
           context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic = 'Quoted "definition" <tag>';
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderGeometryCompare };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderCharts, renderGeometryCompare };\n})();');
           vm.runInNewContext(app, context);
+          context.window.CHURCH_GEOMETRY[0].axis = 'Quoted "axis" <tag>';
           context.window.__atlasTest.renderGeometryCompare();
-          if (!geometryCompare.innerHTML.includes('Quoted &quot;definition&quot; &lt;tag&gt;') || geometryCompare.innerHTML.includes('Quoted "definition" <tag>')) {
-            throw new Error('Comparison card aria-label did not escape edited status definitions');
+          context.window.__atlasTest.renderCharts();
+          if (!geometryCompare.innerHTML.includes('Quoted &quot;definition&quot; &lt;tag&gt;') || geometryCompare.innerHTML.includes('Quoted "definition" <tag>') || !ratioChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !heightChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !moduleChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || ratioChart.innerHTML.includes('Quoted "axis" <tag> axis')) {
+            throw new Error('Comparison card and chart labels did not escape edited dynamic text');
           }
           console.log('Escaped comparison label smoke test passed.');
           NODE
