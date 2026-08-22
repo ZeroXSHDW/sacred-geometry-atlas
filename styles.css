@@ -907,6 +907,12 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   summary:focus-visible { outline-color: Highlight; }
   #runtimeFallback:focus { outline-color: Highlight; }
   #visualEmptyHeading:focus-visible { outline-color: Highlight; }
+  #dataErrorHeading:focus { outline-color: Highlight; }
+  #atlas-heading:focus-visible,
+  .page-view h2:focus-visible,
+  #activeName:focus-visible,
+  #main-content:focus-visible,
+  #noscript-heading:focus-visible { outline-color: Highlight; }
   .nav-button.is-active,
   .mode-button.is-active,
   .layer-button.is-active { color: Highlight; }
