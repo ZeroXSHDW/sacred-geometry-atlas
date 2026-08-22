@@ -2345,7 +2345,7 @@
     const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
     const selected = selectedComparisonStudies();
     const selection = selected.length
-      ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}.`
+      ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}. Selection provenance: ${selected.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
       : "";
     const schema = geometrySchema();
     return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}.${selection} Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
@@ -2488,8 +2488,11 @@
     const records = comparison.length
       ? comparison.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
       : "no records";
+    const provenance = comparison.length
+      ? ` Sources: ${comparison.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
+      : "";
     const schema = geometrySchema();
-    return `Sacred Geometry Atlas. Comparison of ${records}. Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
+    return `Sacred Geometry Atlas. Comparison of ${records}.${provenance} Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
   }
 
   async function copyComparisonCitation() {
