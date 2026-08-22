@@ -110,7 +110,7 @@ jobs:
           if (!html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('No-JS fallback must provide the page heading');
           if (!html.includes('<a class="skip-link skip-link-app" href="#main-content">Skip to content</a>')) throw new Error('Missing interactive skip link');
           if (!html.includes('<a class="skip-link skip-link-noscript" href="#noscript-heading">Skip to collection</a>')) throw new Error('Missing no-JS skip link');
-          if (!html.includes('<main id="main-content" tabindex="-1">') || !html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('Skip-link destinations must be focusable');
+          if (!html.includes('<main id="main-content" tabindex="-1">') || !html.includes('<h1 id="noscript-heading" tabindex="-1">') || !styles.includes('#main-content:focus-visible') || !styles.includes('#noscript-heading:focus-visible')) throw new Error('Skip-link destinations must be focusable and visibly styled');
           if (!html.includes('<div class="hero-stats" role="group" aria-label="Atlas statistics">')) throw new Error('Hero statistics must expose a named group');
           for (const token of ['id="studyCount"', 'id="modeCount"', 'id="profileCount"']) {
             if (!html.includes(token)) throw new Error('Hero statistics must expose a dynamic target: ' + token);
