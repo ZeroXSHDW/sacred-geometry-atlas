@@ -2532,6 +2532,7 @@
     const heightScale = $("#heightChartScale");
     const moduleScale = $("#moduleChartScale");
     const chartScaleStatus = $("#comparisonChartScaleStatus");
+    const compareView = $("#compareView");
     const ratioAxisMid = $("#ratioChartAxisMid");
     const ratioAxisMax = $("#ratioChartAxisMax");
     const heightAxisMid = $("#heightChartAxisMid");
@@ -2541,7 +2542,7 @@
     if (ratioScale) ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;
     if (heightScale) heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;
     if (moduleScale) moduleScale.textContent = `Scale 0 → ${number(maxModule)} m · active comparison maximum`;
-    if (chartScaleStatus) chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} m.`;
+    if (chartScaleStatus && (!compareView || !compareView.hidden)) chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} m.`;
     if (ratioAxisMid) ratioAxisMid.textContent = number(maxRatio / 2, 2);
     if (ratioAxisMax) ratioAxisMax.textContent = number(maxRatio, 2);
     if (heightAxisMid) heightAxisMid.textContent = number(maxHeightRatio / 2, 2);
