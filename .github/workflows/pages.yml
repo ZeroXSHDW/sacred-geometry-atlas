@@ -104,7 +104,7 @@ jobs:
             throw new Error('Collection JSON-LD metadata is not valid JSON');
           }
           const structuredDataset = structuredData && structuredData.mainEntity;
-          if (structuredData['@context'] !== 'https://schema.org' || structuredData['@type'] !== 'CollectionPage' || structuredData.name !== 'Sacred Geometry Atlas' || !structuredDataset || structuredDataset['@type'] !== 'Dataset' || structuredDataset.encodingFormat !== 'application/json' || !structuredDataset.distribution || structuredDataset.distribution.contentUrl !== 'data/geometry.json') throw new Error('Collection JSON-LD metadata is incomplete');
+          if (structuredData['@context'] !== 'https://schema.org' || structuredData['@type'] !== 'CollectionPage' || structuredData.name !== 'Sacred Geometry Atlas' || !structuredDataset || structuredDataset['@type'] !== 'Dataset' || structuredDataset['@id'] !== 'data/geometry.json' || structuredDataset.encodingFormat !== 'application/json' || !structuredDataset.distribution || structuredDataset.distribution.contentUrl !== 'data/geometry.json') throw new Error('Collection JSON-LD metadata is incomplete');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
             'property="og:url" content="./"',
@@ -2249,6 +2249,7 @@ jobs:
           from pathlib import Path
 
           base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
+          dataset_url = html.escape(base_url + "data/geometry.json", quote=True)
           page = Path("index.html")
           source = page.read_text()
           replacements = {
@@ -2256,6 +2257,8 @@ jobs:
               '<meta property="og:url" content="./" />': f'<meta property="og:url" content="{html.escape(base_url, quote=True)}" />',
               '<meta property="og:image" content="og.png" />': f'<meta property="og:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
               '<meta name="twitter:image" content="og.png" />': f'<meta name="twitter:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
+              '"@id": "data/geometry.json"': f'"@id": "{dataset_url}"',
+              '"contentUrl": "data/geometry.json"': f'"contentUrl": "{dataset_url}"',
           }
           for old, new in replacements.items():
               if old not in source:
@@ -2310,11 +2313,13 @@ jobs:
               f'<meta property="og:url" content="{base_url}" />',
               f'<meta property="og:image" content="{base_url}og.png" />',
               f'<meta name="twitter:image" content="{base_url}og.png" />',
+              f'"@id": "{base_url}data/geometry.json"',
+              f'"contentUrl": "{base_url}data/geometry.json"',
               f'Sitemap: {base_url}sitemap.xml',
               f'<loc>{base_url}</loc>',
           ]
-          missing = [token for token in expected[:4] if token not in page]
-          missing.extend(token for token in expected[4:] if token not in (robots + sitemap))
+          missing = [token for token in expected[:6] if token not in page]
+          missing.extend(token for token in expected[6:] if token not in (robots + sitemap))
           expected_404 = [
               f'<a class="home-link" data-site-root href="{base_url}">',
               f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
