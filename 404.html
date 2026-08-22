@@ -18,6 +18,7 @@
         --amber-soft: rgba(233, 179, 108, 0.14);
         --coral: #e77f62;
         --teal: #88c6ba;
+        --line-strong: rgba(213, 229, 214, 0.68);
         --mono: 'SFMono-Regular', Consolas, monospace;
         --serif: Georgia, serif;
       }
@@ -51,6 +52,15 @@
       }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      }
+      @media (prefers-contrast: more) {
+        :root {
+          --ink-soft: #d8e2da;
+          --ink-muted: #b6c4ba;
+          --line-strong: rgba(213, 229, 214, 0.92);
+        }
+        .home-link:focus-visible { outline-width: 3px; }
+        .error-footer { border-top-color: var(--line-strong); }
       }
       @media (forced-colors: active) {
         .home-link,
