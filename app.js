@@ -422,8 +422,7 @@
         normalizedStudyRoute = true;
         includeStudyInNormalizedRoute = false;
       } else if (visible.length && !visible.some((study) => study.id === state.activeId)) {
-        state.activeId = visible[0].id;
-        normalizedStudyRoute = Boolean(route.studyId);
+        if (!route.studyId) state.activeId = visible[0].id;
       } else if (route.studyId && window.location.hash !== routeHash("atlas", true)) {
         normalizedStudyRoute = true;
       } else if (!route.requestedStudy && window.location.hash.length > 0 && window.location.hash !== routeHash("atlas", false)) {
@@ -544,6 +543,11 @@
     });
     $("#clearSearch").addEventListener("click", () => clearCatalogFilters({ resetSort: true, focus: true }));
     $("#clearVisualFilters").addEventListener("click", () => clearCatalogFilters({ resetSort: true, focus: true }));
+    $("#showActiveStudy").addEventListener("click", () => {
+      const studyId = state.activeId;
+      clearCatalogFilters({ resetSort: true });
+      focusStudyCard(studyId, { preventScroll: false });
+    });
     $("#churchList").addEventListener("click", (event) => {
       const compareToggle = event.target.closest("[data-compare-id]");
       if (compareToggle) {
@@ -757,9 +761,10 @@
     if (toggle && typeof toggle.focus === "function") toggle.focus({ preventScroll: true });
   }
 
-  function focusStudyCard(id) {
+  function focusStudyCard(id, options = {}) {
+    const { preventScroll = true } = options;
     const card = $$(`[data-study-id]`).find((button) => button.dataset.studyId === id);
-    if (card && typeof card.focus === "function") card.focus({ preventScroll: true });
+    if (card && typeof card.focus === "function") card.focus({ preventScroll });
   }
 
   function clearFilter(key, options = {}) {
@@ -1141,6 +1146,7 @@
     renderVisibleComparisonAction(visible);
     renderMethodReturnAction(activeStudy(), visible);
     renderMethodContext(activeStudy(), visible);
+    renderActiveCatalogContext(activeStudy(), visible);
     updateSearchClear();
     renderStudyNav();
     list.innerHTML = visible.map((study) => {
@@ -1218,6 +1224,7 @@
     renderActiveProvenance(study);
     renderMethodReturnAction(study);
     renderMethodContext(study);
+    renderActiveCatalogContext(study, visibleStudies());
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -1272,6 +1279,24 @@
     target.textContent = isVisible
       ? `Current study · ${studyShortName(study)}`
       : `Study context · ${studyShortName(study)} · outside current catalog`;
+  }
+
+  function renderActiveCatalogContext(study = activeStudy(), visible = visibleStudies()) {
+    const target = $("#activeCatalogContext");
+    if (!target) return;
+    const text = $("#activeCatalogContextText");
+    const action = $("#showActiveStudy");
+    const outsideCatalog = Boolean(study && visible.length && !visible.some((candidate) => candidate.id === study.id));
+    target.hidden = !outsideCatalog;
+    if (text) text.textContent = outsideCatalog ? "This study is outside the current catalog view." : "";
+    if (action) {
+      action.hidden = !outsideCatalog;
+      const label = outsideCatalog ? `Show ${studyShortName(study)} in catalog` : "Show current study in catalog";
+      action.setAttribute("aria-label", label);
+      action.title = label;
+    }
+    const heading = $("#activeName");
+    if (heading) heading.setAttribute("aria-describedby", outsideCatalog ? "activeStatusHelp activeCatalogContextText" : "activeStatusHelp");
   }
 
   function renderActiveProvenance(study) {

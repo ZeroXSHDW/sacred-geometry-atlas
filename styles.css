@@ -417,6 +417,9 @@ h3 { letter-spacing: -0.04em; }
 .study-header h3 { margin-bottom: 0.35rem; font-size: clamp(1.45rem, 3vw, 2.6rem); line-height: 1.06; }
 .study-status { display: inline-flex; align-items: center; align-self: center; padding: 0.32rem 0.42rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); font-family: var(--mono); font-size: 0.49rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
 .study-meta { margin: 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.63rem; }
+.study-context-note { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.7rem; max-width: 42rem; margin: 0.55rem 0 0; padding: 0.45rem 0.6rem; border-left: 2px solid var(--amber); color: var(--ink-muted); background: var(--amber-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; }
+.study-context-note button { padding: 0.32rem 0.45rem; border: 1px solid var(--amber); color: var(--amber); background: transparent; font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.study-context-note button:hover { color: var(--ink); background: rgba(233, 179, 108, 0.18); }
 .study-reference { margin: 0.35rem 0 0; color: var(--ink-soft); font-family: var(--serif); font-size: 0.72rem; font-style: italic; }
 .study-source { margin: 0.18rem 0 0; color: var(--ink-muted); font-size: 0.62rem; }
 .study-provenance { width: fit-content; max-width: 100%; margin-top: 0.55rem; }
@@ -825,6 +828,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .drawing-export,
   .drawing-reset { min-height: 36px; }
   .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }
+  .study-context-note button { min-height: 36px; }
   .compare-selection-clear, .compare-selection-chip, .catalog-batch-action { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
@@ -867,6 +871,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
   .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }
+  .study-context-note { border-color: Highlight; color: ButtonText; background: Canvas; }
+  .study-context-note button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .manual-copy-fallback { border-color: ButtonText; background: Canvas; }
   .manual-copy-fallback-heading { color: ButtonText; }
   .manual-copy-fallback textarea { border-color: ButtonText; color: CanvasText; background: Canvas; }

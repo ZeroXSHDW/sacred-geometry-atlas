@@ -27,6 +27,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The Atlas comparison tray previews selected study names, including selections outside the current filter view.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
 - Catalog cards keep typology, place, era, emphasis, and data status visible at a glance.
+- Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
 - A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
