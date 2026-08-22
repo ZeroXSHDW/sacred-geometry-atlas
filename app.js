@@ -1100,7 +1100,7 @@
 
   function handleKeyboard(event) {
     const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
-    if (["input", "select", "textarea", "button", "summary", "a"].includes(tagName) || event.target.isContentEditable) return;
+    if (["input", "select", "textarea", "summary", "a"].includes(tagName) || event.target.isContentEditable) return;
     if (event.metaKey || event.ctrlKey || event.altKey || state.page !== "atlas") return;
     const key = event.key.toLowerCase();
     if (key === "/") {
