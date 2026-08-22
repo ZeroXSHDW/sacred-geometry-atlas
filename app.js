@@ -1069,7 +1069,7 @@
 
   function handleComparisonTableKey(event) {
     const target = event.currentTarget;
-    if (!target || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (!target || event.target !== target || event.metaKey || event.ctrlKey || event.altKey) return;
     const key = event.key;
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(key)) return;
     const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";

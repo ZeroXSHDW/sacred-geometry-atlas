@@ -278,7 +278,7 @@ jobs:
           if (!styles.includes('.compare-status-note {') || !html.includes('<span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>') || !html.includes('<p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>') || !html.includes('Study names open in Atlas.') || !styles.includes('.comparison-table-copy {') || !styles.includes('.comparison-table-hint {')) throw new Error('Comparison status terminology and table instructions must be exposed');
           if (!html.includes('<caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status.</caption>') || !app.includes('Recorded study values for') || !app.includes('<td class="comparison-status" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>') || !app.includes('const studyDataLabel = (study) =>') || !styles.includes('.comparison-table tbody .comparison-status') || !styles.includes('text-transform: uppercase') || !app.includes('target.setAttribute("aria-label", "Study envelopes; each card identifies whether its data is schematic or measured.")')) throw new Error('Comparison surfaces must expose per-study data status');
           if (!styles.includes('.comparison-table thead th:first-child, .comparison-table tbody th { position: sticky;') || !styles.includes('box-shadow: 1px 0 0 var(--line);')) throw new Error('Comparison table must keep study labels visible while scrolling');
-          if (!app.includes('function handleComparisonTableKey(event)') || !app.includes('comparisonTable.addEventListener("keydown", handleComparisonTableKey)') || !app.includes('target.scrollBy({ left: delta, behavior })') || !app.includes('target.scrollTo({ left, behavior })')) throw new Error('Comparison table keyboard scrolling behavior is missing');
+          if (!app.includes('function handleComparisonTableKey(event)') || !app.includes('event.target !== target') || !app.includes('comparisonTable.addEventListener("keydown", handleComparisonTableKey)') || !app.includes('target.scrollBy({ left: delta, behavior })') || !app.includes('target.scrollTo({ left, behavior })')) throw new Error('Comparison table keyboard scrolling behavior is missing or too broadly delegated');
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
           if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Missing atomic drawing status channel');
@@ -903,6 +903,42 @@ jobs:
             throw new Error('Comparison card aria-label did not escape edited status definitions');
           }
           console.log('Escaped comparison label smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison table shortcut scope
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector() { return null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { handleComparisonTableKey };\n})();');
+          vm.runInNewContext(app, context);
+          const { handleComparisonTableKey } = context.window.__atlasTest;
+          const scrollCalls = [];
+          const target = {
+            clientWidth: 400,
+            scrollWidth: 1000,
+            scrollBy(options) { scrollCalls.push(['by', options]); },
+            scrollTo(options) { scrollCalls.push(['to', options]); }
+          };
+          let prevented = false;
+          handleComparisonTableKey({ currentTarget: target, target, key: 'ArrowRight', preventDefault() { prevented = true; } });
+          if (!prevented || scrollCalls.length !== 1 || scrollCalls[0][0] !== 'by' || scrollCalls[0][1].left !== 320) throw new Error('Table scroll shortcut did not work when the scroll region was focused');
+          prevented = false;
+          const studyLink = {};
+          handleComparisonTableKey({ currentTarget: target, target: studyLink, key: 'ArrowRight', preventDefault() { prevented = true; } });
+          if (prevented || scrollCalls.length !== 1) throw new Error('Table scroll shortcut hijacked a nested study link');
+          console.log('Comparison table shortcut scope smoke test passed.');
           NODE
 
       - name: Smoke-test Method return context
