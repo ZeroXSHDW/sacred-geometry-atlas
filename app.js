@@ -3106,9 +3106,14 @@
       const section = study.height / study.span;
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
+      const isActive = study.id === state.activeId;
+      const currentAttribute = isActive ? ' aria-current="true"' : "";
+      const studyLinkLabel = isActive
+        ? `Open ${studyShortName(study)} in Atlas. Current Atlas study.`
+        : `Open ${studyShortName(study)} in Atlas`;
       return `
         <tr>
-          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
+          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(study.axis)}</td>
           <td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${escapedLinearMeasure(study.length)}</td>
