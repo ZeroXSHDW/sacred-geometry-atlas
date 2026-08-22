@@ -1053,6 +1053,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .visual-empty-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .visual-empty-action:hover,
   .visual-empty-action:focus-visible { color: HighlightText; background: Highlight; }
+  .search-clear { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .search-clear:hover,
+  .search-clear:focus-visible { border-color: Highlight; color: HighlightText; background: Highlight; }
   .method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .method-dictionary-links a:hover { color: HighlightText; background: Highlight; }
   .method-dictionary-item dt,
