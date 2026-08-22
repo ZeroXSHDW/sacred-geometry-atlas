@@ -24,6 +24,7 @@
       }
 
       * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
       body { min-height: 100vh; margin: 0; color: var(--ink); background: radial-gradient(circle at 82% 14%, rgba(136, 198, 186, 0.1), transparent 25rem), var(--bg); font-family: Arial, sans-serif; }
       body::before { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(213, 229, 214, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(213, 229, 214, 0.04) 1px, transparent 1px); background-size: 32px 32px; content: ''; -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%); mask-image: linear-gradient(to bottom, black, transparent 75%); }
       .error-page { display: grid; align-content: center; width: min(100% - 48px, 900px); min-height: calc(100vh - 96px); margin: auto; padding: 4rem 0; }
