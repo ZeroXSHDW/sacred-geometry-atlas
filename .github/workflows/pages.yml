@@ -964,6 +964,47 @@ jobs:
           if (!planWithUnsafeUnit.includes('&lt;unit&gt;') || planWithUnsafeUnit.includes('<unit>') || !sectionWithUnsafeUnit.includes('&lt;unit&gt;') || sectionWithUnsafeUnit.includes('<unit>')) throw new Error('Schema unit symbols must be escaped in generated SVG labels');
           console.log('Route-native catalog link smoke test passed.');
           NODE
+      - name: Smoke-test encoded comparison routes
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const studies = [
+            { id: 'choir,annex', status: 'schematic' },
+            { id: 'basilica', status: 'schematic' }
+          ];
+          const context = {
+            URL,
+            window: {
+              CHURCH_GEOMETRY: studies,
+              CHURCH_GEOMETRY_SCHEMA: { statusValues: ['schematic'], statusDefinitions: { schematic: 'Illustrative proportions.' } },
+              location: { href: 'https://example.test/atlas/#compare/choir%2Cannex,basilica', hash: '#compare/choir%2Cannex,basilica' }
+            },
+            document: {
+              querySelector() { return null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { parseRoute, routeHash, catalogRouteValues, state };\n})();');
+          vm.runInNewContext(app, context);
+          const { parseRoute, routeHash, catalogRouteValues, state } = context.window.__atlasTest;
+          let route = parseRoute();
+          state.compareIds = route.compareIds;
+          if (route.compareIds.join('|') !== 'choir,annex|basilica' || routeHash('compare', false) !== '#compare/choir%2Cannex,basilica') throw new Error(`Encoded hash comparison route did not round-trip: ${route.compareIds.join('|')} / ${routeHash('compare', false)}`);
+          state.compareIds = ['basilica', 'gothic'];
+          if (catalogRouteValues(true).compare !== 'basilica,gothic') throw new Error('Simple comparison query IDs changed their canonical format');
+          state.compareIds = ['choir,annex', 'basilica'];
+          const encodedQueryValue = catalogRouteValues(true).compare;
+          if (encodedQueryValue !== 'choir%2Cannex,basilica') throw new Error(`Comparison query ID was not encoded safely: ${encodedQueryValue}`);
+          const queryUrl = new URL('https://example.test/atlas/');
+          queryUrl.searchParams.set('compare', encodedQueryValue);
+          queryUrl.hash = '#compare';
+          context.window.location.href = queryUrl.href;
+          context.window.location.hash = queryUrl.hash;
+          route = parseRoute();
+          if (route.compareIds.join('|') !== 'choir,annex|basilica') throw new Error(`Encoded query comparison route did not round-trip: ${route.compareIds.join('|')}`);
+          console.log('Encoded comparison route smoke test passed.');
+          NODE
       - name: Smoke-test study selection announcement
         run: |
           node - <<'NODE'

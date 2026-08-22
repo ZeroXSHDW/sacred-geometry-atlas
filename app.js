@@ -411,15 +411,24 @@
     });
   }
 
+  const routeSafeStudyIdPattern = /^[A-Za-z0-9._~-]+$/;
+  const decodeRouteSegment = (segment) => {
+    try {
+      return decodeURIComponent(segment);
+    } catch (error) {
+      return segment;
+    }
+  };
+  const comparisonQueryId = (id) => {
+    const value = String(id ?? "");
+    return routeSafeStudyIdPattern.test(value) ? value : encodeURIComponent(value);
+  };
+
   function parseRoute() {
-    const segments = window.location.hash.replace(/^#/, "").replace(/^\/+/, "").split("/").map((segment) => {
-      try {
-        return decodeURIComponent(segment);
-      } catch (error) {
-        return segment;
-      }
-    });
+    const rawSegments = window.location.hash.replace(/^#/, "").replace(/^\/+/, "").split("/");
+    const segments = rawSegments.map(decodeRouteSegment);
     const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer, requestedZoom] = segments;
+    const rawRequestedStudy = rawSegments[1] || "";
     const page = validPages.has(requestedPage) ? requestedPage : pageAliases.get(requestedPage) || "atlas";
     const studyId = page === "atlas" && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
@@ -427,11 +436,11 @@
     const contextStudyId = ["atlas", "method"].includes(page) && studies.some((study) => study.id === requestedStudy)
       ? requestedStudy
       : null;
-    const requestedCompareIds = requestedStudy ? requestedStudy.split(",") : [];
+    const requestedCompareIds = rawRequestedStudy ? rawRequestedStudy.split(",").map(decodeRouteSegment) : [];
     const hashCompareIds = [...new Set(requestedCompareIds.filter((id) => studies.some((study) => study.id === id)))];
     const queryCompareValue = new URL(window.location.href).searchParams.get("compare");
     const queryCompareIds = queryCompareValue
-      ? [...new Set(queryCompareValue.split(",").map((id) => id.trim()).filter((id) => studies.some((study) => study.id === id)))]
+      ? [...new Set(queryCompareValue.split(",").map((id) => decodeRouteSegment(id.trim())).filter((id) => studies.some((study) => study.id === id)))]
       : [];
     const compareIds = page === "compare"
       ? (hashCompareIds.length ? hashCompareIds : queryCompareIds)
@@ -509,7 +518,7 @@
       axis: state.filterAxis === "all" ? "" : state.filterAxis,
       status: state.filterStatus === "all" ? "" : state.filterStatus,
       sort: state.sort === "index" ? "" : state.sort,
-      compare: includeCompare && state.compareIds.length ? state.compareIds.join(",") : ""
+      compare: includeCompare && state.compareIds.length ? state.compareIds.map(comparisonQueryId).join(",") : ""
     };
   }
 
