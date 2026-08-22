@@ -1694,7 +1694,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${study.axis} axis, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
         url: shareUrl.href
       };
 
