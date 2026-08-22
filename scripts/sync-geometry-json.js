@@ -233,6 +233,9 @@ function noScriptFallback() {
       `${study.bayCount} bays`,
       `module ${study.module} ${unitSymbol}`,
       `radius ${study.radius} ${unitSymbol}`,
+      `length / span ${fixed(study.length / study.span, 2)}`,
+      `height / span ${fixed(study.height / study.span, 2)}`,
+      `symmetry ${fixed(study.symmetry, 2)}`,
       floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}²` : "",
       volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : ""
     ].filter(Boolean).join(" · ");

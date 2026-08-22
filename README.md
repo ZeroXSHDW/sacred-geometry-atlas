@@ -36,7 +36,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
 - A visible runtime recovery panel offers a one-click retry and preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Runtime recovery distinguishes a missing dataset, an empty collection, and an incomplete record shape, so its explanation stays accurate while the static JSON path remains available.
-- The no-script collection index includes schema/unit metadata, each record’s source note, and clearly labelled key derived readings (bays, module, radius, area, and volume), keeping the static fallback research-ready.
+- The no-script collection index includes schema/unit metadata, each record’s source note, and clearly labelled key derived readings (bays, module, radius, length/span ratio, height/span ratio, symmetry, area, and volume), keeping the static fallback research-ready.
 - The no-script collection index also includes a compact reading key for axes, ratios, modules, symmetry, and optional volume estimates, with direct JSON, CSV, and schema links so the static fallback explains its vocabulary before a visitor opens an artifact.
 - The no-script collection index keeps each study name as a direct deep link into its interactive route, with matching static fragment targets that bring visitors without JavaScript to the selected record; the same links remain a useful handoff when JavaScript is restored or enabled.
 - The no-script generator also renders an honest empty-collection state if future data edits temporarily remove all study records.
