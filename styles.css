@@ -906,6 +906,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   textarea:focus-visible,
   summary:focus-visible { outline-color: Highlight; }
   #runtimeFallback:focus { outline-color: Highlight; }
+  #visualEmptyHeading:focus-visible { outline-color: Highlight; }
   .nav-button.is-active,
   .mode-button.is-active,
   .layer-button.is-active { color: Highlight; }
