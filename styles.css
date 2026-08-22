@@ -761,7 +761,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .comparison-table-actions .share-button { flex: 0 0 auto; }
 .comparison-table-scroll-cue { display: flex; align-items: center; gap: 0.55rem; margin: 0; padding: 0.55rem 1.15rem; border-bottom: 1px solid var(--line); color: var(--teal); font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
 .scroll-cue-mark { color: var(--amber); font-size: 0.8rem; line-height: 1; }
-.comparison-table-wrap { overflow-x: auto; overscroll-behavior-inline: contain; }
+.comparison-table-wrap { overflow-x: auto; overscroll-behavior-x: contain; overscroll-behavior-inline: contain; }
 .comparison-table-wrap:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
 .comparison-table { width: 100%; min-width: 760px; border-collapse: collapse; font-family: var(--mono); font-size: 0.58rem; }
 .comparison-table caption { padding: 0.9rem 1.15rem 0.65rem; color: var(--ink-muted); text-align: left; }
