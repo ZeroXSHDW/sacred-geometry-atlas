@@ -2066,8 +2066,14 @@
       `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
     ).join(" ");
     const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
+    const selected = state.compareIds
+      .map((id) => studies.find((study) => study.id === id))
+      .filter(Boolean);
+    const selection = selected.length
+      ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatus(study)})`).join("; ")}.`
+      : "";
     const schema = geometrySchema();
-    return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
+    return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}.${selection} Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
   }
 
   async function copyCatalogCitation() {
