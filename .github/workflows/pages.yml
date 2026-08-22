@@ -885,6 +885,31 @@ jobs:
           if (!planWithUnsafeUnit.includes('&lt;unit&gt;') || planWithUnsafeUnit.includes('<unit>') || !sectionWithUnsafeUnit.includes('&lt;unit&gt;') || sectionWithUnsafeUnit.includes('<unit>')) throw new Error('Schema unit symbols must be escaped in generated SVG labels');
           console.log('Route-native catalog link smoke test passed.');
           NODE
+      - name: Smoke-test study selection announcement
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const studyStatus = { textContent: '' };
+          const context = {
+            window: {},
+            document: {
+              querySelector(selector) { return selector === '#studyLiveStatus' ? studyStatus : null; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, announceStudy };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, announceStudy } = context.window.__atlasTest;
+          state.surface = 'interior';
+          state.mode = 'section';
+          state.layer = 'axis';
+          state.zoom = 1.3;
+          announceStudy(context.window.CHURCH_GEOMETRY[1], 3);
+          const expected = 'Study 02, The high gothic cathedral selected. Current drawing: Inside · Section · axis focus · 130% zoom. 3 studies visible.';
+          if (studyStatus.textContent !== expected) throw new Error(`Study selection announcement lost drawing context: ${studyStatus.textContent}`);
+          console.log('Study selection announcement smoke test passed.');
+          NODE
       - name: Smoke-test filtered study focus handoff
         run: |
           node - <<'NODE'

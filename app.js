@@ -1063,7 +1063,7 @@
 
   function announceStudy(study, visibleCount) {
     const status = $("#studyLiveStatus");
-    if (status && study) status.textContent = `Study ${study.index}, ${study.name} selected. ${visibleCount} ${visibleCount === 1 ? "study" : "studies"} visible.`;
+    if (status && study) status.textContent = `Study ${study.index}, ${study.name} selected. Current drawing: ${drawingStateLabel()}. ${visibleCount} ${visibleCount === 1 ? "study" : "studies"} visible.`;
   }
 
   function announceDrawingState() {
