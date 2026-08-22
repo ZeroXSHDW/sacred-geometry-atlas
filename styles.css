@@ -869,6 +869,19 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }
   .dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .dataset-icon { color: ButtonText; }
+  .study-status,
+  .study-provenance summary,
+  .study-nav button,
+  .drawing-export,
+  .drawing-reset,
+  .zoom-control,
+  .comparison-table-panel,
+  .method-return-button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .study-provenance summary::after,
+  .drawing-export span:first-child,
+  .drawing-reset span:first-child { color: Highlight; }
+  .study-nav button:disabled,
+  .zoom-control button:disabled { border-color: GrayText; color: GrayText; }
   .catalog-card-status,
   .catalog-card-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .segment-button.is-active { color: HighlightText; background: Highlight; }
