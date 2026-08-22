@@ -139,10 +139,13 @@ summary:focus-visible {
   transform: translateY(-150%);
 }
 
-.skip-link-noscript { display: none; }
+.skip-link-noscript,
+.skip-link-runtime { display: none; }
 .no-js .skip-link-app { display: none; }
 .no-js .skip-link-noscript { display: block; }
+.js-runtime.no-js .skip-link-runtime { display: block; }
 .skip-link:focus { transform: translateY(0); }
+#runtimeFallback:focus { outline: 2px solid var(--teal); outline-offset: 6px; }
 
 .site-header,
 main,
@@ -862,6 +865,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   select:focus-visible,
   textarea:focus-visible,
   summary:focus-visible { outline-color: Highlight; }
+  #runtimeFallback:focus { outline-color: Highlight; }
   .nav-button.is-active,
   .mode-button.is-active,
   .layer-button.is-active { color: Highlight; }
