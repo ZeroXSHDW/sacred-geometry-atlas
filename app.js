@@ -68,6 +68,7 @@
   let compareShareResetTimer;
   let catalogShareResetTimer;
   let citationResetTimer;
+  let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
   let lastCatalogResultCount = "";
   let lastRouteSignature = "";
@@ -643,6 +644,7 @@
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
+    $("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
     $("#shareCompare").addEventListener("click", shareComparison);
@@ -861,6 +863,34 @@
       const trigger = $(manualCopyFallbackControls[selector]);
       if (trigger && typeof trigger.setAttribute === "function") trigger.setAttribute("aria-expanded", "false");
     });
+  }
+
+  function hideDownloadRecovery() {
+    const recovery = $("#downloadRecovery");
+    if (recovery) recovery.hidden = true;
+    downloadRecoveryFocusTarget = "";
+  }
+
+  function showDownloadRecovery(message, focusSelector) {
+    const recovery = $("#downloadRecovery");
+    const heading = $("#downloadRecoveryHeading");
+    if (!recovery || !heading) return;
+    heading.textContent = message;
+    recovery.hidden = false;
+    downloadRecoveryFocusTarget = focusSelector || "";
+  }
+
+  function dismissDownloadRecovery() {
+    const focusSelector = downloadRecoveryFocusTarget;
+    hideDownloadRecovery();
+    const trigger = focusSelector ? $(focusSelector) : null;
+    if (trigger && typeof trigger.focus === "function") {
+      try {
+        trigger.focus({ preventScroll: true });
+      } catch (error) {
+        // Focus restoration is best-effort; the recovery actions remain available.
+      }
+    }
   }
 
   function dismissManualCopyFallback(fallbackSelector) {
@@ -1153,6 +1183,7 @@
 
   function refreshCatalog() {
     hideManualCopyFallbacks();
+    hideDownloadRecovery();
     const visible = visibleStudies();
     const previousId = state.activeId;
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
@@ -1492,6 +1523,7 @@
   function showPage(page, options = {}) {
     const { updateHash: shouldUpdateHash = true, routeStudy = page === "atlas", scroll = true } = options;
     hideManualCopyFallbacks();
+    hideDownloadRecovery();
     const previousPage = state.page;
     if (!validPages.has(page)) page = "atlas";
     const pageChanged = previousPage !== page;
@@ -1835,6 +1867,7 @@
     const svgElement = $("#geometryCanvas svg");
     const status = $("#drawingDownloadStatus");
     const button = $("#downloadDrawing");
+    hideDownloadRecovery();
     if (!study || !svgElement || !beginAsyncAction(button)) return;
     try {
     const exportStyles = `
@@ -1875,8 +1908,10 @@
     const downloaded = triggerDownload(filename, `<?xml version="1.0" encoding="UTF-8"?>\n${source}`, "image/svg+xml;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "SVG download is unavailable in this browser. Use Print sheet to preserve the current view instead.";
+      showDownloadRecovery("SVG export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadDrawing");
       return;
     }
+    hideDownloadRecovery();
     if (status) status.textContent = `Current drawing exported as ${filename}.`;
     temporaryButtonFeedback(button, "Exported", "Drawing exported", "SVG", "Export the current drawing as SVG", "drawing-export");
     } finally {
@@ -1888,6 +1923,7 @@
     const study = activeStudy();
     const status = $("#studyDownloadStatus");
     const button = $("#downloadStudy");
+    hideDownloadRecovery();
     if (!study || !beginAsyncAction(button)) return;
     try {
     const filename = `${study.id}-sacred-geometry-study.json`;
@@ -1895,8 +1931,10 @@
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
       if (status) status.textContent = "Study JSON download is unavailable in this browser. Use the static dataset link instead.";
+      showDownloadRecovery("The study export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadStudy");
       return;
     }
+    hideDownloadRecovery();
     if (status) status.textContent = `Active study exported as ${filename}. Data status: ${studyStatusSummary([study])}.`;
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     } finally {
@@ -1956,14 +1994,17 @@
 
   function downloadData() {
     const button = $("#downloadData");
+    hideDownloadRecovery();
     if (!beginAsyncAction(button)) return;
     try {
     const payload = JSON.stringify(fullAtlasExportPayload(), null, 2);
     const downloaded = triggerDownload("sacred-geometry-atlas.json", payload, "application/json");
     if (!downloaded) {
       $("#downloadStatus").textContent = "Atlas data download is unavailable in this browser. Open the static JSON dataset link instead.";
+      showDownloadRecovery("The file download was blocked. Open the static dataset instead.", "#downloadData");
       return;
     }
+    hideDownloadRecovery();
     $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. Data status: ${studyStatusSummary()}.`;
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
     } finally {
@@ -1975,6 +2016,7 @@
     const visible = visibleStudies();
     const status = $("#catalogDownloadStatus");
     const button = $("#downloadCatalogView");
+    hideDownloadRecovery();
     if (!visible.length) {
       if (status) status.textContent = "There are no studies in the current catalog view to export.";
       return;
@@ -1986,8 +2028,10 @@
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
       if (status) status.textContent = "Catalog view download is unavailable in this browser. Share the catalog URL instead.";
+      showDownloadRecovery("The catalog export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogView");
       return;
     }
+    hideDownloadRecovery();
     if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "Export view", "Export current catalog view as JSON", "catalog-download");
     } finally {
@@ -2044,6 +2088,7 @@
     const comparison = comparisonStudies();
     const status = $("#comparisonDownloadStatus");
     const button = $("#downloadComparison");
+    hideDownloadRecovery();
     if (!comparison.length) {
       if (status) status.textContent = "There are no comparison records to export.";
       return;
@@ -2054,8 +2099,10 @@
     const downloaded = triggerDownload(filename, `\uFEFF${comparisonCsvPayload(comparison)}`, "text/csv;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "Comparison CSV download is unavailable in this browser. Share the comparison URL instead.";
+      showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparison");
       return;
     }
+    hideDownloadRecovery();
     if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
     } finally {

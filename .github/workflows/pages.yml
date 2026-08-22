@@ -141,6 +141,10 @@ jobs:
           if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="region" aria-labelledby="runtimeFallbackHeading" tabindex="-1">') || !html.includes('<p id="runtimeFallbackHeading" role="status" aria-live="polite" aria-atomic="true"><strong>The atlas is still loading.</strong>')) throw new Error('Missing polite runtime script-failure recovery panel');
           if (!html.includes('<div class="runtime-fallback-actions">') || !html.includes('<a class="hero-action hero-action-primary" href="./">Reload the interactive atlas') || !html.includes('<a class="hero-action" href="data/geometry.json">Open the static JSON dataset') || !html.includes('<a class="noscript-link" href="data/geometry.json">Open the JSON dataset') || html.includes('href="data/geometry.json" download=')) throw new Error('Static recovery links must provide a reload path and open the JSON artifact without forcing a download');
           if (!html.includes('<a class="dataset-link" href="data/geometry.json" aria-label="Open the static atlas dataset as JSON"') || !styles.includes('.header-actions {') || !styles.includes('.dataset-link {') || !styles.includes('.dataset-link:hover') || !styles.includes('.dataset-link,\n  .download-button { min-height: 40px; }') || !styles.includes('.dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.runtime-fallback-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }')) throw new Error('Normal atlas mode must expose an accessible raw JSON fallback link');
+          if (!html.includes('<div class="action-recovery" id="downloadRecovery" role="region" aria-labelledby="downloadRecoveryHeading" hidden>') || !html.includes('<p class="action-recovery-message" id="downloadRecoveryHeading" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('id="dismissDownloadRecovery" type="button" aria-label="Dismiss download recovery message" title="Dismiss download recovery message"') || !styles.includes('.action-recovery {') || !styles.includes('.action-recovery-actions {') || !styles.includes('.action-recovery-dismiss:hover') || !styles.includes('.action-recovery { border-color: ButtonText; background: Canvas; }') || !styles.includes('.action-recovery,')) throw new Error('Blocked exports must expose a visible, responsive recovery panel');
+          for (const token of ['function hideDownloadRecovery()', 'function showDownloadRecovery(message, focusSelector)', 'function dismissDownloadRecovery()', '$("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);', 'showDownloadRecovery("SVG export was blocked.', 'showDownloadRecovery("The study export was blocked.', 'showDownloadRecovery("The file download was blocked.', 'showDownloadRecovery("The catalog export was blocked.', 'showDownloadRecovery("The comparison export was blocked.']) {
+            if (!app.includes(token)) throw new Error('Download recovery behavior is incomplete: ' + token);
+          }
           const initStart = app.indexOf('function init()');
           const initEnd = app.indexOf('\n  function renderHeroStats()', initStart);
           const syncStart = app.indexOf('function syncFromHash()');
@@ -1288,6 +1292,44 @@ jobs:
             if (!fallback.hidden || trigger['aria-expanded'] !== 'false' || trigger.focusCalls !== 1) throw new Error(`Fallback dismissal did not hide ${fallbackSelector} and restore focus`);
           }
           console.log('Manual-copy fallback dismissal smoke test passed.');
+          NODE
+
+      - name: Smoke-test visible download recovery
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const recovery = { hidden: true };
+          const heading = { textContent: '' };
+          const downloadButton = {
+            focusCalls: 0,
+            focus() { this.focusCalls += 1; }
+          };
+          elements.set('#downloadRecovery', recovery);
+          elements.set('#downloadRecoveryHeading', heading);
+          elements.set('#downloadData', downloadButton);
+          const context = {
+            URL,
+            navigator: {},
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { showDownloadRecovery, dismissDownloadRecovery };\n})();');
+          vm.runInNewContext(app, context);
+          const { showDownloadRecovery, dismissDownloadRecovery } = context.window.__atlasTest;
+          showDownloadRecovery('The file download was blocked. Open the static dataset instead.', '#downloadData');
+          if (recovery.hidden || heading.textContent !== 'The file download was blocked. Open the static dataset instead.') throw new Error('Visible download recovery did not reveal its contextual message');
+          dismissDownloadRecovery();
+          if (!recovery.hidden || downloadButton.focusCalls !== 1) throw new Error('Visible download recovery did not dismiss and restore focus');
+          console.log('Visible download recovery smoke test passed.');
           NODE
 
       - name: Smoke-test export busy cooldown
