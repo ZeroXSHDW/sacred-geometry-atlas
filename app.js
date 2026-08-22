@@ -50,7 +50,7 @@
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.axis} axis; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1310,7 +1310,7 @@
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
               <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place}`)}</span>
               <span class="catalog-card-status" data-status="${escapeHtml(studyDataLabel(study))}" title="${escapeHtml(studyStatusDescription(study))}">${highlightSearchText(studyDataLabel(study))}</span>
-              <span class="catalog-card-detail">${highlightSearchText(`${study.era} · ${study.emphasis}`)}</span>
+              <span class="catalog-card-detail">${highlightSearchText(`${study.era} · Axis: ${study.axis} · ${study.emphasis}`)}</span>
               ${matchContext ? `<span class="catalog-card-match">${escapeHtml(matchContext)}</span>` : ""}
             </span>
             ${catalogGlyph(study)}
@@ -1403,7 +1403,7 @@
     const ratio = study.length / study.span;
     $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
     $("#activeName").textContent = study.name;
-    $("#activeMeta").textContent = `${study.place} · ${study.era} · ${study.emphasis.toLowerCase()}`;
+    $("#activeMeta").textContent = `${study.place} · ${study.era} · Axis: ${study.axis} · ${study.emphasis.toLowerCase()}`;
     renderActiveProvenance(study);
     renderMethodReturnAction(study);
     renderMethodContext(study);
