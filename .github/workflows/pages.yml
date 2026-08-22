@@ -282,6 +282,7 @@ jobs:
           if (!html.includes('<div class="manual-copy-fallback" id="shareFallback" role="region" aria-labelledby="shareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogCitationFallback" role="region" aria-labelledby="catalogCitationFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="comparisonCitationFallback" role="region" aria-labelledby="comparisonCitationFallbackHeading" hidden>') || !html.includes('id="shareFallbackText"') || !html.includes('id="catalogShareFallbackText"') || !html.includes('id="catalogCitationFallbackText"') || !html.includes('id="compareShareFallbackText"') || !html.includes('id="citationFallbackText"') || !html.includes('id="comparisonCitationFallbackText"') || !html.includes('aria-controls="shareFallback" aria-expanded="false"') || !html.includes('aria-controls="citationFallback" aria-expanded="false"') || !html.includes('aria-controls="catalogShareFallback" aria-expanded="false"') || !html.includes('aria-controls="catalogCitationFallback" aria-expanded="false"') || !html.includes('aria-controls="compareShareFallback" aria-expanded="false"') || !html.includes('aria-controls="comparisonCitationFallback" aria-expanded="false"') || !app.includes('const manualCopyFallbackControls = {') || !app.includes('trigger.setAttribute("aria-expanded", "false")') || !app.includes('trigger.setAttribute("aria-expanded", "true")') || !app.includes('function hideManualCopyFallbacks()') || !app.includes('function revealManualCopyFallback(fallbackSelector, textSelector, value)') || !app.includes('The share link is shown below for manual copying.') || !app.includes('The catalog link is shown below for manual copying.') || !app.includes('The catalog citation is shown below for manual copying.') || !app.includes('The comparison link is shown below for manual copying.') || !app.includes('The citation is shown below for manual copying.') || !app.includes('The comparison citation is shown below for manual copying.') || !styles.includes('.manual-copy-fallback {') || !styles.includes('.manual-copy-fallback textarea:focus') || !styles.includes('.share-button[aria-expanded="true"]') || !styles.includes('.share-button[aria-expanded="true"] span:first-child') || !styles.includes('background: Canvas;')) throw new Error('Share and citation actions must expose selected manual-copy fallbacks');
           if (!html.includes('id="copyCatalogCitation" type="button" aria-label="Copy a citation for this catalog view" aria-controls="catalogCitationFallback" aria-expanded="false"') || !html.includes('id="catalogCitationStatus"') || !app.includes('$("#copyCatalogCitation").addEventListener("click", copyCatalogCitation);') || !app.includes('function catalogCitationText(records = visibleStudies())') || !app.includes('async function copyCatalogCitation()') || !app.includes('catalogCitationResetTimer') || !app.includes('Catalog citation copied')) throw new Error('Catalog citation must expose a reusable, accessible action');
           if (!app.includes('function selectedComparisonStudies()') || !app.includes('const selected = selectedComparisonStudies();') || !app.includes('Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatus(study)})`).join("; ")}.')) throw new Error('Catalog citation must expose selected comparison identities');
+          if (!app.includes('function comparisonSelectionShareText(selection = selectedComparisonStudies())') || !app.includes('Selected comparison: ${comparisonSelectionShareText(selected)}.') || !app.includes('const selectionLabel = comparisonSelectionShareText(selected)') || !app.includes('Data status: ${studyStatus(study)}.`,') ) throw new Error('Native share text must expose study identity, axis, and data-status context');
           if (!html.includes('id="copyComparisonCitation" type="button" aria-label="Copy a citation for this comparison" aria-controls="comparisonCitationFallback" aria-expanded="false"') || !html.includes('id="comparisonCitationStatus"') || !app.includes('$("#copyComparisonCitation").addEventListener("click", copyComparisonCitation);') || !app.includes('function comparisonCitationText(comparison = comparisonStudies())') || !app.includes('async function copyComparisonCitation()') || !app.includes('comparisonCitationResetTimer') || !app.includes('Comparison citation copied')) throw new Error('Comparison citation must expose a reusable, accessible action');
           for (const token of ['data-dismiss-fallback="shareFallback"', 'data-dismiss-fallback="citationFallback"', 'data-dismiss-fallback="catalogShareFallback"', 'data-dismiss-fallback="catalogCitationFallback"', 'data-dismiss-fallback="compareShareFallback"', 'data-dismiss-fallback="comparisonCitationFallback"', 'function dismissManualCopyFallback(fallbackSelector)', 'event.key !== "Escape"', '.manual-copy-fallback-heading-row {', '.manual-copy-fallback-dismiss {', '.manual-copy-fallback-dismiss { border-color: ButtonText;']) {
             if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
@@ -1901,7 +1902,7 @@ jobs:
             if (shareCalls !== 1) throw new Error('Native share accepted a duplicate activation while busy');
             resolveShare();
             await first;
-            if (status.textContent !== 'The longitudinal basilica shared.' || !sharedPayload || !sharedPayload.text.includes('Longitudinal axis') || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared' || button.title !== 'Study shared' || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-complete') || timers.length !== 1) {
+            if (status.textContent !== 'The longitudinal basilica shared.' || !sharedPayload || !sharedPayload.text.includes('Longitudinal axis') || !sharedPayload.text.includes('Data status: schematic') || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared' || button.title !== 'Study shared' || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-complete') || timers.length !== 1) {
               throw new Error('Native share did not expose visible completion feedback or restore its state');
             }
             timers[0]();
@@ -1913,6 +1914,61 @@ jobs:
             if (status.textContent !== 'Study sharing cancelled.' || button.disabled || button['aria-busy'] !== 'false') throw new Error('Native share cancellation did not provide live feedback or restore its state');
             console.log('Native share feedback smoke test passed.');
           })().catch((error) => { throw error; });
+          NODE
+
+      - name: Smoke-test native share context
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const payloads = [];
+          const makeButton = (label) => ({
+            disabled: false,
+            classList: { add() {}, remove() {} },
+            querySelector(selector) { return selector === 'span:last-child' ? label : null; },
+            setAttribute(name, value) { this[name] = value; }
+          });
+          const shareCatalogButton = makeButton({ textContent: 'Share view' });
+          const shareCatalogStatus = { textContent: '' };
+          const shareCompareButton = makeButton({ textContent: 'Share comparison' });
+          const shareCompareStatus = { textContent: '' };
+          elements.set('#shareCatalog', shareCatalogButton);
+          elements.set('#catalogShareStatus', shareCatalogStatus);
+          elements.set('#shareCompare', shareCompareButton);
+          elements.set('#compareShareStatus', shareCompareStatus);
+          const context = {
+            URL,
+            navigator: { share: async (payload) => { payloads.push(payload); } },
+            window: {
+              location: { href: 'https://example.test/atlas/?q=basilica#atlas' },
+              clearTimeout() {},
+              setTimeout() { return 1; },
+              addEventListener() {}
+            },
+            document: {
+              baseURI: 'https://example.test/atlas/',
+              title: '',
+              body: { classList: { contains() { return false; } } },
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, shareCatalog, shareComparison } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, shareCatalog, shareComparison } = context.window.__atlasTest;
+          state.page = 'atlas';
+          state.query = 'basilica';
+          state.compareIds = ['basilica', 'gothic'];
+          (async () => {
+            await shareCatalog();
+            if (!payloads[0] || !payloads[0].text.includes('Selected comparison: Longitudinal basilica (Longitudinal axis; schematic); High gothic cathedral (Longitudinal axis; schematic).')) throw new Error('Catalog native share text did not preserve selected study context');
+            await shareComparison();
+            if (!payloads[1] || !payloads[1].text.includes('Compare Longitudinal basilica (Longitudinal axis; schematic); High gothic cathedral (Longitudinal axis; schematic) in the Sacred Geometry Atlas.')) throw new Error('Comparison native share text did not preserve selected study context');
+            if (shareCatalogButton.disabled || shareCompareButton.disabled || shareCatalogStatus.textContent !== 'Catalog view shared.' || shareCompareStatus.textContent !== 'Comparison shared.') throw new Error('Native share context smoke test did not restore controls or announce completion');
+            console.log('Native share context smoke test passed.');
+          })().catch((error) => { console.error(error); process.exitCode = 1; });
           NODE
 
       - name: Smoke-test citation manual-copy fallback

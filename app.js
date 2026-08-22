@@ -1999,7 +1999,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${study.axis} axis, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${study.axis} axis, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatus(study)}.`,
         url: shareUrl.href
       };
 
@@ -2079,6 +2079,12 @@
     });
   }
 
+  function comparisonSelectionShareText(selection = selectedComparisonStudies()) {
+    return selection.length
+      ? selection.map((study) => `${studyShortName(study)} (${study.axis} axis; ${studyStatus(study)})`).join("; ")
+      : "the full collection";
+  }
+
   function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
     return selection
       .map(({ name, axis, status, statusDefinition }) => `${name} (${axis} axis; ${status}; ${statusDefinition})`)
@@ -2135,9 +2141,11 @@
     try {
       hideManualCopyFallbacks();
       const shareUrl = catalogViewRouteUrl();
+      const selected = selectedComparisonStudies();
+      const selectionText = selected.length ? ` Selected comparison: ${comparisonSelectionShareText(selected)}.` : "";
       const sharePayload = {
         title: "Sacred Geometry Atlas · catalog view",
-        text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.`,
+        text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.${selectionText}`,
         url: shareUrl.href
       };
 
@@ -2181,9 +2189,7 @@
       hideManualCopyFallbacks();
       const shareUrl = comparisonRouteUrl();
       const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
-      const selectionLabel = selected.length
-        ? selected.map((study) => studyShortName(study)).join(", ")
-        : "the full collection";
+      const selectionLabel = comparisonSelectionShareText(selected);
       const sharePayload = {
         title: "Sacred Geometry Atlas comparison",
         text: `Compare ${selectionLabel} in the Sacred Geometry Atlas.`,
