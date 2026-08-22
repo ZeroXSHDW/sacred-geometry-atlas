@@ -172,7 +172,7 @@ jobs:
           }
           if (!html.includes('<p class="section-note" id="compareSectionNote">Relative readings · full collection</p>') || !html.includes('<span class="card-kicker" id="geometryCompareKicker">00 / collection geometry</span>') || !app.includes('function renderCompareContext()') || !app.includes('const compareScopeLabel = focused ? "selected collection" : "full collection";') || !app.includes('sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;') || !app.includes('geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";')) throw new Error('Comparison copy must identify the active full or focused collection');
           if (!html.includes('<summary id="comparisonTableSummary">Read the 6 study records as a table</summary>') || !app.includes('const summary = $("#comparisonTableSummary");') || !app.includes('Read the ${comparison.length} selected study records as a table') || !app.includes('Read the ${comparison.length} study records as a table')) throw new Error('Comparison table trigger must identify its active record scope');
-          if (!app.includes('class="comparison-table-study-link"') || !app.includes('data-table-study') || !app.includes('comparisonTable.addEventListener("click"') || !styles.includes('.comparison-table-study-link {')) throw new Error('Comparison table study names must provide route-native Atlas links');
+          if (!app.includes('class="comparison-table-study-link"') || !app.includes('data-table-study') || !app.includes('comparisonTable.addEventListener("click"') || !app.includes('escapeHtml(studyStatusDescription(study))') || !styles.includes('.comparison-table-study-link {')) throw new Error('Comparison table study names must provide route-native Atlas links and escaped comparison labels');
           for (const token of ['function updateCompareNavigation()', 'const label = selectedCount ? `Compare (${selectedCount} selected)` : "Compare";', 'button.setAttribute("aria-label", label);', 'count.hidden = selectedCount === 0;', 'updateCompareNavigation();']) {
             if (!app.includes(token)) throw new Error('Compare navigation state must reflect the active selection: ' + token);
           }
@@ -871,6 +871,36 @@ jobs:
           if (finalUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Comparison selection was not preserved: ${finalUrl.search}`);
           if (historyCalls.length !== 2 || historyCalls[0][0] !== 'pushState' || historyCalls[1][0] !== 'replaceState') throw new Error(`Unexpected handoff history sequence: ${JSON.stringify(historyCalls)}`);
           console.log('Comparison edit handoff smoke test passed.');
+          NODE
+
+      - name: Smoke-test escaped comparison labels
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const geometryCompare = { innerHTML: '', setAttribute(name, value) { this[name] = value; } };
+          elements.set('#geometryCompare', geometryCompare);
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic = 'Quoted "definition" <tag>';
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderGeometryCompare };\n})();');
+          vm.runInNewContext(app, context);
+          context.window.__atlasTest.renderGeometryCompare();
+          if (!geometryCompare.innerHTML.includes('Quoted &quot;definition&quot; &lt;tag&gt;') || geometryCompare.innerHTML.includes('Quoted "definition" <tag>')) {
+            throw new Error('Comparison card aria-label did not escape edited status definitions');
+          }
+          console.log('Escaped comparison label smoke test passed.');
           NODE
 
       - name: Smoke-test Method return context
