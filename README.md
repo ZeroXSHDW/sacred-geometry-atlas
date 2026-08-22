@@ -98,6 +98,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Active-study Share, Cite, JSON, and Print actions keep compact visible labels at phone widths, while their full accessible names and live feedback remain intact.
 - Static JSON, CSV, and Schema links keep compact format labels at tablet and phone widths, so raw artifacts remain distinguishable from generated downloads.
 - The header wraps before tablet data controls become crowded, while fragment targets, view sections, the sticky catalog, active-study reveal, and comparison table headings share the larger responsive offset below the multi-row header.
+- At the narrowest phone widths, header artifact controls tighten their spacing and padding without reducing their compact format labels or touch-target heights.
 - The desktop catalog panel stays below the sticky site header while visitors scan a long study list, without changing its static mobile flow.
 - The comparison table reveals a live visual cue only when its columns overflow, updating from “More columns →” to edge-aware directions as touch or keyboard scrolling moves through the data.
 - At phone widths, the drawing toolbar gives its scale readout a full row and wraps the export, reset, and zoom controls so the instrument remains usable without horizontal overflow.

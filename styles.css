@@ -946,6 +946,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .comparison-table thead th { top: 11rem; }
   .brand-name { font-size: 0.65rem; }
   .brand-subtitle { font-size: 0.5rem; }
+  .header-actions { gap: 0.3rem; }
+  .dataset-link { padding-inline: 0.6rem; }
+  .download-button { padding-inline: 0.65rem; }
   .download-button span:last-child { display: none; }
   .hero-stats { justify-content: space-between; gap: 0.75rem; }
   .share-button { padding: 0.5rem; }
