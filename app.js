@@ -1313,6 +1313,11 @@
     visualColumn.classList.toggle("is-empty", isEmpty);
     emptyState.hidden = !isEmpty;
     const context = $("#visualEmptyContext");
+    if (typeof emptyState.setAttribute === "function") {
+      emptyState.setAttribute("aria-describedby", activeStudyOutsideCatalog
+        ? "visualEmptyMessage visualEmptyContext"
+        : "visualEmptyMessage");
+    }
     if (context) {
       context.hidden = !activeStudyOutsideCatalog;
       context.textContent = activeStudyOutsideCatalog
