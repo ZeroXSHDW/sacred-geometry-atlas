@@ -3352,9 +3352,7 @@
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentAttribute = isActive ? ' aria-current="page"' : "";
-      const studyLinkLabel = isActive
-        ? `Open ${studyShortName(study)} in Atlas. Current Atlas study.`
-        : `Open ${studyShortName(study)} in Atlas`;
+      const studyLinkLabel = `Open ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;
       return `
         <tr>
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
