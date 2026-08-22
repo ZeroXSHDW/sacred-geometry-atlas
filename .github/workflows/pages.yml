@@ -506,6 +506,7 @@ jobs:
           python3 - <<'PY'
           from html.parser import HTMLParser
           from pathlib import Path
+          import re
           from xml.etree import ElementTree
 
           class AccessibilityAudit(HTMLParser):
@@ -523,12 +524,16 @@ jobs:
                           self.references.extend(attrs[key].split())
 
           parser = AccessibilityAudit()
-          parser.feed(Path("index.html").read_text())
+          html = Path("index.html").read_text()
+          parser.feed(html)
           if len(parser.ids) != len(set(parser.ids)):
               raise SystemExit("Duplicate HTML IDs found")
           missing = sorted(set(parser.references) - set(parser.ids))
           if missing:
               raise SystemExit("Missing ARIA references: " + ", ".join(missing))
+          raw_attribute_ampersands = re.compile(r'="[^"\n]*&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9A-Fa-f]+);)')
+          if raw_attribute_ampersands.search(html):
+              raise SystemExit("Unescaped ampersand found in an HTML attribute")
           sitemap_root = ElementTree.parse("sitemap.xml").getroot()
           sitemap_namespace = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
           if sitemap_root.tag != f"{sitemap_namespace}urlset" or not sitemap_root.findall(f"{sitemap_namespace}url"):
