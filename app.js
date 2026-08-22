@@ -1601,7 +1601,7 @@
     if (measureAccessible) measureAccessible.textContent = measureAccessibleText;
     if (measureSummary && !measureVisible) measureSummary.textContent = measureText;
     const printRoute = $("#printRoute");
-    if (printRoute) printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;
+    renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id), `Open ${studyShortName(study)} route in Atlas`);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -1680,6 +1680,19 @@
       if (outsideCatalog) headingDescriptionIds.push("activeCatalogContextText");
       heading.setAttribute("aria-describedby", headingDescriptionIds.join(" "));
     }
+  }
+
+  function renderRouteLink(container, selector, route, label) {
+    if (!container) return;
+    const link = typeof container.querySelector === "function" ? container.querySelector(selector) : null;
+    if (!link) {
+      container.textContent = `Route · ${route}`;
+      return;
+    }
+    link.href = route;
+    link.textContent = route;
+    if (typeof link.setAttribute === "function") link.setAttribute("aria-label", label);
+    link.title = label;
   }
 
   function renderActiveProvenance(study) {
@@ -2862,7 +2875,8 @@
     const comparisonStatusHelp = $("#comparisonStatusHelp");
     if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
     const printRoute = $("#comparisonPrintRoute");
-    if (printRoute) printRoute.textContent = `Route · ${comparisonRouteUrl().href}`;
+    const comparisonRoute = comparisonRouteUrl().href;
+    renderRouteLink(printRoute, ".comparison-route-link", comparisonRoute, focused ? `Open the ${selected}-study comparison route` : "Open the full collection comparison route");
   }
 
   function renderCompareSelection() {
