@@ -159,8 +159,9 @@ jobs:
           for (const token of ['id="studyCount"', 'id="modeCount"', 'id="profileCount"']) {
             if (!html.includes(token)) throw new Error('Hero statistics must expose a dynamic target: ' + token);
           }
+          if (!html.includes('<p class="hero-data-note" id="heroDataNote" role="note"') || !html.includes('id="heroDataNoteText"') || !html.includes('id="heroDataNoteDefinition"') || !styles.includes('.hero-aside {') || !styles.includes('.hero-data-note {') || !styles.includes('.hero-data-note-definition {')) throw new Error('The landing hero must surface schema-driven dataset provenance with readable responsive styling');
           if (!html.includes('<div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">') || !html.includes('<span class="study-nav-position" id="studyNavPosition">01 / 06 visible</span>') || !styles.includes('.study-nav-position {') || !app.includes('const activeStudyOutsideCatalog = visible.length > 0 && currentIndex < 0') || !app.includes('const positionLabel = currentIndex >= 0') || !app.includes('navigation.setAttribute("aria-label", currentIndex >= 0')) throw new Error('Study navigation must expose its position within the visible collection');
-          for (const token of ['function renderHeroStats()', 'studyCount: studies.length', 'modeCount: validModes.size', 'profileCount: activeStudy() ? profileScores(activeStudy()).length : 0', 'renderHeroStats();', 'function atlasSchemaNoteText(records = studies)', 'function renderAtlasSchemaNote()', 'renderAtlasSchemaNote();']) {
+          for (const token of ['function renderHeroStats()', 'studyCount: studies.length', 'modeCount: validModes.size', 'profileCount: activeStudy() ? profileScores(activeStudy()).length : 0', 'renderHeroStats();', 'function renderHeroProvenance()', 'const summaryTarget = $("#heroDataNoteText")', 'const definitionTarget = $("#heroDataNoteDefinition")', 'renderHeroProvenance();', 'function atlasSchemaNoteText(records = studies)', 'function renderAtlasSchemaNote()', 'renderAtlasSchemaNote();']) {
             if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
           }
           if (!html.includes('<p class="section-note" id="atlasSchemaNote">Illustrative proportions · metric units · v1.1</p>')) throw new Error('Atlas collection note must expose a dynamic schema target');
@@ -487,6 +488,36 @@ jobs:
           const png = fs.readFileSync('og.png');
           if (png.readUInt32BE(0) !== 0x89504e47 || png.readUInt32BE(4) !== 0x0d0a1a0a) throw new Error('og.png is not a PNG');
           if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) throw new Error('og.png must be 1200x630');
+          NODE
+      - name: Smoke-test hero provenance summary
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map([
+            ['#heroDataNote', { attributes: {}, setAttribute(name, value) { this.attributes[name] = value; } }],
+            ['#heroDataNoteText', { textContent: '' }],
+            ['#heroDataNoteDefinition', { textContent: '' }]
+          ]);
+          const context = {
+            console,
+            window: {},
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderHeroProvenance };\n})();');
+          vm.runInNewContext(app, context);
+          const { renderHeroProvenance } = context.window.__atlasTest;
+          renderHeroProvenance();
+          if (elements.get('#heroDataNoteText').textContent !== '06 schematic · 00 measured' || elements.get('#heroDataNoteDefinition').textContent !== 'Schematic = Illustrative proportions; not a measured survey.') throw new Error('Hero provenance summary did not expose the current schema-backed status counts and definition');
+          context.window.CHURCH_GEOMETRY[0].status = 'measured';
+          context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.measured = 'Custom measured definition.';
+          renderHeroProvenance();
+          if (elements.get('#heroDataNoteText').textContent !== '05 schematic · 01 measured' || elements.get('#heroDataNoteDefinition').textContent !== 'Schematic = Illustrative proportions; not a measured survey. Measured = Custom measured definition.' || !elements.get('#heroDataNote').attributes['aria-label'].includes('Measured = Custom measured definition.')) throw new Error('Hero provenance summary did not follow a changed record status or schema definition');
+          console.log('Hero provenance summary smoke test passed.');
           NODE
       - name: Validate high-contrast drawing affordances
         run: |

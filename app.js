@@ -299,7 +299,24 @@
       if (target) target.textContent = String(value).padStart(2, "0");
     });
     renderAtlasSchemaNote();
+    renderHeroProvenance();
     renderMethodProvenance();
+  }
+
+  function renderHeroProvenance() {
+    const note = $("#heroDataNote");
+    const summaryTarget = $("#heroDataNoteText");
+    const definitionTarget = $("#heroDataNoteDefinition");
+    if (!note || !summaryTarget || !definitionTarget) return;
+    const definitions = dataStatusDefinitions();
+    const statuses = schemaStatusValues();
+    const counts = studyStatusCounts();
+    const summary = statuses.map((status) => `${String(counts[status] || 0).padStart(2, "0")} ${statusDisplayName(status).toLowerCase()}`).join(" · ") || "No records";
+    const activeStatuses = statuses.filter((status) => counts[status] > 0);
+    const definition = activeStatuses.map((status) => `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`).join(" ") || "No status definitions are available.";
+    summaryTarget.textContent = summary;
+    definitionTarget.textContent = definition;
+    note.setAttribute("aria-label", `Dataset status: ${summary}. ${definition}`);
   }
 
   function atlasSchemaNoteText(records = studies) {

@@ -344,6 +344,11 @@ h3 { letter-spacing: -0.04em; }
 .hero-action-primary:hover { border-color: var(--amber); color: var(--bg); background: var(--amber); }
 
 .hero-stats { display: flex; gap: clamp(1.6rem, 4vw, 4.5rem); padding-bottom: 0.15rem; }
+.hero-aside { display: grid; align-self: end; justify-items: end; gap: 1.15rem; max-width: 31rem; }
+.hero-data-note { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.5rem; max-width: 28rem; margin: 0; padding-top: 0.7rem; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.55rem; line-height: 1.5; text-align: right; }
+.hero-data-note-mark { display: grid; width: 1.05rem; height: 1.05rem; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal); font-family: var(--serif); font-size: 0.68rem; line-height: 1; }
+.hero-data-note strong { display: block; margin-bottom: 0.12rem; color: var(--amber); font-size: 0.52rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; }
+.hero-data-note-definition { display: block; color: var(--ink-soft); font-family: var(--sans); font-size: 0.62rem; letter-spacing: 0; }
 .hero-stat { display: grid; gap: 0.28rem; }
 .stat-number { color: var(--amber); font-family: var(--serif); font-size: 2.1rem; line-height: 1; }
 .stat-label { color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; text-transform: uppercase; }
@@ -878,7 +883,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .noscript-method-grid { grid-template-columns: 1fr 1fr; }
   .hero { display: block; min-height: auto; padding: 56px 0 48px; }
   h1 { font-size: clamp(3.25rem, 16vw, 5.6rem); }
-  .hero-stats { gap: 2rem; margin-top: 3rem; }
+  .hero-aside { align-self: stretch; justify-items: stretch; max-width: none; margin-top: 3rem; }
+  .hero-stats { gap: 2rem; }
+  .hero-data-note { max-width: none; text-align: left; }
   .workspace, .page-view { padding: 58px 0 72px; }
   .section-heading { display: block; margin-bottom: 1.8rem; }
   .section-note { margin-top: 1rem; }
@@ -1103,6 +1110,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .nav-button.is-active::after,
   .mode-button.is-active::after { background: Highlight; }
   .nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }
+  .hero-data-note { border-top-color: ButtonText; color: CanvasText; }
+  .hero-data-note-mark,
+  .hero-data-note strong { border-color: Highlight; color: Highlight; }
+  .hero-data-note-definition { color: CanvasText; }
   .dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .dataset-icon { color: ButtonText; }
   .dataset-link-schema .dataset-icon { color: ButtonText; }

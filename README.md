@@ -63,6 +63,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The comparison table keeps its column headings visible below the sticky site header while long records are scanned vertically, and keeps the study-name column visible while scrolling horizontally.
 - Comparison tables carry the same schematic/measured status styling as cards and charts, so provenance stays visible across every comparison surface.
 - The active study status badge uses the same schematic/measured styling as the catalog, charts, and comparison table.
+- The first viewport surfaces a schema-driven dataset-status note, so visitors see the collection’s evidence level before opening a study.
 - Context-aware CSV and structured JSON exports for the active comparison scope, including typology/place/era/axis context, per-record status definitions, optional floor-area and volume estimates, derived readings, estimate provenance, scope, reproducible route, schema version, and units, alongside the full-atlas and filtered-view JSON downloads.
 - Comparison JSON records keep each raw study paired with its derived readings, preserving the selected order for downstream research or analysis.
 - Comparison CSV text that resembles a spreadsheet formula is prefixed safely, so research exports remain inert when opened in spreadsheet software.
