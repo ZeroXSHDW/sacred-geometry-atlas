@@ -117,7 +117,7 @@
           <span>Download data</span>
         </button>
       </div>
-      <span class="sr-only" id="downloadStatus" role="status" aria-live="polite"></span>
+      <span class="sr-only" id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
     </header>
 
     <main id="main-content" tabindex="-1">
@@ -241,8 +241,8 @@
               </button>
             </div>
             <span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>
-            <span class="sr-only" id="catalogDownloadStatus" role="status" aria-live="polite"></span>
-            <span class="sr-only" id="catalogShareStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <span class="sr-only" id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>
               <div class="manual-copy-fallback-heading-row">
                 <p class="manual-copy-fallback-heading" id="catalogShareFallbackHeading">Copy this catalog link manually</p>
@@ -325,7 +325,7 @@
                 <div class="study-index" id="activeIndex" aria-hidden="true">01</div>
               </div>
             </div>
-            <span class="sr-only" id="shareStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="shareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="shareFallback" role="region" aria-labelledby="shareFallbackHeading" hidden>
               <div class="manual-copy-fallback-heading-row">
                 <p class="manual-copy-fallback-heading" id="shareFallbackHeading">Copy this study link manually</p>
@@ -334,9 +334,9 @@
               <textarea id="shareFallbackText" rows="3" readonly aria-label="Study share link" aria-describedby="shareFallbackHint"></textarea>
               <p class="manual-copy-fallback-hint" id="shareFallbackHint">The link is selected for copying.</p>
             </div>
-            <span class="sr-only" id="citationStatus" role="status" aria-live="polite"></span>
-            <span class="sr-only" id="studyDownloadStatus" role="status" aria-live="polite"></span>
-            <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="citationStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <span class="sr-only" id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <span class="sr-only" id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>
               <div class="manual-copy-fallback-heading-row">
                 <p class="manual-copy-fallback-heading" id="citationFallbackHeading">Copy this citation manually</p>
@@ -418,8 +418,8 @@
                 </div>
               </div>
             </div>
-            <span class="sr-only" id="keyboardStatus" role="status" aria-live="polite"></span>
-            <span class="sr-only" id="drawingDownloadStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="keyboardStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <span class="sr-only" id="drawingDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
 
             <div class="metric-strip" role="group" aria-label="Primary dimensions">
               <div class="metric-cell">
@@ -486,7 +486,7 @@
             compressed, or immense. The values are normalized from each study record; each row and envelope identifies whether its dimensions are schematic or measured.
           </p>
           <div class="compare-intro-side">
-            <div class="compare-callout"><span id="compareScope" role="status" aria-live="polite">Full collection</span><strong>R = L ÷ span</strong><small>length-to-span ratio</small></div>
+            <div class="compare-callout"><span id="compareScope" role="status" aria-live="polite" aria-atomic="true">Full collection</span><strong>R = L ÷ span</strong><small>length-to-span ratio</small></div>
             <button class="share-button compare-edit-button" id="editCompare" type="button" aria-controls="atlas" aria-label="Edit comparison selection in Atlas" title="Edit comparison selection in Atlas">
               <span aria-hidden="true">←</span>
               <span>Edit selection</span>
@@ -495,7 +495,7 @@
               <span aria-hidden="true">↗</span>
               <span>Share comparison</span>
             </button>
-            <span class="sr-only" id="compareShareStatus" role="status" aria-live="polite"></span>
+            <span class="sr-only" id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>
               <div class="manual-copy-fallback-heading-row">
                 <p class="manual-copy-fallback-heading" id="compareShareFallbackHeading">Copy this comparison link manually</p>
@@ -507,7 +507,7 @@
           </div>
         </div>
 
-        <p class="compare-helper" id="compareHelper" role="status" aria-live="polite">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
+        <p class="compare-helper" id="compareHelper" role="status" aria-live="polite" aria-atomic="true">Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown.</p>
         <div class="compare-selection" id="compareSelection" role="group" aria-labelledby="compareSelectionHeading" hidden>
           <div class="compare-selection-heading">
             <p class="compare-selection-label" id="compareSelectionHeading">Focused selection</p>
@@ -563,7 +563,7 @@
               <span>CSV</span>
             </button>
           </div>
-          <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite"></span>
+          <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
           <span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>
           <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp comparisonStatusHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable" aria-describedby="comparisonStatusHelp">
