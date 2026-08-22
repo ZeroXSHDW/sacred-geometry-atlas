@@ -724,7 +724,7 @@
           <summary id="comparisonTableSummary" aria-keyshortcuts="Escape">Read the 6 study records as a table</summary>
           <div class="comparison-table-actions">
             <div class="comparison-table-copy">
-              <p>Recorded dimensions, derived ratios, and optional area/volume estimates are available here and in the CSV or JSON export. Study names open in Atlas. Both exports carry the schema version, unit system, published schema URL, route, and data-status context.</p>
+              <p>Recorded dimensions, derived ratios, optional area/volume estimates, and source notes are available here and in the CSV or JSON export. Study names open in Atlas. Both exports carry the schema version, unit system, published schema URL, route, and data-status context.</p>
               <p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>
             </div>
             <div class="comparison-export-actions" role="group" aria-label="Download comparison data">
@@ -744,12 +744,13 @@
           <span class="sr-only" id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"></span>
           <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp comparisonStatusHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable" aria-describedby="comparisonStatusHelp">
-              <caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status.</caption>
+              <caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status and source note.</caption>
               <thead>
                 <tr>
                   <th scope="col">Study</th>
                   <th scope="col">Axis</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Source / provenance</th>
                   <th scope="col" data-unit-header="length">Length (m)</th>
                   <th scope="col" data-unit-header="span">Span (m)</th>
                   <th scope="col">Length ÷ span</th>

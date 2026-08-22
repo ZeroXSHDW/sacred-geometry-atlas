@@ -3336,8 +3336,8 @@
       ? `Read the ${comparison.length} selected study records as a table`
       : `Read the ${comparison.length} study records as a table`;
     if (caption) caption.textContent = isFocused
-      ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status.`
-      : "Recorded study values for the full collection; each row includes its data status.";
+      ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status and source note.`
+      : "Recorded study values for the full collection; each row includes its data status and source note.";
     body.innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const section = study.height / study.span;
@@ -3355,6 +3355,7 @@
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(studyAxisLabel(study))}</td>
           <td class="comparison-status" data-status="${escapeHtml(status)}" aria-label="${escapeHtml(`${statusLabel} (${status}): ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</td>
+          <td class="comparison-source"><strong>${escapeHtml(studySource(study))}</strong><span>${escapeHtml(studySourceNote(study))}</span></td>
           <td>${escapedLinearMeasure(study.length)}</td>
           <td>${escapedLinearMeasure(study.span)}</td>
           <td>${number(ratio, 2)}</td>
