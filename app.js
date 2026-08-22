@@ -636,7 +636,16 @@
       if (chip) clearFilter(chip.dataset.clearFilter, { focus: true });
     });
     const comparisonTable = $(".comparison-table-wrap");
-    if (comparisonTable) comparisonTable.addEventListener("keydown", handleComparisonTableKey);
+    if (comparisonTable) {
+      comparisonTable.addEventListener("keydown", handleComparisonTableKey);
+      comparisonTable.addEventListener("click", (event) => {
+        const studyLink = event.target.closest("[data-table-study]");
+        if (!studyLink) return;
+        if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true });
+      });
+    }
     window.addEventListener("keydown", handleKeyboard);
   }
 
@@ -2172,7 +2181,7 @@
       const volume = volumeReading(study);
       return `
         <tr>
-          <th scope="row">${escapeHtml(studyShortName(study))}</th>
+          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(navigationUrl(routeHash("atlas", true, study.id)))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
           <td class="comparison-status" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
           <td>${number(study.length)} m</td>
           <td>${number(study.span)} m</td>
