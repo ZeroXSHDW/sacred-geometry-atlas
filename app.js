@@ -150,6 +150,24 @@
       const target = $(`#${id}`);
       if (target) target.textContent = String(value).padStart(2, "0");
     });
+    renderAtlasSchemaNote();
+  }
+
+  function atlasSchemaNoteText(records = studies) {
+    const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
+    const counts = studyStatusCounts(records);
+    const provenance = counts.schematic && counts.measured
+      ? "Mixed provenance"
+      : counts.measured
+        ? "Source-supported dimensions"
+        : "Illustrative proportions";
+    const units = schema.units === "meters" ? "metric units" : `${schema.units || "units"} units`;
+    return `${provenance} · ${units} · v${schema.version || "1.1"}`;
+  }
+
+  function renderAtlasSchemaNote() {
+    const target = $("#atlasSchemaNote");
+    if (target) target.textContent = atlasSchemaNoteText();
   }
 
   function studyStatusCounts(records = studies) {

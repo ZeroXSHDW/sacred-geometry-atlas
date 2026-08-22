@@ -12,6 +12,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
 - Zoom and reset controls for the SVG drawing instrument.
 - A plain-language drawing context line that keeps the active surface, mode, layer focus, and zoom visible beside the interpretive caption.
+- A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for bounding area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
