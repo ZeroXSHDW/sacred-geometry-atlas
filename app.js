@@ -2537,19 +2537,19 @@
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const status = studyDataLabel(study);
-      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span><span class="bar-track"><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span><span class="bar-track"><i class="bar-fill" style="width:${(ratio / maxRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#heightChart").innerHTML = comparison.map((study) => {
       const ratio = study.height / study.span;
       const status = studyDataLabel(study);
-      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span><span class="bar-track"><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"><span class="bar-label"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span><span class="bar-track"><i class="bar-fill teal" style="width:${(ratio / maxHeightRatio) * 100}%"></i></span><span class="bar-value">${number(ratio, 2)}</span></div>`;
     }).join("");
     $("#moduleChart").innerHTML = comparison.map((study) => {
       const status = studyDataLabel(study);
       const moduleWidth = (study.module / maxModule) * 100;
       return `
       <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} meters; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record">
-        <span class="module-name"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span>
+        <span class="module-name"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span>
         <span class="module-bars" style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
         <span class="module-value">${number(study.module)} m</span>
       </div>
