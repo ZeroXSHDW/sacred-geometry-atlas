@@ -2125,14 +2125,17 @@
       const ratio = number(study.length / study.span, 2);
       const section = number(study.height / study.span, 2);
       const label = comparisonStudyAriaLabel(study, ratio, section);
+      const isActive = study.id === state.activeId;
+      const currentAttribute = isActive ? ' aria-current="true"' : "";
+      const currentLabel = isActive ? " This is the current Atlas study." : "";
       return `
-      <button class="compare-study-card" data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas" aria-label="${label}">
+      <button class="compare-study-card ${isActive ? "is-active" : ""}" data-compare-study="${escapeHtml(study.id)}" type="button" aria-controls="atlas"${currentAttribute} aria-label="${label}${currentLabel}">
         <span class="compare-study-number">${escapeHtml(study.index)} / ${escapeHtml(studyStatus(study))}</span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
         <span class="compare-study-context">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)}</span>
         <span class="compare-study-meta">${ratio} ratio · ${section} section</span>
-        <span class="compare-study-open">Open in Atlas <span aria-hidden="true">↗</span></span>
+        <span class="compare-study-open">${isActive ? "Current Atlas study · open in Atlas" : "Open in Atlas"} <span aria-hidden="true">↗</span></span>
       </button>
     `;
     }).join("");
