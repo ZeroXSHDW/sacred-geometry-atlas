@@ -3064,8 +3064,11 @@
     list.innerHTML = comparison.length ? comparison.map((study) => {
       const axisLabel = studyAxisLabel(study);
       const status = studyDataLabel(study);
-      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${status}; ${studyStatusDescription(study)}`;
-      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span><span aria-hidden="true">×</span></button>`;
+      const isActive = study.id === state.activeId;
+      const currentLabel = isActive ? " Current Atlas study." : "";
+      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${status}; ${studyStatusDescription(study)}${currentLabel}`;
+      const currentCue = isActive ? '<span class="compare-selection-chip-current" title="Current Atlas study">current</span>' : "";
+      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span>${currentCue}<span aria-hidden="true">×</span></button>`;
     }).join("") : "";
     if (clear && comparison.length) {
       const clearLabel = `Clear ${comparison.length} selected ${comparison.length === 1 ? "study" : "studies"}`;

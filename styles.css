@@ -684,6 +684,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .compare-selection-chip-axis { flex: 0 0 auto; color: var(--teal); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
 .compare-selection-chip-status { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.24rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
 .compare-selection-chip-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
+.compare-selection-chip-current { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.24rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.48rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
 .compare-selection-chip span:last-child { color: var(--coral); font-size: 0.9rem; line-height: 0.8; }
 .compare-status-note { margin: 0 0 2rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.5; }
 .comparison-print-route { display: none; }
@@ -1063,6 +1064,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-status,
   .compare-selection-chip-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .compare-selection-chip-current { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-axis { color: ButtonText; }
   .compare-selection-chip span:last-child { color: ButtonText; }
   .compare-study-open { color: Highlight; }
