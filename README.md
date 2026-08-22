@@ -32,9 +32,9 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search cards identify when a query matched a reference, reading, dimension, or derived-ratio field that is not shown in the compact card.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
-- The Atlas comparison tray previews selected study names and a compact schematic/measured status summary, including selections outside the current filter view; its live selection label keeps each study's status attached for assistive technology.
+- The Atlas comparison tray previews selected study names and a compact schema-status summary, including selections outside the current filter view; its live selection label keeps each study's status attached for assistive technology.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.
-- Catalog and comparison cards keep typology, place, era, envelope dimensions, radius, exact geometric axis, emphasis, and dedicated schematic/measured provenance badges visible at a glance; their accessible labels include the explicit data-status name and definition plus the same radius context, and the active study header repeats that status, axis, and envelope context when its title receives keyboard focus.
+- Catalog and comparison cards keep typology, place, era, envelope dimensions, radius, exact geometric axis, emphasis, and dedicated schema-backed provenance badges visible at a glance; their accessible labels include the explicit data-status name and definition plus the same radius context, and the active study header repeats that status, axis, and envelope context when its title receives keyboard focus.
 - Human-facing axis labels normalize source values that already include the word “axis,” keeping catalog cards and filters, comparison, no-script, share, citation, and assistive labels consistent while raw exports retain the source value.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
@@ -61,8 +61,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Focused comparison cards, charts, tables, and exports preserve the order in which studies were selected or shared in the comparison route.
 - An expandable semantic comparison table with route-native study links, axis and recorded study status, lengths, spans, ratios, heights, bays, modules, radii, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling and live position feedback on narrow screens.
 - The comparison table keeps its column headings visible below the sticky site header while long records are scanned vertically, and keeps the study-name column visible while scrolling horizontally.
-- Comparison tables carry the same schematic/measured status styling as cards and charts, so provenance stays visible across every comparison surface.
-- The active study status badge uses the same schematic/measured styling as the catalog, charts, and comparison table.
+- Comparison tables carry the same schema-status styling as cards and charts, so provenance stays visible across every comparison surface.
+- The active study status badge uses the same schema-status styling as the catalog, charts, and comparison table, with custom documented statuses receiving a distinct caution treatment instead of inheriting the schematic color.
 - The first viewport surfaces a schema-driven dataset-status note, so visitors see the collection’s evidence level before opening a study.
 - Context-aware CSV and structured JSON exports for the active comparison scope, including typology/place/era/axis context, per-record status definitions, optional floor-area and volume estimates, derived readings, estimate provenance, scope, reproducible route, schema version, and units, alongside the full-atlas and filtered-view JSON downloads.
 - Comparison JSON records keep each raw study paired with its derived readings, preserving the selected order for downstream research or analysis.

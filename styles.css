@@ -13,6 +13,7 @@
   --teal: #88c6ba;
   --teal-soft: rgba(136, 198, 186, 0.12);
   --coral: #e77f62;
+  --coral-soft: rgba(231, 127, 98, 0.12);
   --serif: 'Playfair Display', Georgia, serif;
   --sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
@@ -444,6 +445,11 @@ h3 { letter-spacing: -0.04em; }
 .catalog-card-meta { display: block; color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; line-height: 1.4; }
 .catalog-card-status { display: inline-flex; margin-top: 0.32rem; padding: 0.18rem 0.3rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.05em; line-height: 1.2; text-transform: uppercase; }
 .catalog-card-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
+.catalog-card-status:not([data-status="schematic"]):not([data-status="measured"]),
+.study-status:not([data-status="schematic"]):not([data-status="measured"]),
+.compare-selection-chip-status:not([data-status="schematic"]):not([data-status="measured"]),
+.compare-study-status:not([data-status="schematic"]):not([data-status="measured"]),
+.chart-status:not([data-status="schematic"]):not([data-status="measured"]) { border-color: rgba(231, 127, 98, 0.42); color: var(--coral); background: var(--coral-soft); }
 .catalog-card-detail { display: block; margin-top: 0.16rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.35; }
 .catalog-card-measure { display: block; margin-top: 0.18rem; color: var(--coral); font-family: var(--mono); font-size: 0.51rem; line-height: 1.35; }
 .catalog-card-match { display: block; margin-top: 0.26rem; color: var(--teal); font-family: var(--mono); font-size: 0.48rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
@@ -798,6 +804,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .comparison-table tbody td { color: var(--teal); }
 .comparison-table tbody .comparison-status { color: var(--amber); letter-spacing: 0.04em; text-transform: uppercase; }
 .comparison-table tbody .comparison-status[data-status="measured"] { color: var(--teal); }
+.comparison-table tbody .comparison-status:not([data-status="schematic"]):not([data-status="measured"]) { color: var(--coral); }
 .comparison-table tbody .comparison-provenance { max-width: 28ch; color: var(--ink-muted); text-align: left; white-space: normal; }
 .comparison-table tbody tr:last-child th, .comparison-table tbody tr:last-child td { border-bottom: 0; }
 
@@ -1128,6 +1135,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .dataset-link-schema .dataset-icon { color: ButtonText; }
   .runtime-fallback-actions .hero-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .study-status,
+  .study-status:not([data-status="schematic"]):not([data-status="measured"]),
   .study-provenance summary,
   .study-nav button,
   .drawing-export,
@@ -1142,15 +1150,19 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .zoom-control button:disabled { border-color: GrayText; color: GrayText; }
   .catalog-card-status,
   .catalog-card-status[data-status="measured"],
+  .catalog-card-status:not([data-status="schematic"]):not([data-status="measured"]),
   .chart-status,
   .chart-status[data-status="measured"],
+  .chart-status:not([data-status="schematic"]):not([data-status="measured"]),
   .chart-current,
   .compare-study-status,
-  .compare-study-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .compare-study-status[data-status="measured"],
+  .compare-study-status:not([data-status="schematic"]):not([data-status="measured"]) { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .bar-row.is-active .bar-label,
   .module-row.is-active .module-name { color: CanvasText; }
   .comparison-table tbody .comparison-status,
-  .comparison-table tbody .comparison-status[data-status="measured"] { color: ButtonText; }
+  .comparison-table tbody .comparison-status[data-status="measured"],
+  .comparison-table tbody .comparison-status:not([data-status="schematic"]):not([data-status="measured"]) { color: ButtonText; }
   .comparison-table-study-link .comparison-table-study-state { color: Highlight; }
   .segment-button.is-active { color: HighlightText; background: Highlight; }
   .layer-button.is-active { border-color: Highlight; background: Canvas; }
@@ -1164,7 +1176,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-selection-clear,
   .compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-status,
-  .compare-selection-chip-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .compare-selection-chip-status[data-status="measured"],
+  .compare-selection-chip-status:not([data-status="schematic"]):not([data-status="measured"]) { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-current { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-axis { color: ButtonText; }
   .compare-selection-chip span:last-child { color: ButtonText; }
