@@ -802,6 +802,57 @@
           </dl>
         </section>
 
+        <section class="method-dictionary" aria-labelledby="data-dictionary-heading">
+          <div class="method-readings-heading">
+            <div>
+              <p class="method-number">Dataset contract</p>
+              <h3 id="data-dictionary-heading">What each record contains</h3>
+            </div>
+            <div class="method-dictionary-intro">
+              <p>JSON records and CSV rows describe the same study objects. Dimensions follow the schema unit system; optional estimates stay blank when a source does not supply them.</p>
+              <div class="method-dictionary-links" role="group" aria-label="Open atlas data artifacts">
+                <a href="data/geometry.json">Open JSON <span aria-hidden="true">↗</span></a>
+                <a href="data/geometry.csv">Open CSV <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </div>
+          <dl class="method-dictionary-grid">
+            <div class="method-dictionary-item">
+              <dt>Identity</dt>
+              <dd><code>id</code>, <code>index</code>, <code>name</code>, and <code>shortName</code> identify a stable study and its display labels.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Context</dt>
+              <dd><code>typology</code>, <code>place</code>, <code>era</code>, <code>churchName</code>, <code>emphasis</code>, and <code>axis</code> situate the reading.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Envelope</dt>
+              <dd><code>length</code>, <code>span</code>, <code>height</code>, <code>envelope</code>, and <code>type</code> describe the enclosing figure.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Rhythm</dt>
+              <dd><code>bayCount</code>, <code>module</code>, and <code>details</code> record repetition, pace, and named geometric components.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Curvature &amp; balance</dt>
+              <dd><code>radius</code> records the primary curved reach; <code>symmetry</code> is a normalized 0–1 reading.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Interpretation</dt>
+              <dd><code>surfaceNote</code>, <code>exteriorNote</code>, and <code>interiorNote</code> keep the visual reading attached to each record.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Provenance</dt>
+              <dd><code>status</code>, <code>source</code>, and <code>sourceNote</code> state the record’s data status and provenance.</dd>
+            </div>
+            <div class="method-dictionary-item">
+              <dt>Optional estimates</dt>
+              <dd><code>floorAreaEstimate</code>, <code>volumeEstimate</code>, and <code>volumeBasis</code> are included only when supplied by the study.</dd>
+            </div>
+          </dl>
+          <p class="method-dictionary-formulas"><span>Derived in the interface and exports:</span> <code>length / span</code> · <code>height / span</code> · <code>module / span</code> · floor area · estimated volume · reading profile.</p>
+        </section>
+
         <div class="method-note">
           <span class="note-icon" aria-hidden="true">i</span>
           <p><strong>Important:</strong> <span id="methodProvenanceNote">The current collection is a schematic proportional study, not a measured survey or a claim about every church. Each record carries a status and provenance note.</span> Replace the values in <code>data/geometry.js</code> with your own measured dataset to expand the atlas.</p>

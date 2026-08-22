@@ -755,6 +755,19 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .method-reading-item { min-height: 145px; margin: 0; padding: 1rem; background: var(--bg-deep); }
 .method-reading-item dt { margin-bottom: 0.55rem; color: var(--teal); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.04em; text-transform: uppercase; }
 .method-reading-item dd { margin: 0; color: var(--ink-muted); font-size: 0.68rem; line-height: 1.65; }
+.method-dictionary { margin-top: 1rem; padding: 1.4rem; border: 1px solid var(--line); background: var(--panel); }
+.method-dictionary .method-readings-heading { align-items: start; }
+.method-dictionary-intro { display: flex; align-items: end; justify-content: end; gap: 1rem; max-width: 34rem; }
+.method-dictionary-intro > p { max-width: 24rem; margin: 0; color: var(--ink-muted); font-size: 0.7rem; line-height: 1.6; text-align: right; }
+.method-dictionary-links { display: flex; flex: 0 0 auto; gap: 0.4rem; }
+.method-dictionary-links a { display: inline-flex; align-items: center; min-height: 36px; padding: 0.55rem 0.65rem; border: 1px solid var(--line-strong); color: var(--teal); font-family: var(--mono); font-size: 0.56rem; text-decoration: none; text-transform: uppercase; transition: 180ms ease; }
+.method-dictionary-links a:hover { border-color: var(--amber); color: var(--amber); }
+.method-dictionary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 0; border: 1px solid var(--line); background: var(--line); }
+.method-dictionary-item { min-height: 132px; margin: 0; padding: 1rem; background: var(--bg-deep); }
+.method-dictionary-item dt { margin-bottom: 0.55rem; color: var(--teal); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.method-dictionary-item dd { margin: 0; color: var(--ink-muted); font-size: 0.66rem; line-height: 1.65; }
+.method-dictionary-formulas { margin: 1rem 0 0; color: var(--ink-muted); font-size: 0.66rem; line-height: 1.6; }
+.method-dictionary-formulas span { color: var(--amber); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.04em; text-transform: uppercase; }
 code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 .method-note { display: flex; gap: 0.85rem; margin-top: 1rem; padding: 1.05rem 1.2rem; border: 1px solid rgba(231, 127, 98, 0.4); background: rgba(231, 127, 98, 0.08); }
 .note-icon { display: grid; flex: 0 0 20px; height: 20px; place-items: center; border: 1px solid var(--coral); border-radius: 50%; color: var(--coral); font-family: var(--serif); font-size: 0.72rem; }
@@ -854,6 +867,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-readings-heading { align-items: start; flex-direction: column; gap: 0.7rem; }
   .method-readings-heading > p { max-width: none; text-align: left; }
   .method-readings-grid { grid-template-columns: 1fr 1fr; }
+  .method-dictionary { padding: 1.1rem; }
+  .method-dictionary-intro { align-items: start; justify-content: start; flex-direction: column; gap: 0.75rem; max-width: none; }
+  .method-dictionary-intro > p { max-width: none; text-align: left; }
+  .method-dictionary-grid { grid-template-columns: 1fr 1fr; }
   .site-footer { align-items: start; flex-direction: column; justify-content: center; gap: 0.6rem; padding: 1.5rem 0; }
 }
 
@@ -876,7 +893,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-entry:nth-child(n) { border-right: 0; padding-inline: 0; }
   .catalog-entry .catalog-card { padding-inline: 0; }
   .catalog-entry:nth-child(n) .catalog-card:hover { padding-left: 0.35rem; }
-  .detail-grid, .method-grid, .method-readings-grid { grid-template-columns: 1fr; }
+  .detail-grid, .method-grid, .method-readings-grid, .method-dictionary-grid { grid-template-columns: 1fr; }
   .method-card { min-height: auto; }
   .method-card p { min-height: 0; }
   .analysis-heading { display: block; }
@@ -979,6 +996,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
   .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }
+  .method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .method-dictionary-links a:hover { color: HighlightText; background: Highlight; }
+  .method-dictionary-item dt,
+  .method-dictionary-formulas span { color: Highlight; }
   .study-context-note { border-color: Highlight; color: ButtonText; background: Canvas; }
   .study-context-note button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .manual-copy-fallback { border-color: ButtonText; background: Canvas; }
