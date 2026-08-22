@@ -2079,6 +2079,12 @@
     });
   }
 
+  function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
+    return selection
+      .map(({ name, axis, status, statusDefinition }) => `${name} (${axis} axis; ${status}; ${statusDefinition})`)
+      .join("; ");
+  }
+
   function catalogCitationText(records = visibleStudies()) {
     const route = catalogViewRouteUrl();
     const definitions = dataStatusDefinitions();
@@ -2526,6 +2532,10 @@
         compareIds: [...state.compareIds],
         comparisonSelection: comparisonSelectionExportContext()
       },
+      records: visible.map((study) => ({
+        study,
+        derived: derivedStudyReadings(study)
+      })),
       studies: visible
     };
   }
@@ -2667,10 +2677,13 @@
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
     const schemaUrl = publishedGeometrySchemaUrl();
+    const comparisonSelection = comparisonSelectionExportContext();
+    const comparisonIds = comparisonSelection.map(({ id }) => id).join(",");
+    const comparisonContext = comparisonSelectionCsvText(comparisonSelection);
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Schema version", "Units", "Schema URL"
     ];
     const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -2700,6 +2713,8 @@
         volume.basis,
         number(study.symmetry, 2),
         scope,
+        comparisonIds,
+        comparisonContext,
         route,
         schema.version,
         schema.units,
