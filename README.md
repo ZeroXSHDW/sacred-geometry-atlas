@@ -23,7 +23,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A visible runtime recovery panel preserves a usable static-data path if the app script is blocked or fails before initialization.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, provenance, drawing state, and shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
-- Share controls use native sharing where available, then fall back to clipboard or address-bar instructions with visible and live completion feedback.
+- Share controls use native sharing where available, then fall back to clipboard or a manually copyable link field with visible and live completion feedback.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, and proportional charts.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.

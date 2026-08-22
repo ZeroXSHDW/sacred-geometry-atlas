@@ -647,9 +647,36 @@
     button.setAttribute("aria-label", accessibleLabel);
   }
 
-  function hideCitationFallback() {
-    const fallback = $("#citationFallback");
-    if (fallback) fallback.hidden = true;
+  const manualCopyFallbackSelectors = ["#shareFallback", "#citationFallback", "#catalogShareFallback", "#compareShareFallback"];
+
+  function hideManualCopyFallbacks() {
+    manualCopyFallbackSelectors.forEach((selector) => {
+      const fallback = $(selector);
+      if (fallback) fallback.hidden = true;
+    });
+  }
+
+  function revealManualCopyFallback(fallbackSelector, textSelector, value) {
+    const fallback = $(fallbackSelector);
+    const fallbackText = $(textSelector);
+    if (!fallback || !fallbackText) return false;
+    fallbackText.value = value;
+    fallback.hidden = false;
+    if (typeof fallbackText.focus === "function") {
+      try {
+        fallbackText.focus({ preventScroll: true });
+      } catch (error) {
+        // Focus is best-effort; the visible field remains available.
+      }
+    }
+    if (typeof fallbackText.select === "function") {
+      try {
+        fallbackText.select();
+      } catch (error) {
+        // Selection is best-effort; the visible field remains available.
+      }
+    }
+    return true;
   }
 
   function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key) {
@@ -843,6 +870,7 @@
   }
 
   function refreshCatalog() {
+    hideManualCopyFallbacks();
     const visible = visibleStudies();
     const previousId = state.activeId;
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
@@ -945,7 +973,7 @@
   function renderStudy() {
     const study = activeStudy();
     if (!study) return;
-    hideCitationFallback();
+    hideManualCopyFallbacks();
     const ratio = study.length / study.span;
     $("#activeKicker").textContent = `Study ${study.index} / ${study.typology}`;
     $("#activeName").textContent = study.name;
@@ -1037,7 +1065,7 @@
   }
 
   function renderControls() {
-    hideCitationFallback();
+    hideManualCopyFallbacks();
     $$('[data-surface]').forEach((button) => {
       const selected = button.dataset.surface === state.surface;
       button.classList.toggle("is-active", selected);
@@ -1069,6 +1097,7 @@
 
   function showPage(page, options = {}) {
     const { updateHash: shouldUpdateHash = true, routeStudy = page === "atlas", scroll = true } = options;
+    hideManualCopyFallbacks();
     const previousPage = state.page;
     if (!validPages.has(page)) page = "atlas";
     const pageChanged = previousPage !== page;
@@ -1159,6 +1188,7 @@
     const status = $("#shareStatus");
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
+      hideManualCopyFallbacks();
       const shareUrl = clearCatalogParams(new URL(window.location.href));
       shareUrl.hash = routeHash("atlas", true);
       const sharePayload = {
@@ -1187,7 +1217,10 @@
           setButtonFeedback(button, "Share study", "Share current study");
         }, 2200);
       } else {
-        status.textContent = "Copying was unavailable. You can copy the page URL from the address bar.";
+        const fallbackShown = revealManualCopyFallback("#shareFallback", "#shareFallbackText", shareUrl.href);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The share link is shown below for manual copying."
+          : "Copying was unavailable. You can copy the page URL from the address bar.";
       }
     } finally {
       endAsyncAction(button);
@@ -1220,6 +1253,7 @@
     const status = $("#catalogShareStatus");
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
+      hideManualCopyFallbacks();
       const shareUrl = new URL(window.location.href);
       shareUrl.hash = routeHash("atlas", false);
       const sharePayload = {
@@ -1247,7 +1281,10 @@
           setButtonFeedback(button, "Share view", "Share current catalog view");
         }, 2200);
       } else {
-        status.textContent = "Copying was unavailable. You can copy the catalog URL from the address bar.";
+        const fallbackShown = revealManualCopyFallback("#catalogShareFallback", "#catalogShareFallbackText", shareUrl.href);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The catalog link is shown below for manual copying."
+          : "Copying was unavailable. You can copy the catalog URL from the address bar.";
       }
     } finally {
       endAsyncAction(button);
@@ -1259,6 +1296,7 @@
     const status = $("#compareShareStatus");
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
+      hideManualCopyFallbacks();
       const shareUrl = comparisonRouteUrl();
       const selected = state.compareIds.length >= 2 ? comparisonStudies() : [];
       const selectionLabel = selected.length
@@ -1289,7 +1327,10 @@
           setButtonFeedback(button, "Share comparison", "Share this comparison");
         }, 2200);
       } else {
-        status.textContent = "Copying was unavailable. You can copy the comparison URL from the address bar.";
+        const fallbackShown = revealManualCopyFallback("#compareShareFallback", "#compareShareFallbackText", shareUrl.href);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The comparison link is shown below for manual copying."
+          : "Copying was unavailable. You can copy the comparison URL from the address bar.";
       }
     } finally {
       endAsyncAction(button);
@@ -1310,12 +1351,10 @@
     const status = $("#citationStatus");
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
+      hideManualCopyFallbacks();
       const citation = citationText(study);
-      const fallback = $("#citationFallback");
-      const fallbackText = $("#citationFallbackText");
       const copied = await copyText(citation);
       if (copied) {
-        if (fallback) fallback.hidden = true;
         button.classList.add("is-copied");
         setButtonFeedback(button, "Citation copied", "Citation copied");
         status.textContent = `Citation for ${study.name} copied.`;
@@ -1325,13 +1364,10 @@
           setButtonFeedback(button, "Copy citation", "Copy a citation for the active study");
         }, 2200);
       } else {
-        if (fallback && fallbackText) {
-          fallbackText.value = citation;
-          fallback.hidden = false;
-          if (typeof fallbackText.focus === "function") fallbackText.focus({ preventScroll: true });
-          if (typeof fallbackText.select === "function") fallbackText.select();
-        }
-        status.textContent = "Copying was unavailable. The citation is shown below for manual copying.";
+        const fallbackShown = revealManualCopyFallback("#citationFallback", "#citationFallbackText", citation);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The citation is shown below for manual copying."
+          : "Copying was unavailable. You can copy the citation from the study details.";
       }
     } finally {
       endAsyncAction(button);

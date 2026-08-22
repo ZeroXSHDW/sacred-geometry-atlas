@@ -195,7 +195,7 @@ jobs:
           if (!html.includes('id="downloadStudy" type="button" aria-label="Download active study as JSON"')) throw new Error('Missing accessible study-data download label');
           if (!html.includes('id="shareStudy" type="button" aria-label="Share current study"')) throw new Error('Missing accessible study share label');
           if (!html.includes('id="copyCitation" type="button" aria-label="Copy a citation for the active study"')) throw new Error('Missing accessible citation label');
-          if (!html.includes('<div class="citation-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>') || !html.includes('id="citationFallbackText"') || !html.includes('id="citationFallbackHint"') || !app.includes('function hideCitationFallback()') || !app.includes('const fallbackText = $("#citationFallbackText");') || !app.includes('The citation is shown below for manual copying.') || !styles.includes('.citation-fallback {') || !styles.includes('.citation-fallback textarea:focus')) throw new Error('Citation copy must expose a selected manual-copy fallback');
+          if (!html.includes('<div class="manual-copy-fallback" id="shareFallback" role="region" aria-labelledby="shareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="catalogShareFallback" role="region" aria-labelledby="catalogShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>') || !html.includes('<div class="manual-copy-fallback" id="citationFallback" role="region" aria-labelledby="citationFallbackHeading" hidden>') || !html.includes('id="shareFallbackText"') || !html.includes('id="catalogShareFallbackText"') || !html.includes('id="compareShareFallbackText"') || !html.includes('id="citationFallbackText"') || !app.includes('function hideManualCopyFallbacks()') || !app.includes('function revealManualCopyFallback(fallbackSelector, textSelector, value)') || !app.includes('The share link is shown below for manual copying.') || !app.includes('The catalog link is shown below for manual copying.') || !app.includes('The comparison link is shown below for manual copying.') || !app.includes('The citation is shown below for manual copying.') || !styles.includes('.manual-copy-fallback {') || !styles.includes('.manual-copy-fallback textarea:focus')) throw new Error('Share and citation actions must expose selected manual-copy fallbacks');
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"')) throw new Error('Missing accessible print control');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view"')) throw new Error('Missing catalog share control');
@@ -339,7 +339,7 @@ jobs:
           if (clearComparisonStart < 0 || clearComparisonEnd < 0 || !app.slice(clearComparisonStart, clearComparisonEnd).includes('updateDocumentTitle(state.page);')) throw new Error('Clearing comparison selection must refresh the browser title');
           if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
           if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;')) throw new Error('Missing narrow study-header layout');
-          if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('textarea:focus-visible') || !styles.includes('.citation-fallback textarea:focus { outline: 2px solid Highlight; outline-offset: 2px; }') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }') || !styles.includes('.compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.compare-tray-summary { color: ButtonText; }') || !styles.includes('.catalog-batch-action span:first-child { color: ButtonText; }')) throw new Error('Forced-colors mode must preserve focus and selected-state affordances');
+          if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('textarea:focus-visible') || !styles.includes('.manual-copy-fallback textarea:focus { outline: 2px solid Highlight; outline-offset: 2px; }') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }') || !styles.includes('.compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.compare-tray-summary { color: ButtonText; }') || !styles.includes('.catalog-batch-action span:first-child { color: ButtonText; }')) throw new Error('Forced-colors mode must preserve focus and selected-state affordances');
           for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }', '.search-field input, .select-wrap select { min-height: 40px; }', '.filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary { min-height: 36px; }']) {
             if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
           }
@@ -832,6 +832,93 @@ jobs:
             if (!status.textContent.includes('shown below for manual copying')) throw new Error('Citation fallback did not announce its manual-copy state');
             console.log('Citation manual-copy fallback smoke test passed.');
           }).catch((error) => { console.error(error); process.exitCode = 1; });
+          NODE
+
+      - name: Smoke-test share-link manual-copy fallbacks
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const makeButton = (label) => {
+            const visibleLabel = { textContent: label };
+            const classes = new Set();
+            return {
+              disabled: false,
+              classList: {
+                add(name) { classes.add(name); },
+                remove(name) { classes.delete(name); }
+              },
+              querySelector(selector) { return selector === 'span:last-child' ? visibleLabel : null; },
+              setAttribute(name, value) { this[name] = value; }
+            };
+          };
+          const makeFallback = () => ({
+            hidden: true,
+            text: {
+              value: '',
+              focusCalls: 0,
+              selectCalls: 0,
+              focus() { this.focusCalls += 1; },
+              select() { this.selectCalls += 1; }
+            }
+          });
+          const shareStudyButton = makeButton('Share study');
+          const shareCatalogButton = makeButton('Share view');
+          const shareCompareButton = makeButton('Share comparison');
+          const shareStudyFallback = makeFallback();
+          const shareCatalogFallback = makeFallback();
+          const shareCompareFallback = makeFallback();
+          elements.set('#shareStudy', shareStudyButton);
+          elements.set('#shareStatus', { textContent: '' });
+          elements.set('#shareFallback', shareStudyFallback);
+          elements.set('#shareFallbackText', shareStudyFallback.text);
+          elements.set('#shareCatalog', shareCatalogButton);
+          elements.set('#catalogShareStatus', { textContent: '' });
+          elements.set('#catalogShareFallback', shareCatalogFallback);
+          elements.set('#catalogShareFallbackText', shareCatalogFallback.text);
+          elements.set('#shareCompare', shareCompareButton);
+          elements.set('#compareShareStatus', { textContent: '' });
+          elements.set('#compareShareFallback', shareCompareFallback);
+          elements.set('#compareShareFallbackText', shareCompareFallback.text);
+          const context = {
+            URL,
+            navigator: {},
+            window: {
+              isSecureContext: false,
+              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
+              clearTimeout() {},
+              setTimeout() { return 1; },
+              addEventListener() {}
+            },
+            document: {
+              activeElement: shareStudyButton,
+              body: {},
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; },
+              createElement() { throw new Error('Copy APIs unavailable'); }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { shareStudy, shareCatalog, shareComparison };\n})();');
+          vm.runInNewContext(app, context);
+          const cases = [
+            ['shareStudy', shareStudyFallback, 'The share link is shown below for manual copying', 'https://example.test/atlas/#atlas/basilica/plan/exterior'],
+            ['shareCatalog', shareCatalogFallback, 'The catalog link is shown below for manual copying', 'https://example.test/atlas/#atlas'],
+            ['shareComparison', shareCompareFallback, 'The comparison link is shown below for manual copying', 'https://example.test/atlas/#compare']
+          ];
+          (async () => {
+            for (const [name, fallback, message, marker] of cases) {
+              await context.window.__atlasTest[name]();
+              const statusSelector = name === 'shareStudy' ? '#shareStatus' : name === 'shareCatalog' ? '#catalogShareStatus' : '#compareShareStatus';
+              const status = elements.get(statusSelector);
+              if (fallback.hidden || !fallback.text.value.startsWith(marker) || fallback.text.focusCalls !== 1 || fallback.text.selectCalls !== 1 || !status.textContent.includes(message)) {
+                throw new Error(`${name} did not reveal and select its manual-copy link fallback`);
+              }
+            }
+            if (shareStudyButton.disabled || shareCatalogButton.disabled || shareCompareButton.disabled) throw new Error('Share-link fallback did not restore the share button states');
+            console.log('Share-link manual-copy fallback smoke test passed.');
+          })().catch((error) => { console.error(error); process.exitCode = 1; });
           NODE
 
   deploy:
