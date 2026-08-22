@@ -1041,6 +1041,28 @@ jobs:
           if (studyStatus.textContent !== expected) throw new Error(`Study selection announcement lost drawing context: ${studyStatus.textContent}`);
           console.log('Study selection announcement smoke test passed.');
           NODE
+      - name: Smoke-test empty keyboard navigation recovery
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const keyboardStatus = { textContent: '' };
+          const context = {
+            window: {},
+            document: {
+              querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, cycleStudy, announceKeyboard };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, cycleStudy } = context.window.__atlasTest;
+          state.query = 'no matching study';
+          cycleStudy(1, { scroll: false, focus: true });
+          if (keyboardStatus.textContent !== 'No studies are visible. Clear the catalog filters to continue.') throw new Error(`Empty keyboard navigation did not announce recovery guidance: ${keyboardStatus.textContent}`);
+          console.log('Empty keyboard navigation recovery smoke test passed.');
+          NODE
       - name: Smoke-test filtered study focus handoff
         run: |
           node - <<'NODE'

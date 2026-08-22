@@ -1382,7 +1382,10 @@
   function cycleStudy(direction, options = {}) {
     const { scroll = true, focus = false } = options;
     const visible = visibleStudies();
-    if (!visible.length) return;
+    if (!visible.length) {
+      announceKeyboard("No studies are visible. Clear the catalog filters to continue.");
+      return;
+    }
     const currentIndex = visible.findIndex((study) => study.id === state.activeId);
     const baseIndex = currentIndex >= 0 ? currentIndex : direction > 0 ? -1 : 0;
     const nextIndex = (baseIndex + direction + visible.length) % visible.length;
