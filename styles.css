@@ -431,6 +431,7 @@ h3 { letter-spacing: -0.04em; }
 .study-provenance-body { max-width: 38rem; margin-top: 0.45rem; padding: 0.55rem 0.7rem; border-left: 2px solid var(--teal); background: var(--teal-soft); }
 .study-provenance-body p { margin: 0; color: var(--ink-soft); font-family: var(--mono); font-size: 0.56rem; line-height: 1.5; }
 .study-provenance-body p + p { margin-top: 0.25rem; color: var(--ink-muted); }
+.study-print-route { display: none; }
 .study-header-actions { display: flex; flex-direction: column; align-items: end; gap: 1.25rem; }
 .study-nav { display: inline-flex; align-items: center; gap: 0.35rem; }
 .study-nav-position { color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
@@ -943,6 +944,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .study-provenance:not([open]) .study-provenance-body { display: block !important; max-width: none; margin-top: 0.2rem; padding: 0.25rem 0 0.25rem 0.55rem; border-left: 1px solid var(--line-strong); background: transparent; }
   .study-provenance-body p { color: var(--ink-soft); font-size: 8pt; }
   .study-provenance-body p + p { color: var(--ink-muted); }
+  .study-print-route { display: block; margin: 0.45rem 0 0; color: var(--ink-muted); font-family: var(--mono); font-size: 7.5pt; line-height: 1.45; overflow-wrap: anywhere; }
   .drawing-card { border-color: var(--ink); background: #fff; }
   .svg-wrap { min-height: 0; background: #fff; }
   .geometry-svg { min-height: 0; color: var(--ink); background: #fff; }

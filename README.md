@@ -47,7 +47,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Downloadable full-atlas JSON, filtered catalog-view JSON, and context-aware active-study JSON with view state, derived readings, and a deterministic `provenance` manifest that records scope, record count, and schema-backed schematic/measured status definitions; the committed [`data/geometry.json`](data/geometry.json) artifact remains available for static and no-script use.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
-- Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition and schema/unit provenance remain included even when the interactive disclosure is collapsed.
+- Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition, schema/unit provenance, and reproducible direct route remain included even when the interactive disclosure is collapsed.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
 - The Method view keeps the current study in context with a study-aware deep link, a visible context label, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.

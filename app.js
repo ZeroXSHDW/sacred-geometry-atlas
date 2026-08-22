@@ -378,6 +378,17 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
+  function studyRouteUrl(studyId = state.activeId) {
+    const url = clearCatalogParams(new URL(window.location.href));
+    url.hash = routeHash("atlas", true, studyId);
+    return url;
+  }
+
+  function studyRoutePath(studyId = state.activeId) {
+    const url = studyRouteUrl(studyId);
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
   function updateRoute(page, includeStudy = page === "atlas") {
     const nextHash = routeHash(page, includeStudy);
     if (window.location.hash === nextHash) return;
@@ -1225,6 +1236,8 @@
     renderMethodReturnAction(study);
     renderMethodContext(study);
     renderActiveCatalogContext(study, visibleStudies());
+    const printRoute = $("#printRoute");
+    if (printRoute) printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -1497,8 +1510,7 @@
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
-      const shareUrl = clearCatalogParams(new URL(window.location.href));
-      shareUrl.hash = routeHash("atlas", true);
+      const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
         text: `Explore ${study.name} in the Sacred Geometry Atlas — ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom.`,
@@ -1647,8 +1659,7 @@
   }
 
   function citationText(study) {
-    const citationUrl = clearCatalogParams(new URL(window.location.href));
-    citationUrl.hash = routeHash("atlas", true);
+    const citationUrl = studyRouteUrl(study.id);
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
     const dimensions = `${number(study.length)} m length × ${number(study.span)} m span × ${number(study.height)} m height; ${study.bayCount} bays at ${number(study.module)} m module; radius ${number(study.radius)} m; symmetry ${number(study.symmetry, 2)}`;
@@ -1811,8 +1822,7 @@
   }
 
   function activeStudyExportPayload(study) {
-    const shareUrl = clearCatalogParams(new URL(window.location.href));
-    shareUrl.hash = routeHash("atlas", true);
+    const shareUrl = studyRouteUrl(study.id);
     return {
       title: `Sacred Geometry Atlas · ${studyShortName(study)}`,
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
