@@ -349,6 +349,15 @@ h3 { letter-spacing: -0.04em; }
 .hero-data-note-mark { display: grid; width: 1.05rem; height: 1.05rem; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal); font-family: var(--serif); font-size: 0.68rem; line-height: 1; }
 .hero-data-note strong { display: block; margin-bottom: 0.12rem; color: var(--amber); font-size: 0.52rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; }
 .hero-data-note-definition { display: block; color: var(--ink-soft); font-family: var(--sans); font-size: 0.62rem; letter-spacing: 0; }
+.hero-data-note[data-status="schematic"] { border-top-color: rgba(233, 179, 108, 0.56); }
+.hero-data-note[data-status="schematic"] .hero-data-note-mark,
+.hero-data-note[data-status="schematic"] strong { border-color: var(--amber); color: var(--amber); }
+.hero-data-note[data-status="measured"] { border-top-color: rgba(136, 198, 186, 0.56); }
+.hero-data-note[data-status="measured"] .hero-data-note-mark,
+.hero-data-note[data-status="measured"] strong { border-color: var(--teal); color: var(--teal); }
+.hero-data-note[data-status="mixed"] { border-top-color: rgba(231, 127, 98, 0.56); }
+.hero-data-note[data-status="mixed"] .hero-data-note-mark,
+.hero-data-note[data-status="mixed"] strong { border-color: var(--coral); color: var(--coral); }
 .hero-stat { display: grid; gap: 0.28rem; }
 .stat-number { color: var(--amber); font-family: var(--serif); font-size: 2.1rem; line-height: 1; }
 .stat-label { color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; text-transform: uppercase; }
@@ -1110,9 +1119,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .nav-button.is-active::after,
   .mode-button.is-active::after { background: Highlight; }
   .nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }
-  .hero-data-note { border-top-color: ButtonText; color: CanvasText; }
+  .hero-data-note { border-top-color: ButtonText !important; color: CanvasText; }
   .hero-data-note-mark,
-  .hero-data-note strong { border-color: Highlight; color: Highlight; }
+  .hero-data-note strong { border-color: Highlight !important; color: Highlight !important; }
   .hero-data-note-definition { color: CanvasText; }
   .dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .dataset-icon { color: ButtonText; }

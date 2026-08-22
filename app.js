@@ -314,8 +314,10 @@
     const summary = statuses.map((status) => `${String(counts[status] || 0).padStart(2, "0")} ${statusDisplayName(status).toLowerCase()}`).join(" · ") || "No records";
     const activeStatuses = statuses.filter((status) => counts[status] > 0);
     const definition = activeStatuses.map((status) => `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`).join(" ") || "No status definitions are available.";
+    const noteStatus = activeStatuses.length === 1 ? activeStatuses[0] : activeStatuses.length > 1 ? "mixed" : "empty";
     summaryTarget.textContent = summary;
     definitionTarget.textContent = definition;
+    note.setAttribute("data-status", noteStatus);
     note.setAttribute("aria-label", `Dataset status: ${summary}. ${definition}`);
   }
 
