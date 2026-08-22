@@ -113,6 +113,13 @@
     axis: "axis",
     measure: "dimensions"
   };
+  const layerDescriptions = {
+    all: "Complete drawing with every visible relationship.",
+    envelope: "Outer walls and enclosing geometric figure.",
+    rhythm: "Repeated bays, frames, and module marks.",
+    axis: "Directional lines and central geometric guides.",
+    measure: "Schematic measures and construction references."
+  };
   const validStatuses = new Set(["all", ...schemaStatusValues()]);
   const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);
   const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];
@@ -1039,7 +1046,7 @@
   }
 
   function announceDrawingState() {
-    announceKeyboard(`${drawingStateLabel()} selected.`);
+    announceKeyboard(`${drawingStateLabel()} selected. ${layerDescriptions[state.layer] || "Geometry layer focus."}`);
   }
 
   function updateSearchClear() {
@@ -1745,9 +1752,14 @@
       button.setAttribute("aria-pressed", String(selected));
     });
     $$('[data-layer]').forEach((button) => {
-      const selected = button.dataset.layer === state.layer;
+      const layer = button.dataset.layer;
+      const selected = layer === state.layer;
+      const layerLabel = layer === "all" ? "All geometry" : `${layerDisplayName(layer)[0].toUpperCase()}${layerDisplayName(layer).slice(1)} focus`;
+      const accessibleLabel = `${layerLabel}: ${layerDescriptions[layer] || "Geometry layer focus."}`;
       button.classList.toggle("is-active", selected);
       button.setAttribute("aria-pressed", String(selected));
+      button.setAttribute("aria-label", accessibleLabel);
+      button.title = accessibleLabel;
     });
     const drawingState = $("#drawingState");
     if (drawingState) drawingState.textContent = drawingStateLabel();

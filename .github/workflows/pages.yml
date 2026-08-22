@@ -167,6 +167,9 @@ jobs:
           for (const token of ['class="shortcut-guide layer-guide"', '<summary>Layer guide</summary>', '<p>Focus layers</p>', '<dt>Envelope</dt><dd>Outer walls and enclosing geometric figure.</dd>', '<dt>Rhythm</dt><dd>Repeated bays, frames, and module marks.</dd>', '<dt>Dimensions</dt><dd>Schematic measures and construction references.</dd>']) {
             if (!html.includes(token)) throw new Error('Drawing layer guide is incomplete: ' + token);
           }
+          for (const token of ['const layerDescriptions = {', 'const layerLabel = layer === "all" ? "All geometry"', 'button.setAttribute("aria-label", accessibleLabel);', 'button.title = accessibleLabel;', 'announceKeyboard(`${drawingStateLabel()} selected. ${layerDescriptions[state.layer] || "Geometry layer focus."}`);']) {
+            if (!app.includes(token)) throw new Error('Drawing layer controls are missing accessible definitions: ' + token);
+          }
           for (const token of ['.method-dictionary {', '.method-dictionary-grid {', '.method-dictionary-links a {', '.method-dictionary-item dd {', '.method-dictionary-formulas {']) {
             if (!styles.includes(token)) throw new Error('Method data dictionary styling is incomplete: ' + token);
           }
@@ -699,6 +702,12 @@ jobs:
             dataset: { view },
             setAttribute(name, value) { this[name] = value; }
           }));
+          const layerButtons = ['all', 'envelope', 'rhythm', 'axis', 'measure'].map((layer) => ({
+            dataset: { layer },
+            setAttribute(name, value) { this[name] = value; },
+            classList: { toggle() {} },
+            title: ''
+          }));
           const methodLink = { setAttribute(name, value) { this[name] = value; } };
           const context = {
             URL,
@@ -709,7 +718,7 @@ jobs:
               body: { classList: { remove() {} } },
               createElement() { return {}; },
               querySelector(selector) { return selector === '#keyboardStatus' ? keyboardStatus : elements.get(selector) || null; },
-              querySelectorAll(selector) { return selector === '[data-view]' ? navLinks : []; }
+              querySelectorAll(selector) { return selector === '[data-view]' ? navLinks : selector === '[data-layer]' ? layerButtons : []; }
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
@@ -732,6 +741,8 @@ jobs:
           populateFilter();
           renderControls();
           if (drawingState.textContent !== 'Outside · Plan · all geometry · 100% zoom') throw new Error(`Initial drawing context did not render: ${drawingState.textContent}`);
+          const axisLayer = layerButtons.find((button) => button.dataset.layer === 'axis');
+          if (!axisLayer || axisLayer['aria-label'] !== 'Axis focus: Directional lines and central geometric guides.' || axisLayer.title !== axisLayer['aria-label']) throw new Error('Drawing layer controls did not expose their accessible definitions');
           state.surface = 'interior';
           state.mode = 'section';
           state.layer = 'axis';

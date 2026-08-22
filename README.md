@@ -10,7 +10,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Interactive plan, elevation, and section drawings.
 - Outside / inside surface switch.
 - Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
-- An expandable layer guide explains what All, Envelope, Rhythm, Axis, and Dimensions reveal before a visitor isolates a drawing layer.
+- An expandable layer guide explains what All, Envelope, Rhythm, Axis, and Dimensions reveal before a visitor isolates a drawing layer; the focus buttons repeat those definitions in accessible labels and live announcements.
 - Zoom and reset controls for the SVG drawing instrument.
 - A plain-language drawing context line that keeps the active surface, mode, layer focus, and zoom visible beside the interpretive caption.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
