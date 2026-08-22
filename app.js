@@ -1509,7 +1509,11 @@
       action.title = label;
     }
     const heading = $("#activeName");
-    if (heading) heading.setAttribute("aria-describedby", outsideCatalog ? "activeStatusHelp activeCatalogContextText" : "activeStatusHelp");
+    if (heading) {
+      const headingDescriptionIds = ["activeStatusHelp", "activeMeta", "activeMeasureAccessible"];
+      if (outsideCatalog) headingDescriptionIds.push("activeCatalogContextText");
+      heading.setAttribute("aria-describedby", headingDescriptionIds.join(" "));
+    }
   }
 
   function renderActiveProvenance(study) {
