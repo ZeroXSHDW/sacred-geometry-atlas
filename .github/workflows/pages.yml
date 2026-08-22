@@ -232,8 +232,8 @@ jobs:
           for (const token of ['data-dismiss-fallback="shareFallback"', 'data-dismiss-fallback="citationFallback"', 'data-dismiss-fallback="catalogShareFallback"', 'data-dismiss-fallback="compareShareFallback"', 'function dismissManualCopyFallback(fallbackSelector)', 'event.key !== "Escape"', '.manual-copy-fallback-heading-row {', '.manual-copy-fallback-dismiss {', '.manual-copy-fallback-dismiss { border-color: ButtonText;']) {
             if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
           }
-          if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route" id="printRoute">') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;')) throw new Error('Print output must preserve active study provenance and its reproducible route');
-          if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !html.includes('<p class="comparison-print-route" id="comparisonPrintRoute">Route · #compare</p>') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !app.includes('printRoute.textContent = `Route · ${comparisonRouteUrl().href}`;') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('body.print-comparison .comparison-print-route { display: block;') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, table, and route');
+          if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route" id="printRoute">') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('printRoute.textContent = `Route · ${studyRoutePath(study.id)}`;') || !app.includes('temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print sheet", "Print active study sheet", "study-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print")') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;')) throw new Error('Print output must preserve active study provenance and its reproducible route');
+          if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !html.includes('<p class="comparison-print-route" id="comparisonPrintRoute">Route · #compare</p>') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !app.includes('printRoute.textContent = `Route · ${comparisonRouteUrl().href}`;') || !app.includes('temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print comparison", "Print this comparison", "comparison-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print")') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('body.print-comparison .comparison-print-route { display: block;') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, table, route, and visible feedback');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"')) throw new Error('Missing catalog export control');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="selectVisibleCompare" type="button" aria-label="Add visible studies to comparison"') || !app.includes('function addVisibleToComparison({ focus = false } = {})') || !app.includes('renderVisibleComparisonAction(visible);') || !styles.includes('.catalog-batch-action')) throw new Error('Missing filter-aware batch comparison action');
@@ -1166,6 +1166,20 @@ jobs:
           const panel = { open: false };
           const keyboardStatus = { textContent: '' };
           const classes = new Set();
+          const createPrintButton = () => {
+            const label = { textContent: '' };
+            const attributes = {};
+            return {
+              attributes,
+              classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } },
+              querySelector() { return label; },
+              setAttribute(name, value) { attributes[name] = value; },
+              label,
+              title: ''
+            };
+          };
+          const printComparisonButton = createPrintButton();
+          const printStudyButton = createPrintButton();
           let printCalls = 0;
           let afterPrint;
           const context = {
@@ -1173,12 +1187,20 @@ jobs:
             window: {
               location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
               print() { printCalls += 1; },
+              setTimeout() { return 1; },
+              clearTimeout() {},
               addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
               removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
             },
             document: {
               body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
-              querySelector(selector) { return selector === '.comparison-table-panel' ? panel : selector === '#keyboardStatus' ? keyboardStatus : null; },
+              querySelector(selector) {
+                if (selector === '.comparison-table-panel') return panel;
+                if (selector === '#keyboardStatus') return keyboardStatus;
+                if (selector === '#printComparison') return printComparisonButton;
+                if (selector === '#printStudy') return printStudyButton;
+                return null;
+              },
               querySelectorAll() { return []; }
             }
           };
@@ -1188,14 +1210,14 @@ jobs:
           const { state, printComparison, printStudy } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic'];
           printComparison();
-          if (printCalls !== 1 || !classes.has('print-comparison') || !panel.open || keyboardStatus.textContent !== 'Printing 2 study comparison.' || typeof afterPrint !== 'function') throw new Error('Comparison printing did not prepare its scoped print state');
+          if (printCalls !== 1 || !classes.has('print-comparison') || !panel.open || keyboardStatus.textContent !== 'Printing 2 study comparison.' || printComparisonButton.label.textContent !== 'Print opened' || printComparisonButton.attributes['aria-label'] !== 'Print dialog opened' || typeof afterPrint !== 'function') throw new Error('Comparison printing did not prepare its scoped print state or visible feedback');
           afterPrint();
           if (classes.has('print-comparison') || panel.open || afterPrint !== null) throw new Error('Comparison printing did not restore the interactive state after printing');
           context.window.print = () => { throw new Error('Print dialog blocked'); };
           state.compareIds = [];
           printStudy();
-          if (keyboardStatus.textContent !== 'Printing is unavailable in this browser.') throw new Error('Study printing did not recover from a blocked print dialog');
-          console.log('Comparison printing smoke test passed.');
+          if (keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printStudyButton.label.textContent !== 'Unavailable' || printStudyButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Study printing did not recover from a blocked print dialog with visible feedback');
+          console.log('Study and comparison printing smoke test passed.');
           NODE
 
       - name: Smoke-test escaped comparison labels

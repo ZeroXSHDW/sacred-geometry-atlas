@@ -1938,23 +1938,29 @@
 
   function printStudy() {
     const study = activeStudy();
+    const button = $("#printStudy");
     if (!study) return;
     if (typeof window.print !== "function") {
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print");
       announceKeyboard("Printing is unavailable in this browser.");
       return;
     }
     announceKeyboard(`Printing ${study.name} study sheet.`);
     try {
       window.print();
+      if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print sheet", "Print active study sheet", "study-print");
     } catch (error) {
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print");
       announceKeyboard("Printing is unavailable in this browser.");
     }
   }
 
   function printComparison() {
     const comparison = comparisonStudies();
+    const button = $("#printComparison");
     if (!comparison.length) return;
     if (typeof window.print !== "function") {
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print");
       announceKeyboard("Printing is unavailable in this browser.");
       return;
     }
@@ -1971,8 +1977,10 @@
     announceKeyboard(`Printing ${comparison.length} study comparison.`);
     try {
       window.print();
+      if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print comparison", "Print this comparison", "comparison-print");
     } catch (error) {
       cleanup();
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print");
       announceKeyboard("Printing is unavailable in this browser.");
     }
   }
