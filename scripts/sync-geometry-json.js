@@ -39,6 +39,7 @@ const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character
 const numberWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 const countLabel = (count) => numberWords[count] || String(count);
 const studyStatus = (study) => study.status || "schematic";
+const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
 
 function noScriptFallback() {
   const hasStudies = payload.studies.length > 0;
@@ -72,10 +73,19 @@ function noScriptFallback() {
       : `The records are labeled schematic and use the Sacred Geometry Atlas proportional model; they are not a measured survey. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`;
   const list = payload.studies.map((study) => {
     const dimensions = [study.length, study.span, study.height].join(" × ") + ` ${unitSymbol}`;
+    const floorArea = positiveEstimate(study.floorAreaEstimate);
+    const volume = positiveEstimate(study.volumeEstimate);
+    const readings = [
+      `${study.bayCount} bays`,
+      `module ${study.module} ${unitSymbol}`,
+      `radius ${study.radius} ${unitSymbol}`,
+      floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}²` : "",
+      volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : ""
+    ].filter(Boolean).join(" · ");
     const reading = study.surfaceNote || study.exteriorNote || study.interiorNote || "No interpretive reading supplied.";
     const source = study.source || "Provenance not supplied";
     const sourceNote = study.sourceNote || "Provenance note not supplied";
-    return `          <li><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong>${escapeHtml(study.name)}</strong><small>${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(study.axis)} · ${escapeHtml(studyStatus(study))} · ${escapeHtml(dimensions)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-provenance">Provenance: ${escapeHtml(source)} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading">Reading: ${escapeHtml(reading)}</span></span></li>`;
+    return `          <li><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong>${escapeHtml(study.name)}</strong><small>${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(study.axis)} · ${escapeHtml(studyStatus(study))} · ${escapeHtml(dimensions)} · ${escapeHtml(readings)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-provenance">Provenance: ${escapeHtml(source)} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading">Reading: ${escapeHtml(reading)}</span></span></li>`;
   }).join("\n");
   const intro = hasStudies
     ? `${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} ${escapeHtml(provenanceLabel)} ${payload.studies.length === 1 ? "study" : "studies"} of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in ${escapeHtml(unitName)}. ${escapeHtml(schemaNote)}.`

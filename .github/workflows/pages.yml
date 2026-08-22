@@ -162,8 +162,11 @@ jobs:
           if (noScriptEntries.length !== source.studies.length) throw new Error(`No-script fallback has ${noScriptEntries.length} entries; expected ${source.studies.length}`);
           for (const study of source.studies) {
             const dimensions = [study.length, study.span, study.height].join(' × ') + ' m';
+            const floorArea = Number.isFinite(study.floorAreaEstimate) && study.floorAreaEstimate > 0 ? `floor area ${Number(study.floorAreaEstimate).toLocaleString('en-US')} m²` : '';
+            const volume = Number.isFinite(study.volumeEstimate) && study.volumeEstimate > 0 ? `volume ${Number(study.volumeEstimate).toLocaleString('en-US')} m³` : '';
+            const readings = [`${study.bayCount} bays`, `module ${study.module} m`, `radius ${study.radius} m`, floorArea, volume].filter(Boolean);
             const entry = noScriptEntries.find((candidate) => candidate.includes(study.name));
-            if (!entry || [study.name, study.typology, study.place, study.era, study.emphasis, `Axis: ${study.axis}`, study.status, dimensions, study.churchName, study.source, study.sourceNote, study.surfaceNote].some((value) => !entry.includes(value))) {
+            if (!entry || [study.name, study.typology, study.place, study.era, study.emphasis, `Axis: ${study.axis}`, study.status, dimensions, ...readings, study.churchName, study.source, study.sourceNote, study.surfaceNote].some((value) => !entry.includes(value))) {
               throw new Error('No-script fallback is missing ' + study.id + ': ' + dimensions + ' / ' + study.churchName + ' / reading');
             }
           }
@@ -429,8 +432,18 @@ jobs:
             const result = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (result.status !== 0) throw new Error(result.stderr || result.stdout || 'Temporary no-script generation failed');
             const generated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
-            if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('Provenance: Sacred Geometry Atlas proportional model · Source &lt;note&gt;') || !generated.includes('Schema 1.1 · units: meters.') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
+            if (!generated.includes('The longitudinal &lt;basilica&gt;') || !generated.includes('· measured ·') || !generated.includes('· 7 bays · module 7.2 m · radius 11 m · floor area 1,276 m² · volume 14,239 m³ · Reference: Representative longitudinal basilica') || !generated.includes('Provenance: Sacred Geometry Atlas proportional model · Source &lt;note&gt;') || !generated.includes('Schema 1.1 · units: meters.') || !generated.includes('Six schematic and measured studies') || !generated.includes('The collection mixes schematic and measured records')) {
               throw new Error('Generated no-script fallback did not reflect escaped content and mixed provenance');
+            }
+            const unitSource = fs.readFileSync('data/geometry.js', 'utf8')
+              .replace('units: "meters",', 'units: "feet",')
+              .replace('unitSymbol: "m",', 'unitSymbol: "ft",');
+            fs.writeFileSync(sourcePath, unitSource);
+            const unitResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
+            if (unitResult.status !== 0) throw new Error(unitResult.stderr || unitResult.stdout || 'Custom-unit no-script generation failed');
+            const unitGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
+            if (!unitGenerated.includes('Dimensions are shown as length × span × height in feet. Schema 1.1 · units: feet.') || !unitGenerated.includes('58 × 22 × 18 ft · 7 bays · module 7.2 ft · radius 11 ft · floor area 1,276 ft² · volume 14,239 ft³')) {
+              throw new Error('Generated no-script fallback did not follow a custom schema unit name and symbol');
             }
             const emptySource = fs.readFileSync('data/geometry.js', 'utf8').replace(/window\.CHURCH_GEOMETRY = \[[\s\S]*?\n\];/, 'window.CHURCH_GEOMETRY = [];');
             fs.writeFileSync(sourcePath, emptySource);
