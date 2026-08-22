@@ -42,6 +42,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Comparison bars also expose their active range and value as semantic meters, keeping the normalized readings available beyond the visual bar lengths.
 - Comparison study cards and table links expose visible “Open in Atlas” cues for returning to a selected study and mark the current Atlas study for orientation; table links preserve the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
+- Focused comparison cards, charts, tables, and exports preserve the order in which studies were selected or shared in the comparison route.
 - An expandable semantic comparison table with route-native study links, axis and recorded study status, lengths, spans, ratios, heights, bays, modules, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling on narrow screens.
 - Comparison tables carry the same schematic/measured status styling as cards and charts, so provenance stays visible across every comparison surface.
 - The active study status badge uses the same schematic/measured styling as the catalog, charts, and comparison table.

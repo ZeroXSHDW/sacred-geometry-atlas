@@ -2371,7 +2371,7 @@
   }
 
   function comparisonStudies() {
-    if (state.compareIds.length >= 2) return studies.filter((study) => state.compareIds.includes(study.id));
+    if (state.compareIds.length >= 2) return state.compareIds.map((id) => studies.find((study) => study.id === id)).filter(Boolean);
     return studies;
   }
 
