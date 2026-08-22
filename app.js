@@ -1089,6 +1089,7 @@
     renderVisualState(visible);
     renderActiveFilters();
     renderVisibleComparisonAction(visible);
+    renderMethodReturnAction(activeStudy(), visible);
     updateSearchClear();
     renderStudyNav();
     list.innerHTML = visible.map((study) => {
@@ -1195,10 +1196,10 @@
     `).join("");
   }
 
-  function renderMethodReturnAction(study = activeStudy()) {
+  function renderMethodReturnAction(study = activeStudy(), visible = visibleStudies()) {
     const button = $("#methodBackToStudy");
     if (!button) return;
-    const canOpenStudy = Boolean(study && visibleStudies().some((candidate) => candidate.id === study.id));
+    const canOpenStudy = Boolean(study && visible.some((candidate) => candidate.id === study.id));
     const label = canOpenStudy ? `Open ${studyShortName(study)} in Atlas` : "Return to Atlas catalog";
     button.setAttribute("aria-label", label);
     button.title = label;
