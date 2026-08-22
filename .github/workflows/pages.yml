@@ -436,7 +436,7 @@ jobs:
             const emptyResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (emptyResult.status !== 0) throw new Error(emptyResult.stderr || emptyResult.stdout || 'Empty no-script generation failed');
             const emptyGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
-            if (!emptyGenerated.includes('No studies are currently available in the church geometry collection. Schema 1.1 · units: meters.') || !emptyGenerated.includes('The collection is currently empty. Schema 1.1 · units: meters.') || emptyGenerated.includes('Zero schematic studies')) {
+            if (!emptyGenerated.includes('No studies are currently available in the church geometry collection. Schema 1.1 · units: meters.') || !emptyGenerated.includes('No study records are currently available.') || !emptyGenerated.includes('The collection is currently empty. Schema 1.1 · units: meters.') || emptyGenerated.includes('<ol class="noscript-list">') || emptyGenerated.includes('Zero schematic studies')) {
               throw new Error('Empty no-script fallback did not render an honest collection state');
             }
             console.log('Generated no-script fallback smoke test passed.');

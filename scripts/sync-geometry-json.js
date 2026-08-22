@@ -78,11 +78,16 @@ function noScriptFallback() {
   const intro = hasStudies
     ? `${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} ${escapeHtml(provenanceLabel)} ${payload.studies.length === 1 ? "study" : "studies"} of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in meters. ${escapeHtml(schemaNote)}.`
     : `No studies are currently available in the church geometry collection. ${escapeHtml(schemaNote)}.`;
+  const collection = hasStudies
+    ? [
+        "        <ol class=\"noscript-list\">",
+        list,
+        "        </ol>"
+      ].join("\n")
+    : '        <p class="noscript-empty">No study records are currently available.</p>';
   return [
     `        <p class="noscript-intro">${intro}</p>`,
-    "        <ol class=\"noscript-list\">",
-    list,
-    "        </ol>",
+    collection,
     `        <p class="noscript-note">${escapeHtml(note)}</p>`
   ].join("\n");
 }

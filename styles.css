@@ -90,6 +90,7 @@ summary:focus-visible {
 .noscript-index h1 { margin: 0 0 0.8rem; font-size: clamp(1.7rem, 3vw, 2.9rem); letter-spacing: -0.06em; line-height: 1.05; }
 .noscript-intro { max-width: 42rem; color: var(--ink-soft); }
 .noscript-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 2rem 0 1.2rem; padding: 0; list-style: none; }
+.noscript-empty { margin: 2rem 0 1.2rem; padding: 1rem 0; border-top: 1px solid var(--line); color: var(--ink-soft); font-family: var(--mono); font-size: 0.68rem; line-height: 1.55; }
 .noscript-list li { display: grid; grid-template-columns: 32px 1fr; gap: 0.7rem; padding: 1rem 0; border-top: 1px solid var(--line); }
 .noscript-number { color: var(--amber); font-family: var(--serif); font-size: 1.35rem; line-height: 1; }
 .noscript-list strong { display: block; color: var(--ink); font-size: 0.82rem; }
@@ -944,6 +945,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-study-card.is-active .compare-study-open { color: Highlight; }
   .compare-tray-summary { color: ButtonText; }
   .noscript-provenance { color: Highlight; }
+  .noscript-empty { border-top-color: ButtonText; color: CanvasText; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
   .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }
