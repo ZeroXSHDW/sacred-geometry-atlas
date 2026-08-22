@@ -135,7 +135,7 @@ Each record should include:
 }
 ```
 
-The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status. Each generated JSON export also includes a `provenance` object with its scope, record count, status counts, and those schema-backed definitions. The committed [`data/geometry.json`](data/geometry.json) is generated from the same source and checked in CI so it cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
+The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status. Those same definitions drive the visible filter/comparison guidance and accessible study labels, so the interface and exports use one provenance vocabulary. Each generated JSON export also includes a `provenance` object with its scope, record count, status counts, and those schema-backed definitions. The committed [`data/geometry.json`](data/geometry.json) is generated from the same source and checked in CI so it cannot drift from [`data/geometry.js`](data/geometry.js). Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
 
 ## Test locally
 

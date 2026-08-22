@@ -33,9 +33,7 @@
   const activeStudy = () => studies.find((study) => study.id === state.activeId) || studies[0];
   const studyStatus = (study) => study.status || "schematic";
   const studyDataLabel = (study) => studyStatus(study) === "measured" ? "measured" : "schematic";
-  const studyStatusDescription = (study) => studyStatus(study) === "measured"
-    ? "Measured data uses source-supported dimensions."
-    : "Schematic data uses illustrative proportions.";
+  const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
@@ -176,6 +174,12 @@
         : FALLBACK_DATA_STATUS_DEFINITIONS[status];
       return definitions;
     }, {});
+  }
+
+  function statusGuidanceText() {
+    const definitions = dataStatusDefinitions();
+    const counts = studyStatusCounts();
+    return `Schematic = ${definitions.schematic} Measured = ${definitions.measured} Counts reflect the full collection: ${counts.schematic} schematic · ${counts.measured} measured.`;
   }
 
   function exportProvenance(records, scope) {
@@ -431,6 +435,11 @@
         if (statusLabels[option.value]) option.textContent = statusLabels[option.value];
       });
     }
+    const statusGuidance = statusGuidanceText();
+    ["#statusHelp", "#comparisonStatusHelp"].forEach((selector) => {
+      const target = $(selector);
+      if (target) target.textContent = statusGuidance;
+    });
   }
 
   function bindEvents() {
