@@ -2528,6 +2528,12 @@
     const maxRatio = Math.max(...comparison.map((study) => study.length / study.span));
     const maxHeightRatio = Math.max(...comparison.map((study) => study.height / study.span));
     const maxModule = Math.max(...comparison.map((study) => study.module));
+    const ratioScale = $("#ratioChartScale");
+    const heightScale = $("#heightChartScale");
+    const moduleScale = $("#moduleChartScale");
+    if (ratioScale) ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;
+    if (heightScale) heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;
+    if (moduleScale) moduleScale.textContent = `Scale 0 → ${number(maxModule)} m · active comparison maximum`;
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const status = studyDataLabel(study);

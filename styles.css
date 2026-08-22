@@ -670,7 +670,8 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .bar-fill { display: block; height: 100%; min-width: 3px; background: var(--amber); transition: width 450ms ease; }
 .bar-fill.teal { background: var(--teal); }
 .bar-value { color: var(--ink-muted); font-family: var(--mono); font-size: 0.57rem; text-align: right; }
-.chart-note { margin: 2.2rem 0 0; color: var(--ink-muted); font-size: 0.68rem; }
+.chart-scale { margin: 1.25rem 0 0; color: var(--teal); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
+.chart-note { margin: 0.5rem 0 0; color: var(--ink-muted); font-size: 0.68rem; }
 .module-chart { display: grid; gap: 0.75rem; }
 .module-row { display: grid; grid-template-columns: 145px 1fr 55px; align-items: center; gap: 0.8rem; }
 .module-name { display: flex; min-width: 0; align-items: baseline; gap: 0.35rem; color: var(--ink-soft); font-size: 0.65rem; }
