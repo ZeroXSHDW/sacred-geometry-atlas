@@ -908,7 +908,7 @@
         if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
       }
-      selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true });
+      selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 });
     });
     $$("[data-surface]").forEach((button) => button.addEventListener("click", () => {
       state.surface = button.dataset.surface;
@@ -983,7 +983,7 @@
         if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
       }
-      selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true });
+      selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 });
     });
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadStudy").addEventListener("click", downloadStudy);
@@ -1031,7 +1031,7 @@
         if (!studyLink) return;
         if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true });
+        selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 });
       });
     }
     const comparisonTablePanel = $(".comparison-table-panel");
@@ -1064,18 +1064,33 @@
   }
 
   function selectStudy(id, options = {}) {
-    const { scroll = true, focus = false, restoreCardFocus = false } = options;
+    const { scroll = true, focus = false, restoreCardFocus = false, reveal = false } = options;
     if (!studies.some((study) => study.id === id)) return;
     state.activeId = id;
-    showPage("atlas", { scroll });
+    const revealCompactStudy = reveal && scroll && isCompactAtlasViewport();
+    showPage("atlas", { scroll: revealCompactStudy ? false : scroll });
     renderAll();
     announceStudy(activeStudy(), visibleStudies().length);
     if (focus) {
       const heading = $("#activeName");
       if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: !scroll });
     } else if (restoreCardFocus) {
+      if (revealCompactStudy) scrollActiveStudyIntoView();
       focusStudyTarget(id);
     }
+  }
+
+  function isCompactAtlasViewport() {
+    if (typeof window.matchMedia !== "function") return false;
+    return window.matchMedia("(max-width: 740px)").matches;
+  }
+
+  function scrollActiveStudyIntoView() {
+    const heading = $("#activeName");
+    if (!heading || typeof heading.scrollIntoView !== "function") return false;
+    const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    heading.scrollIntoView({ behavior, block: "start" });
+    return true;
   }
 
   function resultCountText(count) {

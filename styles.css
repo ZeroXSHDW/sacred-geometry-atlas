@@ -64,6 +64,8 @@ summary:focus-visible {
   outline-offset: 6px;
 }
 
+#activeName { scroll-margin-top: 7rem; }
+
 #dataErrorHeading:focus {
   outline: 2px solid var(--teal);
   outline-offset: 6px;
@@ -845,6 +847,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 @media (max-width: 740px) {
   html { scroll-padding-top: 9rem; }
   .route-anchor, .workspace, .page-view { scroll-margin-top: 9rem; }
+  #activeName { scroll-margin-top: 9rem; }
   .comparison-table thead th { top: 9rem; }
   .site-header, main, .site-footer { width: min(100% - 32px, 600px); }
   .noscript-index { width: min(100% - 32px, 600px); padding: 1.3rem; }
@@ -932,6 +935,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 @media (max-width: 430px) {
   html { scroll-padding-top: 11rem; }
   .route-anchor, .workspace, .page-view { scroll-margin-top: 11rem; }
+  #activeName { scroll-margin-top: 11rem; }
   .comparison-table thead th { top: 11rem; }
   .brand-name { font-size: 0.65rem; }
   .brand-subtitle { font-size: 0.5rem; }
