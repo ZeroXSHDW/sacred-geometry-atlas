@@ -817,6 +817,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-grid { grid-template-columns: repeat(2, 1fr); }
   .dataset-link span:last-child { display: none; }
   .catalog-action span:last-child { display: none; }
+  .catalog-action#downloadCatalogView span:last-child,
+  .catalog-action#downloadCatalogCsv span:last-child { display: inline; }
 }
 
 @media (max-width: 740px) {
