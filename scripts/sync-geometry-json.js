@@ -41,6 +41,7 @@ const countLabel = (count) => numberWords[count] || String(count);
 const studyStatus = (study) => study.status || "schematic";
 
 function noScriptFallback() {
+  const hasStudies = payload.studies.length > 0;
   const collectionCount = countLabel(payload.studies.length);
   const counts = payload.studies.reduce((statusCounts, study) => {
     const status = studyStatus(study);
@@ -60,7 +61,9 @@ function noScriptFallback() {
     .join(" · ");
   const statusDefinitions = payload.schema.statusDefinitions || {};
   const schemaNote = `Schema ${payload.schema.version || "unspecified"} · units: ${payload.schema.units || "unspecified"}`;
-  const note = schematicCount && measuredCount
+  const note = !hasStudies
+    ? `The collection is currently empty. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
+    : schematicCount && measuredCount
     ? `The collection mixes schematic and measured records (${statusSummary}). Schematic = ${statusDefinitions.schematic || "illustrative proportions"} Measured = ${statusDefinitions.measured || "source-supported dimensions"} ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
     : measuredCount
       ? `The records are labeled measured and use source-supported dimensions. Counts: ${statusSummary}. ${schemaNote}. Enable JavaScript for interactive drawings, comparison, filters, and downloadable exports.`
@@ -72,8 +75,11 @@ function noScriptFallback() {
     const sourceNote = study.sourceNote || "Provenance note not supplied";
     return `          <li><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong>${escapeHtml(study.name)}</strong><small>${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(study.axis)} · ${escapeHtml(studyStatus(study))} · ${escapeHtml(dimensions)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-provenance">Provenance: ${escapeHtml(source)} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading">Reading: ${escapeHtml(reading)}</span></span></li>`;
   }).join("\n");
+  const intro = hasStudies
+    ? `${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} ${escapeHtml(provenanceLabel)} ${payload.studies.length === 1 ? "study" : "studies"} of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in meters. ${escapeHtml(schemaNote)}.`
+    : `No studies are currently available in the church geometry collection. ${escapeHtml(schemaNote)}.`;
   return [
-    `        <p class="noscript-intro">${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} ${escapeHtml(provenanceLabel)} ${payload.studies.length === 1 ? "study" : "studies"} of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in meters. ${escapeHtml(schemaNote)}.</p>`,
+    `        <p class="noscript-intro">${intro}</p>`,
     "        <ol class=\"noscript-list\">",
     list,
     "        </ol>",

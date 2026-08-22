@@ -32,6 +32,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
 - A visible runtime recovery panel offers a one-click retry and preserves a usable static-data path if the app script is blocked or fails before initialization.
 - The no-script collection index includes schema/unit metadata and each record’s source note, keeping the static fallback research-ready.
+- The no-script generator also renders an honest empty-collection state if future data edits temporarily remove all study records.
 - Previous/next study controls that follow the active filter set, including touch-sized buttons.
 - Copyable citations that include the active study, reference, axis, provenance, data-status definition, key geometry dimensions, drawing state, and shareable route; if browser copy APIs are unavailable, the citation is revealed in a manually copyable field.
 - Share controls use native sharing where available, then fall back to clipboard or a manually copyable link field with visible and live completion feedback.
