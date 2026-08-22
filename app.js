@@ -2059,6 +2059,26 @@
     return parts.length ? parts.join(", ") : "the full collection";
   }
 
+  function selectedComparisonStudies() {
+    return state.compareIds
+      .map((id) => studies.find((study) => study.id === id))
+      .filter(Boolean);
+  }
+
+  function comparisonSelectionExportContext() {
+    const definitions = dataStatusDefinitions();
+    return selectedComparisonStudies().map((study) => {
+      const status = studyStatus(study);
+      return {
+        id: study.id,
+        name: studyShortName(study),
+        axis: study.axis,
+        status,
+        statusDefinition: definitions[status] || "Data status is not documented."
+      };
+    });
+  }
+
   function catalogCitationText(records = visibleStudies()) {
     const route = catalogViewRouteUrl();
     const definitions = dataStatusDefinitions();
@@ -2066,9 +2086,7 @@
       `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
     ).join(" ");
     const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
-    const selected = state.compareIds
-      .map((id) => studies.find((study) => study.id === id))
-      .filter(Boolean);
+    const selected = selectedComparisonStudies();
     const selection = selected.length
       ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatus(study)})`).join("; ")}.`
       : "";
@@ -2505,7 +2523,8 @@
         axis: state.filterAxis,
         status: state.filterStatus,
         sort: state.sort,
-        compareIds: [...state.compareIds]
+        compareIds: [...state.compareIds],
+        comparisonSelection: comparisonSelectionExportContext()
       },
       studies: visible
     };
@@ -2928,7 +2947,7 @@
   }
 
   function comparisonStudies() {
-    if (state.compareIds.length >= 2) return state.compareIds.map((id) => studies.find((study) => study.id === id)).filter(Boolean);
+    if (state.compareIds.length >= 2) return selectedComparisonStudies();
     return studies;
   }
 
