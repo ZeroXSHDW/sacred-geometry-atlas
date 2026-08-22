@@ -435,6 +435,7 @@ h3 { letter-spacing: -0.04em; }
 .study-title-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.65rem; }
 .study-header h3 { margin-bottom: 0.35rem; font-size: clamp(1.45rem, 3vw, 2.6rem); line-height: 1.06; }
 .study-status { display: inline-flex; align-items: center; align-self: center; padding: 0.32rem 0.42rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); font-family: var(--mono); font-size: 0.49rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+.study-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
 .study-meta { margin: 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.63rem; }
 .study-context-note { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.7rem; max-width: 42rem; margin: 0.55rem 0 0; padding: 0.45rem 0.6rem; border-left: 2px solid var(--amber); color: var(--ink-muted); background: var(--amber-soft); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; }
 .study-context-note button { padding: 0.32rem 0.45rem; border: 1px solid var(--amber); color: var(--amber); background: transparent; font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }

@@ -1497,6 +1497,7 @@
     if (activeStatus) {
       activeStatus.textContent = status;
       activeStatus.title = statusDefinition;
+      activeStatus.setAttribute("data-status", studyDataLabel(study));
       activeStatus.setAttribute("aria-label", `${status}: ${statusDefinition}`);
     }
     const activeStatusHelp = $("#activeStatusHelp");
