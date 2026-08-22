@@ -716,11 +716,14 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .bar-chart { display: grid; gap: 0.8rem; }
 .bar-row { display: grid; grid-template-columns: 92px 1fr 44px; align-items: center; gap: 0.7rem; }
 .bar-label { display: grid; min-width: 0; align-content: center; gap: 0.14rem; overflow: hidden; color: var(--ink-soft); font-size: 0.65rem; }
+.bar-row.is-active .bar-label,
+.module-row.is-active .module-name { color: var(--ink); }
 .chart-study-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chart-study-meta { display: flex; min-width: 0; align-items: center; gap: 0.3rem; overflow: hidden; }
 .chart-axis-context { min-width: 0; overflow: hidden; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.03em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
 .chart-status { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.22rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
 .chart-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
+.chart-current { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.22rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.46rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
 .bar-track { height: 7px; background: rgba(213, 229, 214, 0.1); }
 .bar-fill { display: block; height: 100%; min-width: 3px; background: var(--amber); transition: width 450ms ease; }
 .bar-fill.teal { background: var(--teal); }
@@ -1039,8 +1042,11 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-card-status[data-status="measured"],
   .chart-status,
   .chart-status[data-status="measured"],
+  .chart-current,
   .compare-study-status,
   .compare-study-status[data-status="measured"] { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .bar-row.is-active .bar-label,
+  .module-row.is-active .module-name { color: CanvasText; }
   .comparison-table tbody .comparison-status,
   .comparison-table tbody .comparison-status[data-status="measured"] { color: ButtonText; }
   .comparison-table-study-link .comparison-table-study-state { color: Highlight; }

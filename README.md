@@ -50,6 +50,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Sorting by curated order, length, height, span, length-to-span ratio, symmetry, or name.
 - Multi-study comparison with side-by-side study envelopes, per-record schematic/measured status, typology/place/era/axis context, and proportional charts.
 - Comparison chart rows keep each study’s geometric axis visible beside its name and provenance status, so the visual comparison retains the same orientation context as the accessible labels and table.
+- Comparison chart rows identify the current Atlas study with a visible cue and matching accessible context, keeping ratio, height, and module readings oriented while a visitor moves between comparison and Atlas.
 - Each normalized comparison chart includes a dynamic zero, midpoint, and active-maximum guide so focused selections remain visually honest when their scale changes.
 - Focused comparison range announcements keep each active chart maximum available to assistive technology as the selection changes.
 - Comparison bars also expose their active range and value as semantic meters, keeping the normalized readings available beyond the visual bar lengths.
