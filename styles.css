@@ -929,6 +929,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .hero-stats { justify-content: space-between; gap: 0.75rem; }
   .share-button { padding: 0.5rem; }
   .share-button span:last-child { display: none; }
+  .download-button span.download-label { display: inline; font-size: 0; }
+  .download-button span.download-label::after { content: "JSON"; font-size: 0.62rem; }
+  .download-button.is-complete span.download-label::after { content: "Done"; }
   .method-return-button span:last-child { display: inline; }
   .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
   .drawing-scale { flex: 0 0 100%; }

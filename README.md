@@ -92,6 +92,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
 - Forced-colors mode maps meter tracks, fills, and chart guides to system colors so quantitative readings remain legible in high-contrast themes.
 - Compact catalog export controls keep their JSON and CSV format labels visible at tablet and phone widths, so identical download glyphs remain distinguishable.
+- The full-atlas download keeps a compact JSON label at phone widths, with a visible Done state during export feedback, while its accessible name remains explicit.
 - At phone widths, the drawing toolbar gives its scale readout a full row and wraps the export, reset, and zoom controls so the instrument remains usable without horizontal overflow.
 - The drawing toolbar labels its ratio as an illustrative diagram reference, keeping the schematic studies distinct from measured survey output.
 
