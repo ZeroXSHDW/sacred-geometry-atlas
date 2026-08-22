@@ -13,6 +13,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Zoom and reset controls for the SVG drawing instrument.
 - A plain-language drawing context line that keeps the active surface, mode, layer focus, and zoom visible beside the interpretive caption.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
+- Displayed dimensions, SVG labels, citations, comparison tables, and CSV headers use the schema-backed unit symbol, so a changed unit system cannot silently retain metre labels.
 - The Method warning adapts when a collection mixes schematic and source-supported records, so its limitations stay accurate as the atlas grows.
 - A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON artifact and the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
@@ -46,7 +47,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Comparison study cards and table links expose visible “Open in Atlas” cues for returning to a selected study and mark the current Atlas study for orientation; table links preserve the focused selection when opened in a new tab.
 - Focused comparisons keep their selected-study strip visible, with inline removal and clear-all controls that preserve keyboard focus.
 - Focused comparison cards, charts, tables, and exports preserve the order in which studies were selected or shared in the comparison route.
-- An expandable semantic comparison table with route-native study links, axis and recorded study status, lengths, spans, ratios, heights, bays, modules, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling on narrow screens.
+- An expandable semantic comparison table with route-native study links, axis and recorded study status, lengths, spans, ratios, heights, bays, modules, radii, symmetry values, optional floor-area and volume estimates, and volume provenance; each status cell carries its definition for assistive technology, with keyboard-accessible horizontal scrolling on narrow screens.
 - Comparison tables carry the same schematic/measured status styling as cards and charts, so provenance stays visible across every comparison surface.
 - The active study status badge uses the same schematic/measured styling as the catalog, charts, and comparison table.
 - Context-aware CSV export for the active comparison scope, including typology/place/era/axis context, per-record status definitions, optional floor-area and volume estimates, estimate provenance, scope, reproducible route, schema version, and units, alongside the full-atlas and filtered-view JSON downloads.

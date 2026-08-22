@@ -1,6 +1,7 @@
 window.CHURCH_GEOMETRY_SCHEMA = {
   version: "1.1",
   units: "meters",
+  unitSymbol: "m",
   statusValues: ["schematic", "measured"],
   statusDefinitions: {
     schematic: "Illustrative proportions; not a measured survey.",

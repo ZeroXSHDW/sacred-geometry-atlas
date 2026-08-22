@@ -47,10 +47,17 @@
     : study.exteriorNote || study.surfaceNote || study.interiorNote;
   const number = (value, digits = 1) => Number(value).toFixed(digits);
   const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
+  const geometrySchema = () => window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters", unitSymbol: "m" };
+  const geometryUnitName = () => geometrySchema().units || "units";
+  const geometryUnitSymbol = () => geometrySchema().unitSymbol || "m";
+  const linearMeasure = (value, digits = 1) => `${number(value, digits)} ${geometryUnitSymbol()}`;
+  const squareMeasure = (value, digits = 0) => `${number(value, digits)} ${geometryUnitSymbol()}²`;
+  const cubicMeasure = (value) => `${Number(value).toLocaleString()} ${geometryUnitSymbol()}³`;
+  const rawMeasure = (value) => `${value} ${geometryUnitSymbol()}`;
   function catalogStudyAriaLabel(study, isActive) {
     const stateLabel = isActive ? "Selected study" : "Open study";
     const matchContext = searchMatchContext(study);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} meters long, span ${number(study.span)} meters, height ${number(study.height)} meters; ${study.axis} axis; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; ${study.axis} axis; ${study.emphasis}; ${studyStatusDescription(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1173,35 +1180,37 @@
   }
 
   function studySearchDimensions(study) {
+    const unit = geometryUnitSymbol();
     return [
-      `length ${study.length} m`,
-      `length ${number(study.length)} m`,
-      `span ${study.span} m`,
-      `span ${number(study.span)} m`,
-      `height ${study.height} m`,
-      `height ${number(study.height)} m`,
+      `length ${study.length} ${unit}`,
+      `length ${number(study.length)} ${unit}`,
+      `span ${study.span} ${unit}`,
+      `span ${number(study.span)} ${unit}`,
+      `height ${study.height} ${unit}`,
+      `height ${number(study.height)} ${unit}`,
       `${study.bayCount} bays`,
-      `module ${study.module} m`,
-      `module ${number(study.module)} m`,
-      `radius ${study.radius} m`,
-      `radius ${number(study.radius)} m`,
+      `module ${study.module} ${unit}`,
+      `module ${number(study.module)} ${unit}`,
+      `radius ${study.radius} ${unit}`,
+      `radius ${number(study.radius)} ${unit}`,
     ];
   }
 
   function studySearchDerivedReadings(study) {
     const floorAreaEstimate = positiveEstimate(study.floorAreaEstimate);
     const volumeEstimate = positiveEstimate(study.volumeEstimate);
+    const unit = geometryUnitSymbol();
     return [
       `symmetry ${number(study.symmetry, 2)}`,
       `length / span ${number(study.length / study.span, 2)}`,
       `height / span ${number(study.height / study.span, 2)}`,
       `section ratio ${number(study.height / study.span, 2)}`,
       `module / span ${number(study.module / study.span, 2)}`,
-      `radial reach ${number(study.radius)} m`,
-      floorAreaEstimate !== null ? `floor area ${floorAreaEstimate} m²` : "",
-      floorAreaEstimate !== null ? `floor area ${number(floorAreaEstimate, 0)} m²` : "",
-      volumeEstimate !== null ? `volume ${volumeEstimate} m³` : "",
-      volumeEstimate !== null ? `volume ${Number(volumeEstimate).toLocaleString()} m³` : ""
+      `radial reach ${number(study.radius)} ${unit}`,
+      floorAreaEstimate !== null ? `floor area ${floorAreaEstimate} ${unit}²` : "",
+      floorAreaEstimate !== null ? `floor area ${number(floorAreaEstimate, 0)} ${unit}²` : "",
+      volumeEstimate !== null ? `volume ${volumeEstimate} ${unit}³` : "",
+      volumeEstimate !== null ? `volume ${Number(volumeEstimate).toLocaleString()} ${unit}³` : ""
     ];
   }
 
@@ -1424,9 +1433,9 @@
     $("#activeIndex").textContent = study.index;
     $("#activeDescription").textContent = studySurfaceReading(study) || "No interpretive reading supplied.";
     $("#analysisReading").textContent = studySurfaceReading(study) || "No interpretive note supplied.";
-    $("#metricLength").textContent = `${number(study.length)} m`;
-    $("#metricSpan").textContent = `${number(study.span)} m`;
-    $("#metricHeight").textContent = `${number(study.height)} m`;
+    $("#metricLength").textContent = linearMeasure(study.length);
+    $("#metricSpan").textContent = linearMeasure(study.span);
+    $("#metricHeight").textContent = linearMeasure(study.height);
     $("#metricRatio").textContent = `${number(ratio, 2)} : 1`;
     $("#metricSymmetry").textContent = number(study.symmetry, 2);
     $("#detailGrid").innerHTML = study.details.map(([label, value]) => `
@@ -1437,10 +1446,10 @@
     const sectionRatio = study.height / study.span;
     const moduleRatio = study.module / study.span;
     const volume = volumeReading(study);
-    $("#analysisArea").textContent = `${number(area, 0)} m²`;
+    $("#analysisArea").textContent = squareMeasure(area);
     $("#analysisSection").textContent = number(sectionRatio, 2);
     $("#analysisModule").textContent = number(moduleRatio, 2);
-    $("#analysisRadius").textContent = `${number(study.radius)} m`;
+    $("#analysisRadius").textContent = linearMeasure(study.radius);
     $("#analysisVolume").textContent = volume.value;
     $("#analysisVolumeBasis").textContent = volume.basis;
     $("#activeEquation").textContent = `R = L ÷ span = ${number(ratio, 2)}`;
@@ -1519,7 +1528,7 @@
     const estimate = positiveEstimate(study.volumeEstimate);
     return {
       numeric: estimate,
-      value: estimate !== null ? `${Number(estimate).toLocaleString()} m³` : "Not supplied",
+      value: estimate !== null ? cubicMeasure(estimate) : "Not supplied",
       basis: estimate !== null
         ? study.volumeBasis || (studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate")
         : "No estimate supplied"
@@ -1530,7 +1539,7 @@
     const estimate = positiveEstimate(study.floorAreaEstimate);
     return {
       numeric: estimate,
-      value: estimate !== null ? `${Number(estimate).toLocaleString()} m²` : "Not supplied"
+      value: estimate !== null ? `${Number(estimate).toLocaleString()} ${geometryUnitSymbol()}²` : "Not supplied"
     };
   }
 
@@ -1862,7 +1871,7 @@
     const citationUrl = studyRouteUrl(study.id);
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
-    const dimensions = `${number(study.length)} m length × ${number(study.span)} m span × ${number(study.height)} m height; ${study.bayCount} bays at ${number(study.module)} m module; radius ${number(study.radius)} m; symmetry ${number(study.symmetry, 2)}`;
+    const dimensions = `${linearMeasure(study.length)} length × ${linearMeasure(study.span)} span × ${linearMeasure(study.height)} height; ${study.bayCount} bays at ${linearMeasure(study.module)} module; radius ${linearMeasure(study.radius)}; symmetry ${number(study.symmetry, 2)}`;
     return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${study.axis}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatus(study)}. Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
@@ -2159,10 +2168,11 @@
     const scope = comparisonScopeLabel(comparison);
     const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
     const statusDefinitions = dataStatusDefinitions();
+    const unit = geometryUnitSymbol();
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
-      "Length (m)", "Span (m)", "Length / span", "Height (m)", "Height / span",
-      "Bay count", "Module (m)", "Radius (m)", "Floor area estimate (m²)", "Volume estimate (m³)", "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
+      `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units"
     ];
     const rows = comparison.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -2459,6 +2469,20 @@
     if (!body) return;
     const comparison = comparisonStudies();
     const isFocused = state.compareIds.length >= 2;
+    const unit = geometryUnitSymbol();
+    const unitHeaders = {
+      length: `Length (${unit})`,
+      span: `Span (${unit})`,
+      height: `Height (${unit})`,
+      module: `Module (${unit})`,
+      radius: `Radius (${unit})`,
+      area: `Floor area (${unit}²)`,
+      volume: `Est. volume (${unit}³)`
+    };
+    $$('[data-unit-header]').forEach((header) => {
+      const key = header.dataset.unitHeader;
+      if (unitHeaders[key]) header.textContent = unitHeaders[key];
+    });
     if (summary) summary.textContent = isFocused
       ? `Read the ${comparison.length} selected study records as a table`
       : `Read the ${comparison.length} study records as a table`;
@@ -2475,13 +2499,14 @@
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-label="Open ${escapeHtml(studyShortName(study))} in Atlas">${escapeHtml(studyShortName(study))} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(study.axis)}</td>
           <td class="comparison-status" data-status="${escapeHtml(studyDataLabel(study))}" aria-label="${escapeHtml(`${studyStatus(study)}: ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(studyStatus(study))}</td>
-          <td>${number(study.length)} m</td>
-          <td>${number(study.span)} m</td>
+          <td>${linearMeasure(study.length)}</td>
+          <td>${linearMeasure(study.span)}</td>
           <td>${number(ratio, 2)}</td>
-          <td>${number(study.height)} m</td>
+          <td>${linearMeasure(study.height)}</td>
           <td>${number(section, 2)}</td>
           <td>${study.bayCount}</td>
-          <td>${number(study.module)} m</td>
+          <td>${linearMeasure(study.module)}</td>
+          <td>${linearMeasure(study.radius)}</td>
           <td>${number(study.symmetry, 2)}</td>
           <td>${escapeHtml(floorArea.value)}</td>
           <td>${escapeHtml(volume.value)}</td>
@@ -2516,7 +2541,7 @@
   }
 
   function comparisonStudyAriaLabel(study, ratio, section) {
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} meters long, with a span of ${number(study.span)} meters, and a height of ${number(study.height)} meters. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyStatusDescription(study))} Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
@@ -2548,16 +2573,18 @@
     const heightAxisMax = $("#heightChartAxisMax");
     const moduleAxisMid = $("#moduleChartAxisMid");
     const moduleAxisMax = $("#moduleChartAxisMax");
+    const unit = geometryUnitSymbol();
+    const unitName = geometryUnitName();
     if (ratioScale) ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;
     if (heightScale) heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;
-    if (moduleScale) moduleScale.textContent = `Scale 0 → ${number(maxModule)} m · active comparison maximum`;
-    if (chartScaleStatus && (!compareView || !compareView.hidden)) chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} m.`;
+    if (moduleScale) moduleScale.textContent = `Scale 0 → ${number(maxModule)} ${unit} · active comparison maximum`;
+    if (chartScaleStatus && (!compareView || !compareView.hidden)) chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} ${unit}.`;
     if (ratioAxisMid) ratioAxisMid.textContent = number(maxRatio / 2, 2);
     if (ratioAxisMax) ratioAxisMax.textContent = number(maxRatio, 2);
     if (heightAxisMid) heightAxisMid.textContent = number(maxHeightRatio / 2, 2);
     if (heightAxisMax) heightAxisMax.textContent = number(maxHeightRatio, 2);
-    if (moduleAxisMid) moduleAxisMid.textContent = `${number(maxModule / 2, 2)} m`;
-    if (moduleAxisMax) moduleAxisMax.textContent = `${number(maxModule)} m`;
+    if (moduleAxisMid) moduleAxisMid.textContent = `${number(maxModule / 2, 2)} ${unit}`;
+    if (moduleAxisMax) moduleAxisMax.textContent = `${number(maxModule)} ${unit}`;
     const meterAttributes = (label, value, maximum, valueText) => `role="meter" aria-label="${escapeHtml(label)}" aria-valuemin="0" aria-valuemax="${number(maximum, 2)}" aria-valuenow="${number(value, 2)}" aria-valuetext="${escapeHtml(valueText)}"`;
     $("#ratioChart").innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
@@ -2573,10 +2600,10 @@
       const status = studyDataLabel(study);
       const moduleWidth = (study.module / maxModule) * 100;
       return `
-      <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} meters; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record">
+      <div class="module-row" role="listitem" aria-label="${escapeHtml(studyShortName(study))}: ${study.bayCount} bays, module ${number(study.module)} ${escapeHtml(unitName)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record">
         <span class="module-name"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="chart-study-meta"><span class="chart-axis-context" title="${escapeHtml(study.axis)} axis">${escapeHtml(study.axis)} axis</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(status)}</span></span></span>
-        <span class="module-bars" ${meterAttributes(`${studyShortName(study)} relative module length`, study.module, maxModule, `${number(study.module)} m of ${number(maxModule)} m maximum`)} style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
-        <span class="module-value">${number(study.module)} m</span>
+        <span class="module-bars" ${meterAttributes(`${studyShortName(study)} relative module length`, study.module, maxModule, `${number(study.module)} ${unit} of ${number(maxModule)} ${unit} maximum`)} style="width:${moduleWidth}%">${Array.from({ length: study.bayCount }, () => '<i class="module-bar"></i>').join("")}</span>
+        <span class="module-value">${number(study.module)} ${unit}</span>
       </div>
     `;
     }).join("");
@@ -2598,7 +2625,8 @@
     const surface = state.surface === "interior" ? "Interior" : "Exterior";
     const layer = state.layer === "all" ? "complete geometry study" : `${layerDisplayName(state.layer)} layer focus`;
     const reading = studySurfaceReading(study);
-    const description = `${surface} ${state.mode} ${studyDataLabel(study)} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} meters, span ${study.span} meters, and height ${study.height} meters. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} meter module. Primary radius: ${number(study.radius)} meters. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
+    const unitName = geometryUnitName();
+    const description = `${surface} ${state.mode} ${studyDataLabel(study)} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${study.axis}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} Status: ${studyStatusDescription(study)} Reference: ${study.churchName || study.name}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
@@ -2667,9 +2695,9 @@
           content += `<line class="secondary-line" x1="${px}" y1="${y + height * 0.1}" x2="${px}" y2="${y + height * 0.62}" />`;
         }
       }
-      content += dimensionLine(x, y - 25, x + width, y - 25, `${study.length} m`, x + width / 2, y - 33);
-      content += dimensionLine(x - 25, y, x - 25, y + height * 0.72, `${study.span} m`, x - 34, y + height * 0.36);
-      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">module ${number(study.module)} m · ${study.bayCount} bays · radius ${number(study.radius)} m</text>`;
+      content += dimensionLine(x, y - 25, x + width, y - 25, rawMeasure(study.length), x + width / 2, y - 33);
+      content += dimensionLine(x - 25, y, x - 25, y + height * 0.72, rawMeasure(study.span), x - 34, y + height * 0.36);
+      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">module ${linearMeasure(study.module)} · ${study.bayCount} bays · radius ${linearMeasure(study.radius)}</text>`;
     } else if (study.type === "gothic") {
       const transeptY = y + height * 0.42;
       const apseR = height * 0.22;
@@ -2682,9 +2710,9 @@
         content += `<circle class="column" cx="${px}" cy="${y + 7}" r="4" /><circle class="column" cx="${px}" cy="${transeptY - 5}" r="4" />`;
       }
       content += `<circle class="faint-line" cx="${x + width / 2}" cy="${y + height * 0.86}" r="${apseR}" />`;
-      content += dimensionLine(x, y - 25, x + width, y - 25, `${study.length} m`, x + width / 2, y - 33);
-      content += dimensionLine(x - 25, y + height * 0.42, x - 25, y + height * 0.59, `${study.span} m`, x - 34, y + height * 0.51);
-      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">pointed bay · ${study.bayCount} ribs · radius ${number(study.radius)} m</text>`;
+      content += dimensionLine(x, y - 25, x + width, y - 25, rawMeasure(study.length), x + width / 2, y - 33);
+      content += dimensionLine(x - 25, y + height * 0.42, x - 25, y + height * 0.59, rawMeasure(study.span), x - 34, y + height * 0.51);
+      content += `<text class="small-label" x="${x + width / 2}" y="${y + height + 33}" text-anchor="middle">pointed bay · ${study.bayCount} ribs · radius ${linearMeasure(study.radius)}</text>`;
     } else if (study.type === "central") {
       const r = Math.min(width, height) * 0.34;
       content += `<rect class="${mainClass}" x="${330 - r * 1.18}" y="${265 - r * 1.18}" width="${r * 2.36}" height="${r * 2.36}" />`;
@@ -2697,8 +2725,8 @@
         content += `<circle class="${mainClass}" cx="${cx}" cy="${cy}" r="${r * 0.32}" />`;
       });
       content += `<circle class="secondary-line" cx="330" cy="265" r="${r * 0.2}" fill="none" />`;
-      content += dimensionLine(330 - r * 1.18, 265 + r * 1.55, 330 + r * 1.18, 265 + r * 1.55, `${study.span} m`, 330, 265 + r * 1.7);
-      content += `<text class="small-label" x="330" y="${265 + r * 1.95}" text-anchor="middle">central radius ${number(study.radius)} m · 4 arms · dome field</text>`;
+      content += dimensionLine(330 - r * 1.18, 265 + r * 1.55, 330 + r * 1.18, 265 + r * 1.55, rawMeasure(study.span), 330, 265 + r * 1.7);
+      content += `<text class="small-label" x="330" y="${265 + r * 1.95}" text-anchor="middle">central radius ${linearMeasure(study.radius)} · 4 arms · dome field</text>`;
     } else if (study.type === "baroque") {
       const rx = width * 0.37;
       const ry = height * 0.44;
@@ -2706,8 +2734,8 @@
       content += `<ellipse class="${inner ? "interior-fill" : "primary-line"}" cx="330" cy="265" rx="${rx}" ry="${ry}" fill="${inner ? "rgba(136,198,186,.08)" : "none"}" />`;
       content += `<line class="secondary-line" x1="330" y1="${y}" x2="330" y2="${y + height}" /><line class="secondary-line" x1="${x}" y1="265" x2="${x + width}" y2="265" />`;
       content += `<circle class="column" cx="${330 - rx}" cy="265" r="4" /><circle class="column" cx="${330 + rx}" cy="265" r="4" />`;
-      content += dimensionLine(x, y - 25, x + width, y - 25, `${study.length} m`, 330, y - 33);
-      content += `<text class="small-label" x="330" y="${y + height + 33}" text-anchor="middle">ellipse ${number(rx / scale)} × ${number(ry / scale)} m · 2 focal points</text>`;
+      content += dimensionLine(x, y - 25, x + width, y - 25, rawMeasure(study.length), 330, y - 33);
+      content += `<text class="small-label" x="330" y="${y + height + 33}" text-anchor="middle">ellipse ${linearMeasure(rx / scale)} × ${linearMeasure(ry / scale)} · 2 focal points</text>`;
     } else if (study.type === "stave") {
       content += `<rect class="${mainClass}" x="${x + width * 0.15}" y="${y + height * 0.16}" width="${width * 0.7}" height="${height * 0.68}" />`;
       content += `<rect class="${mainClass}" x="${x + width * 0.28}" y="${y + height * 0.04}" width="${width * 0.44}" height="${height * 0.92}" />`;
@@ -2716,8 +2744,8 @@
         content += `<line class="secondary-line" x1="${px}" y1="${y + height * 0.06}" x2="${px}" y2="${y + height * 0.94}" />`;
       }
       content += `<path class="${inner ? "secondary-line" : "primary-line"}" d="M${x + width * 0.13} ${y + height * 0.16}L${x + width * 0.27} ${y}L${x + width * 0.5} ${y + height * 0.13}L${x + width * 0.73} ${y}L${x + width * 0.87} ${y + height * 0.16}" fill="none" />`;
-      content += dimensionLine(x + width * 0.15, y + height + 25, x + width * 0.85, y + height + 25, `${study.span} m`, 330, y + height + 33);
-      content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">${study.bayCount} post frames · module ${number(study.module)} m</text>`;
+      content += dimensionLine(x + width * 0.15, y + height + 25, x + width * 0.85, y + height + 25, rawMeasure(study.span), 330, y + height + 33);
+      content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">${study.bayCount} post frames · module ${linearMeasure(study.module)}</text>`;
     } else {
       const poly = `${x + width * 0.08},${y + height * 0.75} ${x + width * 0.17},${y + height * 0.15} ${x + width * 0.6},${y + height * 0.05} ${x + width * 0.92},${y + height * 0.3} ${x + width * 0.78},${y + height * 0.86} ${x + width * 0.08},${y + height * 0.75}`;
       content += `<polygon class="${mainClass}" points="${poly}" />`;
@@ -2726,7 +2754,7 @@
         content += `<line class="secondary-line" x1="${px}" y1="${y + height * 0.14}" x2="${px - 10}" y2="${y + height * 0.78}" />`;
       }
       content += `<line class="axis-line" x1="${x}" y1="${y + height * 0.5}" x2="${x + width}" y2="${y + height * 0.5}" />`;
-      content += dimensionLine(x + width * 0.08, y + height + 25, x + width * 0.78, y + height + 25, `${study.length} m`, x + width * 0.43, y + height + 33);
+      content += dimensionLine(x + width * 0.08, y + height + 25, x + width * 0.78, y + height + 25, rawMeasure(study.length), x + width * 0.43, y + height + 33);
       content += `<text class="small-label" x="330" y="${y + height + 58}" text-anchor="middle">offset axis · ${study.bayCount} portal frames · shell thickness study</text>`;
     }
     return content;
@@ -2780,8 +2808,8 @@
         }
         content += `<line class="axis-line" x1="${x + width * 0.12}" y1="${ground - height * 0.08}" x2="${x + width * 0.88}" y2="${ground - height * 0.08}" />`;
       }
-    content += dimensionLine(x, ground + 30, x + width, ground + 30, `${study.length} m`, x + width / 2, ground + 47);
-    content += dimensionLine(x + width + 28, ground, x + width + 28, top, `${study.height} m`, x + width + 42, (ground + top) / 2);
+    content += dimensionLine(x, ground + 30, x + width, ground + 30, rawMeasure(study.length), x + width / 2, ground + 47);
+    content += dimensionLine(x + width + 28, ground, x + width + 28, top, rawMeasure(study.height), x + width + 42, (ground + top) / 2);
     content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">${escapeHtml(study.emphasis.toLowerCase())} · height / span ${number(study.height / study.span, 2)}</text>`;
     return content;
   }
@@ -2822,9 +2850,9 @@
       content += `<path class="secondary-line" d="M${x + width * 0.18} ${ground}V${top + height * 0.36}H${x + width * 0.82}V${ground}" fill="none" />`;
       for (let i = 1; i < study.bayCount; i += 1) { const px = x + width * 0.18 + (width * 0.64 / study.bayCount) * i; content += `<line class="secondary-line" x1="${px}" y1="${top + height * 0.25}" x2="${px}" y2="${ground}" />`; }
     }
-    content += dimensionLine(x, ground + 30, x + width, ground + 30, `${study.span} m`, 330, ground + 47);
-    content += dimensionLine(x + width + 28, ground, x + width + 28, top, `${study.height} m`, x + width + 42, (ground + top) / 2);
-    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">vault / roof profile · ${study.type === "central" ? "central radius" : `module ${number(study.module)} m`}</text>`;
+    content += dimensionLine(x, ground + 30, x + width, ground + 30, rawMeasure(study.span), 330, ground + 47);
+    content += dimensionLine(x + width + 28, ground, x + width + 28, top, rawMeasure(study.height), x + width + 42, (ground + top) / 2);
+    content += `<text class="small-label" x="330" y="${ground + 78}" text-anchor="middle">vault / roof profile · ${study.type === "central" ? "central radius" : `module ${linearMeasure(study.module)}`}</text>`;
     return content;
   }
 
