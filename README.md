@@ -121,6 +121,8 @@ The source metadata uses repository-relative paths so local previews and project
 
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
 
+The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
+
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
 
 ## Add real churches

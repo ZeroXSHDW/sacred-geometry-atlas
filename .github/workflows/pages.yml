@@ -20,6 +20,10 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Validate static site
         run: |
           node --check app.js
@@ -90,6 +94,7 @@ jobs:
           const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
+          if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
           const requiredMetadata = [
             'property="og:image" content="og.png"',
             'property="og:url" content="./"',
