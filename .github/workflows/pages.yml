@@ -359,7 +359,7 @@ jobs:
           for (const token of ['if (!study || !button || !status || !beginAsyncAction(button)) return;', 'if (!button || !status || !beginAsyncAction(button)) return;', 'endAsyncAction(button);']) {
             if (!app.includes(token)) throw new Error('Async share and citation actions must use the busy-state guard: ' + token);
           }
-          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record"', 'module ${number(study.module)} ${escapeHtml(unitName)}; ${escapeHtml(study.axis)} axis; ${studyDataLabel(study)} record']) {
+          for (const token of ['aria-label="${escapeHtml(studyShortName(study))}: length to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyDataLabel(study))} record"', 'aria-label="${escapeHtml(studyShortName(study))}: height to span ratio ${number(ratio, 2)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyDataLabel(study))} record"', 'module ${number(study.module)} ${escapeHtml(unitName)}; ${escapeHtml(study.axis)} axis; ${escapeHtml(studyDataLabel(study))} record']) {
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
@@ -2123,8 +2123,14 @@ jobs:
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
           context.window.CHURCH_GEOMETRY_SCHEMA = {
             ...context.window.CHURCH_GEOMETRY_SCHEMA,
-            unitSymbol: '<unit>'
+            unitSymbol: '<unit>',
+            statusValues: [...context.window.CHURCH_GEOMETRY_SCHEMA.statusValues, 'estimated <review>'],
+            statusDefinitions: {
+              ...context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions,
+              'estimated <review>': 'Proportional estimate <pending review>.'
+            }
           };
+          context.window.CHURCH_GEOMETRY = context.window.CHURCH_GEOMETRY.map((study, index) => index === 0 ? { ...study, status: 'estimated <review>' } : study);
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderComparisonTable, renderCharts };\n})();');
           vm.runInNewContext(app, context);
           const { renderComparisonTable, renderCharts } = context.window.__atlasTest;
@@ -2132,7 +2138,9 @@ jobs:
           renderCharts();
           const table = elements.get('#comparisonTableBody').innerHTML;
           const moduleChart = elements.get('#moduleChart').innerHTML;
+          const ratioChart = elements.get('#ratioChart').innerHTML;
           if (!table.includes('&lt;unit&gt;') || table.includes('<unit>') || !moduleChart.includes('&lt;unit&gt;') || moduleChart.includes('<unit>')) throw new Error('Schema unit symbols must remain escaped in HTML comparison surfaces');
+          if (!ratioChart.includes('estimated &lt;review&gt;') || ratioChart.includes('<review>') || ratioChart.includes('<pending review>')) throw new Error('Custom schema status text must remain escaped in comparison chart markup');
           console.log('Escaped schema units in comparison surfaces smoke test passed.');
           NODE
       - name: Smoke-test active study measure summary
