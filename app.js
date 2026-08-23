@@ -2244,7 +2244,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatusLabel(study).toLowerCase()}.`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
         url: shareUrl.href
       };
 
@@ -2332,6 +2332,12 @@
       : "the full collection";
   }
 
+  function comparisonSelectionProvenanceText(selection = []) {
+    if (!selection.length) return "";
+    const sourceText = selection.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ");
+    return `Source context: ${sourceText}${/[.!?]$/.test(sourceText.trim()) ? "" : "."}`;
+  }
+
   function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
     return selection
       .map(({ name, axis, status, statusDefinition, source, sourceNote }) => `${name} (${axisDisplayLabel(axis)}; ${status}; ${statusDefinition}; Source: ${source}; ${sourceNote})`)
@@ -2389,7 +2395,7 @@
       hideManualCopyFallbacks();
       const shareUrl = catalogViewRouteUrl();
       const selected = selectedComparisonStudies();
-      const selectionText = selected.length ? ` Selected comparison: ${comparisonSelectionShareText(selected)}.` : "";
+      const selectionText = selected.length ? ` Selected comparison: ${comparisonSelectionShareText(selected)}. ${comparisonSelectionProvenanceText(selected)}` : "";
       const sharePayload = {
         title: "Sacred Geometry Atlas · catalog view",
         text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.${selectionText}`,
@@ -2442,9 +2448,10 @@
       const shareLabel = pending.length
         ? `${comparisonSelectionShareText(pending)} selected; choose one more study for a focused comparison`
         : selectionLabel;
+      const selectionProvenance = comparisonSelectionProvenanceText(focused ? selected : pending);
       const sharePayload = {
         title: "Sacred Geometry Atlas comparison",
-        text: `Compare ${shareLabel} in the Sacred Geometry Atlas.`,
+        text: `Compare ${shareLabel} in the Sacred Geometry Atlas.${selectionProvenance ? ` ${selectionProvenance}` : ""}`,
         url: shareUrl.href
       };
 
