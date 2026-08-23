@@ -567,6 +567,7 @@ h3 { letter-spacing: -0.04em; }
 button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .share-button.is-copied { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .download-button.is-complete, .drawing-export.is-complete, .share-button.is-complete { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.download-button.is-unavailable, .drawing-export.is-unavailable, .share-button.is-unavailable { border-color: var(--coral); color: var(--coral); background: var(--coral-soft); }
 .manual-copy-fallback { display: grid; gap: 0.55rem; margin: 0 0 1rem; padding: 0.8rem 0.9rem; border: 1px solid rgba(233, 179, 108, 0.42); background: var(--amber-soft); }
 .manual-copy-fallback-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .manual-copy-fallback-heading { margin: 0; color: var(--amber); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -1036,6 +1037,12 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   #copyCitation span.study-action-label::after { content: "Cite"; font-size: 0.5rem; }
   #downloadStudy span.study-action-label::after { content: "JSON"; font-size: 0.5rem; }
   #printStudy span.study-action-label::after { content: "Print"; font-size: 0.5rem; }
+  #shareStudy.is-copied span.study-action-label::after,
+  #shareStudy.is-complete:not(.is-unavailable) span.study-action-label::after,
+  #copyCitation.is-copied span.study-action-label::after,
+  #downloadStudy.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
+  #printStudy.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
+  #printStudy.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }
   .download-button span.download-label { display: inline; font-size: 0; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.62rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
@@ -1044,7 +1051,29 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-summary .catalog-citation-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
   .catalog-summary .catalog-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }
   .catalog-summary .catalog-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }
+  .catalog-summary .catalog-share-button.is-copied span:last-child::after,
+  .catalog-summary .catalog-share-button.is-complete:not(.is-unavailable) span:last-child::after,
+  .catalog-summary .catalog-citation-button.is-copied span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .catalog-summary .catalog-print-button.is-complete:not(.is-unavailable) span:last-child { font-size: 0; }
+  .catalog-summary .catalog-print-button.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .catalog-summary .catalog-print-button.is-unavailable span:last-child { font-size: 0; }
+  .catalog-summary .catalog-print-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .catalog-summary .catalog-print-button span:last-child { display: inline; font-size: 0.5rem; white-space: nowrap; }
+  .compare-intro-side .compare-edit-button span:last-child,
+  .compare-intro-side .compare-share-button span:last-child,
+  .compare-intro-side .compare-citation-button span:last-child,
+  .compare-intro-side .compare-print-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
+  .compare-intro-side .compare-edit-button span:last-child::after { content: "Edit"; font-size: 0.5rem; }
+  .compare-intro-side .compare-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }
+  .compare-intro-side .compare-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }
+  .compare-intro-side .compare-print-button span:last-child::after { content: "Print"; font-size: 0.5rem; }
+  .compare-intro-side .compare-share-button.is-copied span:last-child::after,
+  .compare-intro-side .compare-share-button.is-complete:not(.is-unavailable) span:last-child::after,
+  .compare-intro-side .compare-citation-button.is-copied span:last-child::after,
+  .compare-intro-side .compare-print-button.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .compare-intro-side .compare-share-button.is-unavailable span:last-child::after,
+  .compare-intro-side .compare-citation-button.is-unavailable span:last-child::after,
+  .compare-intro-side .compare-print-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .method-return-button span:last-child { display: inline; }
   .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
   .drawing-scale { flex: 0 0 100%; }

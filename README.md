@@ -108,6 +108,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Compact catalog actions keep JSON and CSV format labels visible at tablet widths, then add short Share and Cite labels at phone widths so identical glyphs remain distinguishable.
 - The full-atlas download keeps a compact JSON label at tablet and phone widths, with a visible Done state during export feedback, while its accessible name remains explicit.
 - Active-study Share, Cite, JSON, and Print actions keep compact visible labels at phone widths, while their full accessible names and live feedback remain intact.
+- Phone-width study, catalog, and comparison actions switch their compact visible label to Done after a successful share, citation, download, or print action, and expose an Unavailable state when a print dialog is blocked; comparison actions retain Edit, Share, Cite, and Print labels before activation.
 - Static JSON, CSV, and Schema links keep compact format labels at tablet and phone widths, so raw artifacts remain distinguishable from generated downloads.
 - The header wraps before tablet data controls become crowded, while fragment targets, view sections, the sticky catalog, active-study reveal, and comparison table headings share the larger responsive offset below the multi-row header.
 - At the narrowest phone widths, header artifact controls tighten their spacing and padding without reducing their compact format labels or touch-target heights.

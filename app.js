@@ -1427,10 +1427,13 @@
   function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key) {
     if (!button) return;
     button.classList.add("is-complete");
+    if (visibleLabel === "Unavailable") button.classList.add("is-unavailable");
+    else button.classList.remove("is-unavailable");
     setButtonFeedback(button, visibleLabel, accessibleLabel);
     window.clearTimeout(actionFeedbackTimers.get(key));
     actionFeedbackTimers.set(key, window.setTimeout(() => {
       button.classList.remove("is-complete");
+      button.classList.remove("is-unavailable");
       setButtonFeedback(button, resetVisibleLabel, resetAccessibleLabel);
       actionFeedbackTimers.delete(key);
     }, 2200));
