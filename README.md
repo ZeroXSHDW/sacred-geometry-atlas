@@ -95,7 +95,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition, schema/unit provenance, and reproducible direct route remain included even when the interactive disclosure is collapsed.
 - Print-ready comparison sheets that preserve the active full-collection or focused comparison, visible provenance context, charts, the complete comparison table, and a reproducible route.
 - A Print view action for the active catalog scope, preserving visible records, filter/sort chips, schema-backed status guidance, and the direct route on a compact research sheet.
-- Study and comparison print surfaces expose those reproducible routes as native links, so a researcher can reopen or copy the exact view before printing.
+- A Print guide action for the Method view, preserving its context note, direct route, research key, data-status evidence labels, and dataset dictionary as a readable reference sheet.
+- Study, comparison, and Method print surfaces expose those reproducible routes as native links, so a researcher can reopen or copy the exact view before printing.
 - Active catalog, study, comparison, and Method views keep their direct route visible on screen, so each reproducible hash link is discoverable before a share, citation, or print action.
 - Each visible catalog, study, comparison, and Method route also has a one-click Copy link action that copies the full URL, announces success, and reveals a focused readonly manual-copy field when clipboard access is unavailable; the controls disappear from print output.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.

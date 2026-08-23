@@ -1069,6 +1069,7 @@
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
     $("#printCatalog").addEventListener("click", printCatalog);
     $("#printComparison").addEventListener("click", printComparison);
+    $("#printMethod").addEventListener("click", printMethod);
     $("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);
     $("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);
     $("#shareStudy").addEventListener("click", shareStudy);
@@ -2741,6 +2742,33 @@
       if (button) temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print sheet", "Print active study sheet", "study-print");
     } catch (error) {
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print");
+      announceKeyboard("Printing is unavailable in this browser.");
+    }
+  }
+
+  function printMethod() {
+    const button = $("#printMethod");
+    const route = parseRoute();
+    const contextStudy = route.contextStudyId ? studies.find((study) => study.id === route.contextStudyId) : null;
+    const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
+    if (typeof window.print !== "function") {
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print guide", "Print method guide", "method-print");
+      announceKeyboard("Printing is unavailable in this browser.");
+      return;
+    }
+    const cleanup = () => {
+      document.body.classList.remove("print-method");
+      if (typeof window.removeEventListener === "function") window.removeEventListener("afterprint", cleanup);
+    };
+    document.body.classList.add("print-method");
+    if (typeof window.addEventListener === "function") window.addEventListener("afterprint", cleanup, { once: true });
+    announceKeyboard(`Printing the Method guide for ${scope}.`);
+    try {
+      window.print();
+      if (button) temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print guide", "Print method guide", "method-print");
+    } catch (error) {
+      cleanup();
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print guide", "Print method guide", "method-print");
       announceKeyboard("Printing is unavailable in this browser.");
     }
   }

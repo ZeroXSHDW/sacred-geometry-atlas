@@ -145,7 +145,7 @@ jobs:
           const notFoundNarrowEnd = notFound.indexOf('@media (pointer: coarse)', notFoundNarrowStart);
           const notFoundNarrow = notFound.slice(notFoundNarrowStart, notFoundNarrowEnd);
           if (!notFoundNarrow.includes('.home-link { min-height: 44px; }')) throw new Error('404 recovery actions must retain a 44px target at narrow widths');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>']) {
@@ -307,6 +307,7 @@ jobs:
             if (!html.includes(token) && !app.includes(token)) throw new Error('Route manual-copy fallback is incomplete: ' + token);
           }
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route study-route" id="printRoute">Direct route · <a class="study-route-link"') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('function renderRouteLink(container, selector, route, label)') || !app.includes('renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id)') || !app.includes('temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print sheet", "Print active study sheet", "study-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print")') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;') || !styles.includes('.study-route,') || !styles.includes('.study-route { margin: 0.55rem 0 0; }') || !styles.includes('.study-print-route a,') || !styles.includes('.comparison-print-route a,\n  .method-route a { color: LinkText;')) throw new Error('Print output must preserve active study provenance and its route-native reproducibility link');
+          if (!html.includes('id="printMethod" type="button" aria-label="Print method guide"') || !app.includes('function printMethod()') || !app.includes('$("#printMethod").addEventListener("click", printMethod);') || !app.includes('document.body.classList.add("print-method");') || !app.includes('temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print guide", "Print method guide", "method-print")') || !app.includes('announceKeyboard(`Printing the Method guide for ${scope}.`);') || !styles.includes('body.print-method .method-view { display: block !important;') || !styles.includes('body.print-method .method-hero {') || !styles.includes('body.print-method .method-status-key,')) throw new Error('Method printing must preserve the research guide, context, and accessible feedback');
           if (!html.includes('id="catalogRoute"') || !html.includes('<p class="catalog-route" id="catalogRoute">Direct route · <a class="catalog-route-link"') || !app.includes('function routePath(url)') || !app.includes('renderRouteLink(catalogRoute, ".catalog-route-link", routePath(catalogViewRouteUrl())') || !styles.includes('.catalog-route,') || !styles.includes('.catalog-route { margin: 0.45rem 0 0; }') || !styles.includes('.catalog-route a,') || !styles.includes('.catalog-route a:focus-visible,')) throw new Error('The current catalog view must expose a visible, route-native direct link');
           if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !html.includes('<p class="comparison-print-route comparison-route" id="comparisonPrintRoute">Direct route · <a class="comparison-route-link"') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !app.includes('const comparisonRoute = comparisonRouteUrl();') || !app.includes('renderRouteLink(printRoute, ".comparison-route-link", routePath(comparisonRoute)') || !app.includes('temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print comparison", "Print this comparison", "comparison-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print")') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('.comparison-route { display: block; margin: -1.25rem 0 1.15rem; }') || !styles.includes('body.print-comparison .comparison-print-route { display: block;') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .compare-intro-side .compare-citation-button') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, table, route-native link, and visible feedback');
           if (!app.includes('function readableScopeLabel(scope)') || !app.includes('const scope = studyShortName(study);') || !app.includes('const scope = readableScopeLabel(catalogScopeLabel());') || !app.includes('const scope = readableScopeLabel(comparisonScopeLabel(comparison));') || !app.includes('announceKeyboard(`Printing the catalog view for ${scope}.`);') || !app.includes('announceKeyboard(`Printing the comparison for ${scope}.`);')) throw new Error('Print feedback must carry the active study, catalog, or comparison scope');
@@ -1930,6 +1931,64 @@ jobs:
           printCatalog();
           if (classes.has('print-catalog') || !classes.has('is-unavailable') || keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printCatalogButton.label.textContent !== 'Unavailable' || printCatalogButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Catalog printing did not recover from a blocked print dialog with visible feedback');
           console.log('Catalog printing smoke test passed.');
+          NODE
+
+      - name: Smoke-test Method printing
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const keyboardStatus = { textContent: '' };
+          const classes = new Set();
+          const createPrintButton = () => {
+            const label = { textContent: '' };
+            const attributes = {};
+            return {
+              attributes,
+              classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } },
+              querySelector() { return label; },
+              setAttribute(name, value) { attributes[name] = value; },
+              label,
+              title: ''
+            };
+          };
+          const printMethodButton = createPrintButton();
+          let printCalls = 0;
+          let afterPrint;
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/?q=gothic#method/gothic', hash: '#method/gothic' },
+              print() { printCalls += 1; },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
+              removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
+            },
+            document: {
+              body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
+              querySelector(selector) {
+                if (selector === '#keyboardStatus') return keyboardStatus;
+                if (selector === '#printMethod') return printMethodButton;
+                return null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { printMethod };\n})();');
+          vm.runInNewContext(app, context);
+          const { printMethod } = context.window.__atlasTest;
+          printMethod();
+          if (printCalls !== 1 || !classes.has('print-method') || keyboardStatus.textContent !== 'Printing the Method guide for High gothic cathedral.' || printMethodButton.label.textContent !== 'Print opened' || printMethodButton.attributes['aria-label'] !== 'Print dialog opened for High gothic cathedral' || typeof afterPrint !== 'function') throw new Error('Method printing did not prepare its scoped print state or context-aware feedback');
+          afterPrint();
+          if (classes.has('print-method') || afterPrint !== null) throw new Error('Method printing did not restore the interactive state after printing');
+          context.window.location.href = 'https://example.test/atlas/#method';
+          context.window.location.hash = '#method';
+          context.window.print = () => { throw new Error('Print dialog blocked'); };
+          printMethod();
+          if (classes.has('print-method') || !classes.has('is-unavailable') || keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printMethodButton.label.textContent !== 'Unavailable' || printMethodButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Method printing did not recover from a blocked print dialog with visible feedback');
+          console.log('Method printing smoke test passed.');
           NODE
 
       - name: Smoke-test reproducible route links
