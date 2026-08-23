@@ -743,6 +743,17 @@
               <span aria-hidden="true">⎙</span>
               <span>Print comparison</span>
             </button>
+            <div class="comparison-export-actions compare-intro-export-actions" role="group" aria-label="Download comparison data">
+              <button class="share-button comparison-export" id="downloadComparison" type="button" aria-label="Download comparison data as CSV" title="Download comparison data as CSV">
+                <span aria-hidden="true">↓</span>
+                <span>CSV</span>
+              </button>
+              <button class="share-button comparison-export" id="downloadComparisonJson" type="button" aria-label="Download comparison data as JSON" title="Download comparison data as JSON">
+                <span aria-hidden="true">↓</span>
+                <span>JSON</span>
+              </button>
+            </div>
+            <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <span class="sr-only" id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <span class="sr-only" id="comparisonCitationStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback" id="compareShareFallback" role="region" aria-labelledby="compareShareFallbackHeading" hidden>
@@ -840,22 +851,11 @@
           <summary id="comparisonTableSummary" aria-keyshortcuts="Escape">Read the 6 study records as a table</summary>
           <div class="comparison-table-actions">
             <div class="comparison-table-copy">
-              <p>Recorded dimensions, derived ratios, optional floor-area estimates with their basis, volume estimates with provenance, source notes, and the four interpretive reading-profile scores are available here and in the CSV or JSON export. Study names open in Atlas, with each curated study index kept visible in the row. Both exports carry the study&apos;s curated index, schema version, unit system, published schema URL, active view route, data-status context, and self-describing reading-profile basis/note; each record also carries a direct study route.</p>
+              <p>Recorded dimensions, derived ratios, optional floor-area estimates with their basis, volume estimates with provenance, source notes, and the four interpretive reading-profile scores are available here and in the CSV or JSON export. Study names open in Atlas, with each curated study index kept visible in the row. The header actions download both formats. Both exports carry the study&apos;s curated index, schema version, unit system, published schema URL, active view route, data-status context, and self-describing reading-profile basis/note; each record also carries a direct study route.</p>
               <p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>
-            </div>
-            <div class="comparison-export-actions" role="group" aria-label="Download comparison data">
-              <button class="share-button comparison-export" id="downloadComparison" type="button" aria-label="Download comparison data as CSV" title="Download comparison data as CSV">
-                <span aria-hidden="true">↓</span>
-                <span>CSV</span>
-              </button>
-              <button class="share-button comparison-export" id="downloadComparisonJson" type="button" aria-label="Download comparison data as JSON" title="Download comparison data as JSON">
-                <span aria-hidden="true">↓</span>
-                <span>JSON</span>
-              </button>
             </div>
           </div>
           <p class="comparison-table-scroll-cue" id="comparisonTableScrollCue" aria-hidden="true" hidden><span class="scroll-cue-mark">↔</span><span id="comparisonTableScrollCueText">More columns →</span></p>
-          <span class="sr-only" id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
           <span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>
           <span class="sr-only" id="comparisonTableProfileHelp">Linearity, verticality, radiality, and repetition are interpretive 0–100 profile scores describing proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.</span>
           <span class="sr-only" id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"></span>

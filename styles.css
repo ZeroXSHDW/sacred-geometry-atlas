@@ -844,6 +844,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .compare-intro { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; }
 .compare-intro > p { max-width: 39rem; margin-bottom: 0; color: var(--ink-soft); line-height: 1.75; }
 .compare-intro-side { display: grid; justify-items: end; gap: 0.7rem; }
+.compare-intro-export-actions { justify-content: end; }
 .compare-callout { display: grid; min-width: 150px; padding: 0.9rem 1rem; border: 1px solid var(--amber); background: var(--amber-soft); }
 .compare-callout span, .compare-callout small { color: var(--amber); font-family: var(--mono); font-size: 0.54rem; text-transform: uppercase; }
 .compare-callout strong { margin: 0.2rem 0; color: var(--ink); font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
@@ -1271,18 +1272,23 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-intro-side .compare-edit-button span:last-child,
   .compare-intro-side .compare-share-button span:last-child,
   .compare-intro-side .compare-citation-button span:last-child,
-  .compare-intro-side .compare-print-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
+  .compare-intro-side .compare-print-button span:last-child,
+  .compare-intro-side .comparison-export span:last-child { display: inline; font-size: 0; white-space: nowrap; }
   .compare-intro-side .compare-edit-button span:last-child::after { content: "Edit"; font-size: 0.5rem; }
   .compare-intro-side .compare-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }
   .compare-intro-side .compare-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }
   .compare-intro-side .compare-print-button span:last-child::after { content: "Print"; font-size: 0.5rem; }
+  .compare-intro-side #downloadComparison span:last-child::after { content: "CSV"; font-size: 0.5rem; }
+  .compare-intro-side #downloadComparisonJson span:last-child::after { content: "JSON"; font-size: 0.5rem; }
   .compare-intro-side .compare-share-button.is-copied span:last-child::after,
   .compare-intro-side .compare-share-button.is-complete:not(.is-unavailable) span:last-child::after,
   .compare-intro-side .compare-citation-button.is-copied span:last-child::after,
-  .compare-intro-side .compare-print-button.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .compare-intro-side .compare-print-button.is-complete:not(.is-unavailable) span:last-child::after,
+  .compare-intro-side .comparison-export.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
   .compare-intro-side .compare-share-button.is-unavailable span:last-child::after,
   .compare-intro-side .compare-citation-button.is-unavailable span:last-child::after,
-  .compare-intro-side .compare-print-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
+  .compare-intro-side .compare-print-button.is-unavailable span:last-child::after,
+  .compare-intro-side .comparison-export.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .method-return-button span:last-child,
   .method-share-button span:last-child,
   .method-citation-button span:last-child,
@@ -1836,6 +1842,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-comparison .compare-intro-side .compare-share-button,
   body.print-comparison .compare-intro-side .compare-citation-button,
   body.print-comparison .compare-intro-side .compare-print-button,
+  body.print-comparison .compare-intro-side .comparison-export-actions,
   body.print-comparison .compare-helper,
   body.print-comparison .comparison-table-actions { display: none !important; }
   body.print-comparison .compare-intro { align-items: start; margin-bottom: 1.1rem; }
