@@ -24,7 +24,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Derived readings for floor area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles; floor area identifies whether it uses a supplied estimate or the length × span fallback.
 - Explicit reference, provenance, and interpretive reading text for each schematic study.
 - Reading-profile bars expose their 0–100 scores as accessible meters while keeping the duplicate visual score label out of the accessibility tree, so assistive technology hears one reading per profile.
-- Search across study names, references, provenance definitions, notes, detail vocabulary, numeric geometry dimensions, and derived ratios, with multi-word queries matching all terms across the record; repeated whitespace is normalized so shared catalog URLs and scope announcements stay canonical; typology, location, era, geometric axis, and measured/schematic status filtering use explicit catalog keys.
+- Search across study names, references, provenance definitions, notes, detail vocabulary, numeric geometry dimensions, derived ratios, and reading-profile labels/scores, with multi-word queries matching all terms across the record; repeated whitespace is normalized so shared catalog URLs and scope announcements stay canonical; typology, location, era, geometric axis, and measured/schematic status filtering use explicit catalog keys.
 - Persistent search guidance keeps the searchable fields, all-term matching behavior, `/` focus shortcut, and `Esc` clear shortcut visible after the placeholder disappears.
 - Every catalog filter option shows a scope-aware matching count, so the current search and other active filters make the remaining choices legible before a visitor opens a menu.
 - Visible Typology, Sort by, Location, Era, Axis, and Data status labels keep selected catalog values understandable for sighted visitors as well as assistive technology.
@@ -32,7 +32,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog scope changes announce the active query, filters, and sort order alongside the updated result count, without repeating that count in the live status.
 - Changing or clearing the catalog data-status filter also announces the schema-backed status definition, so provenance meaning is available at the moment the filter changes.
 - Matching terms are highlighted in catalog cards so multi-word results can be scanned at a glance.
-- Search cards identify when a query matched a reference, reading, dimension, or derived-ratio field that is not shown in the compact card.
+- Search cards identify when a query matched a reference, reading, dimension, derived-ratio, or reading-profile field that is not shown in the compact card.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Active filter chips prefix typology, location, era, axis, and data-status values, so a dense filtered view stays self-describing.
 - The active catalog settings group reports its count to assistive technology and keeps search, filters, and sorting state under one consistent label.

@@ -1765,6 +1765,10 @@
     ];
   }
 
+  function studySearchProfileReadings(study) {
+    return profileScores(study).map(([label, score]) => `reading profile ${label} ${score}`);
+  }
+
   function searchMatchContext(study) {
     const terms = queryTerms(state.query);
     if (!terms.length) return "";
@@ -1774,7 +1778,8 @@
       ["provenance", [studySource(study), studySourceNote(study), studyStatus(study), studyStatusDescription(study)]],
       ["reading", [study.axis, studyAxisLabel(study), study.envelope, study.surfaceNote, study.exteriorNote, study.interiorNote, ...details]],
       ["dimensions", studySearchDimensions(study)],
-      ["derived ratios", studySearchDerivedReadings(study)]
+      ["derived ratios", studySearchDerivedReadings(study)],
+      ["reading profile", studySearchProfileReadings(study)]
     ];
     const labels = groups
       .filter(([, values]) => terms.some((term) => values.filter(Boolean).join(" ").toLowerCase().includes(term)))
@@ -1786,6 +1791,7 @@
     const details = Array.isArray(study.details) ? study.details.flat() : [];
     const dimensions = studySearchDimensions(study);
     const derivedReadings = studySearchDerivedReadings(study);
+    const profileReadings = studySearchProfileReadings(study);
     const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";
     return [
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
@@ -1794,6 +1800,7 @@
       studyStatusDescription(study),
       ...dimensions,
       ...derivedReadings,
+      ...profileReadings,
       ...details
     ].filter(Boolean).join(" ").toLowerCase();
   }
