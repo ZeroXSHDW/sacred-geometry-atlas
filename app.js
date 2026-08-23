@@ -3066,7 +3066,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL"
     ];
     const rows = comparison.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -3097,6 +3097,7 @@
         number(study.symmetry, 2),
         scope,
         route,
+        studyRouteUrl(study.id).href,
         schema.version,
         schema.units,
         schemaUrl
@@ -3118,7 +3119,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL"
     ];
     const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -3151,6 +3152,7 @@
         comparisonIds,
         comparisonContext,
         route,
+        studyRouteUrl(study.id).href,
         schema.version,
         schema.units,
         schemaUrl
