@@ -1336,7 +1336,10 @@
     "#catalogShareFallback": "#shareCatalog",
     "#catalogCitationFallback": "#copyCatalogCitation",
     "#compareShareFallback": "#shareCompare",
-    "#comparisonCitationFallback": "#copyComparisonCitation"
+    "#comparisonCitationFallback": "#copyComparisonCitation",
+    "#catalogRouteFallback": "#copyCatalogRoute",
+    "#studyRouteFallback": "#copyStudyRoute",
+    "#comparisonRouteFallback": "#copyComparisonRoute"
   };
   const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
@@ -2068,11 +2071,12 @@
     }
   }
 
-  async function copyRoute({ linkSelector, buttonSelector, statusSelector, scope, resetAccessibleLabel, feedbackKey }) {
+  async function copyRoute({ linkSelector, buttonSelector, statusSelector, fallbackSelector, fallbackTextSelector, scope, resetAccessibleLabel, feedbackKey }) {
     const button = $(buttonSelector);
     const status = $(statusSelector);
     if (!button || !status || !beginAsyncAction(button)) return false;
     try {
+      hideManualCopyFallbacks();
       const href = routeLinkHref(linkSelector);
       if (!href) {
         const message = `Copying the ${scope.toLowerCase()} route is unavailable. Select the visible route link manually.`;
@@ -2087,7 +2091,10 @@
         status.textContent = message;
         return true;
       }
-      const message = `Copying the ${scope.toLowerCase()} route is unavailable. Select the visible route link manually.`;
+      const fallbackShown = revealManualCopyFallback(fallbackSelector, fallbackTextSelector, href);
+      const message = fallbackShown
+        ? `Copying the ${scope.toLowerCase()} route was unavailable. The full route is shown below for manual copying.`
+        : `Copying the ${scope.toLowerCase()} route is unavailable. Select the visible route link manually.`;
       temporaryButtonFeedback(button, "Unavailable", message, "Copy link", resetAccessibleLabel, feedbackKey);
       status.textContent = message;
       return false;
@@ -2101,6 +2108,8 @@
       linkSelector: ".catalog-route-link",
       buttonSelector: "#copyCatalogRoute",
       statusSelector: "#catalogRouteStatus",
+      fallbackSelector: "#catalogRouteFallback",
+      fallbackTextSelector: "#catalogRouteFallbackText",
       scope: "Catalog view",
       resetAccessibleLabel: "Copy current catalog route",
       feedbackKey: "catalog-route-copy"
@@ -2112,6 +2121,8 @@
       linkSelector: ".study-route-link",
       buttonSelector: "#copyStudyRoute",
       statusSelector: "#studyRouteStatus",
+      fallbackSelector: "#studyRouteFallback",
+      fallbackTextSelector: "#studyRouteFallbackText",
       scope: "Active study",
       resetAccessibleLabel: "Copy active study route",
       feedbackKey: "study-route-copy"
@@ -2123,6 +2134,8 @@
       linkSelector: ".comparison-route-link",
       buttonSelector: "#copyComparisonRoute",
       statusSelector: "#comparisonRouteStatus",
+      fallbackSelector: "#comparisonRouteFallback",
+      fallbackTextSelector: "#comparisonRouteFallbackText",
       scope: "Comparison",
       resetAccessibleLabel: "Copy comparison route",
       feedbackKey: "comparison-route-copy"

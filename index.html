@@ -355,8 +355,16 @@
               </button>
             </div>
             <p class="catalog-export-note" id="catalogExportNote">JSON pairs each raw study with derived readings; CSV carries row-level provenance and any active comparison selection context.</p>
-            <p class="catalog-route" id="catalogRoute">Direct route · <a class="catalog-route-link" href="#atlas" aria-label="Open current catalog view in Atlas" title="Open current catalog view in Atlas">#atlas</a> <button class="route-copy-button" id="copyCatalogRoute" type="button" aria-label="Copy current catalog route" title="Copy current catalog route"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
+            <p class="catalog-route" id="catalogRoute">Direct route · <a class="catalog-route-link" href="#atlas" aria-label="Open current catalog view in Atlas" title="Open current catalog view in Atlas">#atlas</a> <button class="route-copy-button" id="copyCatalogRoute" type="button" aria-label="Copy current catalog route" title="Copy current catalog route" aria-controls="catalogRouteFallback" aria-expanded="false"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
             <span class="sr-only" id="catalogRouteStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+            <div class="manual-copy-fallback route-copy-fallback" id="catalogRouteFallback" role="region" aria-labelledby="catalogRouteFallbackHeading" hidden>
+              <div class="manual-copy-fallback-heading-row">
+                <p class="manual-copy-fallback-heading" id="catalogRouteFallbackHeading">Copy this catalog route manually</p>
+                <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="catalogRouteFallback" type="button" aria-label="Hide catalog route manual-copy field" title="Hide manual-copy field">Hide</button>
+              </div>
+              <textarea id="catalogRouteFallbackText" rows="2" readonly aria-label="Catalog route URL" aria-describedby="catalogRouteFallbackHint"></textarea>
+              <p class="manual-copy-fallback-hint" id="catalogRouteFallbackHint">The full route is selected for copying.</p>
+            </div>
             <span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <span class="sr-only" id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <span class="sr-only" id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
@@ -424,8 +432,16 @@
                     <p id="activeSchemaNote">Schema 1.1 · units: meters</p>
                   </div>
                 </details>
-                <p class="study-print-route study-route" id="printRoute">Direct route · <a class="study-route-link" href="#atlas/basilica/plan/exterior/all" aria-label="Open active study route" title="Open active study route">#atlas/basilica/plan/exterior/all</a> <button class="route-copy-button" id="copyStudyRoute" type="button" aria-label="Copy active study route" title="Copy active study route"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
+                <p class="study-print-route study-route" id="printRoute">Direct route · <a class="study-route-link" href="#atlas/basilica/plan/exterior/all" aria-label="Open active study route" title="Open active study route">#atlas/basilica/plan/exterior/all</a> <button class="route-copy-button" id="copyStudyRoute" type="button" aria-label="Copy active study route" title="Copy active study route" aria-controls="studyRouteFallback" aria-expanded="false"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
                 <span class="sr-only" id="studyRouteStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+                <div class="manual-copy-fallback route-copy-fallback" id="studyRouteFallback" role="region" aria-labelledby="studyRouteFallbackHeading" hidden>
+                  <div class="manual-copy-fallback-heading-row">
+                    <p class="manual-copy-fallback-heading" id="studyRouteFallbackHeading">Copy this study route manually</p>
+                    <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="studyRouteFallback" type="button" aria-label="Hide study route manual-copy field" title="Hide manual-copy field">Hide</button>
+                  </div>
+                  <textarea id="studyRouteFallbackText" rows="2" readonly aria-label="Study route URL" aria-describedby="studyRouteFallbackHint"></textarea>
+                  <p class="manual-copy-fallback-hint" id="studyRouteFallbackHint">The full route is selected for copying.</p>
+                </div>
               </div>
               <div class="study-header-actions">
                 <div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">
@@ -677,8 +693,16 @@
           <div class="compare-selection-list" id="compareSelectionList"></div>
         </div>
         <p class="compare-status-note" id="comparisonStatusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>
-        <p class="comparison-print-route comparison-route" id="comparisonPrintRoute">Direct route · <a class="comparison-route-link" href="#compare" aria-label="Open comparison route" title="Open comparison route">#compare</a> <button class="route-copy-button" id="copyComparisonRoute" type="button" aria-label="Copy comparison route" title="Copy comparison route"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
+        <p class="comparison-print-route comparison-route" id="comparisonPrintRoute">Direct route · <a class="comparison-route-link" href="#compare" aria-label="Open comparison route" title="Open comparison route">#compare</a> <button class="route-copy-button" id="copyComparisonRoute" type="button" aria-label="Copy comparison route" title="Copy comparison route" aria-controls="comparisonRouteFallback" aria-expanded="false"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
         <span class="sr-only" id="comparisonRouteStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+        <div class="manual-copy-fallback route-copy-fallback" id="comparisonRouteFallback" role="region" aria-labelledby="comparisonRouteFallbackHeading" hidden>
+          <div class="manual-copy-fallback-heading-row">
+            <p class="manual-copy-fallback-heading" id="comparisonRouteFallbackHeading">Copy this comparison route manually</p>
+            <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="comparisonRouteFallback" type="button" aria-label="Hide comparison route manual-copy field" title="Hide manual-copy field">Hide</button>
+          </div>
+          <textarea id="comparisonRouteFallbackText" rows="2" readonly aria-label="Comparison route URL" aria-describedby="comparisonRouteFallbackHint"></textarea>
+          <p class="manual-copy-fallback-hint" id="comparisonRouteFallbackHint">The full route is selected for copying.</p>
+        </div>
         <p class="sr-only" id="comparisonChartScaleStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <span class="sr-only" id="comparisonCurrentStudyContext">Current Atlas study; this reading is the active study in the Atlas view.</span>
 

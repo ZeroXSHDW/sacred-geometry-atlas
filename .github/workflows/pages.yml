@@ -303,12 +303,16 @@ jobs:
           for (const token of ['data-dismiss-fallback="shareFallback"', 'data-dismiss-fallback="citationFallback"', 'data-dismiss-fallback="catalogShareFallback"', 'data-dismiss-fallback="catalogCitationFallback"', 'data-dismiss-fallback="compareShareFallback"', 'data-dismiss-fallback="comparisonCitationFallback"', 'function dismissManualCopyFallback(fallbackSelector)', 'event.key !== "Escape"', '.manual-copy-fallback-heading-row {', '.manual-copy-fallback-dismiss {', '.manual-copy-fallback-dismiss { border-color: ButtonText;']) {
             if (!html.includes(token) && !app.includes(token) && !styles.includes(token)) throw new Error('Manual-copy fallback dismissal is incomplete: ' + token);
           }
+          for (const token of ['data-dismiss-fallback="catalogRouteFallback"', 'data-dismiss-fallback="studyRouteFallback"', 'data-dismiss-fallback="comparisonRouteFallback"', '"#catalogRouteFallback": "#copyCatalogRoute"', '"#studyRouteFallback": "#copyStudyRoute"', '"#comparisonRouteFallback": "#copyComparisonRoute"', 'revealManualCopyFallback(fallbackSelector, fallbackTextSelector, href)']) {
+            if (!html.includes(token) && !app.includes(token)) throw new Error('Route manual-copy fallback is incomplete: ' + token);
+          }
           if (!html.includes('id="printStudy" type="button" aria-label="Print active study sheet"') || !html.includes('<p class="study-print-route study-route" id="printRoute">Direct route · <a class="study-route-link"') || !app.includes('function studyRouteUrl(studyId = state.activeId)') || !app.includes('function studyRoutePath(studyId = state.activeId)') || !app.includes('function renderRouteLink(container, selector, route, label)') || !app.includes('renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id)') || !app.includes('temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print sheet", "Print active study sheet", "study-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print")') || !styles.includes('@media print') || !styles.includes('.study-provenance:not([open]) .study-provenance-body') || !styles.includes('display: block !important') || !styles.includes('.study-provenance summary::after { display: none; }') || !styles.includes('.study-print-route { display: block;') || !styles.includes('.study-route,') || !styles.includes('.study-route { margin: 0.55rem 0 0; }') || !styles.includes('.study-print-route a,') || !styles.includes('.comparison-print-route a { color: LinkText;')) throw new Error('Print output must preserve active study provenance and its route-native reproducibility link');
           if (!html.includes('id="catalogRoute"') || !html.includes('<p class="catalog-route" id="catalogRoute">Direct route · <a class="catalog-route-link"') || !app.includes('function routePath(url)') || !app.includes('renderRouteLink(catalogRoute, ".catalog-route-link", routePath(catalogViewRouteUrl())') || !styles.includes('.catalog-route,') || !styles.includes('.catalog-route { margin: 0.45rem 0 0; }') || !styles.includes('.catalog-route a,') || !styles.includes('.catalog-route a:focus-visible,')) throw new Error('The current catalog view must expose a visible, route-native direct link');
           if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !html.includes('<p class="comparison-print-route comparison-route" id="comparisonPrintRoute">Direct route · <a class="comparison-route-link"') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !app.includes('const comparisonRoute = comparisonRouteUrl();') || !app.includes('renderRouteLink(printRoute, ".comparison-route-link", routePath(comparisonRoute)') || !app.includes('temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print comparison", "Print this comparison", "comparison-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print")') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('.comparison-route { display: block; margin: -1.25rem 0 1.15rem; }') || !styles.includes('body.print-comparison .comparison-print-route { display: block;') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .compare-intro-side .compare-citation-button') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, table, route-native link, and visible feedback');
           if (!app.includes('function readableScopeLabel(scope)') || !app.includes('const scope = studyShortName(study);') || !app.includes('const scope = readableScopeLabel(catalogScopeLabel());') || !app.includes('const scope = readableScopeLabel(comparisonScopeLabel(comparison));') || !app.includes('announceKeyboard(`Printing the catalog view for ${scope}.`);') || !app.includes('announceKeyboard(`Printing the comparison for ${scope}.`);')) throw new Error('Print feedback must carry the active study, catalog, or comparison scope');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"') || !html.includes('id="downloadCatalogCsv" type="button" aria-label="Export current catalog view as CSV"')) throw new Error('Missing catalog export controls');
           if (!html.includes('id="copyCatalogRoute" type="button" aria-label="Copy current catalog route"') || !html.includes('id="copyStudyRoute" type="button" aria-label="Copy active study route"') || !html.includes('id="copyComparisonRoute" type="button" aria-label="Copy comparison route"') || !html.includes('id="catalogRouteStatus" role="status" aria-live="polite" aria-atomic="true"') || !html.includes('id="studyRouteStatus" role="status" aria-live="polite" aria-atomic="true"') || !html.includes('id="comparisonRouteStatus" role="status" aria-live="polite" aria-atomic="true"') || !app.includes('function routeLinkHref(selector)') || !app.includes('async function copyRoute({') || !app.includes('function copyCatalogRoute()') || !app.includes('function copyStudyRoute()') || !app.includes('function copyComparisonRoute()') || !app.includes('Select the visible route link manually.') || !styles.includes('.route-copy-button { display: inline-flex;') || !styles.includes('.route-copy-button.is-complete') || !styles.includes('.route-copy-button.is-unavailable') || !styles.includes('  .route-copy-button { min-height: 36px; }') || !styles.includes('  .visual-empty-state,\n  .route-copy-button { display: none !important; }')) throw new Error('Visible route links must expose accessible one-click copy controls with print and fallback behavior');
+          if (!app.includes('fallbackSelector, fallbackTextSelector') || !app.includes('The full route is shown below for manual copying.') || !html.includes('id="catalogRouteFallbackText"') || !html.includes('id="studyRouteFallbackText"') || !html.includes('id="comparisonRouteFallbackText"') || !html.includes('id="copyCatalogRoute" type="button" aria-label="Copy current catalog route" title="Copy current catalog route" aria-controls="catalogRouteFallback" aria-expanded="false"') || !html.includes('id="copyStudyRoute" type="button" aria-label="Copy active study route" title="Copy active study route" aria-controls="studyRouteFallback" aria-expanded="false"') || !html.includes('id="copyComparisonRoute" type="button" aria-label="Copy comparison route" title="Copy comparison route" aria-controls="comparisonRouteFallback" aria-expanded="false"')) throw new Error('Route copy failures must expose focused readonly manual-copy fields and an explicit control relationship');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="selectVisibleCompare" type="button" aria-label="Add visible studies to comparison"') || !app.includes('function addVisibleToComparison({ focus = false } = {})') || !app.includes('renderVisibleComparisonAction(visible);') || !styles.includes('.catalog-batch-action')) throw new Error('Missing filter-aware batch comparison action');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison" aria-controls="compareShareFallback" aria-expanded="false"')) throw new Error('Missing comparison share control');
@@ -2003,6 +2007,26 @@ jobs:
           elements.set('.catalog-route-link', makeLink('/atlas/?q=gothic#atlas'));
           elements.set('.study-route-link', makeLink('/atlas/#atlas/gothic/section/interior/axis/1.3'));
           elements.set('.comparison-route-link', makeLink('/atlas/?compare=basilica,gothic#compare/basilica,gothic'));
+          const makeFallback = () => {
+            const panel = { hidden: true };
+            const text = {
+              value: '',
+              focused: false,
+              selected: false,
+              focus() { this.focused = true; },
+              select() { this.selected = true; }
+            };
+            return { panel, text };
+          };
+          const catalogRouteFallback = makeFallback();
+          const studyRouteFallback = makeFallback();
+          const comparisonRouteFallback = makeFallback();
+          elements.set('#catalogRouteFallback', catalogRouteFallback.panel);
+          elements.set('#catalogRouteFallbackText', catalogRouteFallback.text);
+          elements.set('#studyRouteFallback', studyRouteFallback.panel);
+          elements.set('#studyRouteFallbackText', studyRouteFallback.text);
+          elements.set('#comparisonRouteFallback', comparisonRouteFallback.panel);
+          elements.set('#comparisonRouteFallbackText', comparisonRouteFallback.text);
           const context = {
             URL,
             navigator: {
@@ -2025,10 +2049,10 @@ jobs:
               querySelectorAll() { return []; }
             }
           };
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { copyCatalogRoute, copyStudyRoute, copyComparisonRoute };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { copyCatalogRoute, copyStudyRoute, copyComparisonRoute, dismissManualCopyFallback };\n})();');
           vm.runInNewContext(app, context);
           (async () => {
-            const { copyCatalogRoute, copyStudyRoute, copyComparisonRoute } = context.window.__atlasTest;
+            const { copyCatalogRoute, copyStudyRoute, copyComparisonRoute, dismissManualCopyFallback } = context.window.__atlasTest;
             await copyCatalogRoute();
             await copyStudyRoute();
             await copyComparisonRoute();
@@ -2042,8 +2066,39 @@ jobs:
             if (catalogButton.label.textContent !== 'Copied' || studyButton.label.textContent !== 'Copied' || comparisonButton.label.textContent !== 'Copied') throw new Error('Route copy actions did not expose visible completion labels');
             if (catalogButton.disabled || catalogButton.attributes['aria-busy'] !== 'false' || studyButton.disabled || comparisonButton.disabled) throw new Error('Route copy actions did not release their busy state');
             context.navigator.clipboard.writeText = () => Promise.reject(new Error('blocked'));
-            const result = await copyCatalogRoute();
-            if (result !== false || !elements.get('#catalogRouteStatus').textContent.includes('Select the visible route link manually.') || catalogButton.label.textContent !== 'Unavailable' || !catalogButton.classes.has('is-unavailable')) throw new Error('Route copy actions did not expose the manual-selection fallback when clipboard access failed');
+            const fallbackCases = [
+              {
+                copy: copyCatalogRoute,
+                button: catalogButton,
+                status: elements.get('#catalogRouteStatus'),
+                fallback: catalogRouteFallback,
+                scope: 'catalog view',
+                url: expected[0]
+              },
+              {
+                copy: copyStudyRoute,
+                button: studyButton,
+                status: elements.get('#studyRouteStatus'),
+                fallback: studyRouteFallback,
+                scope: 'active study',
+                url: expected[1]
+              },
+              {
+                copy: copyComparisonRoute,
+                button: comparisonButton,
+                status: elements.get('#comparisonRouteStatus'),
+                fallback: comparisonRouteFallback,
+                scope: 'comparison',
+                url: expected[2]
+              }
+            ];
+            for (const test of fallbackCases) {
+              const result = await test.copy();
+              const message = 'Copying the ' + test.scope + ' route was unavailable. The full route is shown below for manual copying.';
+              if (result !== false || test.fallback.panel.hidden || test.fallback.text.value !== test.url || !test.fallback.text.selected || !test.fallback.text.focused || test.status.textContent !== message || test.button.label.textContent !== 'Unavailable' || !test.button.classes.has('is-unavailable') || test.button.attributes['aria-expanded'] !== 'true') throw new Error('Route copy actions did not expose a focused manual-copy field when clipboard access failed');
+            }
+            dismissManualCopyFallback('#comparisonRouteFallback');
+            if (!comparisonRouteFallback.panel.hidden || comparisonButton.attributes['aria-expanded'] !== 'false') throw new Error('Route copy fallback dismissal did not hide the field or restore its control state');
             console.log('Route copy actions smoke test passed.');
           })().catch((error) => {
             console.error(error);
