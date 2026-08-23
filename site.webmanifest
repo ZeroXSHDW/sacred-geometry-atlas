@@ -10,6 +10,30 @@
   "display": "standalone",
   "background_color": "#111817",
   "theme_color": "#111817",
+  "categories": [
+    "education",
+    "reference"
+  ],
+  "shortcuts": [
+    {
+      "name": "Explore Atlas",
+      "short_name": "Atlas",
+      "description": "Open the church geometry collection.",
+      "url": "./#atlas"
+    },
+    {
+      "name": "Compare studies",
+      "short_name": "Compare",
+      "description": "Compare proportional studies.",
+      "url": "./#compare"
+    },
+    {
+      "name": "Read Method",
+      "short_name": "Method",
+      "description": "Open the geometry method guide.",
+      "url": "./#methodView"
+    }
+  ],
   "icons": [
     {
       "src": "icons/atlas-192.png",

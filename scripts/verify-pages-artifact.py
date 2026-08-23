@@ -115,6 +115,24 @@ if (
     )
 ):
     fail("Published web manifest is missing its static Atlas identity or complete icon set")
+required_shortcuts = {
+    "./#atlas": "Explore Atlas",
+    "./#compare": "Compare studies",
+    "./#methodView": "Read Method",
+}
+manifest_shortcuts = {
+    shortcut.get("url"): shortcut
+    for shortcut in manifest_data.get("shortcuts", [])
+    if isinstance(shortcut, dict) and isinstance(shortcut.get("url"), str)
+}
+if (
+    not {"education", "reference"}.issubset(set(manifest_data.get("categories", [])))
+    or any(
+        manifest_shortcuts.get(url, {}).get("name") != name
+        for url, name in required_shortcuts.items()
+    )
+):
+    fail("Published web manifest is missing its Atlas navigation shortcuts")
 for icon_path, width, height in (
     ("icons/atlas-192.png", 192, 192),
     ("icons/atlas-512.png", 512, 512),
