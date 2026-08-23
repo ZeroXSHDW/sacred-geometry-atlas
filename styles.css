@@ -1061,6 +1061,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button span.download-label { display: inline; font-size: 0; white-space: nowrap; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.56rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
+  #downloadCsvData span.download-label::after { content: "CSV"; }
+  #downloadCsvData.is-complete span.download-label::after { content: "Done"; }
   .download-button.install-button span.download-label::after { content: "Install"; }
   .theme-toggle span.theme-toggle-label { display: inline; font-size: 0; white-space: nowrap; }
   .theme-toggle span.theme-toggle-label::after { content: "Theme"; font-size: 0.56rem; }
@@ -1177,6 +1179,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .brand-name { font-size: 0.65rem; }
   .brand-subtitle { font-size: 0.5rem; }
   .header-actions { gap: 0.3rem; }
+  .header-actions { flex: 1 1 100%; justify-content: flex-end; margin-left: 0; flex-wrap: wrap; }
   .dataset-link { padding-inline: 0.6rem; }
   .dataset-link,
   .download-button { min-height: 40px; }
@@ -1233,6 +1236,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button span.download-label { display: inline; font-size: 0; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.62rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
+  #downloadCsvData span.download-label::after { content: "CSV"; font-size: 0.62rem; }
+  #downloadCsvData.is-complete span.download-label::after { content: "Done"; }
   .download-button.install-button span.download-label { display: inline; font-size: 0; }
   .download-button.install-button span.download-label::after { content: "Install"; font-size: 0.62rem; }
   .theme-toggle-label { display: none !important; }

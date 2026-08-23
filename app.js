@@ -989,6 +989,12 @@
     return url;
   }
 
+  function fullAtlasRouteUrl() {
+    const url = clearCatalogParams(new URL(window.location.href));
+    url.hash = routeHash("atlas", false);
+    return url;
+  }
+
   function studyRouteUrl(studyId = state.activeId) {
     const url = clearCatalogParams(new URL(window.location.href));
     url.hash = routeHash("atlas", true, studyId);
@@ -1328,6 +1334,7 @@
       selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 });
     });
     $("#downloadData").addEventListener("click", downloadData);
+    $("#downloadCsvData").addEventListener("click", downloadCsvData);
     $("#downloadStudy").addEventListener("click", downloadStudy);
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadCatalogCsv").addEventListener("click", downloadCatalogCsv);
@@ -3643,6 +3650,86 @@
     hideDownloadRecovery();
     $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. ${exportCompletionScope(studies, "full collection")}. Data status: ${studyStatusSummary()}.`;
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
+    } finally {
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
+    }
+  }
+
+  function fullAtlasCsvPayload() {
+    const route = fullAtlasRouteUrl().href;
+    const scope = "full collection";
+    const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
+    const statusDefinitions = dataStatusDefinitions();
+    const unit = geometryUnitSymbol();
+    const schemaUrl = publishedGeometrySchemaUrl();
+    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
+    const headers = [
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
+    ];
+    const rows = studies.map((study) => {
+      const floorArea = floorAreaReading(study);
+      const volume = volumeReading(study);
+      const readingProfile = Object.fromEntries(profileScores(study));
+      return [
+        study.id,
+        studyShortName(study),
+        study.typology,
+        study.index,
+        study.place,
+        study.era,
+        study.axis,
+        studyStatus(study),
+        statusDefinitions[studyStatus(study)] || "",
+        study.churchName || study.name,
+        studySource(study),
+        studySourceNote(study),
+        number(study.length),
+        number(study.span),
+        number(study.length / study.span, 2),
+        number(study.height),
+        number(study.height / study.span, 2),
+        study.bayCount,
+        number(study.module),
+        number(study.radius),
+        floorArea.numeric !== null ? number(floorArea.numeric, 0) : "",
+        floorArea.basis,
+        volume.numeric !== null ? number(volume.numeric, 0) : "",
+        volume.basis,
+        number(study.symmetry, 2),
+        scope,
+        route,
+        studyRouteUrl(study.id).href,
+        schema.version,
+        schema.units,
+        schemaUrl,
+        readingProfile.linearity,
+        readingProfile.verticality,
+        readingProfile.radiality,
+        readingProfile.repetition,
+        readingProfileExportContext()
+      ];
+    });
+    return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
+  }
+
+  function downloadCsvData() {
+    const button = $("#downloadCsvData");
+    const status = $("#csvDownloadStatus");
+    hideDownloadRecovery();
+    if (!beginAsyncAction(button)) return;
+    try {
+      const filename = "sacred-geometry-atlas.csv";
+      const downloaded = triggerDownload(filename, `\uFEFF${fullAtlasCsvPayload()}`, "text/csv;charset=utf-8");
+      if (!downloaded) {
+        if (status) status.textContent = "Atlas CSV download is unavailable in this browser. Open the static CSV dataset link instead.";
+        showDownloadRecovery("The full CSV export was blocked. Open the static CSV dataset instead.", "#downloadCsvData");
+        return;
+      }
+      hideDownloadRecovery();
+      if (status) status.textContent = `Atlas CSV downloaded as ${filename}. ${exportCompletionScope(studies, "full collection")}. Data status: ${studyStatusSummary()}.`;
+      temporaryButtonFeedback(button, "Downloaded", "Atlas CSV downloaded", "Download CSV", "Download full atlas data as CSV", "atlas-csv-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
