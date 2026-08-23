@@ -148,6 +148,7 @@ jobs:
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
           if (!workflow.includes("permissions:\n  contents: read\n\nconcurrency:") || !workflow.includes("  deploy:\n    needs: validate\n    if: github.event_name != 'pull_request'\n    permissions:\n      contents: read\n      pages: write\n      id-token: write")) throw new Error('Pages write and OIDC permissions must be scoped to the deploy job');
+          if (!workflow.includes('      - name: Prepare Pages artifact') || !workflow.includes('site = Path("_site")') || !workflow.includes('path: "_site"') || workflow.includes('path: "."')) throw new Error('Pages deployment must upload a curated public-site artifact');
           if (!workflow.includes('node scripts/sync-geometry-json.js --check')) throw new Error('Pages validation must check the generated geometry artifact');
           if (!html.includes('<body class="no-js">') || !html.includes('document.body.classList.add("js-runtime");') || !html.includes('data-recovery-reload')) throw new Error('Missing no-JS/runtime fallback markers');
           if (!html.includes('<h1 id="noscript-heading" tabindex="-1">')) throw new Error('No-JS fallback must provide the page heading');
@@ -3317,6 +3318,60 @@ jobs:
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
+      - name: Prepare Pages artifact
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+
+          site = Path("_site")
+          if site.exists():
+              shutil.rmtree(site)
+          site.mkdir()
+          (site / "data").mkdir()
+
+          public_files = [
+              Path(".nojekyll"),
+              Path("404.html"),
+              Path("app.js"),
+              Path("favicon.svg"),
+              Path("index.html"),
+              Path("og.png"),
+              Path("robots.txt"),
+              Path("sitemap.xml"),
+              Path("styles.css"),
+          ]
+          data_files = [
+              Path("data/geometry.csv"),
+              Path("data/geometry.js"),
+              Path("data/geometry.json"),
+              Path("data/geometry.schema.json"),
+          ]
+          for source in public_files:
+              shutil.copy2(source, site / source.name)
+          for source in data_files:
+              shutil.copy2(source, site / source)
+
+          expected = {
+              ".nojekyll",
+              "404.html",
+              "app.js",
+              "favicon.svg",
+              "index.html",
+              "og.png",
+              "robots.txt",
+              "sitemap.xml",
+              "styles.css",
+              "data/geometry.csv",
+              "data/geometry.js",
+              "data/geometry.json",
+              "data/geometry.schema.json",
+          }
+          actual = {path.relative_to(site).as_posix() for path in site.rglob("*") if path.is_file()}
+          if actual != expected:
+              raise SystemExit(f"Unexpected Pages artifact contents: {sorted(actual)}")
+          print(f"Prepared curated Pages artifact with {len(actual)} public files.")
+          PY
       - name: Stamp deployed site metadata
         env:
           PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
@@ -3331,7 +3386,8 @@ jobs:
           csv_url = html.escape(base_url + "data/geometry.csv", quote=True)
           schema_target = base_url + "data/geometry.schema.json"
           schema_url = html.escape(schema_target, quote=True)
-          page = Path("index.html")
+          site = Path("_site")
+          page = site / "index.html"
           source = page.read_text()
           replacements = {
               '<link rel="canonical" href="./" />': f'<link rel="canonical" href="{html.escape(base_url, quote=True)}" />',
@@ -3349,21 +3405,21 @@ jobs:
               source = source.replace(old, new)
           page.write_text(source)
 
-          dataset = Path("data/geometry.json")
+          dataset = site / "data/geometry.json"
           dataset_source = dataset.read_text()
           dataset_marker = '"schemaUrl": "data/geometry.schema.json"'
           if dataset_marker not in dataset_source:
               raise SystemExit(f"Missing repository-relative dataset schema URL: {dataset_marker}")
           dataset.write_text(dataset_source.replace(dataset_marker, f'"schemaUrl": "{schema_target}"', 1))
 
-          csv = Path("data/geometry.csv")
+          csv = site / "data/geometry.csv"
           csv_source = csv.read_text()
           csv_marker = '"data/geometry.schema.json"'
           if csv_marker not in csv_source:
               raise SystemExit(f"Missing repository-relative CSV schema URL: {csv_marker}")
           csv.write_text(csv_source.replace(csv_marker, f'"{schema_target}"'))
 
-          schema = Path("data/geometry.schema.json")
+          schema = site / "data/geometry.schema.json"
           schema_source = schema.read_text()
           schema_replacements = {
               '"$id": "./geometry.schema.json"': f'"$id": "{schema_target}"',
@@ -3375,7 +3431,7 @@ jobs:
               schema_source = schema_source.replace(old, new, 1)
           schema.write_text(schema_source)
 
-          not_found = Path("404.html")
+          not_found = site / "404.html"
           not_found_source = not_found.read_text()
           not_found_replacements = {
               '<a class="home-link" data-site-root href="../">': f'<a class="home-link" data-site-root href="{html.escape(base_url, quote=True)}">',
@@ -3389,7 +3445,7 @@ jobs:
               not_found_source = not_found_source.replace(old, new)
           not_found.write_text(not_found_source)
 
-          robots = Path("robots.txt")
+          robots = site / "robots.txt"
           robots_source = robots.read_text()
           robots_marker = "Sitemap: ./sitemap.xml"
           robots_value = f"Sitemap: {html.escape(base_url + 'sitemap.xml', quote=True)}"
@@ -3397,7 +3453,7 @@ jobs:
               raise SystemExit(f"Missing repository-relative crawl marker: {robots_marker}")
           robots.write_text(robots_source.replace(robots_marker, robots_value))
 
-          sitemap = Path("sitemap.xml")
+          sitemap = site / "sitemap.xml"
           sitemap_source = sitemap.read_text()
           sitemap_markers = {
               "<loc>./</loc>": f"<loc>{html.escape(base_url, quote=True)}</loc>",
@@ -3421,13 +3477,32 @@ jobs:
           from pathlib import Path
 
           base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
-          page = Path("index.html").read_text()
-          not_found = Path("404.html").read_text()
-          robots = Path("robots.txt").read_text()
-          sitemap = Path("sitemap.xml").read_text()
-          dataset = Path("data/geometry.json").read_text()
-          csv = Path("data/geometry.csv").read_text()
-          schema = Path("data/geometry.schema.json").read_text()
+          site = Path("_site")
+          expected_files = {
+              ".nojekyll",
+              "404.html",
+              "app.js",
+              "favicon.svg",
+              "index.html",
+              "og.png",
+              "robots.txt",
+              "sitemap.xml",
+              "styles.css",
+              "data/geometry.csv",
+              "data/geometry.js",
+              "data/geometry.json",
+              "data/geometry.schema.json",
+          }
+          actual_files = {path.relative_to(site).as_posix() for path in site.rglob("*") if path.is_file()}
+          if actual_files != expected_files:
+              raise SystemExit(f"Published artifact contains unexpected files: {sorted(actual_files)}")
+          page = (site / "index.html").read_text()
+          not_found = (site / "404.html").read_text()
+          robots = (site / "robots.txt").read_text()
+          sitemap = (site / "sitemap.xml").read_text()
+          dataset = (site / "data/geometry.json").read_text()
+          csv = (site / "data/geometry.csv").read_text()
+          schema = (site / "data/geometry.schema.json").read_text()
           expected = [
               f'<link rel="canonical" href="{base_url}" />',
               f'<meta property="og:url" content="{base_url}" />',
@@ -3468,7 +3543,7 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "_site"
       - name: Deploy to Pages
         id: deployment
         uses: actions/deploy-pages@v4
