@@ -13,6 +13,7 @@ const csvOutputPath = path.join(projectRoot, "data", "geometry.csv");
 const schemaOutputPath = path.join(projectRoot, "data", "geometry.schema.json");
 const schemaUrl = "data/geometry.schema.json";
 const htmlPath = path.join(projectRoot, "index.html");
+const staticHtmlPath = path.join(projectRoot, "static.html");
 const noScriptStart = "        <!-- geometry-noscript:start -->";
 const noScriptEnd = "        <!-- geometry-noscript:end -->";
 const context = { window: {} };
@@ -330,9 +331,60 @@ function renderNoScriptIndex(source) {
   return `${source.slice(0, start + noScriptStart.length)}\n${noScriptFallback()}\n${source.slice(end)}`;
 }
 
+function staticFallbackDocument(source) {
+  const renderedSource = renderNoScriptIndex(source);
+  const start = renderedSource.indexOf("<noscript>");
+  const end = renderedSource.indexOf("</noscript>", start + "<noscript>".length);
+  if (start < 0 || end < 0 || end < start) {
+    throw new Error("index.html is missing its no-script fallback block");
+  }
+  const noScriptContent = renderedSource.slice(start + "<noscript>".length, end).trim();
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="The static, no-JavaScript collection index for the Sacred Geometry Atlas." />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="site.webmanifest" />
+    <title>Static collection · Sacred Geometry Atlas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="static-fallback-page">
+    <header class="site-header static-fallback-header">
+      <a class="brand" href="#noscript-heading" aria-label="Return to the static collection index">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>
+          <span class="brand-name">Sacred Geometry</span>
+          <span class="brand-subtitle">Static collection index</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Static collection navigation">
+        <a class="nav-button" href="./">Interactive atlas</a>
+        <a class="nav-button is-active" href="#noscript-heading" aria-current="page">Collection</a>
+        <a class="nav-button" href="#noscript-method-heading">Reading key</a>
+        <a class="nav-button" href="data/geometry.json">JSON</a>
+        <a class="nav-button" href="data/geometry.csv">CSV</a>
+        <a class="nav-button" href="data/geometry.schema.json">Schema</a>
+      </nav>
+    </header>
+    ${noScriptContent}
+    <footer class="site-footer">
+      <p><span class="footer-mark" aria-hidden="true">✳</span> Sacred Geometry Atlas</p>
+      <p>Static collection index · GitHub Pages ready</p>
+    </footer>
+  </body>
+</html>
+`;
+}
+
 if (require.main === module) {
   const currentHtml = fs.readFileSync(htmlPath, "utf8");
   const renderedHtml = renderNoScriptIndex(currentHtml);
+  const renderedStaticHtml = staticFallbackDocument(currentHtml);
   const renderedCsv = staticCsv();
   const renderedSchema = `${JSON.stringify(schemaDocument(), null, 2)}\n`;
 
@@ -340,18 +392,20 @@ if (require.main === module) {
     const current = fs.readFileSync(outputPath, "utf8");
     const currentCsv = fs.readFileSync(csvOutputPath, "utf8");
     const currentSchema = fs.readFileSync(schemaOutputPath, "utf8");
-    if (current !== rendered || currentCsv !== renderedCsv || currentSchema !== renderedSchema || currentHtml !== renderedHtml) {
+    const currentStaticHtml = fs.readFileSync(staticHtmlPath, "utf8");
+    if (current !== rendered || currentCsv !== renderedCsv || currentSchema !== renderedSchema || currentHtml !== renderedHtml || currentStaticHtml !== renderedStaticHtml) {
       console.error("Static data artifacts are out of sync; run node scripts/sync-geometry-json.js");
       process.exitCode = 1;
     } else {
-      console.log(`Geometry JSON, CSV, schema, and no-script index are in sync: ${payload.studies.length} studies.`);
+      console.log(`Geometry JSON, CSV, schema, no-script index, and static collection are in sync: ${payload.studies.length} studies.`);
     }
   } else {
     fs.writeFileSync(outputPath, rendered);
     fs.writeFileSync(csvOutputPath, renderedCsv);
     fs.writeFileSync(schemaOutputPath, renderedSchema);
     fs.writeFileSync(htmlPath, renderedHtml);
-    console.log(`Wrote data/geometry.json, data/geometry.csv, data/geometry.schema.json, and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
+    fs.writeFileSync(staticHtmlPath, renderedStaticHtml);
+    console.log(`Wrote data/geometry.json, data/geometry.csv, data/geometry.schema.json, no-script index, and static.html from data/geometry.js: ${payload.studies.length} studies.`);
   }
 }
 

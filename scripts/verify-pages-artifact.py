@@ -39,6 +39,7 @@ expected_files = {
     "robots.txt",
     "site.webmanifest",
     "sitemap.xml",
+    "static.html",
     "styles.css",
     "sw.js",
     "data/geometry.csv",
@@ -56,6 +57,7 @@ if custom_domain.is_file() and (site / "CNAME").read_text() != custom_domain.rea
     fail("Published custom-domain CNAME does not match the repository CNAME")
 
 page = (site / "index.html").read_text()
+static_page = (site / "static.html").read_text()
 manifest = (site / "site.webmanifest").read_text()
 service_worker = (site / "sw.js").read_text()
 not_found = (site / "404.html").read_text()
@@ -102,6 +104,7 @@ missing = [token for token in expected_page if token not in page]
 missing.extend(token for token in [
     f"Sitemap: {base_url}sitemap.xml",
     f"<loc>{base_url}</loc>",
+    f"<loc>{base_url}static.html</loc>",
     f"<loc>{base_url}data/geometry.json</loc>",
     f"<loc>{base_url}data/geometry.csv</loc>",
     f"<loc>{schema_target}</loc>",
@@ -111,6 +114,7 @@ missing.extend(token for token in [
     '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />',
     f'<a class="home-link" data-site-root href="{base_url}">',
     f'<a class="home-link home-link-secondary" data-site-method href="{base_url}#method">',
+    f'<a class="home-link home-link-secondary" data-site-static href="{base_url}static.html">',
     f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
     f'<a class="home-link home-link-secondary" data-site-csv href="{base_url}data/geometry.csv">',
     f'<a class="home-link home-link-secondary" data-site-schema href="{schema_target}">',
@@ -124,6 +128,25 @@ missing.extend(token for token in [
 ] if token not in not_found)
 if missing:
     fail("Deployed metadata is incomplete: " + ", ".join(missing))
+
+static_required = [
+    '<title>Static collection · Sacred Geometry Atlas</title>',
+    '<meta name="description" content="The static, no-JavaScript collection index for the Sacred Geometry Atlas." />',
+    '<link rel="stylesheet" href="styles.css" />',
+    '<body class="static-fallback-page">',
+    '<section class="noscript-index" role="main" aria-labelledby="noscript-heading">',
+    '<section class="noscript-method" aria-labelledby="noscript-method-heading">',
+    '<a class="nav-button" href="./">Interactive atlas</a>',
+    '<a class="nav-button is-active" href="#noscript-heading" aria-current="page">Collection</a>',
+    'href="data/geometry.json"',
+    'href="data/geometry.csv"',
+    'href="data/geometry.schema.json"',
+]
+missing_static = [token for token in static_required if token not in static_page]
+if missing_static:
+    fail("Published static collection fallback is incomplete: " + ", ".join(missing_static))
+if "<script" in static_page.lower():
+    fail("Published static collection fallback must remain script-free")
 
 try:
     manifest_data = json.loads(manifest)
@@ -188,6 +211,7 @@ if not all(token in service_worker for token in (
     'self.addEventListener("install"',
     'self.addEventListener("activate"',
     'self.addEventListener("fetch"',
+    'static.html',
     'data/geometry.json',
     'networkFirst(request)',
 )):

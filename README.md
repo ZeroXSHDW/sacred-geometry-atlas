@@ -47,8 +47,9 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.
 - The active study includes a keyboard-accessible provenance disclosure with its status definition and schema/unit metadata.
 - Runtime and data-load recovery panels offer a one-click retry that preserves the current study, comparison, or catalog route, plus a usable static-data path if the app script or local geometry data fails before initialization.
+- A generated, script-free `static.html` collection index turns those failure states into a browsable research surface with the collection, evidence labels, reading key, and direct JSON/CSV/schema links; it is regenerated with the geometry artifacts and cached offline.
 - The geometry data and app scripts load in document order with deferred execution; the route-preserving recovery link is synchronized as soon as the static shell exists, allowing the shell and recovery actions to paint before interactive boot while preserving the no-JavaScript fallback.
-- Runtime recovery distinguishes a missing dataset, an empty collection, and an incomplete record shape, so its explanation stays accurate while the static JSON path remains available.
+- Runtime recovery distinguishes a missing dataset, an empty collection, and an incomplete record shape, so its explanation stays accurate while the static collection and raw JSON paths remain available.
 - The no-script collection index includes schema/unit metadata, each record’s source note, and clearly labelled key derived readings (bays, module, radius, length/span ratio, height/span ratio, symmetry, area, area basis, volume with its calculation basis, and the four interpretive 0–100 reading-profile scores with their note and basis), keeping the static fallback research-ready; a direct reading-key link keeps the static vocabulary one jump away.
 - The no-script collection index also includes a compact reading key for axes, ratios, modules, symmetry, profile-score basis, and optional volume estimates, with direct JSON, CSV, and schema links so the static fallback explains its vocabulary before a visitor opens an artifact.
 - The no-script collection index keeps each study name as a direct jump to its focusable static fragment record, explicitly associates that link with the visible study metadata, derived readings, status definition, provenance, and interpretive reading, and explains that interactive drawings require JavaScript; the same hash remains a useful route handoff when JavaScript is restored or enabled.
@@ -120,7 +121,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Browsers that expose an install prompt receive a capability-gated Install Atlas action with live acceptance, dismissal, and installed-state feedback; unsupported browsers keep the header uncluttered.
 - Already-open tabs surface a newer offline-shell version after an existing service-worker controller updates, with a route-preserving Refresh Atlas action instead of silently leaving the tab on an older shell.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
-- A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the Atlas, Method guide, static JSON, CSV, and schema artifacts.
+- A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the Atlas, Method guide, static collection, JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, 404-reference, and geometry-schema validation on pull requests and before GitHub Pages deployment.
 - The Pages deploy job assembles a curated `_site` artifact containing only the public atlas files before stamping absolute metadata, so repository instructions, CI configuration, and regeneration scripts are not published; if a repository-level `CNAME` is present, the custom-domain file is preserved in that artifact. Before upload, [`scripts/verify-pages-artifact.py`](scripts/verify-pages-artifact.py) re-parses the final JSON, CSV, and JSON Schema bundle and checks its row order, direct routes, status values, and absolute schema URLs.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
@@ -185,7 +186,7 @@ The source metadata uses repository-relative paths so local previews and project
 
 The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON, CSV, and JSON Schema distributions. The HTML advertises the JSON Schema through an `application/schema+json` alternate link. Browser-generated exports resolve their schema URL from the current site origin, while deployment resolves the Dataset metadata—including the JSON Schema distribution URL—and stamps the published JSON, CSV, and JSON Schema artifacts with the final absolute Pages address.
 
-The sitemap includes the landing page plus the published JSON, CSV, and JSON Schema artifacts, so the static research surface is discoverable without JavaScript.
+The sitemap includes the landing page, the static collection index, and the published JSON, CSV, and JSON Schema artifacts, so the research surface is discoverable without JavaScript.
 
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
 
@@ -193,7 +194,7 @@ If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository
 
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
 
-The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
+The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, the generated `static.html` collection index, and the data artifacts required by the site.
 
 The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon and the safe-zone icons/atlas-maskable.svg launcher mark.
 
@@ -207,7 +208,7 @@ After editing the source, regenerate the static artifacts with:
 node scripts/sync-geometry-json.js
 ```
 
-Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON, CSV, JSON Schema, and no-JavaScript index are current without changing files.
+Use `node scripts/sync-geometry-json.js --check` to verify that the committed JSON, CSV, JSON Schema, no-JavaScript index, and standalone static collection are current without changing files.
 
 Each record should include:
 

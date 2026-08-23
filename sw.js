@@ -3,6 +3,7 @@ const SHELL_PATHS = [
   "./",
   "index.html",
   "404.html",
+  "static.html",
   "app.js",
   "styles.css",
   "favicon.svg",

@@ -280,6 +280,7 @@ summary:focus-visible {
 .skip-link-runtime { display: none; }
 .no-js .skip-link-app { display: none; }
 .no-js .skip-link-noscript { display: block; }
+.static-fallback-page .skip-link-noscript { display: block; }
 .js-runtime.no-js .skip-link-runtime { display: block; }
 .skip-link:focus { transform: translateY(0); }
 #runtimeFallback:focus { outline: 2px solid var(--teal); outline-offset: 6px; }
@@ -330,6 +331,8 @@ main,
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
+
+.static-fallback-header .main-nav { margin-left: auto; gap: 1.15rem; }
 
 .brand {
   display: inline-flex;

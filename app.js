@@ -528,15 +528,15 @@
         const recoveryCopy = {
           missing: {
             heading: "Geometry data could not be loaded.",
-            description: "The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static JSON artifact while the connection is restored."
+            description: "The interactive collection is temporarily missing its local dataset. Reload the atlas, or open the static collection while the connection is restored."
           },
           empty: {
             heading: "The atlas collection is currently empty.",
-            description: "No study records are available in the current dataset. Open the static JSON artifact or return after the collection has been populated."
+            description: "No study records are available in the current dataset. Open the static collection or return after the collection has been populated."
           },
           invalid: {
             heading: "The atlas data is incomplete.",
-            description: "The local dataset is present but one or more records cannot be rendered safely. Reload the atlas, or open the static JSON artifact while the connection is restored."
+            description: "The local dataset is present but one or more records cannot be rendered safely. Reload the atlas, or open the static collection while the connection is restored."
           }
         }[dataIssue];
         if (heading) heading.textContent = recoveryCopy.heading;

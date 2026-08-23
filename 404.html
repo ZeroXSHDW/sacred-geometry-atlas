@@ -164,6 +164,7 @@
       <div class="error-actions">
         <a class="home-link" data-site-root href="../">Return to the atlas <span aria-hidden="true">↗</span></a>
         <a class="home-link home-link-secondary" data-site-method href="../#method">Read the method <span aria-hidden="true">↗</span></a>
+        <a class="home-link home-link-secondary" data-site-static href="static.html">Open the static collection <span aria-hidden="true">↗</span></a>
         <a class="home-link home-link-secondary" data-site-dataset href="data/geometry.json">Open the static dataset <span aria-hidden="true">↗</span></a>
         <a class="home-link home-link-secondary" data-site-csv href="data/geometry.csv">Open the static CSV dataset <span aria-hidden="true">↗</span></a>
         <a class="home-link home-link-secondary" data-site-schema href="data/geometry.schema.json">Open the data schema <span aria-hidden="true">↗</span></a>
@@ -186,10 +187,12 @@
         const manifest = document.querySelector('#site-manifest');
         const appleTouchIcon = document.querySelector('#site-apple-touch-icon');
         const methodLink = document.querySelector('[data-site-method]');
+        const staticLink = document.querySelector('[data-site-static]');
         if (favicon) favicon.href = `${siteRoot}favicon.svg`;
         if (manifest) manifest.href = `${siteRoot}site.webmanifest`;
         if (appleTouchIcon) appleTouchIcon.href = `${siteRoot}icons/atlas-180.png`;
         if (methodLink) methodLink.href = `${siteRoot}#method`;
+        if (staticLink) staticLink.href = `${siteRoot}static.html`;
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
         document.querySelectorAll('[data-site-dataset]').forEach((link) => { link.href = `${siteRoot}data/geometry.json`; });
         document.querySelectorAll('[data-site-csv]').forEach((link) => { link.href = `${siteRoot}data/geometry.csv`; });
