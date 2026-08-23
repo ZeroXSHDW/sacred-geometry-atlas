@@ -1206,6 +1206,12 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .profile-compare-label { font-size: 0.44rem; }
 }
 
+@media (max-width: 320px) {
+  .header-actions { gap: 0.2rem; }
+  .dataset-link { gap: 0.25rem; padding-inline: 0.45rem; }
+  .download-button { padding-inline: 0.5rem; }
+}
+
 @media (pointer: coarse) {
   .dataset-link,
   .download-button { min-height: 40px; }
