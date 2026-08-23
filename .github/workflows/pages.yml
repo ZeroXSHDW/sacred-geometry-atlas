@@ -378,7 +378,7 @@ jobs:
           }
           if (!app.includes('<span class="catalog-number" aria-hidden="true">')) throw new Error('Missing catalog number guard');
           if (!app.includes('function normalizeCatalogQuery(value)') || !app.includes('state.query = normalizeCatalogQuery(event.target.value);') || !app.includes('state.query = normalizeCatalogQuery(requestedQuery);') || !app.includes('function queryTerms(value)') || !app.includes('const terms = queryTerms(state.query);') || !app.includes('terms.every((term) => haystack.includes(term))') || !app.includes('function escapeRegExp(value)') || !app.includes('function highlightSearchText(value)') || !app.includes('highlightSearchText(study.name)') || !app.includes('function searchMatchContext(study)') || !app.includes('["provenance", [studySource(study), studySourceNote(study), studyStatus(study), studyStatusDescription(study)]]') || !app.includes('studyStatusDescription(study),\n      ...dimensions') || !app.includes('Found in ${labels.join(" · ")}') || !app.includes('class="search-hit"') || !app.includes('class="catalog-card-match"') || !app.includes('function studySearchText(study)') || !app.includes('study.details.flat()')) throw new Error('Catalog search must normalize and cover full study text, provenance definitions, multi-term queries, explain hidden matches, and escape dynamic text');
-          if (!app.includes('const currentAttribute = isActive ? \' aria-current="page"\' : "";') || app.includes('aria-current="${isActive ? "true" : "false"}"')) throw new Error('Inactive catalog cards must omit aria-current');
+          if (!app.includes('const routeStudyId = route.page === "atlas" ? route.studyId : null;') || !app.includes('const isCurrentRoute = routeStudyId === study.id && isActive;') || !app.includes('const currentAttribute = isCurrentRoute ? \' aria-current="page"\' : "";') || app.includes('aria-current="${isActive ? "true" : "false"}"')) throw new Error('Catalog cards must reserve aria-current page semantics for an explicit Atlas study route');
           if (!app.includes('function routeHash(page, includeStudy, studyId = state.activeId)') || !app.includes('function atlasStudyNavigationUrl(studyId)') || !app.includes('function catalogViewRouteUrl()') || !app.includes('if (page === "method" && includeStudy && studyId)') || !app.includes('const contextStudyId = ["atlas", "method"].includes(page)') || !app.includes('route.contextStudyId') || !app.includes('href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"')) throw new Error('Study-aware Atlas and Method routes must expose route-native links');
           if (!app.includes('(event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey') || !app.includes('event.preventDefault();')) throw new Error('Catalog links must preserve modified-click behavior while selecting in place');
           if (!styles.includes('color: inherit; text-align: left; text-decoration: none; transition: 180ms ease;')) throw new Error('Catalog route links must retain card styling without browser underlines');
@@ -399,7 +399,8 @@ jobs:
           if (!app.includes('function renderCatalogResultCount(count)') || !app.includes('renderCatalogResultCount(visible.length);') || !app.includes('let lastCatalogStatus = "";') || !app.includes('let lastCatalogStatusFilter = null;') || app.includes('let lastCatalogResultCount = "";') || !app.includes('const scope = catalogScopeLabel();') || !app.includes('const scopeLabel = `${text}; ${scope}.`;') || !app.includes('const statusFilterChanged = lastCatalogStatusFilter !== null && lastCatalogStatusFilter !== state.filterStatus;') || !app.includes('function catalogStatusFilterAnnouncement()') || !app.includes('Data status filter cleared.') || !app.includes('Data status filter: ${status}. ${definition}') || !app.includes('if (statusFilterChanged) announcements.push(catalogStatusFilterAnnouncement());') || !app.includes('Catalog updated: ${scope}.')) throw new Error('Catalog scope and status changes must announce the active scope without repeating the visible count');
           const refreshStart = app.indexOf('function refreshCatalog()');
           const refreshEnd = app.indexOf('\n  function renderAll()', refreshStart);
-          if (refreshStart < 0 || refreshEnd < 0 || app.slice(refreshStart, refreshEnd).includes('renderCatalogResultCount(')) throw new Error('Catalog refresh must announce its result count only through renderList');
+          const refreshSource = refreshStart >= 0 && refreshEnd >= 0 ? app.slice(refreshStart, refreshEnd) : '';
+          if (refreshStart < 0 || refreshEnd < 0 || refreshSource.includes('renderCatalogResultCount(') || refreshSource.indexOf('if (previousId !== state.activeId && state.page === "atlas") replaceRoute("atlas");') < 0 || refreshSource.indexOf('if (previousId !== state.activeId && state.page === "atlas") replaceRoute("atlas");') > refreshSource.indexOf('renderList();')) throw new Error('Catalog refresh must announce its result count only through renderList and update an active study route before rendering current-page semantics');
           for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Copied", `Share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Copied", `Catalog share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Copied", `Comparison share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Catalog citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Comparison citation copied: ${scope}`);']) {
             if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
           }
@@ -1349,10 +1350,12 @@ jobs:
           elements.set('#churchList', list);
           elements.set('#catalogRoute', catalogRoute);
           elements.set('#printCatalog', catalogPrint);
+          const location = { href: 'https://example.test/atlas/#atlas', hash: '#atlas' };
           const context = {
             URL,
             window: {
-              location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all', hash: '#atlas/basilica/plan/exterior/all' }
+              location,
+              history: { replaceState(_state, _title, next) { const url = new URL(next, location.href); location.href = url.href; location.hash = url.hash; } }
             },
             document: {
               querySelector(selector) {
@@ -1363,13 +1366,24 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderList, state };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderList, refreshCatalog, state };\n})();');
           vm.runInNewContext(app, context);
-          const { renderList, state } = context.window.__atlasTest;
+          const { renderList, refreshCatalog, state } = context.window.__atlasTest;
           renderList();
           if (catalogRouteLink.href !== '/atlas/#atlas' || catalogRouteLink.textContent !== '/atlas/#atlas') throw new Error(`Catalog route link did not render the current full-collection route: ${catalogRouteLink.href} / ${catalogRouteLink.textContent}`);
+          if (list.innerHTML.includes('aria-current="page"')) throw new Error('Collection-only Atlas route incorrectly marked the default selected study as the current page');
           if (catalogPrint.disabled) throw new Error('Catalog print action was disabled while the full collection was visible');
           if (!list.innerHTML.includes('class="catalog-card-status" data-status="schematic" title="Illustrative proportions; not a measured survey.">Schematic</span>') || !list.innerHTML.includes('4th–6th century · Axis: Longitudinal axis · Processional axis') || !list.innerHTML.includes('class="catalog-card-measure">58 × 22 × 18 m · radius 11 m</span>') || !list.innerHTML.includes('primary radius 11.0 meters') || !list.innerHTML.includes('Data status: Schematic (schematic); Illustrative proportions; not a measured survey.') || !list.innerHTML.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || !list.innerHTML.includes('Longitudinal axis') || !list.innerHTML.includes('title="Add The longitudinal basilica to comparison"')) throw new Error('Catalog card did not render its axis context, geometry measures, accessible radius, explicit schema-backed status, source note, or compact comparison tooltip');
+          context.window.location.href = 'https://example.test/atlas/#atlas/basilica/plan/exterior/all';
+          context.window.location.hash = '#atlas/basilica/plan/exterior/all';
+          renderList();
+          if (!list.innerHTML.includes('aria-current="page"')) throw new Error('Study-specific Atlas route did not mark its active catalog card as the current page');
+          state.filter = 'Gothic';
+          state.filterStatus = 'all';
+          refreshCatalog();
+          if (state.activeId !== 'gothic' || !location.hash.startsWith('#atlas/gothic/')) throw new Error(`Filtering did not move the active study route before rendering: ${state.activeId} / ${location.hash}`);
+          if (!list.innerHTML.includes('aria-current="page"')) throw new Error('Filtered active study did not receive current-page semantics');
+          state.filter = 'all';
           state.filterStatus = 'measured';
           renderList();
           if (catalogRouteLink.href !== '/atlas/?status=measured#atlas' || catalogRouteLink.textContent !== '/atlas/?status=measured#atlas') throw new Error(`Catalog route link did not follow the active status filter: ${catalogRouteLink.href} / ${catalogRouteLink.textContent}`);

@@ -1779,12 +1779,12 @@
     const visible = visibleStudies();
     const previousId = state.activeId;
     if (visible.length && !visible.some((study) => study.id === state.activeId)) state.activeId = visible[0].id;
-    renderList();
     if (state.page === "atlas" && !visible.length) replaceRoute("atlas", false);
+    if (previousId !== state.activeId && state.page === "atlas") replaceRoute("atlas");
+    renderList();
     if (previousId !== state.activeId) {
       renderStudy();
       renderDrawing();
-      if (state.page === "atlas") replaceRoute("atlas");
       announceStudy(activeStudy(), visible.length);
     }
     updateDocumentTitle("atlas");
@@ -1804,6 +1804,8 @@
     const list = $("#churchList");
     const empty = $("#emptyState");
     const emptyMessage = $("#emptyStateMessage");
+    const route = parseRoute();
+    const routeStudyId = route.page === "atlas" ? route.studyId : null;
     renderCatalogFilterOptions();
     const visible = visibleStudies();
     const catalogExport = $("#downloadCatalogView");
@@ -1829,9 +1831,10 @@
     list.innerHTML = visible.map((study) => {
       const isActive = study.id === state.activeId;
       const isCompared = state.compareIds.includes(study.id);
+      const isCurrentRoute = routeStudyId === study.id && isActive;
       const matchContext = searchMatchContext(study);
       const compareLabel = `${isCompared ? "Remove" : "Add"} ${study.name} ${isCompared ? "from" : "to"} comparison`;
-      const currentAttribute = isActive ? ' aria-current="page"' : "";
+      const currentAttribute = isCurrentRoute ? ' aria-current="page"' : "";
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       const statusLabel = studyStatusLabel(study);
       return `
