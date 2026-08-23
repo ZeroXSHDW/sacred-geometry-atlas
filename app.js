@@ -63,6 +63,7 @@
   const MAX_ZOOM = 1.6;
   const SYNC_ACTION_COOLDOWN_MS = 400;
   const zoomPercent = (zoom) => `${Math.round((zoom ?? state.zoom) * 100)}%`;
+  const zoomDeltaForKey = (key) => key === "+" ? 0.15 : key === "-" ? -0.15 : 0;
   const parseZoom = (value) => {
     if (value === undefined || value === "") return null;
     const parsed = Number(value);
@@ -1504,6 +1505,12 @@
       else announceKeyboard(state.compareIds.length === 1
         ? "Select one more study to open comparison."
         : "Select at least two studies to open comparison.");
+      return;
+    }
+    const zoomDelta = zoomDeltaForKey(key);
+    if (zoomDelta) {
+      event.preventDefault();
+      changeZoom(zoomDelta);
       return;
     }
     if (key === "j" || key === "k") {

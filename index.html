@@ -516,6 +516,7 @@
                         <div><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next / previous study</dd></div>
                         <div><dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></dt><dd>Plan / elevation / section</dd></div>
                         <div><dt><kbd>I</kbd> <kbd>O</kbd></dt><dd>Inside / outside</dd></div>
+                        <div><dt><kbd>+</kbd> <kbd>-</kbd></dt><dd>Zoom in / out</dd></div>
                         <div><dt><kbd>R</kbd></dt><dd>Reset drawing zoom</dd></div>
                         <div><dt><kbd>C</kbd></dt><dd>Open focused comparison when two studies are selected</dd></div>
                       </dl>
@@ -546,9 +547,9 @@
                     <span>Reset view</span>
                   </button>
                   <div class="zoom-control" role="group" aria-label="Drawing zoom">
-                    <button id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas" title="Zoom out">−</button>
+                    <button id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas" aria-keyshortcuts="-" title="Zoom out">−</button>
                     <button id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas" aria-keyshortcuts="r" title="Reset zoom to 100%">100%</button>
-                    <button id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas" title="Zoom in">+</button>
+                    <button id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas" aria-keyshortcuts="+" title="Zoom in">+</button>
                   </div>
                   <span class="zoom-readout" id="zoomReadout" role="status" aria-live="polite" aria-atomic="true">100%</span>
                 </div>
