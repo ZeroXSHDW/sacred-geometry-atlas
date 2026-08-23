@@ -771,7 +771,7 @@
           <summary id="comparisonTableSummary" aria-keyshortcuts="Escape">Read the 6 study records as a table</summary>
           <div class="comparison-table-actions">
             <div class="comparison-table-copy">
-              <p>Recorded dimensions, derived ratios, optional floor-area estimates with their basis, volume estimates with provenance, source notes, and the four interpretive reading-profile scores are available here and in the CSV or JSON export. Study names open in Atlas. Both exports carry the study&apos;s curated index, schema version, unit system, published schema URL, active view route, data-status context, and self-describing reading-profile basis/note; each record also carries a direct study route.</p>
+              <p>Recorded dimensions, derived ratios, optional floor-area estimates with their basis, volume estimates with provenance, source notes, and the four interpretive reading-profile scores are available here and in the CSV or JSON export. Study names open in Atlas, with each curated study index kept visible in the row. Both exports carry the study&apos;s curated index, schema version, unit system, published schema URL, active view route, data-status context, and self-describing reading-profile basis/note; each record also carries a direct study route.</p>
               <p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>
             </div>
             <div class="comparison-export-actions" role="group" aria-label="Download comparison data">
@@ -792,10 +792,10 @@
           <span class="sr-only" id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"></span>
           <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp comparisonTableProfileHelp comparisonStatusHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">
             <table class="comparison-table" id="comparisonDataTable" aria-describedby="comparisonStatusHelp comparisonTableProfileHelp">
-              <caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status, source note, and interpretive 0–100 reading-profile scores.</caption>
+              <caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its curated study index, data status, source note, and interpretive 0–100 reading-profile scores.</caption>
               <thead>
                 <tr>
-                  <th scope="col">Study</th>
+                  <th scope="col">Study / index</th>
                   <th scope="col">Axis</th>
                   <th scope="col">Status</th>
                   <th scope="col">Source / provenance</th>

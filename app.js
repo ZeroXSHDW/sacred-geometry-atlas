@@ -3930,8 +3930,8 @@
       ? `Read the ${comparison.length} selected study records as a table`
       : `Read the ${comparison.length} study records as a table`;
     if (caption) caption.textContent = isFocused
-      ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status, source note, and interpretive 0–100 reading-profile scores.`
-      : "Recorded study values for the full collection; each row includes its data status, source note, and interpretive 0–100 reading-profile scores.";
+      ? `Recorded study values for ${comparison.length} selected studies; each row includes its curated study index, data status, source note, and interpretive 0–100 reading-profile scores.`
+      : "Recorded study values for the full collection; each row includes its curated study index, data status, source note, and interpretive 0–100 reading-profile scores.";
     body.innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const section = study.height / study.span;
@@ -3953,7 +3953,7 @@
       const studyLinkLabel = `Open study ${study.index}, ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;
       return `
         <tr>
-          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentStudyAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
+          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentStudyAttribute} aria-label="${escapeHtml(studyLinkLabel)}"><span class="comparison-table-study-index" aria-hidden="true">${escapeHtml(study.index)}</span>${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(studyAxisLabel(study))}</td>
           <td class="comparison-status" data-status="${escapeHtml(status)}" aria-label="${escapeHtml(`${statusLabel} (${status}): ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</td>
           <td class="comparison-source"><strong>${escapeHtml(studySource(study))}</strong><span>${escapeHtml(studySourceNote(study))}</span></td>
