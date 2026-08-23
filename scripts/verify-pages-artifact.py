@@ -110,6 +110,7 @@ missing.extend(token for token in [
     '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />',
     '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />',
     f'<a class="home-link" data-site-root href="{base_url}">',
+    f'<a class="home-link home-link-secondary" data-site-method href="{base_url}#method">',
     f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
     f'<a class="home-link home-link-secondary" data-site-csv href="{base_url}data/geometry.csv">',
     f'<a class="home-link home-link-secondary" data-site-schema href="{schema_target}">',
