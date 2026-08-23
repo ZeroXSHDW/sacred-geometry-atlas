@@ -84,7 +84,9 @@ const analyze = (study) => {
   }));
   const moduleCount = study.module > 0 ? study.length / study.module : null;
   const bayModuleCoverage = study.length > 0 ? (study.bayCount * study.module) / study.length : null;
-  const measuredOrPublished = Object.values(currentEvidence).filter((value) => value !== "schematic");
+  const measuredOrPublished = Object.entries(currentEvidence)
+    .filter(([, value]) => value !== "schematic")
+    .map(([field]) => field);
   return {
     id: study.id,
     index: study.index,

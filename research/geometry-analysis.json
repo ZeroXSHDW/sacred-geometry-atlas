@@ -46,8 +46,8 @@
   "summary": {
     "recordCount": 24,
     "evidenceFieldCounts": {
-      "reference-dimension": 4,
-      "schematic": 140
+      "reference-dimension": 7,
+      "schematic": 137
     },
     "constructorAttribution": "not-determined-by-geometry"
   },
@@ -4002,87 +4002,112 @@
       "typology": "Baroque",
       "place": "London, England",
       "currentGeometryEvidence": {
-        "length": "schematic",
-        "span": "schematic",
-        "height": "schematic",
+        "length": "reference-dimension",
+        "span": "reference-dimension",
+        "height": "reference-dimension",
         "radius": "schematic",
         "module": "schematic",
         "bayCount": "schematic"
       },
       "geometryInputs": {
-        "length": 150,
+        "length": 169.2,
         "span": 75,
-        "height": 40,
+        "height": 111.6,
         "radius": 30,
         "module": 12,
         "bayCount": 8,
         "units": "m for dimensions; count for bayCount"
       },
-      "publishedMeasurements": [],
+      "publishedMeasurements": [
+        {
+          "field": "length",
+          "label": "cathedral length",
+          "value": 169.2,
+          "unit": "m",
+          "scope": "published length including western steps",
+          "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf"
+        },
+        {
+          "field": "span",
+          "label": "greatest breadth",
+          "value": 75,
+          "unit": "m",
+          "scope": "published greatest breadth",
+          "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf"
+        },
+        {
+          "field": "height",
+          "label": "overall height",
+          "value": 111.6,
+          "unit": "m",
+          "scope": "published height above pavement to top of cross",
+          "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf"
+        }
+      ],
       "ratios": {
-        "lengthToSpan": 2,
-        "heightToSpan": 0.533333,
+        "lengthToSpan": 2.256,
+        "heightToSpan": 1.488,
         "radiusToSpan": 0.4,
         "moduleToSpan": 0.16,
-        "lengthToModule": 12.5
+        "lengthToModule": 14.1
       },
       "ratioPatterns": [
         {
           "name": "lengthToSpan",
-          "observed": 2,
+          "observed": 2.256,
           "simpleFraction": {
-            "numerator": 2,
-            "denominator": 1,
-            "value": 2,
-            "absoluteError": 0
+            "numerator": 52,
+            "denominator": 23,
+            "value": 2.26087,
+            "absoluteError": 0.00487
           },
           "nearestConstants": [
             {
               "name": "2:1",
               "target": 2,
-              "relativeError": 0,
-              "withinFivePercent": true
+              "relativeError": 0.128,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.248,
+              "withinFivePercent": false
             },
             {
               "name": "√3",
               "target": 1.7320508075688772,
-              "relativeError": 0.154701,
-              "withinFivePercent": false
-            },
-            {
-              "name": "φ",
-              "target": 1.618033988749895,
-              "relativeError": 0.236068,
+              "relativeError": 0.302502,
               "withinFivePercent": false
             }
           ]
         },
         {
           "name": "heightToSpan",
-          "observed": 0.533333,
+          "observed": 1.488,
           "simpleFraction": {
-            "numerator": 8,
-            "denominator": 15,
-            "value": 0.533333,
-            "absoluteError": 0
+            "numerator": 34,
+            "denominator": 23,
+            "value": 1.478261,
+            "absoluteError": 0.009739
           },
           "nearestConstants": [
             {
-              "name": "1:1",
-              "target": 1,
-              "relativeError": 0.466667,
-              "withinFivePercent": false
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.008,
+              "withinFivePercent": true
             },
             {
               "name": "√2",
               "target": 1.4142135623730951,
-              "relativeError": 0.622877,
+              "relativeError": 0.052175,
               "withinFivePercent": false
             },
             {
-              "name": "3:2",
-              "target": 1.5,
-              "relativeError": 0.644445,
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.080365,
               "withinFivePercent": false
             }
           ]
@@ -4149,53 +4174,57 @@
         },
         {
           "name": "lengthToModule",
-          "observed": 12.5,
+          "observed": 14.1,
           "simpleFraction": {
-            "numerator": 25,
-            "denominator": 2,
-            "value": 12.5,
+            "numerator": 141,
+            "denominator": 10,
+            "value": 14.1,
             "absoluteError": 0
           },
           "nearestConstants": [
             {
               "name": "4:1",
               "target": 4,
-              "relativeError": 2.125,
+              "relativeError": 2.525,
               "withinFivePercent": false
             },
             {
               "name": "3:1",
               "target": 3,
-              "relativeError": 3.166667,
+              "relativeError": 3.7,
               "withinFivePercent": false
             },
             {
               "name": "2:1",
               "target": 2,
-              "relativeError": 5.25,
+              "relativeError": 6.05,
               "withinFivePercent": false
             }
           ]
         }
       ],
       "moduleChecks": {
-        "lengthToModule": 12.5,
-        "lengthToModuleNearestInteger": 13,
-        "lengthToModuleIntegerResidual": 0.5,
-        "bayModuleCoverage": 0.64,
+        "lengthToModule": 14.1,
+        "lengthToModuleNearestInteger": 14,
+        "lengthToModuleIntegerResidual": 0.1,
+        "bayModuleCoverage": 0.567376,
         "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
       },
       "derivedReadings": {
-        "floorArea": 11250,
-        "envelopeVolume": 450000,
-        "sectionRatio": 0.533333,
+        "floorArea": 12690,
+        "envelopeVolume": 1416204,
+        "sectionRatio": 1.488,
         "radialReachRatio": 0.4
       },
       "constructorFinding": {
         "result": "not-determined-by-geometry",
         "confidence": "not-applicable",
         "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
-        "geometryEvidenceFields": [],
+        "geometryEvidenceFields": [
+          "reference-dimension",
+          "reference-dimension",
+          "reference-dimension"
+        ],
         "documentaryEvidenceRequired": true
       },
       "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."

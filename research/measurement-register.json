@@ -91,7 +91,40 @@
     { "id": "kizhi", "publishedMeasurements": [] },
     { "id": "san-giorgio", "publishedMeasurements": [] },
     { "id": "redentore", "publishedMeasurements": [] },
-    { "id": "st-pauls", "publishedMeasurements": [] },
+    {
+      "id": "st-pauls",
+      "currentGeometryEvidence": {
+        "length": "reference-dimension",
+        "span": "reference-dimension",
+        "height": "reference-dimension"
+      },
+      "publishedMeasurements": [
+        {
+          "field": "length",
+          "label": "cathedral length",
+          "value": 169.2,
+          "unit": "m",
+          "scope": "published length including western steps",
+          "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf"
+        },
+        {
+          "field": "span",
+          "label": "greatest breadth",
+          "value": 75,
+          "unit": "m",
+          "scope": "published greatest breadth",
+          "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf"
+        },
+        {
+          "field": "height",
+          "label": "overall height",
+          "value": 111.6,
+          "unit": "m",
+          "scope": "published height above pavement to top of cross",
+          "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf"
+        }
+      ]
+    },
     { "id": "karlskirche", "publishedMeasurements": [] },
     { "id": "ronchamp", "publishedMeasurements": [] },
     { "id": "brasilia", "publishedMeasurements": [] },
