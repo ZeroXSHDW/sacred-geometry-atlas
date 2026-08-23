@@ -3783,13 +3783,13 @@
     const downloaded = triggerDownload("sacred-geometry-atlas.json", payload, "application/json");
     if (!downloaded) {
       $("#downloadStatus").textContent = "Atlas data download is unavailable in this browser. Open the static JSON dataset link instead.";
-      temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser.", "Download data", "Download full atlas data as JSON", "atlas-download");
+      temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser.", "Download JSON", "Download full atlas data as JSON", "atlas-download");
       showDownloadRecovery("The file download was blocked. Open the static dataset instead.", "#downloadData");
       return;
     }
     hideDownloadRecovery();
     $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. ${exportCompletionScope(studies, "full collection")}. Data status: ${studyStatusSummary()}.`;
-    temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
+    temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download JSON", "Download full atlas data as JSON", "atlas-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
     }
