@@ -13,6 +13,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - An expandable layer guide explains what All, Envelope, Rhythm, Axis, and Dimensions reveal before a visitor isolates a drawing layer; the focus buttons repeat those definitions in accessible labels and live announcements.
 - Zoom and reset controls for the SVG drawing instrument.
 - A plain-language drawing context line that keeps the active surface, mode, layer focus, and zoom visible beside the interpretive caption.
+- The zoom control group is described by its live percentage readout, so the current zoom is announced when keyboard or assistive-technology users enter those controls.
 - Study-selection announcements repeat that active drawing context, so assistive-technology users receive the same surface, mode, layer, and zoom handoff as the visible drawing caption.
 - A schema-backed collection note keeps the visible provenance label, units, and version aligned with the dataset and exports.
 - The data-status vocabulary is read from the schema, so documented statuses beyond schematic/measured remain filterable, counted, announced, and preserved in exports.
