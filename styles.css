@@ -575,6 +575,9 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .manual-copy-fallback-dismiss:hover { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .manual-copy-fallback textarea { width: 100%; min-height: 4.6rem; padding: 0.6rem; border: 1px solid var(--line-strong); color: var(--ink); background: var(--bg-deep); font-family: var(--mono); font-size: 0.63rem; line-height: 1.5; resize: vertical; }
 .manual-copy-fallback textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); outline: none; }
+.search-field input:focus-visible,
+.select-wrap select:focus-visible,
+.manual-copy-fallback textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 .manual-copy-fallback-hint { margin: 0; color: var(--ink-muted); font-size: 0.62rem; line-height: 1.45; }
 .study-index { color: var(--amber); font-family: var(--serif); font-size: 3.5rem; line-height: 0.85; opacity: 0.85; }
 
