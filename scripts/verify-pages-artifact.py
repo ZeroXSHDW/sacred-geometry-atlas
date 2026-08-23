@@ -124,7 +124,7 @@ if (
 required_shortcuts = {
     "./#atlas": "Explore Atlas",
     "./#compare": "Compare studies",
-    "./#methodView": "Read Method",
+    "./#method": "Read Method",
 }
 manifest_shortcuts = {
     shortcut.get("url"): shortcut
