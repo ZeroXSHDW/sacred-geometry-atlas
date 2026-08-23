@@ -224,7 +224,9 @@ jobs:
           if (!notFound.includes('data-site-root') || !notFound.includes('data-site-dataset') || !notFound.includes('data-site-csv') || !notFound.includes('data-site-schema')) throw new Error('Missing GitHub Pages recovery navigation');
           if (!notFound.includes("hostname.endsWith('.github.io')")) throw new Error('Missing project-site root resolver');
           if (!notFound.includes('<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing 404 favicon link');
+          if (!notFound.includes('<link rel="manifest" id="site-manifest" href="site.webmanifest" />') || !notFound.includes('<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />')) throw new Error('Missing 404 install metadata links');
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
+          if (!notFound.includes("manifest.href = `${siteRoot}site.webmanifest`") || !notFound.includes("appleTouchIcon.href = `${siteRoot}icons/atlas-192.png`")) throw new Error('Missing 404 install metadata root resolver');
           if (!notFound.includes('link.href = `${siteRoot}data/geometry.json`') || !notFound.includes('link.href = `${siteRoot}data/geometry.csv`') || !notFound.includes('link.href = `${siteRoot}data/geometry.schema.json`')) throw new Error('Missing 404 dataset root resolver');
           if (!html.includes('<div class="data-error" id="dataError" role="main" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" tabindex="-1" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">') || !html.includes('<p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset.') || !html.includes('<a class="hero-action hero-action-primary" href="./" data-recovery-reload>Reload the atlas')) throw new Error('Data-load recovery must expose a main landmark, preserve the current route, and announce its recovery explanation assertively');
           if (!html.includes('<script defer src="data/geometry.js"></script>') || !html.includes('<script defer src="app.js"></script>') || html.indexOf('<script defer src="data/geometry.js"></script>') > html.indexOf('<script defer src="app.js"></script>')) throw new Error('Geometry data and app scripts must load in ordered deferred execution');
@@ -1274,27 +1276,30 @@ jobs:
           const script = scripts[scripts.length - 1][1];
           function resolveLinks(pathname, hostname, configuredRoot) {
             const rootLink = { href: '', getAttribute() { return configuredRoot; } };
+            const favicon = { href: '' };
+            const manifest = { href: '' };
+            const appleTouchIcon = { href: '' };
             const datasetLink = { href: '' };
             const csvLink = { href: '' };
             const schemaLink = { href: '' };
             const context = {
               window: { location: { pathname, hostname } },
               document: {
-                querySelector(selector) { return selector === '#site-favicon' ? { href: '' } : selector === '[data-site-root]' ? rootLink : null; },
+                querySelector(selector) { return selector === '#site-favicon' ? favicon : selector === '#site-manifest' ? manifest : selector === '#site-apple-touch-icon' ? appleTouchIcon : selector === '[data-site-root]' ? rootLink : null; },
                 querySelectorAll(selector) {
                   return selector === '[data-site-root]' ? [rootLink] : selector === '[data-site-dataset]' ? [datasetLink] : selector === '[data-site-csv]' ? [csvLink] : selector === '[data-site-schema]' ? [schemaLink] : [];
                 }
               }
             };
             vm.runInNewContext(script, context);
-            return { root: rootLink.href, dataset: datasetLink.href, csv: csvLink.href, schema: schemaLink.href };
+            return { root: rootLink.href, favicon: favicon.href, manifest: manifest.href, appleTouchIcon: appleTouchIcon.href, dataset: datasetLink.href, csv: csvLink.href, schema: schemaLink.href };
           }
           const sourceLinks = resolveLinks('/sacred-geometry-atlas/missing/study', 'someone.github.io', '../');
-          if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || sourceLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || sourceLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.dataset} / ${sourceLinks.csv} / ${sourceLinks.schema}`);
+          if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.favicon !== '/sacred-geometry-atlas/favicon.svg' || sourceLinks.manifest !== '/sacred-geometry-atlas/site.webmanifest' || sourceLinks.appleTouchIcon !== '/sacred-geometry-atlas/icons/atlas-192.png' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || sourceLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || sourceLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.manifest} / ${sourceLinks.appleTouchIcon} / ${sourceLinks.dataset} / ${sourceLinks.csv} / ${sourceLinks.schema}`);
           const rootLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', '../');
-          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || rootLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || rootLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.dataset} / ${rootLinks.csv} / ${rootLinks.schema}`);
+          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.favicon !== '/sacred-geometry-atlas/favicon.svg' || rootLinks.manifest !== '/sacred-geometry-atlas/site.webmanifest' || rootLinks.appleTouchIcon !== '/sacred-geometry-atlas/icons/atlas-192.png' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || rootLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || rootLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.manifest} / ${rootLinks.appleTouchIcon} / ${rootLinks.dataset} / ${rootLinks.csv} / ${rootLinks.schema}`);
           const deployedLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', 'https://someone.github.io/sacred-geometry-atlas/');
-          if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json' || deployedLinks.csv !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.csv' || deployedLinks.schema !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.dataset} / ${deployedLinks.csv} / ${deployedLinks.schema}`);
+          if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.favicon !== 'https://someone.github.io/sacred-geometry-atlas/favicon.svg' || deployedLinks.manifest !== 'https://someone.github.io/sacred-geometry-atlas/site.webmanifest' || deployedLinks.appleTouchIcon !== 'https://someone.github.io/sacred-geometry-atlas/icons/atlas-192.png' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json' || deployedLinks.csv !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.csv' || deployedLinks.schema !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.manifest} / ${deployedLinks.appleTouchIcon} / ${deployedLinks.dataset} / ${deployedLinks.csv} / ${deployedLinks.schema}`);
           console.log('404 project root resolver smoke test passed.');
           NODE
       - name: Smoke-test route-native catalog links
@@ -4525,6 +4530,8 @@ jobs:
               '<a class="home-link home-link-secondary" data-site-dataset href="data/geometry.json">': f'<a class="home-link home-link-secondary" data-site-dataset href="{html.escape(base_url + "data/geometry.json", quote=True)}">',
               '<a class="home-link home-link-secondary" data-site-csv href="data/geometry.csv">': f'<a class="home-link home-link-secondary" data-site-csv href="{html.escape(base_url + "data/geometry.csv", quote=True)}">',
               '<a class="home-link home-link-secondary" data-site-schema href="data/geometry.schema.json">': f'<a class="home-link home-link-secondary" data-site-schema href="{schema_url}">',
+              '<link rel="manifest" id="site-manifest" href="site.webmanifest" />': f'<link rel="manifest" id="site-manifest" href="{html.escape(base_url + "site.webmanifest", quote=True)}" />',
+              '<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />': f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{html.escape(base_url + "icons/atlas-192.png", quote=True)}" />',
           }
           for old, new in not_found_replacements.items():
               if old not in not_found_source:

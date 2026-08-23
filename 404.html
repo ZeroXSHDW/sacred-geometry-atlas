@@ -7,6 +7,8 @@
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" id="site-manifest" href="site.webmanifest" />
+    <link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />
     <title>Page not found · Sacred Geometry Atlas</title>
     <script>
       (() => {
@@ -169,7 +171,11 @@
           ? configuredRoot
           : isGitHubPages && segments.length ? `/${segments[0]}/` : '/';
         const favicon = document.querySelector('#site-favicon');
+        const manifest = document.querySelector('#site-manifest');
+        const appleTouchIcon = document.querySelector('#site-apple-touch-icon');
         if (favicon) favicon.href = `${siteRoot}favicon.svg`;
+        if (manifest) manifest.href = `${siteRoot}site.webmanifest`;
+        if (appleTouchIcon) appleTouchIcon.href = `${siteRoot}icons/atlas-192.png`;
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
         document.querySelectorAll('[data-site-dataset]').forEach((link) => { link.href = `${siteRoot}data/geometry.json`; });
         document.querySelectorAll('[data-site-csv]').forEach((link) => { link.href = `${siteRoot}data/geometry.csv`; });
