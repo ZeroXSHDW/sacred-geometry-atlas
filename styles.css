@@ -433,6 +433,7 @@ h3 { letter-spacing: -0.04em; }
 .catalog-summary-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 0.35rem; }
 .catalog-summary .catalog-action { flex: 0 0 auto; padding: 0.32rem 0.42rem; font-size: 0.5rem; }
 .catalog-summary .catalog-action:disabled { cursor: not-allowed; border-color: var(--line); color: var(--ink-muted); opacity: 0.45; }
+.catalog-print-button span:last-child { display: none; }
 .catalog-batch-actions { padding: 0 0 0.75rem; border-bottom: 1px solid var(--line); }
 .catalog-batch-action { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 0.6rem; padding: 0.48rem 0.58rem; border: 1px dashed rgba(136, 198, 186, 0.34); color: var(--teal); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-align: left; text-transform: uppercase; transition: 180ms ease; }
 .catalog-batch-action span:first-child { color: var(--amber); font-size: 0.9rem; line-height: 0.8; }
@@ -1040,6 +1041,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-summary .catalog-citation-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
   .catalog-summary .catalog-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }
   .catalog-summary .catalog-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }
+  .catalog-summary .catalog-print-button span:last-child { display: inline; font-size: 0.5rem; white-space: nowrap; }
   .method-return-button span:last-child { display: inline; }
   .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
   .drawing-scale { flex: 0 0 100%; }
@@ -1480,4 +1482,37 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-comparison .comparison-table thead th { position: static; background: #fff; box-shadow: none; }
   body.print-comparison .comparison-table tbody .comparison-source,
   body.print-comparison .comparison-table tbody .comparison-provenance { max-width: none; }
+
+  body.print-catalog .site-header,
+  body.print-catalog .hero-actions,
+  body.print-catalog .hero-stats,
+  body.print-catalog .site-footer,
+  body.print-catalog .visual-column,
+  body.print-catalog .catalog-summary-actions,
+  body.print-catalog .catalog-batch-actions,
+  body.print-catalog .compare-tray,
+  body.print-catalog .catalog-footnote,
+  body.print-catalog .catalog-filter-note,
+  body.print-catalog .search-field,
+  body.print-catalog .tool-row,
+  body.print-catalog .manual-copy-fallback { display: none !important; }
+  body.print-catalog .hero { display: block; min-height: 0; padding: 0 0 1.1rem; }
+  body.print-catalog .hero-data-note { max-width: 32rem; margin-top: 1rem; color: var(--ink-muted); text-align: left; }
+  body.print-catalog .workspace { padding: 1.4rem 0 0; }
+  body.print-catalog .workspace .section-heading { margin-bottom: 1.2rem; }
+  body.print-catalog .atlas-layout { display: block; }
+  body.print-catalog .catalog-panel { display: block !important; position: static; width: 100%; }
+  body.print-catalog .catalog-tools { padding: 0; border: 0; }
+  body.print-catalog .catalog-data-note { margin: 0 0 0.8rem; color: var(--ink-muted); }
+  body.print-catalog .catalog-summary { padding: 0.65rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  body.print-catalog .active-filters { padding: 0.75rem 0 0; }
+  body.print-catalog .catalog-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.4rem; }
+  body.print-catalog .catalog-entry { break-inside: avoid; }
+  body.print-catalog .catalog-card { padding: 0.8rem 0; }
+  body.print-catalog .catalog-card:hover,
+  body.print-catalog .catalog-card.is-active { padding-left: 0; background: transparent; }
+  body.print-catalog .catalog-card.is-active { border-inline-start: 3px solid var(--amber); padding-left: 0.55rem; }
+  body.print-catalog .compare-toggle { display: none; }
+  body.print-catalog .catalog-route { margin-top: 0.7rem; }
+  body.print-catalog .empty-state { padding: 1.2rem 0; text-align: left; }
 }

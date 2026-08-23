@@ -1057,6 +1057,7 @@
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
     $("#downloadComparisonJson").addEventListener("click", downloadComparisonJson);
     $("#downloadDrawing").addEventListener("click", downloadDrawing);
+    $("#printCatalog").addEventListener("click", printCatalog);
     $("#printComparison").addEventListener("click", printComparison);
     $("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);
     $("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);
@@ -1784,6 +1785,7 @@
     const visible = visibleStudies();
     const catalogExport = $("#downloadCatalogView");
     const catalogCsvExport = $("#downloadCatalogCsv");
+    const catalogPrint = $("#printCatalog");
     renderCatalogResultCount(visible.length);
     const catalogRoute = $("#catalogRoute");
     if (catalogRoute) renderRouteLink(catalogRoute, ".catalog-route-link", routePath(catalogViewRouteUrl()), "Open current catalog view in Atlas");
@@ -1791,6 +1793,7 @@
     if (statusHelp) statusHelp.textContent = catalogStatusGuidanceText(visible);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
     if (catalogCsvExport) catalogCsvExport.disabled = visible.length === 0;
+    if (catalogPrint) catalogPrint.disabled = visible.length === 0;
     if (emptyMessage) emptyMessage.textContent = emptyCatalogMessage();
     renderVisualState(visible);
     renderActiveFilters();
@@ -2594,6 +2597,35 @@
       if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print sheet", "Print active study sheet", "study-print");
     } catch (error) {
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print");
+      announceKeyboard("Printing is unavailable in this browser.");
+    }
+  }
+
+  function printCatalog() {
+    const visible = visibleStudies();
+    const button = $("#printCatalog");
+    if (!visible.length) {
+      announceKeyboard("There are no visible studies to print.");
+      return;
+    }
+    if (typeof window.print !== "function") {
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print", "Print the current catalog view", "catalog-print");
+      announceKeyboard("Printing is unavailable in this browser.");
+      return;
+    }
+    const cleanup = () => {
+      document.body.classList.remove("print-catalog");
+      if (typeof window.removeEventListener === "function") window.removeEventListener("afterprint", cleanup);
+    };
+    document.body.classList.add("print-catalog");
+    if (typeof window.addEventListener === "function") window.addEventListener("afterprint", cleanup, { once: true });
+    announceKeyboard(`Printing catalog view: ${catalogScopeLabel()}.`);
+    try {
+      window.print();
+      if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print", "Print the current catalog view", "catalog-print");
+    } catch (error) {
+      cleanup();
+      if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print", "Print the current catalog view", "catalog-print");
       announceKeyboard("Printing is unavailable in this browser.");
     }
   }

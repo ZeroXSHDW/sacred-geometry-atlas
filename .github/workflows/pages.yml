@@ -193,6 +193,7 @@ jobs:
           if (!html.includes('<a class="dataset-link dataset-link-json" href="data/geometry.json" aria-label="Open the static atlas dataset as JSON"') || !html.includes('<a class="dataset-link dataset-link-csv" href="data/geometry.csv" aria-label="Open the static atlas dataset as CSV"') || !html.includes('<a class="dataset-link dataset-link-schema" href="data/geometry.schema.json" aria-label="Open the Sacred Geometry Atlas data schema"') || !styles.includes('.header-actions {') || !styles.includes('.dataset-link {') || !styles.includes('.dataset-link:hover') || !styles.includes('.dataset-link-csv .dataset-icon') || !styles.includes('.dataset-link-schema .dataset-icon') || !styles.includes('.dataset-link,\n  .download-button { min-height: 40px; }') || !styles.includes('.dataset-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.dataset-link span:last-child { display: inline; font-size: 0; white-space: nowrap; }') || !styles.includes('.dataset-link-json span:last-child::after { content: "JSON"; font-size: 0.56rem; }') || !styles.includes('.dataset-link-csv span:last-child::after { content: "CSV"; font-size: 0.56rem; }') || !styles.includes('.dataset-link-schema span:last-child::after { content: "Schema"; font-size: 0.56rem; }') || !styles.includes('.runtime-fallback-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }')) throw new Error('Normal and compact atlas artifact links must expose clear JSON, CSV, and schema labels');
           if (!styles.includes('.download-button span.download-label { display: inline; font-size: 0; white-space: nowrap; }') || !styles.includes('.download-button span.download-label::after { content: "JSON"; font-size: 0.56rem; }') || !styles.includes('.download-button.is-complete span.download-label::after { content: "Done"; }')) throw new Error('Compact full-atlas downloads must retain a visible JSON label and Done completion state');
           if (!styles.includes('.catalog-action#downloadCatalogView span:last-child,\n  .catalog-action#downloadCatalogCsv span:last-child { display: inline; }')) throw new Error('Compact catalog exports must retain visible JSON and CSV format labels');
+          if (!html.includes('id="printCatalog"') || !app.includes('function printCatalog()') || !app.includes('$("#printCatalog").addEventListener("click", printCatalog);') || !app.includes('document.body.classList.add("print-catalog");') || !styles.includes('.catalog-print-button span:last-child { display: none; }') || !styles.includes('body.print-catalog .catalog-panel { display: block !important;') || !styles.includes('body.print-catalog .catalog-list { grid-template-columns: repeat(2, minmax(0, 1fr));')) throw new Error('Filtered catalog views must expose an accessible print action and scoped print layout');
           if (!html.includes('<div class="action-recovery" id="downloadRecovery" role="region" aria-labelledby="downloadRecoveryHeading" tabindex="-1" hidden>') || !html.includes('<p class="action-recovery-message" id="downloadRecoveryHeading" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('<a class="hero-action" href="data/geometry.schema.json">Open the data schema') || !html.includes('id="dismissDownloadRecovery" type="button" aria-label="Dismiss download recovery message" aria-keyshortcuts="Escape" title="Dismiss download recovery message"') || !styles.includes('.action-recovery {') || !styles.includes('.action-recovery-actions {') || !styles.includes('.action-recovery-dismiss:hover') || !styles.includes('#downloadRecovery:focus { outline: 2px solid var(--teal); outline-offset: 4px; }') || !styles.includes('.action-recovery { border-color: ButtonText; background: Canvas; }') || !styles.includes('#downloadRecovery:focus { outline-color: Highlight; }') || !styles.includes('.action-recovery,')) throw new Error('Blocked exports must expose a visible, responsive recovery panel with JSON, CSV, and schema actions');
           for (const token of ['function hideDownloadRecovery()', 'function showDownloadRecovery(message, focusSelector)', 'function dismissDownloadRecovery()', 'function handleDownloadRecoveryKeydown(event)', '$("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);', '$("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);', 'showDownloadRecovery("SVG export was blocked.', 'showDownloadRecovery("The study export was blocked.', 'showDownloadRecovery("The file download was blocked.', 'showDownloadRecovery("The catalog export was blocked.', 'showDownloadRecovery("The comparison export was blocked.']) {
             if (!app.includes(token)) throw new Error('Download recovery behavior is incomplete: ' + token);
@@ -1300,9 +1301,11 @@ jobs:
           const list = makeElement();
           const catalogRouteLink = makeElement();
           const catalogRoute = makeElement();
+          const catalogPrint = makeElement();
           catalogRoute.querySelector = (selector) => selector === '.catalog-route-link' ? catalogRouteLink : null;
           elements.set('#churchList', list);
           elements.set('#catalogRoute', catalogRoute);
+          elements.set('#printCatalog', catalogPrint);
           const context = {
             URL,
             window: {
@@ -1322,11 +1325,13 @@ jobs:
           const { renderList, state } = context.window.__atlasTest;
           renderList();
           if (catalogRouteLink.href !== '/atlas/#atlas' || catalogRouteLink.textContent !== '/atlas/#atlas') throw new Error(`Catalog route link did not render the current full-collection route: ${catalogRouteLink.href} / ${catalogRouteLink.textContent}`);
+          if (catalogPrint.disabled) throw new Error('Catalog print action was disabled while the full collection was visible');
           if (!list.innerHTML.includes('class="catalog-card-status" data-status="schematic" title="Illustrative proportions; not a measured survey.">Schematic</span>') || !list.innerHTML.includes('4th–6th century · Axis: Longitudinal axis · Processional axis') || !list.innerHTML.includes('class="catalog-card-measure">58 × 22 × 18 m · radius 11 m</span>') || !list.innerHTML.includes('primary radius 11.0 meters') || !list.innerHTML.includes('Data status: Schematic (schematic); Illustrative proportions; not a measured survey.') || !list.innerHTML.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || !list.innerHTML.includes('Longitudinal axis') || !list.innerHTML.includes('title="Add The longitudinal basilica to comparison"')) throw new Error('Catalog card did not render its axis context, geometry measures, accessible radius, explicit schema-backed status, source note, or compact comparison tooltip');
           state.filterStatus = 'measured';
           renderList();
           if (catalogRouteLink.href !== '/atlas/?status=measured#atlas' || catalogRouteLink.textContent !== '/atlas/?status=measured#atlas') throw new Error(`Catalog route link did not follow the active status filter: ${catalogRouteLink.href} / ${catalogRouteLink.textContent}`);
           if (list.innerHTML.includes('catalog-card-status')) throw new Error('Catalog status filter rendered hidden schematic records');
+          if (!catalogPrint.disabled) throw new Error('Catalog print action stayed enabled for an empty filtered view');
           console.log('Catalog provenance badge smoke test passed.');
           NODE
       - name: Smoke-test route event deduplication
@@ -1787,6 +1792,67 @@ jobs:
           printStudy();
           if (keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printStudyButton.label.textContent !== 'Unavailable' || printStudyButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Study printing did not recover from a blocked print dialog with visible feedback');
           console.log('Study and comparison printing smoke test passed.');
+          NODE
+
+      - name: Smoke-test catalog printing
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const keyboardStatus = { textContent: '' };
+          const classes = new Set();
+          const createPrintButton = () => {
+            const label = { textContent: '' };
+            const attributes = {};
+            return {
+              attributes,
+              classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } },
+              querySelector() { return label; },
+              setAttribute(name, value) { attributes[name] = value; },
+              label,
+              title: '',
+              disabled: false
+            };
+          };
+          const printCatalogButton = createPrintButton();
+          let printCalls = 0;
+          let afterPrint;
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas' },
+              print() { printCalls += 1; },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
+              removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
+            },
+            document: {
+              body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
+              querySelector(selector) {
+                if (selector === '#keyboardStatus') return keyboardStatus;
+                if (selector === '#printCatalog') return printCatalogButton;
+                return null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, printCatalog };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, printCatalog } = context.window.__atlasTest;
+          printCatalog();
+          if (printCalls !== 1 || !classes.has('print-catalog') || keyboardStatus.textContent !== 'Printing catalog view: the full collection.' || printCatalogButton.label.textContent !== 'Print opened' || printCatalogButton.attributes['aria-label'] !== 'Print dialog opened' || typeof afterPrint !== 'function') throw new Error('Catalog printing did not prepare its scoped print state or visible feedback');
+          afterPrint();
+          if (classes.has('print-catalog') || afterPrint !== null) throw new Error('Catalog printing did not restore the interactive state after printing');
+          state.query = 'gothic';
+          printCatalog();
+          if (printCalls !== 2 || keyboardStatus.textContent !== 'Printing catalog view: results matching “gothic”.') throw new Error('Catalog printing did not retain the active search scope in its announcement');
+          afterPrint();
+          context.window.print = () => { throw new Error('Print dialog blocked'); };
+          printCatalog();
+          if (classes.has('print-catalog') || keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printCatalogButton.label.textContent !== 'Unavailable' || printCatalogButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Catalog printing did not recover from a blocked print dialog with visible feedback');
+          console.log('Catalog printing smoke test passed.');
           NODE
 
       - name: Smoke-test reproducible route links
