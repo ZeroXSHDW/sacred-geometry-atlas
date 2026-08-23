@@ -387,7 +387,10 @@
     const statusCount = schemaStatusValues().length;
     const recordLabel = records.length === 1 ? "record" : "records";
     const statusLabel = statusCount === 1 ? "status" : "statuses";
-    return `The published schema defines ${statusCount} data ${statusLabel} for ${records.length} ${recordLabel}; each record carries one label and a provenance note.`;
+    const counts = studyStatusCounts(records);
+    const statuses = [...new Set([...schemaStatusValues(), ...Object.keys(counts)])];
+    const countSummary = statuses.map((status) => `${counts[status] || 0} ${statusDisplayName(status).toLowerCase()}`).join(" · ") || "no records";
+    return `The published schema defines ${statusCount} data ${statusLabel} for ${records.length} ${recordLabel}; counts: ${countSummary}; each record carries one label and a provenance note.`;
   }
 
   function renderMethodStatusKey(records = studies) {
