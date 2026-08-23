@@ -252,9 +252,11 @@
     if (page === "method") {
       const route = parseRoute();
       const contextStudy = route.contextStudyId ? studies.find((study) => study.id === route.contextStudyId) : null;
+      const methodScope = catalogScopeLabel();
+      const catalogSuffix = methodScope === "the full collection" ? "" : ` · ${methodScope}`;
       document.title = contextStudy
-        ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas`
-        : "Method · Sacred Geometry Atlas";
+        ? `Method · ${studyShortName(contextStudy)}${catalogSuffix} · Sacred Geometry Atlas`
+        : `Method${catalogSuffix} · Sacred Geometry Atlas`;
       return;
     }
     document.title = page[0].toUpperCase() + page.slice(1) + " · Sacred Geometry Atlas";

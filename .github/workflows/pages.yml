@@ -447,6 +447,7 @@ jobs:
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
+          if (!app.includes('const methodScope = catalogScopeLabel();') || !app.includes('const catalogSuffix = methodScope === "the full collection" ? "" : ` · ${methodScope}`;') || !app.includes('`Method · ${studyShortName(contextStudy)}${catalogSuffix} · Sacred Geometry Atlas`') || !app.includes('`Method${catalogSuffix} · Sacred Geometry Atlas`')) throw new Error('Method titles must preserve the active study context and catalog scope');
           for (const token of ['state.mode = route.mode || "plan";', 'state.surface = route.surface || "exterior";', 'state.layer = route.layer || "all";', 'requestedPage,', 'requestedStudy,', 'let normalizedStudyRoute = false;', 'let includeStudyInNormalizedRoute = true;', 'let normalizedCompareRoute = false;', 'let normalizedPageRoute = false;', 'const hasRequestedStudy = Boolean(route.requestedStudy);', 'route.requestedPage !== route.page', 'window.location.hash !== routeHash("atlas", true)', 'normalizedCompareRoute = window.location.hash !== routeHash("compare", false);', 'includeStudyInNormalizedRoute = false;', 'if (normalizedStudyRoute) {', 'replaceRoute("atlas", includeStudyInNormalizedRoute);', 'updateDocumentTitle("atlas");', 'if (normalizedCompareRoute) {', 'replaceRoute("compare", false);', 'updateDocumentTitle("compare");', 'const canonicalPageHash = route.page === "method" && route.contextStudyId', 'replaceRoute(route.page, route.page === "method" && Boolean(route.contextStudyId));', 'showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });\n    replaceCatalogRoute();', 'if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute)', 'if (state.page === "atlas" && !visible.length) replaceRoute("atlas", false);']) {
             if (!app.includes(token)) throw new Error('Partial study routes must restore drawing defaults: ' + token);
           }
@@ -2355,23 +2356,28 @@ jobs:
               addEventListener() {}
             },
             document: {
+              title: 'Sacred Geometry Atlas',
               body: { classList: { contains() { return false; } } },
               querySelector(selector) { return elements.get(selector) || null; },
               querySelectorAll() { return []; }
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, renderMethodReturnAction, renderMethodContext, renderMethodProvenance, visibleStudies, methodScopeNote } ;\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, renderMethodReturnAction, renderMethodContext, renderMethodProvenance, visibleStudies, methodScopeNote, updateDocumentTitle } ;\n})();');
           vm.runInNewContext(app, context);
-          const { state, renderMethodReturnAction, renderMethodContext, renderMethodProvenance, visibleStudies, methodScopeNote } = context.window.__atlasTest;
+          const { state, renderMethodReturnAction, renderMethodContext, renderMethodProvenance, visibleStudies, methodScopeNote, updateDocumentTitle } = context.window.__atlasTest;
           state.activeId = 'basilica';
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Open Longitudinal basilica in Atlas' || action.title !== action['aria-label'] || action.href !== '/atlas/#atlas/basilica/plan/exterior/all' || actionText.textContent !== 'Open current study') throw new Error('Method action did not identify the visible current study or route');
           renderMethodContext();
+          updateDocumentTitle('method');
+          if (context.document.title !== 'Method · Longitudinal basilica · Sacred Geometry Atlas') throw new Error('Method title did not identify its current study context');
           if (contextNote.textContent !== 'Current study · Longitudinal basilica' || methodRouteLink.href !== '/atlas/#method/basilica' || methodRouteLink.textContent !== '/atlas/#method/basilica' || methodRouteLink['aria-label'] !== 'Open method route for Longitudinal basilica') throw new Error('Method view did not name its preserved study context or render its direct route');
           state.query = 'gothic';
           const gothicRecords = visibleStudies();
           renderMethodProvenance(gothicRecords);
+          updateDocumentTitle('method');
+          if (context.document.title !== 'Method · Longitudinal basilica · results matching “gothic” · Sacred Geometry Atlas') throw new Error('Method title did not preserve the active filtered Atlas scope');
           if (methodScopeNote(gothicRecords) !== 'Atlas scope · results matching “gothic” · 1 record' || !provenanceNote.textContent.startsWith('The current Atlas scope (results matching “gothic”) uses schematic proportional studies.') || !statusIntro.textContent.includes('for 1 record') || !statusList.innerHTML.includes('1 record')) throw new Error('Method evidence guidance did not follow the active filtered Atlas scope');
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Return to Atlas catalog' || action.href !== '/atlas/?q=gothic#atlas' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not fall back to the filtered Atlas catalog route');
