@@ -88,6 +88,7 @@
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const studyShortName = (study) => study.shortName || study.name;
+  const studyIdentityLabel = (study, fullName = false) => `Study ${study.index}, ${fullName ? study.name : studyShortName(study)}`;
   function axisDisplayLabel(value) {
     const axis = String(value ?? "").trim();
     return /axis$/i.test(axis) ? axis : `${axis} axis`;
@@ -2344,13 +2345,13 @@
 
   function comparisonReadingProfileSummary(comparison) {
     if (!comparison.length) return "";
-    const values = comparison.map((study) => `${studyShortName(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
+    const values = comparison.map((study) => `${studyIdentityLabel(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
     return ` Reading profiles (0–100, interpretive): ${values}. Basis: ${READING_PROFILE_BASIS}; ${READING_PROFILE_NOTE}`;
   }
 
   function comparisonReadingProfileShareText(comparison) {
     if (!comparison.length) return "";
-    const values = comparison.map((study) => `${studyShortName(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
+    const values = comparison.map((study) => `${studyIdentityLabel(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
     return `Reading profiles (interpretive 0–100): ${values}. ${READING_PROFILE_NOTE} Basis: ${READING_PROFILE_BASIS}.`;
   }
 
@@ -2541,8 +2542,8 @@
       const scope = studyShortName(study);
       const shareUrl = studyRouteUrl();
       const sharePayload = {
-        title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. ${readingProfileShareText(study)} Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
+        title: `${studyIdentityLabel(study)} · Sacred Geometry Atlas`,
+        text: `Explore ${studyIdentityLabel(study, true)} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. ${readingProfileShareText(study)} Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
         url: shareUrl.href
       };
 
@@ -2592,7 +2593,7 @@
       const shareUrl = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
       const sharePayload = {
         title: contextStudy ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas` : "Sacred Geometry Atlas · Method guide",
-        text: `Read the Method guide${contextStudy ? ` alongside ${studyShortName(contextStudy)}` : ""}${scopeContext} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions. ${readingProfileGuideShareText()}`,
+        text: `Read the Method guide${contextStudy ? ` alongside ${studyIdentityLabel(contextStudy)}` : ""}${scopeContext} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions. ${readingProfileGuideShareText()}`,
         url: shareUrl
       };
 
@@ -2745,6 +2746,7 @@
       const status = studyStatus(study);
       return {
         id: study.id,
+        index: study.index,
         name: studyShortName(study),
         axis: study.axis,
         status,
@@ -2757,19 +2759,19 @@
 
   function comparisonSelectionShareText(selection = selectedComparisonStudies()) {
     return selection.length
-      ? selection.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
+      ? selection.map((study) => `${studyIdentityLabel(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
       : "the full collection";
   }
 
   function comparisonSelectionProvenanceText(selection = []) {
     if (!selection.length) return "";
-    const sourceText = selection.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ");
+    const sourceText = selection.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ");
     return `Source context: ${sourceText}${/[.!?]$/.test(sourceText.trim()) ? "" : "."}`;
   }
 
   function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
     return selection
-      .map(({ name, axis, status, statusDefinition, source, sourceNote }) => `${name} (${axisDisplayLabel(axis)}; ${status}; ${statusDefinition}; Source: ${source}; ${sourceNote})`)
+      .map(({ index, name, axis, status, statusDefinition, source, sourceNote }) => `Study ${index}, ${name} (${axisDisplayLabel(axis)}; ${status}; ${statusDefinition}; Source: ${source}; ${sourceNote})`)
       .join("; ");
   }
 
@@ -2782,7 +2784,7 @@
     const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
     const selected = selectedComparisonStudies();
     const selection = selected.length
-      ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}. Selection provenance: ${selected.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
+      ? ` Comparison selection: ${selected.map((study) => `${studyIdentityLabel(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}. Selection provenance: ${selected.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
       : "";
     const profileRecords = selected.length ? selected : records;
     const profileContext = comparisonReadingProfileSummary(profileRecords);
@@ -2934,10 +2936,10 @@
       `${statusDisplayName(status)} = ${definitions[status] || "Data status is not documented."}`
     ).join(" ");
     const records = comparison.length
-      ? comparison.map((study) => `${studyShortName(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
+      ? comparison.map((study) => `${studyIdentityLabel(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
       : "no records";
     const provenance = comparison.length
-      ? ` Sources: ${comparison.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
+      ? ` Sources: ${comparison.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
       : "";
     const schema = geometrySchema();
     return `Sacred Geometry Atlas. Comparison of ${records}.${provenance}${comparisonReadingProfileSummary(comparison)} Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
@@ -2978,7 +2980,7 @@
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
     const dimensions = `${linearMeasure(study.length)} length × ${linearMeasure(study.span)} span × ${linearMeasure(study.height)} height; ${study.bayCount} bays at ${linearMeasure(study.module)} module; radius ${linearMeasure(study.radius)}; symmetry ${number(study.symmetry, 2)}`;
-    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${readingProfileSummary(study)} ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${studyIdentityLabel(study, true)} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${readingProfileSummary(study)} ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
@@ -3019,7 +3021,7 @@
     const schema = geometrySchema();
     const route = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
     const context = contextStudy
-      ? ` Current study context: ${studyShortName(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNote(contextStudy)}.`
+      ? ` Current study context: ${studyIdentityLabel(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNote(contextStudy)}.`
       : "";
     return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract. Scope: ${catalogScope}; ${recordLabel}.${context} Evidence note: ${methodProvenanceText(records, methodProvenanceSubject(records))} ${readingProfileGuideShareText()} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
   }
@@ -3753,8 +3755,8 @@
     const selectedStudies = state.compareIds
       .map((id) => studies.find((study) => study.id === id))
       .filter(Boolean);
-    const selectedNames = selectedStudies.map(studyShortName);
-    const selectedStatuses = selectedStudies.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`);
+    const selectedNames = selectedStudies.map((study) => `${study.index} · ${studyShortName(study)}`);
+    const selectedStatuses = selectedStudies.map((study) => `${studyIdentityLabel(study)} (${studyStatusLabel(study).toLowerCase()})`);
     const statusSummary = studyStatusSummary(selectedStudies);
     const statusDefinitions = schemaStatusValues()
       .map((status) => `${statusDisplayName(status)}: ${dataStatusDefinitions()[status]}`)
