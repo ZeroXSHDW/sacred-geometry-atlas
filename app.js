@@ -153,6 +153,7 @@
   const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name", ...READING_PROFILE_SORT_KEYS]);
   const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];
   const catalogRouteParamKeys = [...catalogParamKeys, "direction"];
+  const THEME_STORAGE_KEY = "sacred-geometry-atlas-theme";
   let shareResetTimer;
   let compareShareResetTimer;
   let catalogShareResetTimer;
@@ -269,6 +270,54 @@
       return;
     }
     document.title = page[0].toUpperCase() + page.slice(1) + " · Sacred Geometry Atlas";
+  }
+
+  function setupThemePreference() {
+    const root = document.documentElement;
+    const button = $("#themeToggle");
+    const status = $("#themeStatus");
+    if (!root || !button) return;
+    const label = $(".theme-toggle-label", button);
+    const icon = $(".theme-toggle-icon", button);
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    const mediaQuery = typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-color-scheme: light)")
+      : null;
+    const systemTheme = () => mediaQuery && mediaQuery.matches ? "light" : "dark";
+    const applyTheme = (theme, source = root.dataset.themeSource || "system", announcement = "") => {
+      const normalizedTheme = theme === "light" ? "light" : "dark";
+      const nextTheme = normalizedTheme === "light" ? "dark" : "light";
+      root.dataset.theme = normalizedTheme;
+      root.dataset.themeSource = source;
+      root.style.colorScheme = normalizedTheme;
+      if (themeColor) themeColor.setAttribute("content", normalizedTheme === "light" ? "#f4f6f1" : "#111817");
+      if (label) label.textContent = nextTheme[0].toUpperCase() + nextTheme.slice(1);
+      if (icon) icon.textContent = normalizedTheme === "light" ? "☼" : "◐";
+      button.setAttribute("aria-label", `Use ${nextTheme} color theme`);
+      button.setAttribute("title", `Use ${nextTheme} color theme`);
+      button.setAttribute("aria-pressed", normalizedTheme === "light" ? "true" : "false");
+      if (announcement && status) status.textContent = announcement;
+    };
+    const initialTheme = root.dataset.theme === "light" ? "light" : "dark";
+    applyTheme(initialTheme, root.dataset.themeSource === "user" ? "user" : "system");
+    button.hidden = false;
+    button.addEventListener("click", () => {
+      const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+      try {
+        window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+      } catch (error) {
+        // Keep the current session preference even when storage is unavailable.
+      }
+      applyTheme(nextTheme, "user", `${nextTheme[0].toUpperCase() + nextTheme.slice(1)} theme enabled.`);
+    });
+    if (mediaQuery) {
+      const followSystem = () => {
+        if (root.dataset.themeSource === "user") return;
+        applyTheme(systemTheme(), "system");
+      };
+      if (typeof mediaQuery.addEventListener === "function") mediaQuery.addEventListener("change", followSystem);
+      else if (typeof mediaQuery.addListener === "function") mediaQuery.addListener(followSystem);
+    }
   }
 
   function registerServiceWorker() {
@@ -405,6 +454,7 @@
   }
 
   function init() {
+    setupThemePreference();
     registerServiceWorker();
     setupConnectionStatus();
     setupInstallPrompt();

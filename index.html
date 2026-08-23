@@ -4,7 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#111817" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        const storageKey = "sacred-geometry-atlas-theme";
+        const validThemes = ["light", "dark"];
+        let storedTheme = "";
+        try {
+          storedTheme = window.localStorage.getItem(storageKey) || "";
+        } catch (error) {
+          // A private or restricted context can decline local preference storage.
+        }
+        const systemTheme = typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark";
+        const theme = validThemes.includes(storedTheme) ? storedTheme : systemTheme;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themeSource = validThemes.includes(storedTheme) ? "user" : "system";
+        document.documentElement.style.colorScheme = theme;
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f4f6f1" : "#111817");
+      })();
+    </script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="site.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />
@@ -216,9 +237,14 @@
           <span class="download-icon" aria-hidden="true">⊞</span>
           <span class="download-label">Install Atlas</span>
         </button>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Use light color theme" title="Use light color theme" aria-pressed="false" hidden>
+          <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+          <span class="theme-toggle-label">Light</span>
+        </button>
       </div>
       <span class="sr-only" id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>
       <span class="sr-only" id="installStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+      <span class="sr-only" id="themeStatus" role="status" aria-live="polite" aria-atomic="true"></span>
     </header>
 
     <div class="action-recovery" id="downloadRecovery" role="region" aria-labelledby="downloadRecoveryHeading" tabindex="-1" hidden>
