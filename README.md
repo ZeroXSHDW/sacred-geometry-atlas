@@ -114,7 +114,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The branded GitHub Pages 404 recovery surface honors the same stored preference when its bootstrap runs and follows the system color scheme in its CSS-only fallback.
 - A network-first [`sw.js`](sw.js) offline shell keeps the Atlas root, data artifacts, and branded 404 recovery page available after a successful visit, serving the app shell only for Atlas-root navigations and the recovery page for missing paths while preferring fresh network content when connectivity returns.
 - An accessible connection notice announces offline mode and the return to connectivity without competing with the drawing or print surfaces.
-- Standard 192px and 512px raster install icons are derived from the established favicon and included in the manifest, offline shell, and curated Pages artifact.
+- The 180px Apple touch icon plus standard 192px and 512px raster install icons are derived from the established favicon and included in the offline shell and curated Pages artifact; the 192px and 512px icons are also declared in the web manifest.
 - Browsers that expose an install prompt receive a capability-gated Install Atlas action with live acceptance, dismissal, and installed-state feedback; unsupported browsers keep the header uncluttered.
 - Already-open tabs surface a newer offline-shell version after an existing service-worker controller updates, with a route-preserving Refresh Atlas action instead of silently leaving the tab on an older shell.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.

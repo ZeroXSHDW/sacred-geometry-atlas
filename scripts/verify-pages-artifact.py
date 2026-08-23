@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import json
 import os
+import re
 from pathlib import Path
 from urllib.parse import quote
 
@@ -59,6 +60,18 @@ service_worker = (site / "sw.js").read_text()
 not_found = (site / "404.html").read_text()
 robots = (site / "robots.txt").read_text()
 sitemap = (site / "sitemap.xml").read_text()
+
+shell_match = re.search(r"const SHELL_PATHS = \[(.*?)\];", service_worker, re.S)
+if not shell_match:
+    fail("Published service worker does not expose its static shell paths")
+shell_paths = re.findall(r'"([^"]+)"', shell_match.group(1))
+shell_files = {
+    "index.html" if path in (".", "./") else path.lstrip("./")
+    for path in shell_paths
+}
+missing_shell_files = sorted(path for path in shell_files if path not in actual_files)
+if missing_shell_files:
+    fail(f"Published service-worker shell references files outside the Pages artifact: {missing_shell_files}")
 expected_page = [
     '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />',
     '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />',

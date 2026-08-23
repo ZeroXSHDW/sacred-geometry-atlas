@@ -180,7 +180,7 @@ jobs:
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify curated Pages artifact', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
-          for (const token of ['PAGES_BASE_URL', 'json.loads', 'csv.DictReader', 'Published CSV route is not direct and deterministic', 'Published JSON Schema does not match the stamped dataset contract']) {
+          for (const token of ['PAGES_BASE_URL', 'json.loads', 'csv.DictReader', 'SHELL_PATHS', 'shell_files', 'missing_shell_files', 'Published CSV route is not direct and deterministic', 'Published JSON Schema does not match the stamped dataset contract']) {
             if (!pagesVerifier.includes(token)) throw new Error(`Pages artifact contract verification is incomplete: ${token}`);
           }
           for (const token of ['icons/atlas-180.png', 'icons/atlas-192.png', 'icons/atlas-512.png', 'const CACHE_NAME = "sacred-geometry-atlas-v2"']) {
