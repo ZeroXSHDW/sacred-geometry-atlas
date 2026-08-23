@@ -3434,11 +3434,11 @@
       const status = studyDataLabel(study);
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
-      const currentAttribute = isActive ? ' aria-current="page"' : "";
+      const currentStudyAttribute = isActive ? ' aria-current="true"' : "";
       const studyLinkLabel = `Open ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;
       return `
         <tr>
-          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
+          <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentStudyAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(studyAxisLabel(study))}</td>
           <td class="comparison-status" data-status="${escapeHtml(status)}" aria-label="${escapeHtml(`${statusLabel} (${status}): ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</td>
           <td class="comparison-source"><strong>${escapeHtml(studySource(study))}</strong><span>${escapeHtml(studySourceNote(study))}</span></td>
@@ -3470,12 +3470,12 @@
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       const label = comparisonStudyAriaLabel(study, ratio, section);
       const isActive = study.id === state.activeId;
-      const currentAttribute = isActive ? ' aria-current="page"' : "";
+      const currentStudyAttribute = isActive ? ' aria-current="true"' : "";
       const currentLabel = isActive ? " This is the current Atlas study." : "";
       const status = studyDataLabel(study);
       const statusLabel = statusDisplayName(status);
       return `
-      <a class="compare-study-card ${isActive ? "is-active" : ""}" data-compare-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-controls="atlas"${currentAttribute} aria-label="${label}${currentLabel}">
+      <a class="compare-study-card ${isActive ? "is-active" : ""}" data-compare-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}" aria-controls="atlas"${currentStudyAttribute} aria-label="${label}${currentLabel}">
         <span class="compare-study-number">${escapeHtml(study.index)} / <span class="compare-study-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span></span>
         ${miniPlan(study)}
         <span class="compare-study-title">${escapeHtml(study.name)}</span>
