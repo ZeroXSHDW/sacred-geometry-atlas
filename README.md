@@ -35,6 +35,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Search cards identify when a query matched a reference, reading, dimension, or derived-ratio field that is not shown in the compact card.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Active filter chips prefix typology, location, era, axis, and data-status values, so a dense filtered view stays self-describing.
+- Catalog scope labels carry those same prefixes into result announcements, document titles, citations, shares, print feedback, and export provenance.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
 - The Atlas comparison tray previews selected study names and a compact schema-status summary, including selections outside the current filter view; its live selection label keeps each study's status attached for assistive technology.
 - Contextual empty states keep filtered-out catalog views understandable and recoverable.

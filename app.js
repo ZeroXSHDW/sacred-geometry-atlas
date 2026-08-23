@@ -2303,11 +2303,11 @@
   function catalogScopeLabel() {
     const parts = [];
     if (state.query) parts.push(`results matching “${state.query}”`);
-    if (state.filter !== "all") parts.push(state.filter);
-    if (state.filterPlace !== "all") parts.push(state.filterPlace);
-    if (state.filterEra !== "all") parts.push(state.filterEra);
-    if (state.filterAxis !== "all") parts.push(axisDisplayLabel(state.filterAxis));
-    if (state.filterStatus !== "all") parts.push(`${statusDisplayName(state.filterStatus).toLowerCase()} records`);
+    if (state.filter !== "all") parts.push(`typology: ${state.filter}`);
+    if (state.filterPlace !== "all") parts.push(`location: ${state.filterPlace}`);
+    if (state.filterEra !== "all") parts.push(`era: ${state.filterEra}`);
+    if (state.filterAxis !== "all") parts.push(`axis: ${axisDisplayLabel(state.filterAxis)}`);
+    if (state.filterStatus !== "all") parts.push(`data status: ${statusDisplayName(state.filterStatus).toLowerCase()} records`);
     if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);
     if (state.sort !== "index") {
       const sortLabels = {
