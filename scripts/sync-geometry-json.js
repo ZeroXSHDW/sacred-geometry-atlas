@@ -84,11 +84,12 @@ function staticCsv() {
   const headers = [
     "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
     `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
+    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL", "Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)"
   ];
   const rows = payload.studies.map((study) => {
     const floorArea = positiveEstimate(study.floorAreaEstimate);
     const volume = positiveEstimate(study.volumeEstimate);
+    const readingProfile = Object.fromEntries(readingProfileScores(study));
     const volumeBasis = volume !== null
       ? study.volumeBasis || (studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate")
       : "No estimate supplied";
@@ -121,7 +122,11 @@ function staticCsv() {
       `#atlas/${encodeURIComponent(study.id)}/plan/exterior/all`,
       payload.schema.version || "",
       payload.schema.units || "",
-      schemaUrl
+      schemaUrl,
+      readingProfile.linearity,
+      readingProfile.verticality,
+      readingProfile.radiality,
+      readingProfile.repetition
     ];
   });
   return `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\n")}\n`;

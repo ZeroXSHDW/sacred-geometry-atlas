@@ -3267,14 +3267,16 @@
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
     const schemaUrl = publishedGeometrySchemaUrl();
+    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)"];
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
     ];
     const rows = comparison.map((study) => {
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
+      const readingProfile = Object.fromEntries(profileScores(study));
       return [
         study.id,
         studyShortName(study),
@@ -3305,7 +3307,11 @@
         studyRouteUrl(study.id).href,
         schema.version,
         schema.units,
-        schemaUrl
+        schemaUrl,
+        readingProfile.linearity,
+        readingProfile.verticality,
+        readingProfile.radiality,
+        readingProfile.repetition
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -3318,17 +3324,19 @@
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
     const schemaUrl = publishedGeometrySchemaUrl();
+    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)"];
     const comparisonSelection = comparisonSelectionExportContext();
     const comparisonIds = comparisonSelection.map(({ id }) => id).join(",");
     const comparisonContext = comparisonSelectionCsvText(comparisonSelection);
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
     ];
     const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
+      const readingProfile = Object.fromEntries(profileScores(study));
       return [
         study.id,
         studyShortName(study),
@@ -3361,7 +3369,11 @@
         studyRouteUrl(study.id).href,
         schema.version,
         schema.units,
-        schemaUrl
+        schemaUrl,
+        readingProfile.linearity,
+        readingProfile.verticality,
+        readingProfile.radiality,
+        readingProfile.repetition
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
