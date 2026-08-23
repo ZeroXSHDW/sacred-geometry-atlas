@@ -61,6 +61,17 @@ not_found = (site / "404.html").read_text()
 robots = (site / "robots.txt").read_text()
 sitemap = (site / "sitemap.xml").read_text()
 
+cache_match = re.search(r'const CACHE_NAME = "([^"]+)";', service_worker)
+if not cache_match:
+    fail("Published service worker does not expose a cache name")
+cache_name = cache_match.group(1)
+expected_cache_name = os.environ.get("PAGES_CACHE_NAME", "").strip()
+if expected_cache_name:
+    if cache_name != expected_cache_name:
+        fail(f"Published service-worker cache name {cache_name!r} does not match the deployment revision {expected_cache_name!r}")
+elif not re.fullmatch(r"sacred-geometry-atlas-(?:v2|[0-9a-f]{40})", cache_name):
+    fail(f"Published service-worker cache name is not a local v2 or revision fingerprint: {cache_name!r}")
+
 shell_match = re.search(r"const SHELL_PATHS = \[(.*?)\];", service_worker, re.S)
 if not shell_match:
     fail("Published service worker does not expose its static shell paths")
@@ -174,7 +185,6 @@ if not all(token in service_worker for token in (
     'self.addEventListener("install"',
     'self.addEventListener("activate"',
     'self.addEventListener("fetch"',
-    'const CACHE_NAME = "sacred-geometry-atlas-v2"',
     'data/geometry.json',
     'networkFirst(request)',
 )):
