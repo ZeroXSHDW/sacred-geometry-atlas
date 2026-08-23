@@ -637,6 +637,10 @@
     return `${url.pathname}${url.search}${url.hash}`;
   }
 
+  function routePath(url) {
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
   const shouldPreserveComparisonQuery = () => state.page !== "compare" || state.compareIds.length < 2;
 
   function catalogRouteValues(includeCompare = shouldPreserveComparisonQuery()) {
@@ -733,8 +737,7 @@
   }
 
   function studyRoutePath(studyId = state.activeId) {
-    const url = studyRouteUrl(studyId);
-    return `${url.pathname}${url.search}${url.hash}`;
+    return routePath(studyRouteUrl(studyId));
   }
 
   function methodNavigationUrl() {
@@ -1782,6 +1785,8 @@
     const catalogExport = $("#downloadCatalogView");
     const catalogCsvExport = $("#downloadCatalogCsv");
     renderCatalogResultCount(visible.length);
+    const catalogRoute = $("#catalogRoute");
+    if (catalogRoute) renderRouteLink(catalogRoute, ".catalog-route-link", routePath(catalogViewRouteUrl()), "Open current catalog view in Atlas");
     const statusHelp = $("#statusHelp");
     if (statusHelp) statusHelp.textContent = catalogStatusGuidanceText(visible);
     if (catalogExport) catalogExport.disabled = visible.length === 0;
@@ -3296,8 +3301,8 @@
     const comparisonStatusHelp = $("#comparisonStatusHelp");
     if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
     const printRoute = $("#comparisonPrintRoute");
-    const comparisonRoute = comparisonRouteUrl().href;
-    renderRouteLink(printRoute, ".comparison-route-link", comparisonRoute, focused ? `Open the ${selected}-study comparison route` : partial ? "Open the comparison route with the pending selection" : "Open the full collection comparison route");
+    const comparisonRoute = comparisonRouteUrl();
+    renderRouteLink(printRoute, ".comparison-route-link", routePath(comparisonRoute), focused ? `Open the ${selected}-study comparison route` : partial ? "Open the comparison route with the pending selection" : "Open the full collection comparison route");
   }
 
   function renderCompareSelection() {
