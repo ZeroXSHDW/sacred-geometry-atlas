@@ -482,6 +482,9 @@ jobs:
           for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'visibleLabel === "Unavailable"', 'button.classList.add("is-unavailable")', 'button.classList.remove("is-unavailable")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'const SYNC_ACTION_COOLDOWN_MS = 400;', 'function endAsyncAction(button, delay = 0)', 'if (delay > 0) window.setTimeout(release, delay);', 'button.setAttribute("aria-busy", "false");', 'function triggerDownload(filename, contents, type)', 'Download activation is unavailable', 'if (!downloaded)', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Study CSV downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON"', 'temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"', 'temporaryButtonFeedback(button, "Shared", `Study shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Catalog view shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Comparison shared: ${scope}`']) {
             if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
+          for (const token of ['function clearButtonFeedback(button, resetVisibleLabel, resetAccessibleLabel, key, resetTimer)', 'button.classList.remove("is-copied")', 'clearButtonFeedback(button, "Share study", "Share current study", "share-study", shareResetTimer)', 'clearButtonFeedback(button, "Share guide", "Share method guide", "share-method", methodShareResetTimer)', 'clearButtonFeedback(button, "Copy citation", "Copy a citation for this catalog view", "catalog-citation", catalogCitationResetTimer)', 'clearButtonFeedback(button, "Share view", "Share current catalog view", "share-catalog", catalogShareResetTimer)', 'clearButtonFeedback(button, "Share comparison", "Share this comparison", "share-comparison", compareShareResetTimer)', 'clearButtonFeedback(button, "Copy citation", "Copy a citation for this comparison", "comparison-citation", comparisonCitationResetTimer)', 'clearButtonFeedback(button, "Copy citation", "Copy a citation for the active study", "study-citation", citationResetTimer)', 'clearButtonFeedback(button, "Cite guide", "Copy a citation for the Method guide", "method-citation", methodCitationResetTimer)']) {
+            if (!app.includes(token)) throw new Error('Share and citation actions must clear stale feedback before a new attempt: ' + token);
+          }
           for (const token of ['temporaryButtonFeedback(button, "Unavailable", "SVG download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study JSON download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog view download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison JSON download is unavailable in this browser."']) {
             if (!app.includes(token)) throw new Error('Blocked exports must synchronize the originating control with its Unavailable state: ' + token);
           }
@@ -3310,12 +3313,13 @@ jobs:
           elements.set('#shareStudy', button);
           elements.set('#shareStatus', status);
           const timers = [];
+          const clearedTimers = new Set();
           const context = {
             URL,
             navigator: { share: async (payload) => { sharedPayload = payload; shareCalls += 1; await pendingShare; } },
             window: {
               location: { href: 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' },
-              clearTimeout() {},
+              clearTimeout(id) { clearedTimers.add(id); },
               setTimeout(callback) { timers.push(callback); return timers.length; },
               addEventListener() {}
             },
@@ -3343,9 +3347,12 @@ jobs:
             if (visibleLabel.textContent !== 'Share study' || button['aria-label'] !== 'Share current study' || button.title !== 'Share current study' || classes.has('is-complete')) {
               throw new Error('Native share did not restore its compact-control tooltip state');
             }
+            context.navigator.share = async () => {};
+            await context.window.__atlasTest.shareStudy();
+            if (visibleLabel.textContent !== 'Shared' || !classes.has('is-complete') || timers.length !== 2) throw new Error('Native share did not establish a second completion state for the interrupted-action check');
             context.navigator.share = async () => { const error = new Error('Share cancelled'); error.name = 'AbortError'; throw error; };
             await context.window.__atlasTest.shareStudy();
-            if (status.textContent !== 'Study sharing cancelled.' || button.disabled || button['aria-busy'] !== 'false') throw new Error('Native share cancellation did not provide live feedback or restore its state');
+            if (status.textContent !== 'Study sharing cancelled.' || visibleLabel.textContent !== 'Share study' || button['aria-label'] !== 'Share current study' || button.title !== 'Share current study' || button.disabled || button['aria-busy'] !== 'false' || classes.has('is-complete') || classes.has('is-copied') || classes.has('is-unavailable') || !clearedTimers.has(2)) throw new Error('Native share cancellation did not clear stale completion feedback, provide live feedback, or restore its state');
             console.log('Native share feedback smoke test passed.');
           })().catch((error) => { throw error; });
           NODE

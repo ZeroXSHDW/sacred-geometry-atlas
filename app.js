@@ -1747,6 +1747,17 @@
     }, 2200));
   }
 
+  function clearButtonFeedback(button, resetVisibleLabel, resetAccessibleLabel, key, resetTimer) {
+    if (!button) return;
+    if (resetTimer !== undefined) window.clearTimeout(resetTimer);
+    window.clearTimeout(actionFeedbackTimers.get(key));
+    actionFeedbackTimers.delete(key);
+    button.classList.remove("is-complete");
+    button.classList.remove("is-unavailable");
+    button.classList.remove("is-copied");
+    setButtonFeedback(button, resetVisibleLabel, resetAccessibleLabel);
+  }
+
   function beginAsyncAction(button) {
     if (!button || button.disabled) return false;
     button.disabled = true;
@@ -2779,6 +2790,8 @@
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Share study", "Share current study", "share-study", shareResetTimer);
+      shareResetTimer = undefined;
       const scope = studyShortName(study);
       const shareUrl = studyRouteUrl();
       const sharePayload = {
@@ -2828,6 +2841,8 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Share guide", "Share method guide", "share-method", methodShareResetTimer);
+      methodShareResetTimer = undefined;
       const contextStudy = methodContextStudy();
       const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
       const catalogScope = catalogScopeLabel();
@@ -3043,6 +3058,8 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Copy citation", "Copy a citation for this catalog view", "catalog-citation", catalogCitationResetTimer);
+      catalogCitationResetTimer = undefined;
       const scope = readableScopeLabel(catalogScopeLabel());
       const citation = catalogCitationText();
       const copied = await copyText(citation);
@@ -3074,6 +3091,8 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Share view", "Share current catalog view", "share-catalog", catalogShareResetTimer);
+      catalogShareResetTimer = undefined;
       const scope = readableScopeLabel(catalogScopeLabel());
       const shareUrl = catalogViewRouteUrl();
       const selected = selectedComparisonStudies();
@@ -3126,6 +3145,8 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Share comparison", "Share this comparison", "share-comparison", compareShareResetTimer);
+      compareShareResetTimer = undefined;
       const comparison = comparisonStudies();
       const scope = readableScopeLabel(comparisonScopeLabel(comparison));
       const shareUrl = comparisonRouteUrl();
@@ -3204,6 +3225,8 @@
     if (!comparison.length || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Copy citation", "Copy a citation for this comparison", "comparison-citation", comparisonCitationResetTimer);
+      comparisonCitationResetTimer = undefined;
       const scope = readableScopeLabel(comparisonScopeLabel(comparison));
       const citation = comparisonCitationText(comparison);
       const copied = await copyText(citation);
@@ -3244,6 +3267,8 @@
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Copy citation", "Copy a citation for the active study", "study-citation", citationResetTimer);
+      citationResetTimer = undefined;
       const scope = studyShortName(study);
       const citation = citationText(study);
       const copied = await copyText(citation);
@@ -3288,6 +3313,8 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      clearButtonFeedback(button, "Cite guide", "Copy a citation for the Method guide", "method-citation", methodCitationResetTimer);
+      methodCitationResetTimer = undefined;
       const contextStudy = methodContextStudy();
       const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
       const citation = methodCitationText();
