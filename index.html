@@ -274,24 +274,28 @@
                     <option value="all">All typologies</option>
                   </select>
                 </label>
-                <label class="select-wrap sort-select">
-                  <span class="select-label">Sort by</span>
-                  <select id="sortSelect" aria-describedby="sortHelp">
-                    <option value="index">Curated order</option>
-                    <option value="length">Length · longest first</option>
-                    <option value="height">Height · tallest first</option>
-                    <option value="span">Span · widest first</option>
-                    <option value="ratio">Length / span · highest first</option>
-                    <option value="symmetry">Symmetry · highest first</option>
-                    <option value="linearity">Linearity profile · highest first</option>
-                    <option value="verticality">Verticality profile · highest first</option>
-                    <option value="radiality">Radiality profile · highest first</option>
-                    <option value="repetition">Repetition profile · highest first</option>
-                    <option value="name">Name · A–Z</option>
-                  </select>
-                </label>
+                <div class="sort-control">
+                  <label class="select-wrap sort-select">
+                    <span class="select-label">Sort by</span>
+                    <select id="sortSelect" aria-describedby="sortHelp">
+                      <option value="index">Curated order</option>
+                      <option value="length">Length · longest first</option>
+                      <option value="height">Height · tallest first</option>
+                      <option value="span">Span · widest first</option>
+                      <option value="ratio">Length / span · highest first</option>
+                      <option value="symmetry">Symmetry · highest first</option>
+                      <option value="linearity">Linearity profile · highest first</option>
+                      <option value="verticality">Verticality profile · highest first</option>
+                      <option value="radiality">Radiality profile · highest first</option>
+                      <option value="repetition">Repetition profile · highest first</option>
+                      <option value="name">Name · A–Z</option>
+                    </select>
+                  </label>
+                  <button class="sort-direction-toggle" id="sortDirection" type="button" aria-label="Curated order is fixed; choose a measure or profile to reverse its order" aria-describedby="sortDirectionHelp" aria-pressed="false" title="Curated order is fixed; choose a measure or profile to reverse its order" disabled><span class="sort-direction-icon" aria-hidden="true">↕</span><span class="sort-direction-label">Fixed order</span></button>
+                </div>
               </div>
               <span class="sr-only" id="sortHelp">Numeric measures and reading profiles sort from largest to smallest; name sorts A–Z.</span>
+              <span class="sr-only" id="sortDirectionHelp">Use the Order control to reverse the active sort: largest or smallest for numeric measures and profiles, or A–Z or Z–A for names. Tied records retain deterministic catalog order.</span>
               <div class="tool-row tool-row-secondary">
                 <label class="select-wrap">
                   <span class="select-label">Location</span>

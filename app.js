@@ -53,6 +53,7 @@
     filterAxis: "all",
     filterStatus: "all",
     sort: "index",
+    sortDirection: "desc",
     page: "atlas",
     compareIds: []
   };
@@ -145,9 +146,12 @@
     measure: "Schematic measures and construction references."
   };
   const READING_PROFILE_SORT_KEYS = ["linearity", "verticality", "radiality", "repetition"];
+  const validSortDirections = new Set(["asc", "desc"]);
+  const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";
   const validStatuses = new Set(["all", ...schemaStatusValues()]);
   const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name", ...READING_PROFILE_SORT_KEYS]);
   const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];
+  const catalogRouteParamKeys = [...catalogParamKeys, "direction"];
   let shareResetTimer;
   let compareShareResetTimer;
   let catalogShareResetTimer;
@@ -644,6 +648,7 @@
     $("#filterAxis").value = state.filterAxis;
     $("#filterStatus").value = state.filterStatus;
     $("#sortSelect").value = state.sort;
+    syncSortDirectionControl();
   }
 
   function syncCatalogFromUrl() {
@@ -659,6 +664,7 @@
     const requestedAxis = params.get("axis");
     const requestedStatus = params.get("status");
     const requestedSort = params.get("sort");
+    const requestedDirection = params.get("direction");
     state.query = normalizeCatalogQuery(requestedQuery);
     state.filter = typologies.has(requestedTypology) ? requestedTypology : "all";
     state.filterPlace = places.has(requestedPlace) ? requestedPlace : "all";
@@ -666,6 +672,9 @@
     state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";
     state.filterStatus = validStatuses.has(requestedStatus) ? requestedStatus : "all";
     state.sort = validSorts.has(requestedSort) ? requestedSort : "index";
+    state.sortDirection = state.sort === "index"
+      ? defaultSortDirection(state.sort)
+      : validSortDirections.has(requestedDirection) ? requestedDirection : defaultSortDirection(state.sort);
     state.compareIds = queryComparisonIds();
     syncCatalogControls();
   }
@@ -696,13 +705,14 @@
       axis: state.filterAxis === "all" ? "" : state.filterAxis,
       status: state.filterStatus === "all" ? "" : state.filterStatus,
       sort: state.sort === "index" ? "" : state.sort,
+      direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection,
       compare: includeCompare && state.compareIds.length ? state.compareIds.map(comparisonQueryId).join(",") : ""
     };
   }
 
   function applyCatalogRouteState(url, includeCompare = shouldPreserveComparisonQuery()) {
     const values = catalogRouteValues(includeCompare);
-    catalogParamKeys.filter((key) => key !== "compare").forEach((key) => {
+    catalogRouteParamKeys.filter((key) => key !== "compare").forEach((key) => {
       if (values[key]) url.searchParams.set(key, values[key]);
       else url.searchParams.delete(key);
     });
@@ -744,7 +754,7 @@
   }
 
   function clearCatalogParams(url) {
-    catalogParamKeys.forEach((key) => url.searchParams.delete(key));
+    catalogRouteParamKeys.forEach((key) => url.searchParams.delete(key));
     return url;
   }
 
@@ -998,7 +1008,14 @@
       refreshCatalog();
     });
     $("#sortSelect").addEventListener("change", (event) => {
+      state.sortDirection = defaultSortDirection(event.target.value);
       state.sort = event.target.value;
+      pushCatalogRoute();
+      refreshCatalog();
+    });
+    $("#sortDirection").addEventListener("click", () => {
+      if (state.sort === "index") return;
+      state.sortDirection = state.sortDirection === "asc" ? "desc" : "asc";
       pushCatalogRoute();
       refreshCatalog();
     });
@@ -1185,6 +1202,7 @@
     if (resetSort) {
       $("#sortSelect").value = "index";
       state.sort = "index";
+      state.sortDirection = defaultSortDirection(state.sort);
     }
     pushCatalogRoute();
     refreshCatalog();
@@ -1345,6 +1363,7 @@
     }
     if (key === "sort") {
       state.sort = "index";
+      state.sortDirection = defaultSortDirection(state.sort);
       $("#sortSelect").value = "index";
     }
     pushCatalogRoute();
@@ -1835,13 +1854,15 @@
     };
     return result.sort((a, b) => {
       let order = 0;
-      if (state.sort === "length") order = b.length - a.length;
-      if (state.sort === "height") order = b.height - a.height;
-      if (state.sort === "span") order = b.span - a.span;
-      if (state.sort === "ratio") order = (b.length / b.span) - (a.length / a.span);
-      if (state.sort === "symmetry") order = b.symmetry - a.symmetry;
+      const descending = state.sortDirection !== "asc";
+      if (state.sort === "length") order = descending ? b.length - a.length : a.length - b.length;
+      if (state.sort === "height") order = descending ? b.height - a.height : a.height - b.height;
+      if (state.sort === "span") order = descending ? b.span - a.span : a.span - b.span;
+      if (state.sort === "ratio") order = descending ? (b.length / b.span) - (a.length / a.span) : (a.length / a.span) - (b.length / b.span);
+      if (state.sort === "symmetry") order = descending ? b.symmetry - a.symmetry : a.symmetry - b.symmetry;
       if (READING_PROFILE_SORT_KEYS.includes(state.sort)) order = readingProfileScore(b, state.sort) - readingProfileScore(a, state.sort);
-      if (state.sort === "name") order = naturalCompare(a.name, b.name);
+      if (state.sortDirection === "asc" && READING_PROFILE_SORT_KEYS.includes(state.sort)) order = -order;
+      if (state.sort === "name") order = descending ? naturalCompare(b.name, a.name) : naturalCompare(a.name, b.name);
       return order || stableStudyOrder(a, b);
     });
   }
@@ -1882,6 +1903,7 @@
     const route = parseRoute();
     const routeStudyId = route.page === "atlas" ? route.studyId : null;
     renderCatalogFilterOptions();
+    syncSortDirectionControl();
     const visible = visibleStudies();
     const catalogExport = $("#downloadCatalogView");
     const catalogCsvExport = $("#downloadCatalogCsv");
@@ -2604,6 +2626,98 @@
     }
   }
 
+  const catalogSortLabels = {
+    length: "length (longest first)",
+    height: "height (tallest first)",
+    span: "span (widest first)",
+    ratio: "length-to-span ratio (highest first)",
+    symmetry: "symmetry (highest first)",
+    linearity: "linearity profile (highest first)",
+    verticality: "verticality profile (highest first)",
+    radiality: "radiality profile (highest first)",
+    repetition: "repetition profile (highest first)",
+    name: "name (A–Z)"
+  };
+  const catalogAscendingSortLabels = {
+    length: "length (shortest first)",
+    height: "height (lowest first)",
+    span: "span (narrowest first)",
+    ratio: "length-to-span ratio (lowest first)",
+    symmetry: "symmetry (lowest first)",
+    linearity: "linearity profile (lowest first)",
+    verticality: "verticality profile (lowest first)",
+    radiality: "radiality profile (lowest first)",
+    repetition: "repetition profile (lowest first)",
+    name: "name (A–Z)"
+  };
+
+  function catalogSortLabel(sort = state.sort, direction = state.sortDirection) {
+    if (sort === "index") return "curated order";
+    const labels = direction === "asc" ? catalogAscendingSortLabels : catalogSortLabels;
+    if (sort === "name" && direction !== "asc") return "name (Z–A)";
+    return labels[sort] || sort;
+  }
+
+  function sortDirectionDetails(sort = state.sort, direction = state.sortDirection) {
+    if (sort === "index") {
+      return {
+        text: "Fixed order",
+        icon: "↕",
+        label: "Curated order is fixed; choose a measure or profile to reverse its order.",
+        pressed: false,
+        disabled: true
+      };
+    }
+    const ascending = direction === "asc";
+    const current = sort === "name" ? (ascending ? "A–Z" : "Z–A") : (ascending ? "low to high" : "high to low");
+    const next = sort === "name" ? (ascending ? "Z–A" : "A–Z") : (ascending ? "high to low" : "low to high");
+    return {
+      text: `Order · ${current}`,
+      icon: ascending ? "↑" : "↓",
+      label: `Reverse sort order. Currently ${current}; activate for ${next}.`,
+      pressed: direction !== defaultSortDirection(sort),
+      disabled: false
+    };
+  }
+
+  function sortSelectLabel(sort = state.sort, direction = state.sortDirection) {
+    if (sort === "index") return "Curated order";
+    const ascending = direction === "asc";
+    const labels = {
+      length: `Length · ${ascending ? "shortest" : "longest"} first`,
+      height: `Height · ${ascending ? "lowest" : "tallest"} first`,
+      span: `Span · ${ascending ? "narrowest" : "widest"} first`,
+      ratio: `Length / span · ${ascending ? "lowest" : "highest"} first`,
+      symmetry: `Symmetry · ${ascending ? "lowest" : "highest"} first`,
+      linearity: `Linearity profile · ${ascending ? "lowest" : "highest"} first`,
+      verticality: `Verticality profile · ${ascending ? "lowest" : "highest"} first`,
+      radiality: `Radiality profile · ${ascending ? "lowest" : "highest"} first`,
+      repetition: `Repetition profile · ${ascending ? "lowest" : "highest"} first`,
+      name: `Name · ${ascending ? "A–Z" : "Z–A"}`
+    };
+    return labels[sort] || sort;
+  }
+
+  function syncSortDirectionControl() {
+    const button = $("#sortDirection");
+    const select = $("#sortSelect");
+    if (select) {
+      select.value = state.sort;
+      const option = select.options && Array.from(select.options).find((candidate) => candidate.value === state.sort);
+      if (option) option.textContent = sortSelectLabel(state.sort, state.sortDirection);
+    }
+    if (!button) return;
+    const details = sortDirectionDetails();
+    button.disabled = details.disabled;
+    button.setAttribute("aria-pressed", String(details.pressed));
+    button.setAttribute("aria-label", details.label);
+    button.title = details.label;
+    const icon = button.querySelector(".sort-direction-icon");
+    const label = button.querySelector(".sort-direction-label");
+    if (icon) icon.textContent = details.icon;
+    if (label) label.textContent = details.text;
+  }
+
   function catalogScopeLabel() {
     const parts = [];
     if (state.query) parts.push(`results matching “${state.query}”`);
@@ -2613,21 +2727,7 @@
     if (state.filterAxis !== "all") parts.push(`axis: ${axisDisplayLabel(state.filterAxis)}`);
     if (state.filterStatus !== "all") parts.push(`data status: ${statusDisplayName(state.filterStatus).toLowerCase()} records`);
     if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);
-    if (state.sort !== "index") {
-      const sortLabels = {
-        length: "length (longest first)",
-        height: "height (tallest first)",
-        span: "span (widest first)",
-        ratio: "length-to-span ratio (highest first)",
-        symmetry: "symmetry (highest first)",
-        linearity: "linearity profile (highest first)",
-        verticality: "verticality profile (highest first)",
-        radiality: "radiality profile (highest first)",
-        repetition: "repetition profile (highest first)",
-        name: "name (A–Z)"
-      };
-      parts.push(`sorted by ${sortLabels[state.sort] || state.sort}`);
-    }
+    if (state.sort !== "index") parts.push(`sorted by ${catalogSortLabel()}`);
     return parts.length ? parts.join(", ") : "the full collection";
   }
 
@@ -3247,6 +3347,7 @@
         axis: state.filterAxis,
         status: state.filterStatus,
         sort: state.sort,
+        sortDirection: state.sortDirection,
         compareIds: [...state.compareIds],
         comparisonSelection: comparisonSelectionExportContext()
       },

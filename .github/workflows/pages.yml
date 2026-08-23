@@ -109,6 +109,7 @@ jobs:
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const pagesVerifier = fs.readFileSync('scripts/verify-pages-artifact.py', 'utf8');
+          if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
           if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
           const structuredDataMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
@@ -966,6 +967,7 @@ jobs:
           state.query = 'gothic';
           state.filterAxis = 'Longitudinal';
           state.sort = 'name';
+          state.sortDirection = 'asc';
           renderCatalogResultCount(1);
           if (catalogResultCount.attributes['aria-label'] !== '01 of 06 studies; results matching “gothic”, axis: Longitudinal axis, sorted by name (A–Z).' || catalogLiveStatus.textContent !== 'Catalog updated: results matching “gothic”, axis: Longitudinal axis, sorted by name (A–Z).') throw new Error('Catalog scope announcement did not include query, filter, sort, and accessible result context');
           if (normalizeCatalogQuery('  Gothic   Cathedral  ') !== 'gothic cathedral') throw new Error('Catalog query normalization did not collapse repeated whitespace');
@@ -1201,6 +1203,7 @@ jobs:
           state.query = 'probe';
           const idsFor = (sort) => {
             state.sort = sort;
+            state.sortDirection = sort === 'name' ? 'asc' : 'desc';
             return visibleStudies().map((study) => study.id);
           };
           if (idsFor('index').join(',') !== 'probe-2,probe-10') throw new Error('Curated order did not sort unpadded numeric indices naturally');
@@ -1212,6 +1215,57 @@ jobs:
           if (idsFor('radiality').join(',') !== 'profile-high,profile-low') throw new Error('Radiality profile sorting did not rank the highest score first');
           if (idsFor('repetition').join(',') !== 'profile-high,profile-low') throw new Error('Repetition profile sorting did not rank the highest score first');
           console.log('Deterministic catalog sorting smoke test passed.');
+          NODE
+      - name: Smoke-test reversible catalog order
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const controls = ['#searchInput', '#filterSelect', '#filterPlace', '#filterEra', '#filterAxis', '#filterStatus'].map((selector) => [selector, { value: '' }]);
+          controls.forEach(([selector, control]) => elements.set(selector, control));
+          const sortOptions = [
+            ['index', 'Curated order'],
+            ['length', 'Length · longest first'],
+            ['name', 'Name · A–Z'],
+            ['linearity', 'Linearity profile · highest first']
+          ].map(([value, textContent]) => ({ value, textContent }));
+          const sortSelect = { value: 'index', options: sortOptions, selectedOptions: [] };
+          const directionIcon = { textContent: '' };
+          const directionLabel = { textContent: '' };
+          const direction = { disabled: true, attributes: {}, title: '', setAttribute(name, value) { this.attributes[name] = value; }, querySelector(selector) { return selector === '.sort-direction-icon' ? directionIcon : selector === '.sort-direction-label' ? directionLabel : null; } };
+          elements.set('#sortSelect', sortSelect);
+          elements.set('#sortDirection', direction);
+          const context = {
+            URL,
+            window: { location: { href: 'https://example.test/atlas/' } },
+            document: { querySelector(selector) { return elements.get(selector) || null; }, querySelectorAll() { return []; } }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, syncSortDirectionControl, sortDirectionDetails, catalogSortLabel, catalogRouteValues, applyCatalogRouteState, visibleStudies, syncCatalogFromUrl };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, syncSortDirectionControl, sortDirectionDetails, catalogSortLabel, catalogRouteValues, applyCatalogRouteState, visibleStudies, syncCatalogFromUrl } = context.window.__atlasTest;
+          state.sort = 'length';
+          state.sortDirection = 'asc';
+          syncSortDirectionControl();
+          if (direction.disabled || direction.attributes['aria-pressed'] !== 'true' || !direction.attributes['aria-label'].includes('Currently low to high') || !direction.attributes['aria-label'].includes('high to low') || directionIcon.textContent !== '↑' || directionLabel.textContent !== 'Order · low to high' || sortSelect.options.find((option) => option.value === 'length').textContent !== 'Length · shortest first' || catalogSortLabel() !== 'length (shortest first)') throw new Error('Ascending numeric sort did not update the direction control, option label, or catalog scope');
+          state.sort = 'name';
+          state.sortDirection = 'desc';
+          syncSortDirectionControl();
+          if (direction.attributes['aria-pressed'] !== 'true' || directionIcon.textContent !== '↓' || directionLabel.textContent !== 'Order · Z–A' || sortSelect.options.find((option) => option.value === 'name').textContent !== 'Name · Z–A' || catalogSortLabel() !== 'name (Z–A)') throw new Error('Reverse alphabetical sort did not update its visible and accessible order state');
+          state.sort = 'index';
+          state.sortDirection = 'desc';
+          syncSortDirectionControl();
+          if (!direction.disabled || direction.attributes['aria-pressed'] !== 'false' || directionLabel.textContent !== 'Fixed order' || sortDirectionDetails().label !== 'Curated order is fixed; choose a measure or profile to reverse its order.') throw new Error('Curated order did not disable and explain the reversible direction control');
+          state.sort = 'linearity';
+          state.sortDirection = 'asc';
+          const ordered = visibleStudies().map((study) => study.id);
+          const route = applyCatalogRouteState(new URL('https://example.test/atlas/'), false);
+          if (ordered[0] !== 'byzantine' || ordered[ordered.length - 1] !== 'gothic' || catalogRouteValues(false).direction !== 'asc' || route.search !== '?sort=linearity&direction=asc') throw new Error(`Ascending profile order or route state was not reproducible: ${ordered.join(',')} / ${route.search}`);
+          context.window.location.href = 'https://example.test/atlas/?sort=name&direction=desc#atlas';
+          syncCatalogFromUrl();
+          if (state.sort !== 'name' || state.sortDirection !== 'desc') throw new Error('Reversible sort direction did not round-trip from a bookmarkable catalog URL');
+          console.log('Reversible catalog order smoke test passed.');
           NODE
       - name: Smoke-test encoded comparison routes
         run: |
@@ -2557,6 +2611,7 @@ jobs:
           state.filterAxis = 'Longitudinal';
           state.page = 'atlas';
           state.sort = 'name';
+          state.sortDirection = 'asc';
           const catalogCitation = catalogCitationText([context.window.CHURCH_GEOMETRY[0]]);
           if (!catalogCitation.includes('Catalog view: results matching “basilica”, axis: Longitudinal axis, sorted by name (A–Z); 1 record') || !catalogCitation.includes('Status definitions: Schematic = Illustrative proportions; not a measured survey.') || !catalogCitation.includes('Schema v1.1; units: meters') || !catalogCitation.endsWith('https://example.test/atlas/?q=basilica&axis=Longitudinal&sort=name#atlas')) throw new Error('Catalog citation did not preserve query, filters, sort, status definitions, schema, and route');
           state.compareIds = ['basilica', 'gothic'];
@@ -2565,6 +2620,7 @@ jobs:
           if (!selectedCatalogCitation.includes('Selection provenance: Longitudinal basilica — Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || !selectedCatalogCitation.includes('High gothic cathedral — Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.')) throw new Error('Catalog citation did not preserve selected source and provenance notes');
           const selectedViewExport = catalogViewExportPayload([context.window.CHURCH_GEOMETRY[0]]);
           if (selectedViewExport.view.compareIds.join(',') !== 'basilica,gothic' || selectedViewExport.view.comparisonSelection.length !== 2 || selectedViewExport.view.comparisonSelection[0].name !== 'Longitudinal basilica' || selectedViewExport.view.comparisonSelection[1].axis !== 'Longitudinal' || selectedViewExport.view.comparisonSelection[1].status !== 'schematic' || selectedViewExport.view.comparisonSelection[1].statusDefinition !== 'Illustrative proportions; not a measured survey.' || selectedViewExport.view.comparisonSelection[1].source !== 'Sacred Geometry Atlas proportional model' || selectedViewExport.view.comparisonSelection[1].sourceNote !== 'Illustrative proportions; no measured source.' || selectedViewExport.records[0].studyRoute !== 'https://example.test/atlas/#atlas/basilica/plan/exterior/all' || !selectedViewExport.view.route.includes('compare=basilica,gothic')) throw new Error('Catalog JSON export did not preserve direct study routes, human-readable comparison selection context, and source provenance');
+          if (selectedViewExport.view.sortDirection !== 'asc') throw new Error('Catalog JSON export did not preserve reversible sort direction');
           const selectedViewCsv = catalogCsvPayload([context.window.CHURCH_GEOMETRY[0]]);
           if (!selectedViewCsv.includes('"Scope","Comparison IDs","Comparison selection context","Route","Study route"') || !selectedViewCsv.includes('"basilica,gothic","Longitudinal basilica (Longitudinal axis; schematic; Illustrative proportions; not a measured survey.; Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.); High gothic cathedral (Longitudinal axis; schematic; Illustrative proportions; not a measured survey.; Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.)"')) throw new Error('Catalog CSV did not preserve human-readable comparison selection context and source provenance');
           if (!selectedViewCsv.includes('"Schema URL","Linearity profile (0–100)","Verticality profile (0–100)","Radiality profile (0–100)","Repetition profile (0–100)","Reading profile basis"') || !selectedViewCsv.includes('"https://example.test/atlas/data/geometry.schema.json","47","68","48","88","linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count; Interpretive proportional tendencies, not empirical measurements."')) throw new Error('Catalog CSV did not append self-describing interpretive reading-profile scores');
@@ -2962,6 +3018,7 @@ jobs:
             state.query = 'gothic';
             state.filterAxis = 'Longitudinal';
             state.sort = 'name';
+            state.sortDirection = 'asc';
             state.compareIds = ['basilica', 'gothic'];
             await copyCitation();
             await copyCatalogCitation();
@@ -3216,6 +3273,7 @@ jobs:
           state.query = 'basilica';
           state.filterAxis = 'Longitudinal';
           state.sort = 'name';
+          state.sortDirection = 'asc';
           state.page = 'atlas';
           state.compareIds = ['basilica', 'gothic'];
           copyCatalogCitation().then(() => {

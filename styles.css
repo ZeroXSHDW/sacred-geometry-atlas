@@ -420,11 +420,17 @@ h3 { letter-spacing: -0.04em; }
 .tool-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.65rem; }
 .tool-row-secondary { margin-top: 0.45rem; }
 .tool-row-single { grid-template-columns: 1fr; }
+.sort-control { display: grid; gap: 0.3rem; min-width: 0; }
 .select-wrap { position: relative; display: grid; gap: 0.28rem; }
 .select-label { color: var(--ink-muted); font-family: var(--mono); font-size: 0.47rem; letter-spacing: 0.08em; line-height: 1.2; text-transform: uppercase; }
 .select-wrap::after { position: absolute; top: 1.62rem; right: 0.65rem; color: var(--amber); content: '⌄'; pointer-events: none; }
 .select-wrap select { width: 100%; padding: 0.6rem 1.35rem 0.6rem 0.65rem; border: 1px solid var(--line); border-radius: var(--radius); outline: none; color: var(--ink-soft); background: var(--panel); font-family: var(--mono); font-size: 0.57rem; appearance: none; }
 .select-wrap select:focus { border-color: var(--amber); }
+.sort-direction-toggle { display: inline-flex; align-items: center; justify-content: space-between; width: 100%; gap: 0.45rem; padding: 0.34rem 0.55rem; border: 1px solid var(--line); color: var(--ink-muted); background: var(--panel); font-family: var(--mono); font-size: 0.5rem; line-height: 1.2; text-align: left; transition: 180ms ease; }
+.sort-direction-toggle:not(:disabled):hover { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.sort-direction-toggle:disabled { cursor: not-allowed; opacity: 0.58; }
+.sort-direction-icon { flex: 0 0 auto; color: var(--teal); font-size: 0.78rem; line-height: 1; }
+.sort-direction-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .catalog-search-note { margin: 0.5rem 0 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; line-height: 1.55; }
 .catalog-search-note kbd { padding: 0.08rem 0.22rem; border: 1px solid var(--line-strong); color: var(--amber); background: var(--amber-soft); font-family: inherit; font-size: 0.9em; }
 .catalog-filter-note { margin: 0.6rem 0 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; line-height: 1.5; }
@@ -1099,6 +1105,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .noscript-artifact-actions a,
   .noscript-link,
   .method-dictionary-links a { min-height: 36px; }
+  .sort-direction-toggle { min-height: 36px; }
   .route-copy-button { min-height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
@@ -1207,6 +1214,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }
   .study-context-note button { min-height: 36px; }
   .compare-selection-clear, .compare-selection-chip, .catalog-batch-action { min-height: 36px; }
+  .sort-direction-toggle { min-height: 36px; }
   .compare-selection-study-link,
   .compare-selection-chip-remove { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
@@ -1282,6 +1290,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .mode-button,
   .layer-button,
   .compare-tray button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .download-button:hover,
   .route-copy-button:hover,
   .share-button:hover,
@@ -1289,7 +1298,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .mode-button:hover,
   .layer-button:hover,
   .compare-tray button:hover { border-color: Highlight; color: HighlightText; background: Highlight; }
+  .sort-direction-toggle:not(:disabled):hover { border-color: Highlight; color: HighlightText; background: Highlight; }
   .share-button span:first-child { color: ButtonText; }
+  .sort-direction-toggle:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }
+  .sort-direction-icon { color: ButtonText; }
   .compare-tray button:last-child:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }
   #runtimeFallback:focus { outline-color: Highlight; }
   #visualEmptyHeading:focus-visible { outline-color: Highlight; }
