@@ -144,8 +144,9 @@
     axis: "Directional lines and central geometric guides.",
     measure: "Schematic measures and construction references."
   };
+  const READING_PROFILE_SORT_KEYS = ["linearity", "verticality", "radiality", "repetition"];
   const validStatuses = new Set(["all", ...schemaStatusValues()]);
-  const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name"]);
+  const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name", ...READING_PROFILE_SORT_KEYS]);
   const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];
   let shareResetTimer;
   let compareShareResetTimer;
@@ -1832,6 +1833,7 @@
       if (state.sort === "span") order = b.span - a.span;
       if (state.sort === "ratio") order = (b.length / b.span) - (a.length / a.span);
       if (state.sort === "symmetry") order = b.symmetry - a.symmetry;
+      if (READING_PROFILE_SORT_KEYS.includes(state.sort)) order = readingProfileScore(b, state.sort) - readingProfileScore(a, state.sort);
       if (state.sort === "name") order = naturalCompare(a.name, b.name);
       return order || stableStudyOrder(a, b);
     });
@@ -2280,6 +2282,11 @@
     ];
   }
 
+  function readingProfileScore(study, profile) {
+    const match = profileScores(study).find(([key]) => key === profile);
+    return match ? match[1] : 0;
+  }
+
   const READING_PROFILE_BASIS_BY_KEY = {
     linearity: "normalized length ÷ span",
     verticality: "normalized height ÷ span",
@@ -2606,6 +2613,10 @@
         span: "span (widest first)",
         ratio: "length-to-span ratio (highest first)",
         symmetry: "symmetry (highest first)",
+        linearity: "linearity profile (highest first)",
+        verticality: "verticality profile (highest first)",
+        radiality: "radiality profile (highest first)",
+        repetition: "repetition profile (highest first)",
         name: "name (A–Z)"
       };
       parts.push(`sorted by ${sortLabels[state.sort] || state.sort}`);
