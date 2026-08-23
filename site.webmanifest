@@ -1,0 +1,21 @@
+{
+  "name": "Sacred Geometry Atlas",
+  "short_name": "Geometry Atlas",
+  "description": "A static atlas of church geometry, proportions, plans, sections, and interpretive readings.",
+  "lang": "en",
+  "dir": "ltr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111817",
+  "theme_color": "#111817",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

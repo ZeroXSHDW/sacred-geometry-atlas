@@ -108,6 +108,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A Method data dictionary that explains the stable identity, context, geometry, rhythm, interpretation, provenance, and optional-estimate fields behind the JSON/CSV records, with direct links to both artifacts.
 - The Method view keeps the current study and active Atlas scope in context with a study-aware deep link, a visible scope label, live status/provenance counts, scope-aware sharing and citations, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
+- A repository-relative `site.webmanifest` gives compatible browsers a standalone, dark-themed Geometry Atlas identity without adding a build step or server dependency.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, 404-reference, and geometry-schema validation on pull requests and before GitHub Pages deployment.
@@ -133,7 +134,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 When the Atlas view is active, press `/` to focus study search, `Esc` to clear a focused search or close an open disclosure,
 `J` / `K` to move through the visible studies and reveal the newly focused study heading (or hear a recovery hint when filters leave none visible), `1` / `2` / `3` to switch between plan, elevation,
-and section, `I` / `O` to switch inside/outside, `+` / `-` to zoom in/out, and `R` to reset zoom. These shortcuts remain
+and section, `I` / `O` to switch inside/outside, `+` / `-` to zoom in/out, and `R` to reset zoom. These shortcuts
 work from the page or from a matching Atlas control that advertises the same shortcut; text fields,
 links, disclosure summaries, and unrelated buttons retain their native keyboard behavior.
 When two or more studies are selected, press `C` to open the focused comparison.
@@ -181,7 +182,7 @@ If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository
 
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
 
-The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
+The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
 
 ## Add real churches
 

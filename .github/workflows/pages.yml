@@ -42,6 +42,7 @@ jobs:
           test -f .nojekyll
           test -s og.png
           test -s favicon.svg
+          test -s site.webmanifest
           test -s robots.txt
           test -s sitemap.xml
           node - <<'NODE'
@@ -100,6 +101,7 @@ jobs:
           });
           console.log(`Geometry schema validation passed: ${source.studies.length} records.`);
           const html = fs.readFileSync('index.html', 'utf8');
+          const manifest = JSON.parse(fs.readFileSync('site.webmanifest', 'utf8'));
           const notFound = fs.readFileSync('404.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
@@ -109,6 +111,7 @@ jobs:
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const pagesVerifier = fs.readFileSync('scripts/verify-pages-artifact.py', 'utf8');
+          if (manifest.name !== 'Sacred Geometry Atlas' || manifest.short_name !== 'Geometry Atlas' || manifest.start_url !== './' || manifest.scope !== './' || manifest.display !== 'standalone' || manifest.theme_color !== '#111817' || !Array.isArray(manifest.icons) || !manifest.icons.some((icon) => icon && icon.src === 'favicon.svg' && icon.type === 'image/svg+xml')) throw new Error('Web manifest must preserve the static Atlas identity and favicon icon');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
           if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
@@ -135,6 +138,9 @@ jobs:
             'property="og:image:height" content="630"',
             'name="robots" content="index, follow"',
             'rel="canonical" href="./"',
+            'rel="manifest" href="site.webmanifest"',
+            'name="application-name" content="Sacred Geometry Atlas"',
+            'name="apple-mobile-web-app-title" content="Geometry Atlas"',
             'rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json"',
             'rel="alternate" type="text/csv" title="Sacred Geometry Atlas dataset as CSV" href="data/geometry.csv"',
             'rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json"'
@@ -150,7 +156,7 @@ jobs:
           const notFoundNarrowEnd = notFound.indexOf('@media (pointer: coarse)', notFoundNarrowStart);
           const notFoundNarrow = notFound.slice(notFoundNarrowStart, notFoundNarrowEnd);
           if (!notFoundNarrow.includes('.home-link { min-height: 44px; }')) throw new Error('404 recovery actions must retain a 44px target at narrow widths');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Method guide; clipboard', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'site.webmanifest', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Method guide; clipboard', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify curated Pages artifact', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) {
@@ -4001,6 +4007,7 @@ jobs:
               Path("index.html"),
               Path("og.png"),
               Path("robots.txt"),
+              Path("site.webmanifest"),
               Path("sitemap.xml"),
               Path("styles.css"),
           ]
@@ -4028,6 +4035,7 @@ jobs:
               "index.html",
               "og.png",
               "robots.txt",
+              "site.webmanifest",
               "sitemap.xml",
               "styles.css",
               "data/geometry.csv",

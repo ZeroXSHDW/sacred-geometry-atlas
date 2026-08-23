@@ -32,6 +32,7 @@ expected_files = {
     "index.html",
     "og.png",
     "robots.txt",
+    "site.webmanifest",
     "sitemap.xml",
     "styles.css",
     "data/geometry.csv",
@@ -49,11 +50,13 @@ if custom_domain.is_file() and (site / "CNAME").read_text() != custom_domain.rea
     fail("Published custom-domain CNAME does not match the repository CNAME")
 
 page = (site / "index.html").read_text()
+manifest = (site / "site.webmanifest").read_text()
 not_found = (site / "404.html").read_text()
 robots = (site / "robots.txt").read_text()
 sitemap = (site / "sitemap.xml").read_text()
 expected_page = [
     f'<link rel="canonical" href="{base_url}" />',
+    '<link rel="manifest" href="site.webmanifest" />',
     f'<meta property="og:url" content="{base_url}" />',
     f'<meta property="og:image" content="{base_url}og.png" />',
     f'<meta name="twitter:image" content="{base_url}og.png" />',
@@ -78,6 +81,22 @@ missing.extend(token for token in [
 ] if token not in not_found)
 if missing:
     fail("Deployed metadata is incomplete: " + ", ".join(missing))
+
+try:
+    manifest_data = json.loads(manifest)
+except json.JSONDecodeError as error:
+    fail(f"Published web manifest is not valid JSON: {error}")
+if (
+    manifest_data.get("name") != "Sacred Geometry Atlas"
+    or manifest_data.get("short_name") != "Geometry Atlas"
+    or manifest_data.get("start_url") != "./"
+    or manifest_data.get("scope") != "./"
+    or manifest_data.get("display") != "standalone"
+    or manifest_data.get("theme_color") != "#111817"
+    or not isinstance(manifest_data.get("icons"), list)
+    or not any(icon.get("src") == "favicon.svg" and icon.get("type") == "image/svg+xml" for icon in manifest_data["icons"] if isinstance(icon, dict))
+):
+    fail("Published web manifest is missing its static Atlas identity or favicon icon")
 
 try:
     dataset = json.loads((site / "data/geometry.json").read_text())
