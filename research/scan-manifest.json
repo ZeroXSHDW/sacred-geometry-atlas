@@ -1,0 +1,480 @@
+{
+  "title": "Sacred Geometry Atlas scan, model, and survey evidence register",
+  "asOf": "2026-08-23",
+  "purpose": "Track public evidence for interior and exterior measurement without treating a photograph, a marketing model, or a published dimension as a LiDAR survey.",
+  "statusVocabulary": {
+    "open-download": "A public file or dataset is advertised for download; it still requires license and scale/control verification.",
+    "viewable-model": "A public 3D model or viewer is available, but a raw point cloud or reproducible download was not taken here.",
+    "survey-documented": "An institutional or scholarly source documents laser scanning, photogrammetry, or measured survey, but the raw data was not found as an open download.",
+    "reference-only": "Public sources establish the building identity or published facts; no authoritative open scan was located.",
+    "partial-survey": "A survey exists for a defined part of the building or site, not the full church.",
+    "contact-access": "A dataset is described publicly but access requires contacting the data custodian."
+  },
+  "records": [
+    {
+      "id": "basilica",
+      "scanStatus": "reference-only",
+      "coverage": "Whole building identified; no authoritative open LiDAR or photogrammetric file located.",
+      "sources": [
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: Early Christian Monuments of Ravenna",
+          "url": "https://whc.unesco.org/en/list/788/",
+          "dataAction": "identity and published dimensions only"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located" }
+    },
+    {
+      "id": "gothic",
+      "scanStatus": "survey-documented",
+      "coverage": "Chartres laser-analysis work is documented for architectural geometry; no open whole-building point cloud was downloaded.",
+      "sources": [
+        {
+          "kind": "institutional-laser-analysis",
+          "title": "Andrew Tallon: Laser Analysis Projects",
+          "url": "https://facultysites.vassar.edu/antallon/projects/laser-analysis.html",
+          "dataAction": "survey provenance; no raw file downloaded"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "Chartres Cathedral: The 13th-century cathedral",
+          "url": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/",
+          "dataAction": "published dimensions and architectural description"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "byzantine",
+      "scanStatus": "reference-only",
+      "coverage": "Whole church identified; no authoritative open interior/exterior scan located.",
+      "sources": [
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: Hosios Loukas Monastery",
+          "url": "https://whc.unesco.org/en/list/537/",
+          "dataAction": "identity and typology only"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located" }
+    },
+    {
+      "id": "baroque",
+      "scanStatus": "reference-only",
+      "coverage": "Whole church identified; no authoritative open LiDAR or photogrammetric file located.",
+      "sources": [
+        {
+          "kind": "institutional-reference",
+          "title": "Sant'Andrea al Quirinale: Architecture",
+          "url": "https://www.gesuiti-santandrea.it/storia-e-arte/architettura/",
+          "dataAction": "architectural description only"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located" }
+    },
+    {
+      "id": "stave",
+      "scanStatus": "reference-only",
+      "coverage": "Whole church identified; no open, scale-controlled scan located.",
+      "sources": [
+        {
+          "kind": "heritage-reference",
+          "title": "Borgund Stave Church",
+          "url": "https://fortidsminneforeningen.no/en/museum/borgund-stave-church/",
+          "dataAction": "date, identity, and heritage description only"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located" }
+    },
+    {
+      "id": "concrete",
+      "scanStatus": "reference-only",
+      "coverage": "Whole church identified; public user/commercial models were not accepted as survey evidence.",
+      "sources": [
+        {
+          "kind": "museum-reference",
+          "title": "MoMA: Tadao Ando catalogue",
+          "url": "https://www.moma.org/documents/moma_catalogue_348_300085246.pdf",
+          "dataAction": "identity, date, and form description only"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-authoritative" }
+    },
+    {
+      "id": "san-vitale",
+      "scanStatus": "viewable-model",
+      "coverage": "Public photogrammetric model is viewable; it was not treated as a measured survey or downloaded as raw data.",
+      "sources": [
+        {
+          "kind": "public-3d-model",
+          "title": "Basilica di San Vitale, Ravenna",
+          "url": "https://sketchfab.com/3d-models/basilica-di-san-vitale-ravenna-italy-22f753fc374644019b05c675de7f5c28",
+          "access": "viewable model; page states a Creative Commons Attribution license",
+          "dataAction": "model link recorded; raw download not attempted"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: Early Christian Monuments of Ravenna",
+          "url": "https://whc.unesco.org/en/list/788/",
+          "dataAction": "building identity and historical context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "viewable-only" }
+    },
+    {
+      "id": "hagia-sophia",
+      "scanStatus": "survey-documented",
+      "coverage": "The UBC Image Matching Challenge page documents an interior image-matching dataset with reconstructed 3D points, but its download page notes that Hagia Sophia Interior was removed in 2022 because of data inconsistencies. It is therefore not treated as a current open download or a complete architectural scan.",
+      "sources": [
+        {
+          "kind": "open-photogrammetry-dataset",
+          "title": "Image Matching Challenge 2020: Data",
+          "url": "https://www.cs.ubc.ca/research/image-matching-challenge/2020/data/",
+          "access": "public dataset page",
+          "dataAction": "historic dataset provenance; current download unavailable per the linked page"
+        },
+        {
+          "kind": "research-data-registry",
+          "title": "Hagia Sophia 3D repository record",
+          "url": "https://www.re3data.org/repository/r3d100012391",
+          "dataAction": "repository metadata and access route"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "removed-from-current-download-page" }
+    },
+    {
+      "id": "speyer",
+      "scanStatus": "open-download",
+      "coverage": "A CC0 digital model is advertised by the 3D Repository of Hochschule Mainz; it is a reconstructed model, so scale and survey lineage must be checked before metric use.",
+      "sources": [
+        {
+          "kind": "open-3d-model",
+          "title": "Speyer Cathedral digital model",
+          "url": "https://3d-repository.hs-mainz.de/wisski/navigate/60/view",
+          "access": "public model record; CC0 stated on the record",
+          "dataAction": "download candidate; not mirrored in this pass"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: Speyer Cathedral",
+          "url": "https://whc.unesco.org/en/list/168/",
+          "dataAction": "building identity and historical context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "candidate-open-model" }
+    },
+    {
+      "id": "durham",
+      "scanStatus": "partial-survey",
+      "coverage": "Durham Chapter House has a documented laser-scan/BIM survey; it covers a major component, not the whole cathedral.",
+      "sources": [
+        {
+          "kind": "scholarly-survey",
+          "title": "Durham Cathedral Chapter House laser scan and BIM case study",
+          "url": "https://nrl.northumbria.ac.uk/id/eprint/43207/1/ECAM-11-2019-0621.pdf",
+          "access": "public paper",
+          "dataAction": "survey metadata; raw point cloud not located"
+        },
+        {
+          "kind": "professional-survey",
+          "title": "Durham Cathedral Chapter House BIM case example",
+          "url": "https://isurv-international.uat.jadu.net/info/1362/bim-facilities-management/171/case-examples/3",
+          "dataAction": "scan extent and workflow context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "santiago",
+      "scanStatus": "reference-only",
+      "coverage": "Whole cathedral identified; no authoritative open point cloud or mesh located.",
+      "sources": [
+        {
+          "kind": "institutional-reference",
+          "title": "Cathedral of Santiago de Compostela",
+          "url": "https://catedraldesantiago.es/en/cathedral/",
+          "dataAction": "identity and history only"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located" }
+    },
+    {
+      "id": "reims",
+      "scanStatus": "survey-documented",
+      "coverage": "Laser-survey documentation and geometric analysis are publicly described; no raw whole-building point cloud was located.",
+      "sources": [
+        {
+          "kind": "scholarly-laser-survey",
+          "title": "Lost in the Labyrinth: laser scanning and Reims Cathedral",
+          "url": "https://archiv.chnt.at/lost-in-the-labyrinth/",
+          "dataAction": "survey method and geometric interpretation"
+        },
+        {
+          "kind": "scholarly-paper",
+          "title": "CHNT paper on Reims Cathedral survey",
+          "url": "https://www.chnt.at/wp-content/uploads/eBook_CHNT22_Smith.pdf",
+          "dataAction": "survey documentation; raw file not located"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "cologne",
+      "scanStatus": "survey-documented",
+      "coverage": "A peer-reviewed ISPRS paper documents a terrestrial laser-scanning project; no raw point cloud was located in the public paper record.",
+      "sources": [
+        {
+          "kind": "open-access-scholarly-survey",
+          "title": "Terrestrial laser scanning for Cologne Cathedral",
+          "url": "https://isprs-annals.copernicus.org/articles/IV-2-W2/213/2017/isprs-annals-IV-2-W2-213-2017.html",
+          "license": "CC BY 4.0 for the paper",
+          "dataAction": "survey provenance; paper is not the raw point cloud"
+        },
+        {
+          "kind": "professional-survey",
+          "title": "Cologne Cathedral laser scanning case study",
+          "url": "https://www.zofre.de/fileadmin/files/images/produkte/laserscanner/laserscanning/case_studies_englisch/Case_Study_Cologne_Cathedral_EN_compr.pdf",
+          "dataAction": "scan workflow and coverage context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "monreale",
+      "scanStatus": "partial-survey",
+      "coverage": "The main portico has a documented laser-scan and photogrammetric survey; it is partial coverage rather than a complete cathedral scan.",
+      "sources": [
+        {
+          "kind": "scholarly-survey",
+          "title": "3D survey and modelling of the main portico of the Cathedral of Monreale",
+          "url": "https://www.researchgate.net/publication/328879948_3D_survey_and_modelling_of_the_main_portico_of_the_Cathedral_of_Monreale",
+          "access": "public paper record",
+          "dataAction": "instrument and point-cloud/model workflow; raw data not located"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: Arab-Norman Palermo and the Cathedral Churches of Cefalù and Monreale",
+          "url": "https://whc.unesco.org/en/list/1487/",
+          "dataAction": "building identity and heritage context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "saint-denis",
+      "scanStatus": "survey-documented",
+      "coverage": "Andrew Tallon's laser-analysis projects provide geometric precedent for Saint-Denis; no open whole-building point cloud was located.",
+      "sources": [
+        {
+          "kind": "institutional-laser-analysis",
+          "title": "Andrew Tallon: Laser Analysis Projects",
+          "url": "https://facultysites.vassar.edu/antallon/projects/laser-analysis.html",
+          "dataAction": "survey provenance; raw file not downloaded"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "Basilica of Saint-Denis: cradle of Gothic art",
+          "url": "https://www.saint-denis-basilique.fr/en/discover/the-cradle-of-gothic-art",
+          "dataAction": "building identity and architectural history"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "urnes",
+      "scanStatus": "survey-documented",
+      "coverage": "NIKU documents detailed laser scanning of Urnes and the public model/scan references support visual study; a raw full-building point cloud was not downloaded.",
+      "sources": [
+        {
+          "kind": "institutional-laser-survey",
+          "title": "Laser scanning of Urnes Stave Church",
+          "url": "https://www.niku.no/en/prosjekter/laserskanning-av-urnes-stavkirke/",
+          "dataAction": "survey provenance and coverage"
+        },
+        {
+          "kind": "public-3d-model",
+          "title": "The Urnes Stave Church photogrammetry model",
+          "url": "https://sketchfab.com/3d-models/the-urnes-stave-church-cc99e41d6fef44f0847fb43a1fa82b04",
+          "access": "viewable model; license and download permissions require page verification",
+          "dataAction": "visual model link only"
+        },
+        {
+          "kind": "heritage-reference",
+          "title": "Urnes Stave Church: knowledge and development",
+          "url": "https://www.urnesstavkirke.no/kunnskap-og-utvikling/",
+          "dataAction": "institutional context for 3D documentation"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "kizhi",
+      "scanStatus": "survey-documented",
+      "coverage": "The Church of the Transfiguration is documented as laser-scanned and measured; no public raw point cloud was located.",
+      "sources": [
+        {
+          "kind": "institutional-survey-report",
+          "title": "Kizhi Museum: 2010 report appendix on 3D laser scanning",
+          "url": "https://site.kizhi.karelia.ru/media/info/files/attached/1401/2010_2app.pdf",
+          "dataAction": "survey provenance and measurement context"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: Kizhi Pogost",
+          "url": "https://whc.unesco.org/en/list/544/",
+          "dataAction": "building identity and heritage context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located-open" }
+    },
+    {
+      "id": "san-giorgio",
+      "scanStatus": "viewable-model",
+      "coverage": "A Palladio Museum digital model records a laser-scanner workflow, photographs, surveys, and an exportable model route; the model was not mirrored here.",
+      "sources": [
+        {
+          "kind": "institutional-3d-model",
+          "title": "San Giorgio Maggiore digital model",
+          "url": "https://mediateca.palladiomuseum.org/palladio/modello.php?id=55",
+          "access": "public model page; reported mesh and survey metadata",
+          "dataAction": "model and metadata link recorded; raw download not attempted"
+        },
+        {
+          "kind": "institutional-site-survey",
+          "title": "ARCHiVe: digitisation of San Giorgio Maggiore",
+          "url": "https://www.archive-venice.org/project/digitisation-of-the-island-of-san-giorgio-maggiore/",
+          "dataAction": "island-scale LiDAR and photogrammetry context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "viewable-only" }
+    },
+    {
+      "id": "redentore",
+      "scanStatus": "reference-only",
+      "coverage": "No authoritative open LiDAR or photogrammetric dataset for the exact Il Redentore church was located; similarly named crypt or project models were excluded.",
+      "sources": [
+        {
+          "kind": "institutional-reference",
+          "title": "Venice Unica official guide",
+          "url": "https://www.veneziaunica.it/sites/default/files/vu_english_170616.pdf",
+          "dataAction": "identity, architect, and historical context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "not-located" }
+    },
+    {
+      "id": "st-pauls",
+      "scanStatus": "open-download",
+      "coverage": "A recent measured drone survey covers the exterior and roof, and the UBC Image Matching Challenge page lists a 2.0G Saint Paul's Cathedral phototourism test sequence with ground truth. The image-matching set is not LiDAR and was not mirrored here; Wren's drawings provide documentary design evidence.",
+      "sources": [
+        {
+          "kind": "measured-drone-survey",
+          "title": "St Paul's Cathedral measured drone survey",
+          "url": "https://solidpoint.co.uk/project/st-pauls-cathedral/",
+          "access": "public project record",
+          "dataAction": "11,000-image exterior survey provenance; raw data not downloaded"
+        },
+        {
+          "kind": "open-photogrammetry-dataset",
+          "title": "IMC-PT 2020 dataset: Saint Paul's Cathedral",
+          "url": "https://www.cs.ubc.ca/~kmyi/imw2020/data.html",
+          "access": "public download page; 2.0G test sequence listed",
+          "dataAction": "candidate image/ground-truth download; not mirrored due size"
+        },
+        {
+          "kind": "institutional-drawings",
+          "title": "St Paul's Cathedral: Wren Office drawings",
+          "url": "https://www.stpauls.co.uk/wren-office-drawings",
+          "dataAction": "historical plans and elevations; reproduction rights to verify"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "candidate-open-dataset-not-mirrored" }
+    },
+    {
+      "id": "karlskirche",
+      "scanStatus": "contact-access",
+      "coverage": "A TU Wien/B2FIND record describes an interior/exterior mesh from laser scanning and photogrammetry; access is by contacting the data provider.",
+      "sources": [
+        {
+          "kind": "research-data-registry",
+          "title": "Karlskirche 3D dataset record",
+          "url": "https://b2find.eudat.eu/dataset/2d71208a-ccc8-5e37-b1cf-d4ae55397ba6",
+          "access": "contact access",
+          "license": "CC BY-NC-SA 4.0",
+          "dataAction": "dataset metadata recorded; no file downloaded"
+        },
+        {
+          "kind": "survey-provider",
+          "title": "Karlskirche Wien 3D documentation",
+          "url": "https://7reasons.net/portfolio/karlskirche-wien-3d/",
+          "dataAction": "laser and photogrammetry workflow context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "contact-required" }
+    },
+    {
+      "id": "ronchamp",
+      "scanStatus": "viewable-model",
+      "coverage": "A public Sketchfab study model is viewable and marked CC Attribution; it is not treated as a scale-controlled survey without model metadata.",
+      "sources": [
+        {
+          "kind": "public-3d-model",
+          "title": "Notre-Dame du Haut / Ronchamp model",
+          "url": "https://sketchfab.com/3d-models/notre-dame-du-haut-933b5cd760d84ae6adcc7194aad12fce",
+          "access": "viewable model; page states Creative Commons Attribution",
+          "dataAction": "model link recorded; raw download not attempted"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "UNESCO: The Architectural Work of Le Corbusier",
+          "url": "https://whc.unesco.org/en/list/1321/",
+          "dataAction": "building identity and architect context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "viewable-only" }
+    },
+    {
+      "id": "brasilia",
+      "scanStatus": "viewable-model",
+      "coverage": "Public low-poly and scan/map models are viewable; no authoritative scale-controlled open survey was located.",
+      "sources": [
+        {
+          "kind": "public-3d-model",
+          "title": "Cathedral of Brasília model",
+          "url": "https://sketchfab.com/3d-models/cathedral-of-brasilia-9f2d2de9642f48ac873b5aab62b667f7",
+          "access": "viewable model; page states Creative Commons Attribution",
+          "dataAction": "visual model link only"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "Brasília Cathedral: official history",
+          "url": "https://catedral.org.br/institucional/historia/",
+          "dataAction": "identity, architect, and column description"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "viewable-only" }
+    },
+    {
+      "id": "thorncrown",
+      "scanStatus": "viewable-model",
+      "coverage": "Public study models are viewable; no open scale-controlled LiDAR or photogrammetric dataset was located.",
+      "sources": [
+        {
+          "kind": "public-3d-model",
+          "title": "Thorncrown Chapel study model",
+          "url": "https://sketchfab.com/3d-models/thorncrown-chapel-89aaf17e674548dea85cf42469f1c574",
+          "access": "viewable model; license and download permissions require page verification",
+          "dataAction": "visual model link only"
+        },
+        {
+          "kind": "institutional-reference",
+          "title": "Thorncrown Chapel: official history",
+          "url": "https://www.thorncrown.com/about",
+          "dataAction": "identity, designer, and date context"
+        }
+      ],
+      "rawData": { "downloaded": false, "status": "viewable-only" }
+    }
+  ]
+}

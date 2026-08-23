@@ -8,3 +8,6 @@ build/
 _site/
 __pycache__/
 *.py[cod]
+
+# Large local research downloads are documented by the manifests but are not repository artifacts.
+research/raw/

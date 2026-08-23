@@ -1,0 +1,5024 @@
+{
+  "title": "Sacred Geometry Atlas geometry analysis",
+  "generatedBy": "scripts/analyze-geometry.js",
+  "asOf": "2026-08-23",
+  "units": "meters",
+  "method": {
+    "purpose": "Calculate transparent ratios and simple geometric comparisons from the current Atlas inputs.",
+    "constantsCompared": [
+      {
+        "name": "1:1",
+        "value": 1
+      },
+      {
+        "name": "3:2",
+        "value": 1.5
+      },
+      {
+        "name": "φ",
+        "value": 1.618033988749895
+      },
+      {
+        "name": "√2",
+        "value": 1.4142135623730951
+      },
+      {
+        "name": "√3",
+        "value": 1.7320508075688772
+      },
+      {
+        "name": "2:1",
+        "value": 2
+      },
+      {
+        "name": "3:1",
+        "value": 3
+      },
+      {
+        "name": "4:1",
+        "value": 4
+      }
+    ],
+    "fractionDenominatorLimit": 24,
+    "toleranceForWithinFivePercent": 0.05,
+    "warning": "A close ratio is a candidate pattern, not proof of design intent or authorship. Schematic inputs remain schematic outputs."
+  },
+  "summary": {
+    "recordCount": 24,
+    "evidenceFieldCounts": {
+      "reference-dimension": 4,
+      "schematic": 140
+    },
+    "constructorAttribution": "not-determined-by-geometry"
+  },
+  "records": [
+    {
+      "id": "basilica",
+      "index": "01",
+      "name": "Basilica of Sant'Apollinare in Classe",
+      "typology": "Basilica",
+      "place": "Ravenna, Italy",
+      "currentGeometryEvidence": {
+        "length": "reference-dimension",
+        "span": "reference-dimension",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 56,
+        "span": 30,
+        "height": 18,
+        "radius": 15,
+        "module": 8,
+        "bayCount": 7,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [
+        {
+          "field": "length",
+          "label": "overall basilica length",
+          "value": 56,
+          "unit": "m",
+          "scope": "published whole-building dimension",
+          "sourceUrl": "https://whc.unesco.org/en/list/788/"
+        },
+        {
+          "field": "span",
+          "label": "overall basilica width",
+          "value": 30,
+          "unit": "m",
+          "scope": "published whole-building dimension",
+          "sourceUrl": "https://whc.unesco.org/en/list/788/"
+        }
+      ],
+      "ratios": {
+        "lengthToSpan": 1.866667,
+        "heightToSpan": 0.6,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.266667,
+        "lengthToModule": 7
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.866667,
+          "simpleFraction": {
+            "numerator": 28,
+            "denominator": 15,
+            "value": 1.866667,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.066666,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.077721,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.153664,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.6,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 5,
+            "value": 0.6,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.4,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.575736,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.6,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.266667,
+          "simpleFraction": {
+            "numerator": 4,
+            "denominator": 15,
+            "value": 0.266667,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.733333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.811438,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.822222,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 7,
+          "simpleFraction": {
+            "numerator": 7,
+            "denominator": 1,
+            "value": 7,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.75,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.333333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 2.5,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 7,
+        "lengthToModuleNearestInteger": 7,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 1680,
+        "envelopeVolume": 30240,
+        "sectionRatio": 0.6,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [
+          "reference-dimension",
+          "reference-dimension"
+        ],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "gothic",
+      "index": "02",
+      "name": "Notre-Dame de Chartres Cathedral",
+      "typology": "Gothic",
+      "place": "Chartres, France",
+      "currentGeometryEvidence": {
+        "length": "reference-dimension",
+        "span": "schematic",
+        "height": "reference-dimension",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 130.2,
+        "span": 34,
+        "height": 37.5,
+        "radius": 17,
+        "module": 11.5,
+        "bayCount": 8,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [
+        {
+          "field": "length",
+          "label": "overall cathedral length",
+          "value": 130.2,
+          "unit": "m",
+          "scope": "published overall length",
+          "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+        },
+        {
+          "field": "height",
+          "label": "vault height",
+          "value": 37.5,
+          "unit": "m",
+          "scope": "published nave vault height; not external height",
+          "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+        },
+        {
+          "field": "nave-span",
+          "label": "nave span",
+          "value": 16.4,
+          "unit": "m",
+          "scope": "published nave span; the Atlas span field remains schematic",
+          "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+        }
+      ],
+      "ratios": {
+        "lengthToSpan": 3.829412,
+        "heightToSpan": 1.102941,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.338235,
+        "lengthToModule": 11.321739
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 3.829412,
+          "simpleFraction": {
+            "numerator": 88,
+            "denominator": 23,
+            "value": 3.826087,
+            "absoluteError": 0.003325
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.042647,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.276471,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.914706,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.102941,
+          "simpleFraction": {
+            "numerator": 21,
+            "denominator": 19,
+            "value": 1.105263,
+            "absoluteError": 0.002322
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.102941,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.220103,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.264706,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.338235,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 3,
+            "value": 0.333333,
+            "absoluteError": 0.004902
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.661765,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.760832,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.77451,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 11.321739,
+          "simpleFraction": {
+            "numerator": 249,
+            "denominator": 22,
+            "value": 11.318182,
+            "absoluteError": 0.003557
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1.830435,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 2.773913,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 4.66087,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 11.321739,
+        "lengthToModuleNearestInteger": 11,
+        "lengthToModuleIntegerResidual": 0.321739,
+        "bayModuleCoverage": 0.706605,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 4426.8,
+        "envelopeVolume": 166005,
+        "sectionRatio": 1.102941,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [
+          "reference-dimension",
+          "reference-dimension"
+        ],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "byzantine",
+      "index": "03",
+      "name": "Hosios Loukas Katholikon",
+      "typology": "Central plan",
+      "place": "Distomo, Greece",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 30,
+        "span": 30,
+        "height": 25,
+        "radius": 4.5,
+        "module": 7.5,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1,
+        "heightToSpan": 0.833333,
+        "radiusToSpan": 0.15,
+        "moduleToSpan": 0.25,
+        "lengthToModule": 4
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.292893,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.333333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.833333,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 6,
+            "value": 0.833333,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.166667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.410745,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.444445,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.15,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 20,
+            "value": 0.15,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.85,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.893934,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.9,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.25,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 4,
+            "value": 0.25,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.75,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.823223,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.833333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 4,
+          "simpleFraction": {
+            "numerator": 4,
+            "denominator": 1,
+            "value": 4,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.333333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 4,
+        "lengthToModuleNearestInteger": 4,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 900,
+        "envelopeVolume": 22500,
+        "sectionRatio": 0.833333,
+        "radialReachRatio": 0.15
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "baroque",
+      "index": "04",
+      "name": "Sant'Andrea al Quirinale",
+      "typology": "Baroque",
+      "place": "Rome, Italy",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 30,
+        "span": 22,
+        "height": 20,
+        "radius": 11,
+        "module": 5.5,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.363636,
+        "heightToSpan": 0.909091,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.25,
+        "lengthToModule": 5.454545
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.363636,
+          "simpleFraction": {
+            "numerator": 15,
+            "denominator": 11,
+            "value": 1.363636,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.035764,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.090909,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.157227,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.909091,
+          "simpleFraction": {
+            "numerator": 10,
+            "denominator": 11,
+            "value": 0.909091,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.090909,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.357176,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.393939,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.25,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 4,
+            "value": 0.25,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.75,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.823223,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.833333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 5.454545,
+          "simpleFraction": {
+            "numerator": 60,
+            "denominator": 11,
+            "value": 5.454545,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.363636,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.818182,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1.727273,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 5.454545,
+        "lengthToModuleNearestInteger": 5,
+        "lengthToModuleIntegerResidual": 0.454545,
+        "bayModuleCoverage": 0.733333,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 660,
+        "envelopeVolume": 13200,
+        "sectionRatio": 0.909091,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "stave",
+      "index": "05",
+      "name": "Borgund Stave Church",
+      "typology": "Timber",
+      "place": "Lærdal, Norway",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 18,
+        "span": 10,
+        "height": 16,
+        "radius": 5,
+        "module": 3.6,
+        "bayCount": 5,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.8,
+        "heightToSpan": 1.6,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.36,
+        "lengthToModule": 5
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.8,
+          "simpleFraction": {
+            "numerator": 9,
+            "denominator": 5,
+            "value": 1.8,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.03923,
+              "withinFivePercent": true
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.1,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.112461,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.6,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 5,
+            "value": 1.6,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.011146,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.066667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.07624,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.36,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 14,
+            "value": 0.357143,
+            "absoluteError": 0.002857
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.64,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.745442,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.76,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 5,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 1,
+            "value": 5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1.5,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 5,
+        "lengthToModuleNearestInteger": 5,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 180,
+        "envelopeVolume": 2880,
+        "sectionRatio": 1.6,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "concrete",
+      "index": "06",
+      "name": "Church of the Light",
+      "typology": "Modern",
+      "place": "Ibaraki, Osaka, Japan",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 18,
+        "span": 6.5,
+        "height": 6.5,
+        "radius": 3.25,
+        "module": 4.5,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.769231,
+        "heightToSpan": 1,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.692308,
+        "lengthToModule": 4
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.769231,
+          "simpleFraction": {
+            "numerator": 36,
+            "denominator": 13,
+            "value": 2.769231,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.076923,
+              "withinFivePercent": false
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.307692,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.384615,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.292893,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.333333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.692308,
+          "simpleFraction": {
+            "numerator": 9,
+            "denominator": 13,
+            "value": 0.692308,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.307692,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.510464,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.538461,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 4,
+          "simpleFraction": {
+            "numerator": 4,
+            "denominator": 1,
+            "value": 4,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.333333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 4,
+        "lengthToModuleNearestInteger": 4,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 117,
+        "envelopeVolume": 760.5,
+        "sectionRatio": 1,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "san-vitale",
+      "index": "07",
+      "name": "Basilica of San Vitale",
+      "typology": "Byzantine",
+      "place": "Ravenna, Italy",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 32,
+        "span": 28,
+        "height": 24,
+        "radius": 14,
+        "module": 4,
+        "bayCount": 8,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.142857,
+        "heightToSpan": 0.857143,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.142857,
+        "lengthToModule": 8
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.142857,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 7,
+            "value": 1.142857,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.142857,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.191878,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.238095,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.857143,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 7,
+            "value": 0.857143,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.142857,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.393908,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.428571,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.142857,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 7,
+            "value": 0.142857,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.857143,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.898985,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.904762,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 8,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 1,
+            "value": 8,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 3,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 8,
+        "lengthToModuleNearestInteger": 8,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 896,
+        "envelopeVolume": 21504,
+        "sectionRatio": 0.857143,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "hagia-sophia",
+      "index": "08",
+      "name": "Hagia Sophia",
+      "typology": "Byzantine",
+      "place": "Istanbul, Türkiye",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 60,
+        "span": 42,
+        "height": 35,
+        "radius": 21,
+        "module": 10,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.428571,
+        "heightToSpan": 0.833333,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.238095,
+        "lengthToModule": 6
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.428571,
+          "simpleFraction": {
+            "numerator": 10,
+            "denominator": 7,
+            "value": 1.428571,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.010152,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.047619,
+              "withinFivePercent": true
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.117095,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.833333,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 6,
+            "value": 0.833333,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.166667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.410745,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.444445,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.238095,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 21,
+            "value": 0.238095,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.761905,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.831641,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.84127,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 6,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 1,
+            "value": 6,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 2,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 6,
+        "lengthToModuleNearestInteger": 6,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 0.666667,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 2520,
+        "envelopeVolume": 88200,
+        "sectionRatio": 0.833333,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "speyer",
+      "index": "09",
+      "name": "Speyer Cathedral",
+      "typology": "Romanesque",
+      "place": "Speyer, Germany",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 100,
+        "span": 40,
+        "height": 30,
+        "radius": 20,
+        "module": 12.5,
+        "bayCount": 8,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.5,
+        "heightToSpan": 0.75,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.3125,
+        "lengthToModule": 8
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.5,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 2,
+            "value": 2.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.166667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.375,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.75,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 4,
+            "value": 0.75,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.46967,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.3125,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 16,
+            "value": 0.3125,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.6875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.779029,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.791667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 8,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 1,
+            "value": 8,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 3,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 8,
+        "lengthToModuleNearestInteger": 8,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 4000,
+        "envelopeVolume": 120000,
+        "sectionRatio": 0.75,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "durham",
+      "index": "10",
+      "name": "Durham Cathedral",
+      "typology": "Romanesque",
+      "place": "Durham, England",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 100,
+        "span": 35,
+        "height": 28,
+        "radius": 17.5,
+        "module": 11,
+        "bayCount": 9,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.857143,
+        "heightToSpan": 0.8,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.314286,
+        "lengthToModule": 9.090909
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.857143,
+          "simpleFraction": {
+            "numerator": 20,
+            "denominator": 7,
+            "value": 2.857143,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.047619,
+              "withinFivePercent": true
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.285714,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.428572,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.8,
+          "simpleFraction": {
+            "numerator": 4,
+            "denominator": 5,
+            "value": 0.8,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.2,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.434315,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.466667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.314286,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 19,
+            "value": 0.315789,
+            "absoluteError": 0.001503
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.685714,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.777766,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.790476,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 9.090909,
+          "simpleFraction": {
+            "numerator": 100,
+            "denominator": 11,
+            "value": 9.090909,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1.272727,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 2.030303,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 3.545454,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 9.090909,
+        "lengthToModuleNearestInteger": 9,
+        "lengthToModuleIntegerResidual": 0.090909,
+        "bayModuleCoverage": 0.99,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 3500,
+        "envelopeVolume": 98000,
+        "sectionRatio": 0.8,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "santiago",
+      "index": "11",
+      "name": "Cathedral of Santiago de Compostela",
+      "typology": "Romanesque",
+      "place": "Santiago de Compostela, Spain",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 90,
+        "span": 45,
+        "height": 26,
+        "radius": 22.5,
+        "module": 10,
+        "bayCount": 9,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2,
+        "heightToSpan": 0.577778,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.222222,
+        "lengthToModule": 9
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2,
+          "simpleFraction": {
+            "numerator": 2,
+            "denominator": 1,
+            "value": 2,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.154701,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.236068,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.577778,
+          "simpleFraction": {
+            "numerator": 11,
+            "denominator": 19,
+            "value": 0.578947,
+            "absoluteError": 0.001169
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.422222,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.591449,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.614815,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.222222,
+          "simpleFraction": {
+            "numerator": 2,
+            "denominator": 9,
+            "value": 0.222222,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.777778,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.842865,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.851852,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 9,
+          "simpleFraction": {
+            "numerator": 9,
+            "denominator": 1,
+            "value": 9,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 2,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 3.5,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 9,
+        "lengthToModuleNearestInteger": 9,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 4050,
+        "envelopeVolume": 105300,
+        "sectionRatio": 0.577778,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "reims",
+      "index": "12",
+      "name": "Notre-Dame de Reims Cathedral",
+      "typology": "Gothic",
+      "place": "Reims, France",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 100,
+        "span": 35,
+        "height": 40,
+        "radius": 17.5,
+        "module": 11,
+        "bayCount": 9,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.857143,
+        "heightToSpan": 1.142857,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.314286,
+        "lengthToModule": 9.090909
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.857143,
+          "simpleFraction": {
+            "numerator": 20,
+            "denominator": 7,
+            "value": 2.857143,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.047619,
+              "withinFivePercent": true
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.285714,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.428572,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.142857,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 7,
+            "value": 1.142857,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.142857,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.191878,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.238095,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.314286,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 19,
+            "value": 0.315789,
+            "absoluteError": 0.001503
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.685714,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.777766,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.790476,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 9.090909,
+          "simpleFraction": {
+            "numerator": 100,
+            "denominator": 11,
+            "value": 9.090909,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1.272727,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 2.030303,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 3.545454,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 9.090909,
+        "lengthToModuleNearestInteger": 9,
+        "lengthToModuleIntegerResidual": 0.090909,
+        "bayModuleCoverage": 0.99,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 3500,
+        "envelopeVolume": 140000,
+        "sectionRatio": 1.142857,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "cologne",
+      "index": "13",
+      "name": "Cologne Cathedral",
+      "typology": "Gothic",
+      "place": "Cologne, Germany",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 120,
+        "span": 40,
+        "height": 48,
+        "radius": 20,
+        "module": 11.5,
+        "bayCount": 10,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 3,
+        "heightToSpan": 1.2,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.2875,
+        "lengthToModule": 10.434783
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 3,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 1,
+            "value": 3,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.2,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 5,
+            "value": 1.2,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.151472,
+              "withinFivePercent": false
+            },
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.2,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.2,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.2875,
+          "simpleFraction": {
+            "numerator": 2,
+            "denominator": 7,
+            "value": 0.285714,
+            "absoluteError": 0.001786
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.7125,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.796707,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.808333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 10.434783,
+          "simpleFraction": {
+            "numerator": 240,
+            "denominator": 23,
+            "value": 10.434783,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1.608696,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 2.478261,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 4.217391,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 10.434783,
+        "lengthToModuleNearestInteger": 10,
+        "lengthToModuleIntegerResidual": 0.434783,
+        "bayModuleCoverage": 0.958333,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 4800,
+        "envelopeVolume": 230400,
+        "sectionRatio": 1.2,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "monreale",
+      "index": "14",
+      "name": "Monreale Cathedral",
+      "typology": "Norman-Arab",
+      "place": "Monreale, Sicily, Italy",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 72,
+        "span": 32,
+        "height": 26,
+        "radius": 16,
+        "module": 9,
+        "bayCount": 7,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.25,
+        "heightToSpan": 0.8125,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.28125,
+        "lengthToModule": 8
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.25,
+          "simpleFraction": {
+            "numerator": 9,
+            "denominator": 4,
+            "value": 2.25,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.125,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.299038,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.8125,
+          "simpleFraction": {
+            "numerator": 13,
+            "denominator": 16,
+            "value": 0.8125,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.1875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.425476,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.458333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.28125,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 18,
+            "value": 0.277778,
+            "absoluteError": 0.003472
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.71875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.801126,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.8125,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 8,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 1,
+            "value": 8,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 1,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 3,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 8,
+        "lengthToModuleNearestInteger": 8,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 0.875,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 2304,
+        "envelopeVolume": 59904,
+        "sectionRatio": 0.8125,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "saint-denis",
+      "index": "15",
+      "name": "Basilica Cathedral of Saint-Denis",
+      "typology": "Gothic",
+      "place": "Saint-Denis, France",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 75,
+        "span": 30,
+        "height": 34,
+        "radius": 15,
+        "module": 10,
+        "bayCount": 7,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.5,
+        "heightToSpan": 1.133333,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.333333,
+        "lengthToModule": 7.5
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.5,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 2,
+            "value": 2.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.166667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.375,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.133333,
+          "simpleFraction": {
+            "numerator": 17,
+            "denominator": 15,
+            "value": 1.133333,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.133333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.198613,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.244445,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.333333,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 3,
+            "value": 0.333333,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.764298,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.777778,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 7.5,
+          "simpleFraction": {
+            "numerator": 15,
+            "denominator": 2,
+            "value": 7.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 2.75,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 7.5,
+        "lengthToModuleNearestInteger": 8,
+        "lengthToModuleIntegerResidual": 0.5,
+        "bayModuleCoverage": 0.933333,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 2250,
+        "envelopeVolume": 76500,
+        "sectionRatio": 1.133333,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "urnes",
+      "index": "16",
+      "name": "Urnes Stave Church",
+      "typology": "Timber",
+      "place": "Luster, Norway",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 18,
+        "span": 8,
+        "height": 13,
+        "radius": 4,
+        "module": 3.5,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.25,
+        "heightToSpan": 1.625,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.4375,
+        "lengthToModule": 5.142857
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.25,
+          "simpleFraction": {
+            "numerator": 9,
+            "denominator": 4,
+            "value": 2.25,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.125,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.299038,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.625,
+          "simpleFraction": {
+            "numerator": 13,
+            "denominator": 8,
+            "value": 1.625,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.004305,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.061806,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.083333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.4375,
+          "simpleFraction": {
+            "numerator": 7,
+            "denominator": 16,
+            "value": 0.4375,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5625,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.690641,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.708333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 5.142857,
+          "simpleFraction": {
+            "numerator": 36,
+            "denominator": 7,
+            "value": 5.142857,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.285714,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.714286,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1.571429,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 5.142857,
+        "lengthToModuleNearestInteger": 5,
+        "lengthToModuleIntegerResidual": 0.142857,
+        "bayModuleCoverage": 0.777778,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 144,
+        "envelopeVolume": 1872,
+        "sectionRatio": 1.625,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "kizhi",
+      "index": "17",
+      "name": "Church of the Transfiguration, Kizhi Pogost",
+      "typology": "Timber",
+      "place": "Kizhi Island, Karelia, Russia",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 30,
+        "span": 18,
+        "height": 25,
+        "radius": 9,
+        "module": 5,
+        "bayCount": 6,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.666667,
+        "heightToSpan": 1.388889,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.277778,
+        "lengthToModule": 6
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.666667,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 3,
+            "value": 1.666667,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.030057,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.037749,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.111111,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.388889,
+          "simpleFraction": {
+            "numerator": 25,
+            "denominator": 18,
+            "value": 1.388889,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.017907,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.074074,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.141619,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.277778,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 18,
+            "value": 0.277778,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.722222,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.803581,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.814815,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 6,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 1,
+            "value": 6,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 2,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 6,
+        "lengthToModuleNearestInteger": 6,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 540,
+        "envelopeVolume": 13500,
+        "sectionRatio": 1.388889,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "san-giorgio",
+      "index": "18",
+      "name": "Basilica of San Giorgio Maggiore",
+      "typology": "Renaissance",
+      "place": "Venice, Italy",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 55,
+        "span": 28,
+        "height": 24,
+        "radius": 14,
+        "module": 9,
+        "bayCount": 6,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.964286,
+        "heightToSpan": 0.857143,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.321429,
+        "lengthToModule": 6.111111
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.964286,
+          "simpleFraction": {
+            "numerator": 47,
+            "denominator": 24,
+            "value": 1.958333,
+            "absoluteError": 0.005953
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.017857,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.134081,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.213996,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.857143,
+          "simpleFraction": {
+            "numerator": 6,
+            "denominator": 7,
+            "value": 0.857143,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.142857,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.393908,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.428571,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.321429,
+          "simpleFraction": {
+            "numerator": 7,
+            "denominator": 22,
+            "value": 0.318182,
+            "absoluteError": 0.003247
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.678571,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.772715,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.785714,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 6.111111,
+          "simpleFraction": {
+            "numerator": 55,
+            "denominator": 9,
+            "value": 6.111111,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.527778,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.037037,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 2.055556,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 6.111111,
+        "lengthToModuleNearestInteger": 6,
+        "lengthToModuleIntegerResidual": 0.111111,
+        "bayModuleCoverage": 0.981818,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 1540,
+        "envelopeVolume": 36960,
+        "sectionRatio": 0.857143,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "redentore",
+      "index": "19",
+      "name": "Il Redentore",
+      "typology": "Renaissance",
+      "place": "Venice, Italy",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 55,
+        "span": 24,
+        "height": 25,
+        "radius": 12,
+        "module": 8,
+        "bayCount": 6,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2.291667,
+        "heightToSpan": 1.041667,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.333333,
+        "lengthToModule": 6.875
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2.291667,
+          "simpleFraction": {
+            "numerator": 55,
+            "denominator": 24,
+            "value": 2.291667,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.145833,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.236111,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.323095,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.041667,
+          "simpleFraction": {
+            "numerator": 25,
+            "denominator": 24,
+            "value": 1.041667,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.041667,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.26343,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.305555,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.333333,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 3,
+            "value": 0.333333,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.764298,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.777778,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 6.875,
+          "simpleFraction": {
+            "numerator": 55,
+            "denominator": 8,
+            "value": 6.875,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.71875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 1.291667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 2.4375,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 6.875,
+        "lengthToModuleNearestInteger": 7,
+        "lengthToModuleIntegerResidual": 0.125,
+        "bayModuleCoverage": 0.872727,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 1320,
+        "envelopeVolume": 33000,
+        "sectionRatio": 1.041667,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "st-pauls",
+      "index": "20",
+      "name": "St Paul's Cathedral",
+      "typology": "Baroque",
+      "place": "London, England",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 150,
+        "span": 75,
+        "height": 40,
+        "radius": 30,
+        "module": 12,
+        "bayCount": 8,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 2,
+        "heightToSpan": 0.533333,
+        "radiusToSpan": 0.4,
+        "moduleToSpan": 0.16,
+        "lengthToModule": 12.5
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 2,
+          "simpleFraction": {
+            "numerator": 2,
+            "denominator": 1,
+            "value": 2,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.154701,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.236068,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.533333,
+          "simpleFraction": {
+            "numerator": 8,
+            "denominator": 15,
+            "value": 0.533333,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.466667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.622877,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.644445,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.4,
+          "simpleFraction": {
+            "numerator": 2,
+            "denominator": 5,
+            "value": 0.4,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.6,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.717157,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.733333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.16,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 19,
+            "value": 0.157895,
+            "absoluteError": 0.002105
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.84,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.886863,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.893333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 12.5,
+          "simpleFraction": {
+            "numerator": 25,
+            "denominator": 2,
+            "value": 12.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 2.125,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 3.166667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 5.25,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 12.5,
+        "lengthToModuleNearestInteger": 13,
+        "lengthToModuleIntegerResidual": 0.5,
+        "bayModuleCoverage": 0.64,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 11250,
+        "envelopeVolume": 450000,
+        "sectionRatio": 0.533333,
+        "radialReachRatio": 0.4
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "karlskirche",
+      "index": "21",
+      "name": "Karlskirche",
+      "typology": "Baroque",
+      "place": "Vienna, Austria",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 45,
+        "span": 30,
+        "height": 30,
+        "radius": 15,
+        "module": 8,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.5,
+        "heightToSpan": 1,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.266667,
+        "lengthToModule": 5.625
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.5,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 2,
+            "value": 1.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.06066,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.072949,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.292893,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.333333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.266667,
+          "simpleFraction": {
+            "numerator": 4,
+            "denominator": 15,
+            "value": 0.266667,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.733333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.811438,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.822222,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 5.625,
+          "simpleFraction": {
+            "numerator": 45,
+            "denominator": 8,
+            "value": 5.625,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.40625,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1.8125,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 5.625,
+        "lengthToModuleNearestInteger": 6,
+        "lengthToModuleIntegerResidual": 0.375,
+        "bayModuleCoverage": 0.711111,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 1350,
+        "envelopeVolume": 40500,
+        "sectionRatio": 1,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "ronchamp",
+      "index": "22",
+      "name": "Chapelle Notre-Dame-du-Haut",
+      "typology": "Modern",
+      "place": "Ronchamp, France",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 25,
+        "span": 16,
+        "height": 14,
+        "radius": 8,
+        "module": 5,
+        "bayCount": 4,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1.5625,
+        "heightToSpan": 0.875,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.3125,
+        "lengthToModule": 5
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1.5625,
+          "simpleFraction": {
+            "numerator": 25,
+            "denominator": 16,
+            "value": 1.5625,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.034322,
+              "withinFivePercent": true
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.041667,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√3",
+              "target": 1.7320508075688772,
+              "relativeError": 0.09789,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.875,
+          "simpleFraction": {
+            "numerator": 7,
+            "denominator": 8,
+            "value": 0.875,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.125,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.381282,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.416667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.3125,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 16,
+            "value": 0.3125,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.6875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.779029,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.791667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 5,
+          "simpleFraction": {
+            "numerator": 5,
+            "denominator": 1,
+            "value": 5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 1.5,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 5,
+        "lengthToModuleNearestInteger": 5,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 0.8,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 400,
+        "envelopeVolume": 5600,
+        "sectionRatio": 0.875,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "brasilia",
+      "index": "23",
+      "name": "Cathedral of Brasília",
+      "typology": "Modern",
+      "place": "Brasília, Brazil",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 40,
+        "span": 40,
+        "height": 30,
+        "radius": 20,
+        "module": 2.5,
+        "bayCount": 16,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 1,
+        "heightToSpan": 0.75,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.0625,
+        "lengthToModule": 16
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 1,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.292893,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.333333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 0.75,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 4,
+            "value": 0.75,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.25,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.46967,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.0625,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 16,
+            "value": 0.0625,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.9375,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.955806,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.958333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 16,
+          "simpleFraction": {
+            "numerator": 16,
+            "denominator": 1,
+            "value": 16,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 3,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 4.333333,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 7,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 16,
+        "lengthToModuleNearestInteger": 16,
+        "lengthToModuleIntegerResidual": 0,
+        "bayModuleCoverage": 1,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 1600,
+        "envelopeVolume": 48000,
+        "sectionRatio": 0.75,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    },
+    {
+      "id": "thorncrown",
+      "index": "24",
+      "name": "Thorncrown Chapel",
+      "typology": "Contemporary",
+      "place": "Eureka Springs, Arkansas, USA",
+      "currentGeometryEvidence": {
+        "length": "schematic",
+        "span": "schematic",
+        "height": "schematic",
+        "radius": "schematic",
+        "module": "schematic",
+        "bayCount": "schematic"
+      },
+      "geometryInputs": {
+        "length": 25,
+        "span": 8,
+        "height": 12,
+        "radius": 4,
+        "module": 2,
+        "bayCount": 12,
+        "units": "m for dimensions; count for bayCount"
+      },
+      "publishedMeasurements": [],
+      "ratios": {
+        "lengthToSpan": 3.125,
+        "heightToSpan": 1.5,
+        "radiusToSpan": 0.5,
+        "moduleToSpan": 0.25,
+        "lengthToModule": 12.5
+      },
+      "ratioPatterns": [
+        {
+          "name": "lengthToSpan",
+          "observed": 3.125,
+          "simpleFraction": {
+            "numerator": 25,
+            "denominator": 8,
+            "value": 3.125,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 0.041667,
+              "withinFivePercent": true
+            },
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 0.21875,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 0.5625,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "heightToSpan",
+          "observed": 1.5,
+          "simpleFraction": {
+            "numerator": 3,
+            "denominator": 2,
+            "value": 1.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0,
+              "withinFivePercent": true
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.06066,
+              "withinFivePercent": false
+            },
+            {
+              "name": "φ",
+              "target": 1.618033988749895,
+              "relativeError": 0.072949,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "radiusToSpan",
+          "observed": 0.5,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 2,
+            "value": 0.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.5,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.646447,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.666667,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "moduleToSpan",
+          "observed": 0.25,
+          "simpleFraction": {
+            "numerator": 1,
+            "denominator": 4,
+            "value": 0.25,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "1:1",
+              "target": 1,
+              "relativeError": 0.75,
+              "withinFivePercent": false
+            },
+            {
+              "name": "√2",
+              "target": 1.4142135623730951,
+              "relativeError": 0.823223,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:2",
+              "target": 1.5,
+              "relativeError": 0.833333,
+              "withinFivePercent": false
+            }
+          ]
+        },
+        {
+          "name": "lengthToModule",
+          "observed": 12.5,
+          "simpleFraction": {
+            "numerator": 25,
+            "denominator": 2,
+            "value": 12.5,
+            "absoluteError": 0
+          },
+          "nearestConstants": [
+            {
+              "name": "4:1",
+              "target": 4,
+              "relativeError": 2.125,
+              "withinFivePercent": false
+            },
+            {
+              "name": "3:1",
+              "target": 3,
+              "relativeError": 3.166667,
+              "withinFivePercent": false
+            },
+            {
+              "name": "2:1",
+              "target": 2,
+              "relativeError": 5.25,
+              "withinFivePercent": false
+            }
+          ]
+        }
+      ],
+      "moduleChecks": {
+        "lengthToModule": 12.5,
+        "lengthToModuleNearestInteger": 13,
+        "lengthToModuleIntegerResidual": 0.5,
+        "bayModuleCoverage": 0.96,
+        "bayModuleCoverageNote": "This tests the supplied Atlas module against the supplied bay count; it does not establish the historical construction grid."
+      },
+      "derivedReadings": {
+        "floorArea": 200,
+        "envelopeVolume": 2400,
+        "sectionRatio": 1.5,
+        "radialReachRatio": 0.5
+      },
+      "constructorFinding": {
+        "result": "not-determined-by-geometry",
+        "confidence": "not-applicable",
+        "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
+        "geometryEvidenceFields": [],
+        "documentaryEvidenceRequired": true
+      },
+      "interpretation": "Pattern calculations are exploratory because the Atlas inputs are schematic; do not report these ratios as surveyed dimensions."
+    }
+  ]
+}

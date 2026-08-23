@@ -209,6 +209,20 @@ The committed public artifact includes a correctly sized 180px icons/atlas-180.p
 
 The current records point to real named churches, while their geometry values remain explicitly schematic, illustrative proportions—not measured surveys of those buildings. Each record carries a source URL and a source note that separates documented building facts from Atlas interpretation. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
 
+## Research image and scan layer
+
+The local research layer now contains a real reference image for every study plus an evidence-aware visual sheet that places each image beside its geometry math: [`research/annotated-atlas.html`](research/annotated-atlas.html). The underlying registers keep the provenance and limits separate:
+
+- [`research/image-manifest.json`](research/image-manifest.json) — 24 downloaded images with source and rights pages.
+- [`research/scan-manifest.json`](research/scan-manifest.json) — LiDAR, laser-scan, photogrammetry, model, and survey leads, with open/contact/partial/reference status.
+- [`research/model-metadata.json`](research/model-metadata.json) — public 3D-model topology, author, license, and downloadability metadata for five Sketchfab leads.
+- [`research/data-probes.json`](research/data-probes.json) — endpoint checks and advertised sizes for real dataset candidates, including the 2.11 GB Saint Paul's archive.
+- [`research/measurement-register.json`](research/measurement-register.json) — published dimensions versus schematic inputs.
+- [`research/geometry-analysis.json`](research/geometry-analysis.json) — reproducible ratios, simple-fraction checks, and candidate √2/√3/φ comparisons.
+- [`research/constructor-evidence.json`](research/constructor-evidence.json) — documentary designer/patron evidence; geometry is never used to name a constructor.
+
+Regenerate and validate the research layer with `node scripts/fetch-research-assets.js`, `node scripts/fetch-model-metadata.js`, `node scripts/probe-research-data.js`, `node scripts/analyze-geometry.js`, `node scripts/build-research-atlas.js`, `python3 scripts/measure-geometry-assets.py`, and `node scripts/validate-research-data.js`. The image files are research-only until each rights page is verified, and the current Pages artifact deliberately does not publish this unverified image corpus.
+
 ### Current reference list
 
 | Index | Reference building | Source |

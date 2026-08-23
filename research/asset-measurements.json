@@ -1,0 +1,8 @@
+{
+  "title": "Sacred Geometry Atlas local geometry asset measurements",
+  "generatedBy": "scripts/measure-geometry-assets.py",
+  "generatedAt": "2026-08-23T22:19:05.204804+00:00",
+  "root": "research/raw",
+  "note": "Bounds are file/model coordinates until scale and control are verified. They are not automatically building dimensions.",
+  "records": []
+}

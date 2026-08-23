@@ -1,0 +1,253 @@
+{
+  "title": "Sacred Geometry Atlas documentary designer and constructor evidence",
+  "asOf": "2026-08-23",
+  "scopeNote": "This register separates a named designer, patron, or project master from the unknown people and teams who physically constructed a building. No attribution below is inferred from a ratio or image.",
+  "geometryConclusion": "Historical constructor identity is not determinable from geometry alone.",
+  "records": [
+    {
+      "id": "basilica",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown",
+      "sourceUrl": "https://whc.unesco.org/en/list/788/"
+    },
+    {
+      "id": "gothic",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "multiple medieval builders; individual constructor not identified here",
+      "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+    },
+    {
+      "id": "byzantine",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown",
+      "sourceUrl": "https://whc.unesco.org/en/list/537/"
+    },
+    {
+      "id": "baroque",
+      "documentaryStatus": "designer-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "Gian Lorenzo Bernini",
+          "sourceUrl": "https://www.gesuiti-santandrea.it/storia-e-arte/architettura/"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.gesuiti-santandrea.it/storia-e-arte/architettura/"
+    },
+    {
+      "id": "stave",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown medieval carpenters and builders",
+      "sourceUrl": "https://fortidsminneforeningen.no/en/museum/borgund-stave-church/"
+    },
+    {
+      "id": "concrete",
+      "documentaryStatus": "designer-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "Tadao Ando",
+          "sourceUrl": "https://www.moma.org/documents/moma_catalogue_348_300085246.pdf"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.moma.org/documents/moma_catalogue_348_300085246.pdf"
+    },
+    {
+      "id": "san-vitale",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown; do not treat the geometric model author as the historical builder",
+      "sourceUrl": "https://whc.unesco.org/en/list/788/"
+    },
+    {
+      "id": "hagia-sophia",
+      "documentaryStatus": "designers-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architects/designers",
+          "name": "Anthemios of Tralles and Isidoros of Miletus",
+          "sourceUrl": "https://whc.unesco.org/pg.cfm?cid=31&id_site=356"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://whc.unesco.org/en/list/356/"
+    },
+    {
+      "id": "speyer",
+      "documentaryStatus": "patron-and-history-documented-constructor-not-established",
+      "roles": [],
+      "constructionTeam": "medieval building teams; individual constructor not identified here",
+      "sourceUrl": "https://whc.unesco.org/en/list/168/"
+    },
+    {
+      "id": "durham",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown in the current source set",
+      "sourceUrl": "https://www.durhamcathedral.co.uk/explore/the-cathedral-building-and-grounds/the-quire"
+    },
+    {
+      "id": "santiago",
+      "documentaryStatus": "staged-medieval-project-documented",
+      "roles": [
+        {
+          "role": "early masters",
+          "name": "Bernard the Elder, Admirable Master, Roberto, and later Master Esteban",
+          "sourceUrl": "https://catedraldesantiago.es/en/cathedral/"
+        },
+        {
+          "role": "later project master",
+          "name": "Master Mateo",
+          "sourceUrl": "https://catedraldesantiago.es/en/portico-de-la-gloria/"
+        }
+      ],
+      "constructionTeam": "workshops and stonecutters are implied by the staged project; a single constructor is not supported",
+      "sourceUrl": "https://catedraldesantiago.es/en/cathedral/"
+    },
+    {
+      "id": "reims",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "multiple medieval masters; exact role attribution requires a dedicated architectural-history source",
+      "sourceUrl": "https://whc.unesco.org/en/list/601/"
+    },
+    {
+      "id": "cologne",
+      "documentaryStatus": "staged-project-documented-constructor-not-normalized",
+      "roles": [],
+      "constructionTeam": "multiple medieval and modern builders followed the design over centuries; this register does not collapse them into one name",
+      "sourceUrl": "https://whc.unesco.org/en/list/292/"
+    },
+    {
+      "id": "monreale",
+      "documentaryStatus": "patron-and-workshop-history-requires-further-source-work",
+      "roles": [],
+      "constructionTeam": "Arab-Norman workshops and later builders; individual constructor not established here",
+      "sourceUrl": "https://whc.unesco.org/en/list/1487/"
+    },
+    {
+      "id": "saint-denis",
+      "documentaryStatus": "patron-and-architectural-history-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "patron/abbot associated with the Gothic rebuilding",
+          "name": "Abbot Suger",
+          "sourceUrl": "https://www.saint-denis-basilique.fr/en/discover/the-cradle-of-gothic-art"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.saint-denis-basilique.fr/en/discover/the-cradle-of-gothic-art"
+    },
+    {
+      "id": "urnes",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown medieval carpenters and carvers",
+      "sourceUrl": "https://whc.unesco.org/en/list/58/"
+    },
+    {
+      "id": "kizhi",
+      "documentaryStatus": "not-established-in-current-source-set",
+      "roles": [],
+      "constructionTeam": "unknown carpenters and builders; later attribution legends require separate verification",
+      "sourceUrl": "https://whc.unesco.org/en/list/544/"
+    },
+    {
+      "id": "san-giorgio",
+      "documentaryStatus": "designer-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "Andrea Palladio",
+          "sourceUrl": "https://tour.venice.it/venice/what-to-see/details/basilica-di-san-giorgio-maggiore"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://tour.venice.it/venice/what-to-see/details/basilica-di-san-giorgio-maggiore"
+    },
+    {
+      "id": "redentore",
+      "documentaryStatus": "designer-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "Andrea Palladio",
+          "sourceUrl": "https://www.veneziaunica.it/sites/default/files/vu_english_170616.pdf"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.veneziaunica.it/sites/default/files/vu_english_170616.pdf"
+    },
+    {
+      "id": "st-pauls",
+      "documentaryStatus": "architect-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect",
+          "name": "Christopher Wren",
+          "sourceUrl": "https://www.stpauls.co.uk/wren-office-drawings"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.stpauls.co.uk/our-timeline"
+    },
+    {
+      "id": "karlskirche",
+      "documentaryStatus": "architectural-history-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architectural project",
+          "name": "Fischer von Erlach family; exact role split requires source-page verification",
+          "sourceUrl": "https://www.karlskirche.at/en/history/"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.karlskirche.at/en/history/"
+    },
+    {
+      "id": "ronchamp",
+      "documentaryStatus": "architect-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "Le Corbusier",
+          "sourceUrl": "https://whc.unesco.org/en/list/1321/"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://whc.unesco.org/en/list/1321/"
+    },
+    {
+      "id": "brasilia",
+      "documentaryStatus": "designer-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "Oscar Niemeyer",
+          "sourceUrl": "https://catedral.org.br/institucional/historia/"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://catedral.org.br/institucional/historia/"
+    },
+    {
+      "id": "thorncrown",
+      "documentaryStatus": "architect-documented-constructor-not-established",
+      "roles": [
+        {
+          "role": "architect/designer",
+          "name": "E. Fay Jones",
+          "sourceUrl": "https://www.thorncrown.com/about"
+        }
+      ],
+      "constructionTeam": "not identified in the current source",
+      "sourceUrl": "https://www.thorncrown.com/about"
+    }
+  ]
+}

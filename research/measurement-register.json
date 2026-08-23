@@ -1,0 +1,100 @@
+{
+  "title": "Sacred Geometry Atlas measurement evidence register",
+  "asOf": "2026-08-23",
+  "defaultCurrentGeometryEvidence": {
+    "length": "schematic",
+    "span": "schematic",
+    "height": "schematic",
+    "radius": "schematic",
+    "module": "schematic",
+    "bayCount": "schematic"
+  },
+  "evidenceDefinitions": {
+    "reference-dimension": "A dimension published by an institutional or scholarly source.",
+    "scan-derived": "A dimension extracted from a registered, scale-controlled scan, mesh, orthophoto, or photogrammetric model.",
+    "image-derived": "A ratio measured from a photograph; it is not metric without scale and camera-control evidence.",
+    "schematic": "An Atlas comparison input; it is not a survey measurement."
+  },
+  "records": [
+    {
+      "id": "basilica",
+      "currentGeometryEvidence": {
+        "length": "reference-dimension",
+        "span": "reference-dimension"
+      },
+      "publishedMeasurements": [
+        {
+          "field": "length",
+          "label": "overall basilica length",
+          "value": 56,
+          "unit": "m",
+          "scope": "published whole-building dimension",
+          "sourceUrl": "https://whc.unesco.org/en/list/788/"
+        },
+        {
+          "field": "span",
+          "label": "overall basilica width",
+          "value": 30,
+          "unit": "m",
+          "scope": "published whole-building dimension",
+          "sourceUrl": "https://whc.unesco.org/en/list/788/"
+        }
+      ]
+    },
+    {
+      "id": "gothic",
+      "currentGeometryEvidence": {
+        "length": "reference-dimension",
+        "height": "reference-dimension"
+      },
+      "publishedMeasurements": [
+        {
+          "field": "length",
+          "label": "overall cathedral length",
+          "value": 130.2,
+          "unit": "m",
+          "scope": "published overall length",
+          "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+        },
+        {
+          "field": "height",
+          "label": "vault height",
+          "value": 37.5,
+          "unit": "m",
+          "scope": "published nave vault height; not external height",
+          "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+        },
+        {
+          "field": "nave-span",
+          "label": "nave span",
+          "value": 16.4,
+          "unit": "m",
+          "scope": "published nave span; the Atlas span field remains schematic",
+          "sourceUrl": "https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/"
+        }
+      ]
+    },
+    { "id": "byzantine", "publishedMeasurements": [] },
+    { "id": "baroque", "publishedMeasurements": [] },
+    { "id": "stave", "publishedMeasurements": [] },
+    { "id": "concrete", "publishedMeasurements": [] },
+    { "id": "san-vitale", "publishedMeasurements": [] },
+    { "id": "hagia-sophia", "publishedMeasurements": [] },
+    { "id": "speyer", "publishedMeasurements": [] },
+    { "id": "durham", "publishedMeasurements": [] },
+    { "id": "santiago", "publishedMeasurements": [] },
+    { "id": "reims", "publishedMeasurements": [] },
+    { "id": "cologne", "publishedMeasurements": [] },
+    { "id": "monreale", "publishedMeasurements": [] },
+    { "id": "saint-denis", "publishedMeasurements": [] },
+    { "id": "urnes", "publishedMeasurements": [] },
+    { "id": "kizhi", "publishedMeasurements": [] },
+    { "id": "san-giorgio", "publishedMeasurements": [] },
+    { "id": "redentore", "publishedMeasurements": [] },
+    { "id": "st-pauls", "publishedMeasurements": [] },
+    { "id": "karlskirche", "publishedMeasurements": [] },
+    { "id": "ronchamp", "publishedMeasurements": [] },
+    { "id": "brasilia", "publishedMeasurements": [] },
+    { "id": "thorncrown", "publishedMeasurements": [] }
+  ]
+}
