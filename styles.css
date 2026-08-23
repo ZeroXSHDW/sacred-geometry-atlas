@@ -1061,8 +1061,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button span.download-label { display: inline; font-size: 0; white-space: nowrap; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.56rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
+  .download-button.is-unavailable span.download-label::after { content: "Unavailable"; }
   #downloadCsvData span.download-label::after { content: "CSV"; }
   #downloadCsvData.is-complete span.download-label::after { content: "Done"; }
+  #downloadCsvData.is-unavailable span.download-label::after { content: "Unavailable"; }
   .download-button.install-button span.download-label::after { content: "Install"; }
   .theme-toggle span.theme-toggle-label { display: inline; font-size: 0; white-space: nowrap; }
   .theme-toggle span.theme-toggle-label::after { content: "Theme"; font-size: 0.56rem; }
@@ -1233,6 +1235,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   #copyCitation.is-copied span.study-action-label::after,
   #downloadStudy.is-complete:not(.is-unavailable) span.study-action-label::after,
   #downloadStudyCsv.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
+  #downloadStudy.is-unavailable span.study-action-label::after,
+  #downloadStudyCsv.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }
   #printStudy.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
   #printStudy.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }
   .download-button span.download-label { display: inline; font-size: 0; }
@@ -1240,6 +1244,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
   #downloadCsvData span.download-label::after { content: "CSV"; font-size: 0.62rem; }
   #downloadCsvData.is-complete span.download-label::after { content: "Done"; }
+  .download-button.is-unavailable span.download-label::after { content: "Unavailable"; }
+  #downloadCsvData.is-unavailable span.download-label::after { content: "Unavailable"; }
   .download-button.install-button span.download-label { display: inline; font-size: 0; }
   .download-button.install-button span.download-label::after { content: "Install"; font-size: 0.62rem; }
   .theme-toggle-label { display: none !important; }

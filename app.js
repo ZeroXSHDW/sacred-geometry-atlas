@@ -3531,6 +3531,7 @@
     const downloaded = triggerDownload(filename, `<?xml version="1.0" encoding="UTF-8"?>\n${source}`, "image/svg+xml;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "SVG download is unavailable in this browser. Use Print sheet to preserve the current view instead.";
+      temporaryButtonFeedback(button, "Unavailable", "SVG download is unavailable in this browser.", "SVG", "Export the current drawing as SVG", "drawing-export");
       showDownloadRecovery("SVG export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadDrawing", {
         href: studyRoutePath(study.id),
         label: "Open current drawing route"
@@ -3557,6 +3558,7 @@
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
       if (status) status.textContent = "Study JSON download is unavailable in this browser. Use the static dataset link instead.";
+      temporaryButtonFeedback(button, "Unavailable", "Study JSON download is unavailable in this browser.", "Study JSON", "Download active study as JSON", "study-download");
       showDownloadRecovery("The study export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadStudy", {
         href: studyRoutePath(study.id),
         label: "Open active study route"
@@ -3582,6 +3584,7 @@
       const downloaded = triggerDownload(filename, `\uFEFF${activeStudyCsvPayload(study)}`, "text/csv;charset=utf-8");
       if (!downloaded) {
         if (status) status.textContent = "Study CSV download is unavailable in this browser. Use the static dataset link instead.";
+        temporaryButtonFeedback(button, "Unavailable", "Study CSV download is unavailable in this browser.", "Study CSV", "Download active study as CSV", "study-csv-download");
         showDownloadRecovery("The study CSV export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadStudyCsv", {
           href: studyRoutePath(study.id),
           label: "Open active study route"
@@ -3731,6 +3734,7 @@
     const downloaded = triggerDownload("sacred-geometry-atlas.json", payload, "application/json");
     if (!downloaded) {
       $("#downloadStatus").textContent = "Atlas data download is unavailable in this browser. Open the static JSON dataset link instead.";
+      temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser.", "Download data", "Download full atlas data as JSON", "atlas-download");
       showDownloadRecovery("The file download was blocked. Open the static dataset instead.", "#downloadData");
       return;
     }
@@ -3811,6 +3815,7 @@
       const downloaded = triggerDownload(filename, `\uFEFF${fullAtlasCsvPayload()}`, "text/csv;charset=utf-8");
       if (!downloaded) {
         if (status) status.textContent = "Atlas CSV download is unavailable in this browser. Open the static CSV dataset link instead.";
+        temporaryButtonFeedback(button, "Unavailable", "Atlas CSV download is unavailable in this browser.", "Download CSV", "Download full atlas data as CSV", "atlas-csv-download");
         showDownloadRecovery("The full CSV export was blocked. Open the static CSV dataset instead.", "#downloadCsvData");
         return;
       }
@@ -3838,6 +3843,7 @@
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
       if (status) status.textContent = "Catalog view download is unavailable in this browser. Share the catalog URL instead.";
+      temporaryButtonFeedback(button, "Unavailable", "Catalog view download is unavailable in this browser.", "JSON", "Export current catalog view as JSON", "catalog-download");
       showDownloadRecovery("The catalog export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogView", {
         href: routePath(catalogViewRouteUrl()),
         label: "Open current catalog view"
@@ -3867,6 +3873,7 @@
       const downloaded = triggerDownload(filename, `\uFEFF${catalogCsvPayload(visible)}`, "text/csv;charset=utf-8");
       if (!downloaded) {
         if (status) status.textContent = "Catalog CSV download is unavailable in this browser. Share the catalog URL instead.";
+        temporaryButtonFeedback(button, "Unavailable", "Catalog CSV download is unavailable in this browser.", "CSV", "Export current catalog view as CSV", "catalog-csv-download");
         showDownloadRecovery("The catalog CSV export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogCsv", {
           href: routePath(catalogViewRouteUrl()),
           label: "Open current catalog view"
@@ -4049,6 +4056,7 @@
     const downloaded = triggerDownload(filename, `\uFEFF${comparisonCsvPayload(comparison)}`, "text/csv;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "Comparison CSV download is unavailable in this browser. Share the comparison URL instead.";
+      temporaryButtonFeedback(button, "Unavailable", "Comparison CSV download is unavailable in this browser.", "CSV", "Download comparison data as CSV", "comparison-download");
       showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparison", {
         href: routePath(comparisonRouteUrl()),
         label: "Open comparison route"
@@ -4079,6 +4087,7 @@
       const downloaded = triggerDownload(filename, payload, "application/json");
       if (!downloaded) {
         if (status) status.textContent = "Comparison JSON download is unavailable in this browser. Share the comparison URL instead.";
+        temporaryButtonFeedback(button, "Unavailable", "Comparison JSON download is unavailable in this browser.", "JSON", "Download comparison data as JSON", "comparison-json-download");
         showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparisonJson", {
           href: routePath(comparisonRouteUrl()),
           label: "Open comparison route"

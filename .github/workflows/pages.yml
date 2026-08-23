@@ -482,6 +482,10 @@ jobs:
           for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'visibleLabel === "Unavailable"', 'button.classList.add("is-unavailable")', 'button.classList.remove("is-unavailable")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'const SYNC_ACTION_COOLDOWN_MS = 400;', 'function endAsyncAction(button, delay = 0)', 'if (delay > 0) window.setTimeout(release, delay);', 'button.setAttribute("aria-busy", "false");', 'function triggerDownload(filename, contents, type)', 'Download activation is unavailable', 'if (!downloaded)', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Study CSV downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON"', 'temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"', 'temporaryButtonFeedback(button, "Shared", `Study shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Catalog view shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Comparison shared: ${scope}`']) {
             if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
+          for (const token of ['temporaryButtonFeedback(button, "Unavailable", "SVG download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study JSON download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog view download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison JSON download is unavailable in this browser."']) {
+            if (!app.includes(token)) throw new Error('Blocked exports must synchronize the originating control with its Unavailable state: ' + token);
+          }
+          if (!styles.includes('.download-button.is-unavailable span.download-label::after { content: "Unavailable"; }') || !styles.includes('#downloadCsvData.is-unavailable span.download-label::after { content: "Unavailable"; }') || !styles.includes('#downloadStudyCsv.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }')) throw new Error('Blocked export controls must keep their compact Unavailable labels visible');
           for (const functionName of ['downloadDrawing()', 'downloadStudy()', 'downloadStudyCsv()', 'downloadData()', 'downloadCatalogView()', 'downloadCatalogCsv()', 'downloadComparisonCsv()', 'downloadComparisonJson()']) {
             const start = app.indexOf(`function ${functionName}`);
             const end = app.indexOf('\n  function ', start + 1);
@@ -4516,6 +4520,41 @@ jobs:
           if (downloaded || appended !== 1 || removed !== 1 || revoked !== 1) throw new Error('Guarded download did not recover from missing anchor activation');
           if (context.window.__atlasTest.safeDownloadPart('../St. Paul\'s: nave?') !== 'St-Pauls-nave' || context.window.__atlasTest.safeDownloadPart('///') !== 'study') throw new Error('Generated download filenames must normalize unsafe dataset IDs');
           console.log('Guarded download fallback smoke test passed.');
+          NODE
+
+      - name: Smoke-test blocked export feedback
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = {
+            window: {
+              CHURCH_GEOMETRY: [],
+              clearTimeout() {},
+              setTimeout() { return 1; }
+            },
+            document: {
+              querySelector() { return null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { temporaryButtonFeedback };\n})();');
+          vm.runInNewContext(app, context);
+          const classes = new Set();
+          const label = { textContent: 'CSV' };
+          const attributes = {};
+          const button = {
+            classList: {
+              add(value) { classes.add(value); },
+              remove(value) { classes.delete(value); }
+            },
+            querySelector() { return label; },
+            setAttribute(name, value) { attributes[name] = value; },
+            title: 'CSV'
+          };
+          context.window.__atlasTest.temporaryButtonFeedback(button, 'Unavailable', 'CSV download is unavailable.', 'CSV', 'Download CSV', 'test-csv');
+          if (!classes.has('is-complete') || !classes.has('is-unavailable') || label.textContent !== 'Unavailable' || attributes['aria-label'] !== 'CSV download is unavailable.' || button.title !== 'CSV download is unavailable.') throw new Error('Blocked export feedback did not synchronize visible, state, and accessible labels');
+          console.log('Blocked export feedback smoke test passed.');
           NODE
 
   deploy:
