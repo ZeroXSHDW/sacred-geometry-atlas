@@ -59,6 +59,8 @@ not_found = (site / "404.html").read_text()
 robots = (site / "robots.txt").read_text()
 sitemap = (site / "sitemap.xml").read_text()
 expected_page = [
+    '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />',
+    '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />',
     f'<link rel="canonical" href="{base_url}" />',
     '<link rel="manifest" href="site.webmanifest" />',
     '<link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />',
@@ -79,6 +81,8 @@ missing.extend(token for token in [
     f"<loc>{schema_target}</loc>",
 ] if token not in robots + sitemap)
 missing.extend(token for token in [
+    '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />',
+    '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />',
     f'<a class="home-link" data-site-root href="{base_url}">',
     f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
     f'<a class="home-link home-link-secondary" data-site-csv href="{base_url}data/geometry.csv">',

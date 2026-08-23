@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#111817" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />
@@ -32,8 +33,14 @@
         document.documentElement.dataset.theme = theme;
         document.documentElement.dataset.themeMode = mode;
         document.documentElement.style.colorScheme = theme;
-        const themeColor = document.querySelector('meta[name="theme-color"]');
-        if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f4f6f1" : "#111817");
+        const themeColors = typeof document.querySelectorAll === "function"
+          ? Array.from(document.querySelectorAll('meta[name="theme-color"]'))
+          : [];
+        if (!themeColors.length) {
+          const themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) themeColors.push(themeColor);
+        }
+        themeColors.forEach((themeColor) => themeColor.setAttribute("content", theme === "light" ? "#f4f6f1" : "#111817"));
       })();
     </script>
     <style>

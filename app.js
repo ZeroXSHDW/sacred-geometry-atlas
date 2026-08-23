@@ -280,7 +280,13 @@
     const themeModes = ["system", "light", "dark"];
     const label = $(".theme-toggle-label", button);
     const icon = $(".theme-toggle-icon", button);
-    const themeColor = document.querySelector('meta[name="theme-color"]');
+    const themeColors = typeof document.querySelectorAll === "function"
+      ? Array.from(document.querySelectorAll('meta[name="theme-color"]'))
+      : [];
+    if (!themeColors.length) {
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+      if (themeColor) themeColors.push(themeColor);
+    }
     const mediaQuery = typeof window.matchMedia === "function"
       ? window.matchMedia("(prefers-color-scheme: light)")
       : null;
@@ -297,7 +303,7 @@
       root.dataset.themeMode = normalizedMode;
       root.dataset.themeSource = normalizedMode === "system" ? "system" : "user";
       root.style.colorScheme = normalizedTheme;
-      if (themeColor) themeColor.setAttribute("content", normalizedTheme === "light" ? "#f4f6f1" : "#111817");
+      themeColors.forEach((themeColor) => themeColor.setAttribute("content", normalizedTheme === "light" ? "#f4f6f1" : "#111817"));
       if (label) label.textContent = modeLabel(normalizedMode);
       if (icon) icon.textContent = normalizedTheme === "light" ? "☼" : "◐";
       button.dataset.themeMode = normalizedMode;
