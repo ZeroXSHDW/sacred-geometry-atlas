@@ -1030,10 +1030,41 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .brand-subtitle { font-size: 0.5rem; }
   .header-actions { gap: 0.3rem; }
   .dataset-link { padding-inline: 0.6rem; }
+  .dataset-link,
+  .download-button { min-height: 40px; }
   .download-button { padding-inline: 0.65rem; }
   .download-button span:last-child { display: none; }
   .hero-stats { justify-content: space-between; gap: 0.75rem; }
   .share-button { padding: 0.5rem; }
+  .nav-button,
+  .segment-button,
+  .mode-button,
+  .layer-button,
+  .share-button,
+  .drawing-export,
+  .drawing-reset,
+  .filter-chip,
+  .filter-clear-all,
+  .compare-tray button,
+  .shortcut-guide summary,
+  .comparison-table-panel summary,
+  .study-provenance summary,
+  .study-context-note button,
+  .compare-selection-clear,
+  .compare-selection-chip,
+  .catalog-batch-action,
+  .clear-search,
+  .visual-empty-action,
+  .manual-copy-fallback-dismiss,
+  .action-recovery .hero-action,
+  .action-recovery-dismiss,
+  .noscript-artifact-actions a,
+  .noscript-link,
+  .method-dictionary-links a { min-height: 36px; }
+  .study-nav button { width: 40px; height: 40px; }
+  .zoom-control button { width: 36px; height: 36px; }
+  .search-field input,
+  .select-wrap select { min-height: 40px; }
   .share-button span:last-child { display: none; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .search-clear { width: 36px; height: 36px; }
