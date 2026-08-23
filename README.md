@@ -105,7 +105,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, and geometry-schema validation on pull requests and before GitHub Pages deployment.
-- The Pages deploy job assembles a curated `_site` artifact containing only the public atlas files before stamping absolute metadata, so repository instructions, CI configuration, and regeneration scripts are not published.
+- The Pages deploy job assembles a curated `_site` artifact containing only the public atlas files before stamping absolute metadata, so repository instructions, CI configuration, and regeneration scripts are not published; if a repository-level `CNAME` is present, the custom-domain file is preserved in that artifact.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
 - Forced-colors mode maps meter tracks, fills, chart guides, and the generated SVG drawing instrument to system colors so quantitative and geometric readings remain legible in high-contrast themes.
 - Search, filter, and manual-copy fields keep an explicit keyboard focus ring after their custom visual treatment replaces the browser outline, including in forced-colors mode.
@@ -170,6 +170,8 @@ The root document also includes machine-readable CollectionPage and Dataset meta
 The sitemap includes the landing page plus the published JSON, CSV, and JSON Schema artifacts, so the static research surface is discoverable without JavaScript.
 
 The workflow keeps pull-request validation read-only; Pages write and OIDC permissions are scoped to the non-pull-request deploy job.
+
+If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository root. The deploy job carries it into the curated public artifact without rewriting its value.
 
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
 
