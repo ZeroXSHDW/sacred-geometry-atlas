@@ -74,7 +74,7 @@ function staticCsv() {
   const headers = [
     "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
     `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
+    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL"
   ];
   const rows = payload.studies.map((study) => {
     const floorArea = positiveEstimate(study.floorAreaEstimate);
@@ -103,6 +103,7 @@ function staticCsv() {
       fixed(study.module),
       fixed(study.radius),
       floorArea !== null ? fixed(floorArea, 0) : "",
+      floorArea !== null ? "supplied floor-area estimate" : "length × span fallback",
       volume !== null ? fixed(volume, 0) : "",
       volumeBasis,
       fixed(study.symmetry, 2),
@@ -262,7 +263,7 @@ function noScriptFallback() {
       `length / span ${fixed(study.length / study.span, 2)}`,
       `height / span ${fixed(study.height / study.span, 2)}`,
       `symmetry ${fixed(study.symmetry, 2)}`,
-      floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}²` : "",
+      floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}² (supplied floor-area estimate)` : "floor area not supplied (length × span fallback)",
       volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : ""
     ].filter(Boolean).join(" · ");
     const reading = study.surfaceNote || study.exteriorNote || study.interiorNote || "No interpretive reading supplied.";

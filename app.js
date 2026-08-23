@@ -2029,6 +2029,10 @@
     const sectionRatio = study.height / study.span;
     const moduleRatio = study.module / study.span;
     const volume = volumeReading(study);
+    const analysisAreaLabel = $("#analysisAreaLabel");
+    if (analysisAreaLabel) analysisAreaLabel.textContent = floorArea.numeric !== null ? "floor area estimate" : "bounding area";
+    const analysisAreaBasis = $("#analysisAreaBasis");
+    if (analysisAreaBasis) analysisAreaBasis.textContent = floorArea.basis;
     $("#analysisArea").textContent = squareMeasure(area);
     $("#analysisSection").textContent = number(sectionRatio, 2);
     $("#analysisModule").textContent = number(moduleRatio, 2);
@@ -2246,7 +2250,8 @@
     const estimate = positiveEstimate(study.floorAreaEstimate);
     return {
       numeric: estimate,
-      value: estimate !== null ? `${Number(estimate).toLocaleString()} ${geometryUnitSymbol()}²` : "Not supplied"
+      value: estimate !== null ? `${Number(estimate).toLocaleString()} ${geometryUnitSymbol()}²` : "Not supplied",
+      basis: estimate !== null ? "supplied floor-area estimate" : "length × span fallback"
     };
   }
 
@@ -2267,6 +2272,7 @@
     return {
       floorAreaEstimate: floorArea.numeric,
       boundingArea: floorArea.numeric ?? study.length * study.span,
+      floorAreaBasis: floorArea.basis,
       ratios: {
         lengthToSpan: study.length / study.span,
         heightToSpan: study.height / study.span,
@@ -3264,7 +3270,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL"
     ];
     const rows = comparison.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -3290,6 +3296,7 @@
         number(study.module),
         number(study.radius),
         floorArea.numeric !== null ? number(floorArea.numeric, 0) : "",
+        floorArea.basis,
         volume.numeric !== null ? number(volume.numeric, 0) : "",
         volume.basis,
         number(study.symmetry, 2),
@@ -3317,7 +3324,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL"
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL"
     ];
     const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -3343,6 +3350,7 @@
         number(study.module),
         number(study.radius),
         floorArea.numeric !== null ? number(floorArea.numeric, 0) : "",
+        floorArea.basis,
         volume.numeric !== null ? number(volume.numeric, 0) : "",
         volume.basis,
         number(study.symmetry, 2),
@@ -3707,7 +3715,7 @@
       height: `Height (${unit})`,
       module: `Module (${unit})`,
       radius: `Radius (${unit})`,
-      area: `Floor area (${unit}²)`,
+      area: `Floor area estimate (${unit}²)`,
       volume: `Est. volume (${unit}³)`
     };
     $$('[data-unit-header]').forEach((header) => {
@@ -3729,6 +3737,9 @@
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentStudyAttribute = isActive ? ' aria-current="true"' : "";
+      const floorAreaLabel = floorArea.numeric !== null
+        ? `Floor area estimate: ${floorArea.value}; ${floorArea.basis}.`
+        : `Floor area estimate: Not supplied; ${floorArea.basis}.`;
       const studyLinkLabel = `Open ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;
       return `
         <tr>
@@ -3745,7 +3756,7 @@
           <td>${escapedLinearMeasure(study.module)}</td>
           <td>${escapedLinearMeasure(study.radius)}</td>
           <td>${number(study.symmetry, 2)}</td>
-          <td>${escapeHtml(floorArea.value)}</td>
+          <td aria-label="${escapeHtml(floorAreaLabel)}" title="${escapeHtml(floorArea.basis)}">${escapeHtml(floorArea.value)}</td>
           <td>${escapeHtml(volume.value)}</td>
           <td class="comparison-provenance">${escapeHtml(volume.basis)}</td>
         </tr>
