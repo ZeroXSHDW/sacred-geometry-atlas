@@ -65,6 +65,9 @@ const readingProfileScores = (study) => {
     ["repetition", Math.round(Math.min(100, (study.bayCount / 8) * 100))]
   ];
 };
+const readingProfileBasis = "linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count";
+const readingProfileNote = "Interpretive proportional tendencies, not empirical measurements.";
+const readingProfileExportContext = () => `${readingProfileBasis}; ${readingProfileNote}`;
 const studySource = (study) => study.source || "Unattributed proportional model";
 const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
 const statusDefinition = (study) => {
@@ -84,7 +87,7 @@ function staticCsv() {
   const headers = [
     "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
     `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL", "Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)"
+    "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL", "Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"
   ];
   const rows = payload.studies.map((study) => {
     const floorArea = positiveEstimate(study.floorAreaEstimate);
@@ -126,7 +129,8 @@ function staticCsv() {
       readingProfile.linearity,
       readingProfile.verticality,
       readingProfile.radiality,
-      readingProfile.repetition
+      readingProfile.repetition,
+      readingProfileExportContext()
     ];
   });
   return `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\n")}\n`;

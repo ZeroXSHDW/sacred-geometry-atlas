@@ -2273,18 +2273,22 @@
     ];
   }
 
+  const READING_PROFILE_BASIS = "linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count";
+  const READING_PROFILE_NOTE = "Interpretive proportional tendencies, not empirical measurements.";
+  const readingProfileExportContext = () => `${READING_PROFILE_BASIS}; ${READING_PROFILE_NOTE}`;
+
   function readingProfileValues(study, separator = "; ") {
     return profileScores(study).map(([label, score]) => `${label} ${score}/100`).join(separator);
   }
 
   function readingProfileSummary(study) {
-    return `Reading profile: ${readingProfileValues(study)}. Interpretive proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.`;
+    return `Reading profile: ${readingProfileValues(study)}. ${READING_PROFILE_NOTE} Basis: ${READING_PROFILE_BASIS}.`;
   }
 
   function comparisonReadingProfileSummary(comparison) {
     if (!comparison.length) return "";
     const values = comparison.map((study) => `${studyShortName(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
-    return ` Reading profiles (0–100, interpretive): ${values}. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.`;
+    return ` Reading profiles (0–100, interpretive): ${values}. Basis: ${READING_PROFILE_BASIS}; ${READING_PROFILE_NOTE}`;
   }
 
   function derivedStudyReadings(study) {
@@ -2303,7 +2307,9 @@
       symmetryIndex: study.symmetry,
       volumeEstimate: volume.numeric,
       volumeBasis: volume.basis,
-      readingProfile: Object.fromEntries(profileScores(study).map(([label, score]) => [label, score]))
+      readingProfile: Object.fromEntries(profileScores(study).map(([label, score]) => [label, score])),
+      readingProfileBasis: READING_PROFILE_BASIS,
+      readingProfileNote: READING_PROFILE_NOTE
     };
   }
 
@@ -3288,7 +3294,7 @@
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
     const schemaUrl = publishedGeometrySchemaUrl();
-    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)"];
+    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
@@ -3332,7 +3338,8 @@
         readingProfile.linearity,
         readingProfile.verticality,
         readingProfile.radiality,
-        readingProfile.repetition
+        readingProfile.repetition,
+        readingProfileExportContext()
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -3345,7 +3352,7 @@
     const statusDefinitions = dataStatusDefinitions();
     const unit = geometryUnitSymbol();
     const schemaUrl = publishedGeometrySchemaUrl();
-    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)"];
+    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
     const comparisonSelection = comparisonSelectionExportContext();
     const comparisonIds = comparisonSelection.map(({ id }) => id).join(",");
     const comparisonContext = comparisonSelectionCsvText(comparisonSelection);
@@ -3394,7 +3401,8 @@
         readingProfile.linearity,
         readingProfile.verticality,
         readingProfile.radiality,
-        readingProfile.repetition
+        readingProfile.repetition,
+        readingProfileExportContext()
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";

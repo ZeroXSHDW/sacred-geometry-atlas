@@ -109,11 +109,12 @@ try:
 except (OSError, csv.Error) as error:
     fail(f"Published CSV dataset could not be read: {error}")
 
-required_csv_fields = {"ID", "Status", "Route", "Schema URL"}
+required_csv_fields = {"ID", "Status", "Route", "Schema URL", "Reading profile basis"}
 if not reader.fieldnames or not required_csv_fields.issubset(reader.fieldnames):
     fail("Published CSV is missing its route, status, or schema columns")
 if len(rows) != len(studies):
     fail(f"Published CSV has {len(rows)} records; expected {len(studies)}")
+expected_profile_context = "linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count; Interpretive proportional tendencies, not empirical measurements."
 for study, row in zip(studies, rows):
     if row.get("ID") != study.get("id") or row.get("Status") != study.get("status"):
         fail(f"Published CSV row does not match dataset record: {study.get('id')}")
@@ -123,5 +124,7 @@ for study, row in zip(studies, rows):
         fail(f"Published CSV route is not direct and deterministic for {study.get('id')}")
     if row.get("Schema URL") != schema_target:
         fail(f"Published CSV schema URL is not absolute for {study.get('id')}")
+    if row.get("Reading profile basis") != expected_profile_context:
+        fail(f"Published CSV reading-profile basis is missing or inconsistent for {study.get('id')}")
 
 print(f"Published Pages artifact contract verified: {len(studies)} study rows and {len(actual_files)} public files.")
