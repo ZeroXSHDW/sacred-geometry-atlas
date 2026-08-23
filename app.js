@@ -1468,7 +1468,7 @@
     if (state.filterEra !== "all") filters.push({ key: "era", label: `Era: ${$("#filterEra").selectedOptions[0].textContent}` });
     if (state.filterAxis !== "all") filters.push({ key: "axis", label: `Axis: ${$("#filterAxis").selectedOptions[0].textContent}` });
     if (state.filterStatus !== "all") filters.push({ key: "status", label: `Data status: ${$("#filterStatus").selectedOptions[0].textContent}` });
-    if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });
+    if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${sortSelectLabel(state.sort, state.sortDirection)}` });
     const activeSettingsLabel = filters.length
       ? `${filters.length} active catalog ${filters.length === 1 ? "setting" : "settings"}`
       : "Active catalog settings";
@@ -1480,7 +1480,7 @@
             <span>${escapeHtml(label)}</span><span aria-hidden="true">×</span>
           </button>
         `).join("")}
-        <button class="filter-clear-all" type="button" data-clear-filters aria-label="Clear all active filters">Clear all</button>`
+        <button class="filter-clear-all" type="button" data-clear-filters aria-label="Clear all active catalog settings">Clear all</button>`
       : "";
   }
 
