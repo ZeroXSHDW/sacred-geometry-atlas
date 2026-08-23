@@ -80,13 +80,6 @@
     <link rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json" />
   </head>
   <body class="no-js">
-    <script>
-      document.body.classList.add("js-runtime");
-      document.addEventListener("DOMContentLoaded", () => {
-        const recoveryReloads = document.querySelectorAll("[data-recovery-reload]");
-        if (window.location && typeof window.location.href === "string") recoveryReloads.forEach((recoveryReload) => { recoveryReload.href = window.location.href; });
-      }, { once: true });
-    </script>
     <a class="skip-link skip-link-app" href="#main-content">Skip to content</a>
     <a class="skip-link skip-link-runtime" href="#runtimeFallback">Skip to recovery</a>
     <div class="runtime-fallback" id="runtimeFallback" role="main" aria-labelledby="runtimeFallbackHeading" tabindex="-1">
@@ -966,6 +959,11 @@
       <p>Static, responsive, and GitHub Pages ready</p>
     </footer>
 
+    <script>
+      document.body.classList.add("js-runtime");
+      const recoveryReloads = document.querySelectorAll("[data-recovery-reload]");
+      if (window.location && typeof window.location.href === "string") recoveryReloads.forEach((recoveryReload) => { recoveryReload.href = window.location.href; });
+    </script>
     <script defer src="data/geometry.js"></script>
     <script defer src="app.js"></script>
   </body>
