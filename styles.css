@@ -1074,10 +1074,12 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 .method-note p { margin-bottom: 0; color: var(--ink-soft); font-size: 0.7rem; line-height: 1.65; }
 .method-note strong { color: var(--coral); }
 
-.site-footer { display: flex; align-items: center; justify-content: space-between; min-height: 100px; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; }
+.site-footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 100px; border-top: 1px solid var(--line); color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; }
+.site-footer-identity { display: grid; gap: 0.3rem; }
 .site-footer p { margin: 0; }
-.site-footer a { color: var(--ink-soft); text-decoration: none; }
-.site-footer a:hover { color: var(--amber); }
+.site-footer-links { display: flex; flex-wrap: wrap; justify-content: end; gap: 0.45rem 0.8rem; }
+.site-footer a { color: var(--ink-soft); text-decoration: none; text-underline-offset: 0.2em; }
+.site-footer a:hover, .site-footer a:focus-visible { color: var(--amber); text-decoration: underline; }
 .footer-mark { margin-right: 0.35rem; color: var(--amber); }
 
 [hidden] { display: none !important; }
@@ -1204,7 +1206,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-dictionary-intro { align-items: start; justify-content: start; flex-direction: column; gap: 0.75rem; max-width: none; }
   .method-dictionary-intro > p { max-width: none; text-align: left; }
   .method-dictionary-grid { grid-template-columns: 1fr 1fr; }
-  .site-footer { align-items: start; flex-direction: column; justify-content: center; gap: 0.6rem; padding: 1.5rem 0; }
+  .site-footer { align-items: start; flex-direction: column; justify-content: center; gap: 1rem; padding: 1.5rem 0; }
+  .site-footer-links { justify-content: start; gap: 0.55rem 0.9rem; }
 }
 
 @media (max-width: 430px) {
@@ -1470,6 +1473,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 
 @media (forced-colors: active) {
   .site-header { background: Canvas; }
+  .site-footer { border-top-color: ButtonText; }
+  .site-footer a { color: LinkText; }
   .back-to-top { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .back-to-top:hover { border-color: Highlight; color: HighlightText; background: Highlight; }
   .back-to-top span:first-child { color: Highlight; }

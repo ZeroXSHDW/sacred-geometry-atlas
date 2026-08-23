@@ -395,8 +395,16 @@ function staticFallbackDocument(source) {
     </header>
     ${noScriptContent}
     <footer class="site-footer">
-      <p><span class="footer-mark" aria-hidden="true">✳</span> Sacred Geometry Atlas</p>
-      <p>Static collection index · GitHub Pages ready</p>
+      <div class="site-footer-identity">
+        <p><span class="footer-mark" aria-hidden="true">✳</span> Sacred Geometry Atlas</p>
+        <p>Static collection index · GitHub Pages ready</p>
+      </div>
+      <nav class="site-footer-links" aria-label="Atlas resources">
+        <a href="./">Interactive atlas</a>
+        <a href="data/geometry.json">JSON</a>
+        <a href="data/geometry.csv">CSV</a>
+        <a href="data/geometry.schema.json">Schema</a>
+      </nav>
     </footer>
   </body>
 </html>
