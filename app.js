@@ -241,12 +241,12 @@
       const surface = state.surface === "interior" ? "Inside" : "Outside";
       const mode = state.mode[0].toUpperCase() + state.mode.slice(1);
       const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";
-      document.title = studyShortName(activeStudy()) + " · " + surface + " " + mode + catalogSuffix + " · Sacred Geometry Atlas";
+      document.title = studyIdentityLabel(activeStudy()) + " · " + surface + " " + mode + catalogSuffix + " · Sacred Geometry Atlas";
       return;
     }
     if (page === "compare" && state.compareIds.length >= 2) {
       const selected = comparisonStudies();
-      const label = selected.slice(0, 2).map(studyShortName).join(" + ");
+      const label = selected.slice(0, 2).map((study) => studyIdentityLabel(study)).join(" + ");
       const extra = selected.length > 2 ? ` +${selected.length - 2}` : "";
       document.title = `Compare ${label}${extra} · Sacred Geometry Atlas`;
       return;
@@ -254,7 +254,7 @@
     if (page === "compare" && state.compareIds.length === 1) {
       const pendingStudy = selectedComparisonStudies()[0];
       document.title = pendingStudy
-        ? `Compare · ${studyShortName(pendingStudy)} selected · Sacred Geometry Atlas`
+        ? `Compare · ${studyIdentityLabel(pendingStudy)} selected · Sacred Geometry Atlas`
         : "Compare · 1 selected · Sacred Geometry Atlas";
       return;
     }
@@ -264,7 +264,7 @@
       const methodScope = catalogScopeLabel();
       const catalogSuffix = methodScope === "the full collection" ? "" : ` · ${methodScope}`;
       document.title = contextStudy
-        ? `Method · ${studyShortName(contextStudy)}${catalogSuffix} · Sacred Geometry Atlas`
+        ? `Method · ${studyIdentityLabel(contextStudy)}${catalogSuffix} · Sacred Geometry Atlas`
         : `Method${catalogSuffix} · Sacred Geometry Atlas`;
       return;
     }
@@ -1563,10 +1563,10 @@
         : "Move between studies; no studies visible");
     previous.disabled = !canNavigate;
     next.disabled = !canNavigate;
-    previous.setAttribute("aria-label", previousStudy ? `Previous study: ${previousStudy.name}` : "Previous study");
-    next.setAttribute("aria-label", nextStudy ? `Next study: ${nextStudy.name}` : "Next study");
-    previous.title = previousStudy ? `Previous: ${previousStudy.name}` : "Previous study";
-    next.title = nextStudy ? `Next: ${nextStudy.name}` : "Next study";
+    previous.setAttribute("aria-label", previousStudy ? `Previous study: ${studyIdentityLabel(previousStudy)}` : "Previous study");
+    next.setAttribute("aria-label", nextStudy ? `Next study: ${studyIdentityLabel(nextStudy)}` : "Next study");
+    previous.title = previousStudy ? `Previous: ${studyIdentityLabel(previousStudy)}` : "Previous study";
+    next.title = nextStudy ? `Next: ${studyIdentityLabel(nextStudy)}` : "Next study";
   }
 
   function cycleStudy(direction, options = {}) {
@@ -2058,7 +2058,7 @@
     if (measureAccessible) measureAccessible.textContent = measureAccessibleText;
     if (measureSummary && !measureVisible) measureSummary.textContent = measureText;
     const printRoute = $("#printRoute");
-    renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id), `Open ${studyShortName(study)} route in Atlas`);
+    renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id), `Open ${studyIdentityLabel(study)} route in Atlas`);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
     $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
     $("#activeIndex").textContent = study.index;
@@ -2097,7 +2097,7 @@
     const button = $("#methodBackToStudy");
     if (!button) return;
     const canOpenStudy = Boolean(study && visible.some((candidate) => candidate.id === study.id));
-    const label = canOpenStudy ? `Open ${studyShortName(study)} in Atlas` : "Return to Atlas catalog";
+    const label = canOpenStudy ? `Open ${studyIdentityLabel(study)} in Atlas` : "Return to Atlas catalog";
     button.setAttribute("aria-label", label);
     button.title = label;
     const catalogRoute = catalogViewRouteUrl();
@@ -2109,7 +2109,7 @@
   function renderMethodContext(study = activeStudy(), visible = visibleStudies()) {
     const methodRoute = $("#methodRoute");
     if (methodRoute) {
-      const routeLabel = study ? `Open method route for ${studyShortName(study)}` : "Open method route";
+      const routeLabel = study ? `Open method route for ${studyIdentityLabel(study)}` : "Open method route";
       renderRouteLink(methodRoute, ".method-route-link", methodNavigationUrl(), routeLabel);
     }
     const target = $("#methodContextNote");
@@ -2123,8 +2123,8 @@
     }
     const isVisible = visible.some((candidate) => candidate.id === study.id);
     const context = isVisible
-      ? `Current study · ${studyShortName(study)}`
-      : `Study context · ${studyShortName(study)} · outside current catalog`;
+      ? `Current study · ${studyIdentityLabel(study)}`
+      : `Study context · ${studyIdentityLabel(study)} · outside current catalog`;
     target.textContent = scopeNote ? `${context} · ${scopeNote}` : context;
   }
 
@@ -2138,7 +2138,7 @@
     if (text) text.textContent = outsideCatalog ? "This study is outside the current catalog view." : "";
     if (action) {
       action.hidden = !outsideCatalog;
-      const label = outsideCatalog ? `Show ${studyShortName(study)} in catalog` : "Show current study in catalog";
+      const label = outsideCatalog ? `Show ${studyIdentityLabel(study)} in catalog` : "Show current study in catalog";
       action.setAttribute("aria-label", label);
       action.title = label;
     }
@@ -2592,7 +2592,7 @@
       const scopeContext = catalogScope === "the full collection" ? "" : ` for ${catalogScope}`;
       const shareUrl = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
       const sharePayload = {
-        title: contextStudy ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas` : "Sacred Geometry Atlas · Method guide",
+        title: contextStudy ? `Method · ${studyIdentityLabel(contextStudy)} · Sacred Geometry Atlas` : "Sacred Geometry Atlas · Method guide",
         text: `Read the Method guide${contextStudy ? ` alongside ${studyIdentityLabel(contextStudy)}` : ""}${scopeContext} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions. ${readingProfileGuideShareText()}`,
         url: shareUrl
       };
