@@ -423,6 +423,8 @@ h3 { letter-spacing: -0.04em; }
 .select-wrap::after { position: absolute; top: 1.62rem; right: 0.65rem; color: var(--amber); content: '⌄'; pointer-events: none; }
 .select-wrap select { width: 100%; padding: 0.6rem 1.35rem 0.6rem 0.65rem; border: 1px solid var(--line); border-radius: var(--radius); outline: none; color: var(--ink-soft); background: var(--panel); font-family: var(--mono); font-size: 0.57rem; appearance: none; }
 .select-wrap select:focus { border-color: var(--amber); }
+.catalog-search-note { margin: 0.5rem 0 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; line-height: 1.55; }
+.catalog-search-note kbd { padding: 0.08rem 0.22rem; border: 1px solid var(--line-strong); color: var(--amber); background: var(--amber-soft); font-family: inherit; font-size: 0.9em; }
 .catalog-filter-note { margin: 0.6rem 0 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; line-height: 1.5; }
 .catalog-data-note { margin: 0.6rem 0 0; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; line-height: 1.5; }
 .catalog-export-note { margin: 0.6rem 0 0; color: var(--teal); font-family: var(--mono); font-size: 0.5rem; line-height: 1.5; }
@@ -1286,6 +1288,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .search-clear { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .search-clear:hover,
   .search-clear:focus-visible { border-color: Highlight; color: HighlightText; background: Highlight; }
+  .catalog-search-note kbd { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .method-dictionary-links a:hover { color: HighlightText; background: Highlight; }
   .method-dictionary-item dt,
@@ -1493,6 +1496,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body.print-catalog .catalog-batch-actions,
   body.print-catalog .compare-tray,
   body.print-catalog .catalog-footnote,
+  body.print-catalog .catalog-search-note,
   body.print-catalog .catalog-filter-note,
   body.print-catalog .search-field,
   body.print-catalog .tool-row,
