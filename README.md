@@ -41,7 +41,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog scope labels carry those same prefixes into result announcements, document titles, citations, shares, print feedback, and export provenance.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
 - The Atlas comparison tray previews selected study names and a compact schema-status summary, including selections outside the current filter view; its live selection label keeps each study's status attached for assistive technology.
-- Contextual empty states keep filtered-out catalog views understandable and recoverable.
+- Contextual empty states keep filtered-out catalog views understandable and recoverable, with a clear catalog-settings reset that names its search, filter, and sort scope.
 - Catalog and comparison cards keep typology, place, era, envelope dimensions, radius, exact geometric axis, emphasis, and dedicated schema-backed provenance badges visible at a glance; their accessible labels include the curated study index, explicit data-status name and definition, source, and source note plus the same radius context, and the active study header now associates its index, status, axis, envelope, and source context with its focusable title.
 - Human-facing axis labels normalize source values that already include the word “axis,” keeping catalog cards and filters, comparison, no-script, share, citation, and assistive labels consistent while raw exports retain the source value.
 - Valid deep links keep their requested study open even when the current catalog filters hide it, with an explicit out-of-scope notice and a one-click return to the visible catalog.

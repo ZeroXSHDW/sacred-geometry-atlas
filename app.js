@@ -1771,7 +1771,7 @@
     const { scroll = true, focus = false } = options;
     const visible = visibleStudies();
     if (!visible.length) {
-      announceKeyboard("No studies are visible. Clear the catalog filters to continue.");
+      announceKeyboard("No studies are visible. Clear catalog settings to continue.");
       return;
     }
     const currentIndex = visible.findIndex((study) => study.id === state.activeId);
@@ -2222,14 +2222,14 @@
     const message = $("#visualEmptyMessage");
     if (message && isEmpty) {
       message.textContent = activeStudyOutsideCatalog
-        ? `${emptyCatalogMessage()} Clear the catalog filters to restore ${studyShortName(study)}.`
-        : `${emptyCatalogMessage()} Clear filters to restore a study drawing.`;
+        ? `${emptyCatalogMessage()} Clear the catalog settings to restore ${studyShortName(study)}.`
+        : `${emptyCatalogMessage()} Clear catalog settings to restore a study drawing.`;
     }
     const recovery = $("#clearVisualFilters");
     if (recovery) {
       const label = activeStudyOutsideCatalog
-        ? `Clear catalog filters and show ${studyShortName(study)}`
-        : "Clear catalog filters";
+        ? `Clear catalog settings and show ${studyShortName(study)}`
+        : "Clear catalog settings";
       recovery.setAttribute("aria-label", label);
       recovery.title = label;
     }
