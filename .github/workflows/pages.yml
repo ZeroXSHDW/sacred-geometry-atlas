@@ -126,7 +126,7 @@ jobs:
           if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v2"') || !serviceWorker.includes('icons/atlas-180.png') || !serviceWorker.includes('icons/atlas-192.png') || !serviceWorker.includes('icons/atlas-512.png') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('function navigationFallback(request)') || !serviceWorker.includes('const isAppShell = requestUrl.pathname === scopePath') || !serviceWorker.includes('new URL(isAppShell ? "index.html" : "404.html", scopeUrl).href') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell, offline 404 recovery, install icons, and network-first fetch strategy');
           if (!workflow.includes('PAGES_CACHE_NAME: sacred-geometry-atlas-${{ github.sha }}') || !workflow.includes('source_cache_marker') || !pagesVerifier.includes('PAGES_CACHE_NAME') || !pagesVerifier.includes('sacred-geometry-atlas-(?:v2|[0-9a-f]{40})')) throw new Error('Pages deployment must stamp and verify a revision-specific offline-shell cache name');
           if (!app.includes('function registerServiceWorker()') || !app.includes('serviceWorker.register(workerUrl.href, { scope })') || !app.includes('registerServiceWorker();')) throw new Error('Atlas must register the progressive offline app shell');
-          if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite connection notice with print and forced-colors styling');
+          if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('const setConnectionState = (connectionState) =>') || !app.includes('setConnectionState("offline")') || !app.includes('setConnectionState("online")') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[data-connection-state="online"]') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite, state-aware connection notice with print and forced-colors styling');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('sortSelectLabel(state.sort, state.sortDirection)') || !app.includes('aria-label="Clear all active catalog settings"') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
           if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
@@ -755,6 +755,56 @@ jobs:
           renderHeroProvenance();
           if (elements.get('#heroDataNoteText').textContent !== '05 schematic · 01 measured' || elements.get('#heroDataNoteDefinition').textContent !== 'Schematic = Illustrative proportions; not a measured survey. Measured = Custom measured definition.' || elements.get('#heroDataNote').attributes['data-status'] !== 'mixed' || !elements.get('#heroDataNote').attributes['aria-label'].includes('Measured = Custom measured definition.')) throw new Error('Hero provenance summary did not follow a changed record status, schema definition, or mixed-state cue');
           console.log('Hero provenance summary smoke test passed.');
+          NODE
+      - name: Smoke-test connection recovery status
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const listeners = {};
+          const timers = [];
+          const cleared = [];
+          const status = {
+            hidden: true,
+            attributes: {},
+            setAttribute(name, value) { this.attributes[name] = value; }
+          };
+          const message = { textContent: '' };
+          const context = {
+            console,
+            navigator: { onLine: false },
+            window: {
+              CHURCH_GEOMETRY: [],
+              CHURCH_GEOMETRY_SCHEMA: { statusValues: [] },
+              addEventListener(name, handler) { listeners[name] = handler; },
+              clearTimeout(id) { cleared.push(id); },
+              setTimeout(handler) {
+                const timer = { id: timers.length + 1, handler };
+                timers.push(timer);
+                return timer.id;
+              }
+            },
+            document: {
+              querySelector(selector) {
+                if (selector === '#connectionStatus') return status;
+                if (selector === '#connectionStatusText') return message;
+                return null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { setupConnectionStatus };\n})();');
+          vm.runInNewContext(app, context);
+          context.window.__atlasTest.setupConnectionStatus();
+          if (!listeners.offline || !listeners.online || status.hidden || status.attributes['data-connection-state'] !== 'offline' || message.textContent !== 'Offline mode · cached Atlas shell and data are available.') throw new Error('Initial offline state did not expose the cached-shell recovery notice');
+          listeners.online();
+          if (status.hidden || status.attributes['data-connection-state'] !== 'online' || message.textContent !== 'Back online · fresh content will be used for the next request.' || timers.length !== 1) throw new Error('Online recovery did not expose the positive state or schedule its dismissal');
+          listeners.offline();
+          if (status.hidden || status.attributes['data-connection-state'] !== 'offline' || cleared[0] !== 1 || message.textContent !== 'Offline mode · cached Atlas shell and data are available.') throw new Error('A return to offline mode did not replace the pending online dismissal');
+          listeners.online();
+          timers[timers.length - 1].handler();
+          if (!status.hidden || cleared[cleared.length - 1] !== 2) throw new Error('Online recovery did not hide itself after its timeout');
+          console.log('Connection recovery status smoke test passed.');
           NODE
       - name: Validate high-contrast drawing affordances
         run: |

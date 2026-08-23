@@ -394,12 +394,17 @@
     const message = $("#connectionStatusText");
     if (!status || !message || typeof window === "undefined" || typeof window.addEventListener !== "function") return;
     let recoveryTimer;
+    const setConnectionState = (connectionState) => {
+      if (!status || typeof status.setAttribute !== "function") return;
+      status.setAttribute("data-connection-state", connectionState);
+    };
     const clearRecoveryTimer = () => {
       if (recoveryTimer && typeof window.clearTimeout === "function") window.clearTimeout(recoveryTimer);
       recoveryTimer = null;
     };
     const showOffline = () => {
       clearRecoveryTimer();
+      setConnectionState("offline");
       message.textContent = "Offline mode · cached Atlas shell and data are available.";
       status.hidden = false;
     };
@@ -409,6 +414,7 @@
     };
     const showOnline = () => {
       clearRecoveryTimer();
+      setConnectionState("online");
       message.textContent = "Back online · fresh content will be used for the next request.";
       status.hidden = false;
       if (typeof window.setTimeout === "function") recoveryTimer = window.setTimeout(hideStatus, 4200);
