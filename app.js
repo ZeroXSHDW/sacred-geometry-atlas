@@ -2273,9 +2273,18 @@
     ];
   }
 
+  function readingProfileValues(study, separator = "; ") {
+    return profileScores(study).map(([label, score]) => `${label} ${score}/100`).join(separator);
+  }
+
   function readingProfileSummary(study) {
-    const scores = profileScores(study).map(([label, score]) => `${label} ${score}/100`).join("; ");
-    return `Reading profile: ${scores}. Interpretive proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.`;
+    return `Reading profile: ${readingProfileValues(study)}. Interpretive proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.`;
+  }
+
+  function comparisonReadingProfileSummary(comparison) {
+    if (!comparison.length) return "";
+    const values = comparison.map((study) => `${studyShortName(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
+    return ` Reading profiles (0–100, interpretive): ${values}. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.`;
   }
 
   function derivedStudyReadings(study) {
@@ -2460,7 +2469,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Reading profile (interpretive 0–100): ${readingProfileValues(study, ", ")}. Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
         url: shareUrl.href
       };
 
@@ -2770,7 +2779,7 @@
       ? ` Sources: ${comparison.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
       : "";
     const schema = geometrySchema();
-    return `Sacred Geometry Atlas. Comparison of ${records}.${provenance} Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
+    return `Sacred Geometry Atlas. Comparison of ${records}.${provenance}${comparisonReadingProfileSummary(comparison)} Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
   }
 
   async function copyComparisonCitation() {
@@ -2808,7 +2817,7 @@
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
     const dimensions = `${linearMeasure(study.length)} length × ${linearMeasure(study.span)} span × ${linearMeasure(study.height)} height; ${study.bayCount} bays at ${linearMeasure(study.module)} module; radius ${linearMeasure(study.radius)}; symmetry ${number(study.symmetry, 2)}`;
-    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${study.name} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${readingProfileSummary(study)} ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
