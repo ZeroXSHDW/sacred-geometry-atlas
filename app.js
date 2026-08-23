@@ -3625,6 +3625,7 @@
 
   function renderCompare() {
     renderCharts();
+    renderProfileCompare();
     renderGeometryCompare();
     renderComparisonTable();
     renderCompareSelection();
@@ -3878,6 +3879,25 @@
         <span class="module-value" aria-hidden="true">${escapedLinearMeasure(study.module)}</span>
       </div>
     `;
+    }).join("");
+  }
+
+  function renderProfileCompare() {
+    const target = $("#profileCompare");
+    if (!target) return;
+    const comparison = comparisonStudies();
+    target.setAttribute("aria-label", "Interpretive reading profiles; each row identifies axis, schema-defined data status, and source provenance.");
+    target.innerHTML = comparison.map((study) => {
+      const status = studyDataLabel(study);
+      const statusLabel = statusDisplayName(status);
+      const axisLabel = studyAxisLabel(study);
+      const isActive = study.id === state.activeId;
+      const currentClass = isActive ? " is-active" : "";
+      const currentDescription = isActive ? ' aria-describedby="comparisonCurrentStudyContext"' : "";
+      const currentCue = isActive ? '<span class="chart-current" title="Current Atlas study">current</span>' : "";
+      const currentLabel = isActive ? " This is the current Atlas study." : "";
+      const label = `Interpretive reading profile for ${studyShortName(study)}; ${axisLabel}; ${statusLabel} (${status}) record: ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
+      return `<div class="profile-compare-row${currentClass}" role="listitem" aria-label="${escapeHtml(label)}"${currentDescription}><span class="profile-compare-name" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="profile-compare-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}</span></span><span class="profile-compare-grid">${profileScores(study).map(([profile, score]) => `<span class="profile-compare-cell"><span class="profile-compare-label" aria-hidden="true">${escapeHtml(profile)}</span><span class="profile-compare-track" role="meter" aria-label="${escapeHtml(`${studyShortName(study)} ${profile}`)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100"><i class="profile-compare-fill" style="width:${score}%"></i></span><span class="profile-compare-value" aria-hidden="true">${score}</span></span>`).join("")}</span></div>`;
     }).join("");
   }
 

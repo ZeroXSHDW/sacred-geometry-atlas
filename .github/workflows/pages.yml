@@ -380,6 +380,7 @@ jobs:
             if (!html.includes(token)) throw new Error('Comparison status explanation is not wired to every visual surface: ' + token);
           }
           if (!html.includes('<p class="chart-scale" id="ratioChartScale">Scale 0 → 2.71 · active comparison maximum</p>') || !html.includes('<p class="chart-scale" id="heightChartScale">Scale 0 → 1.53 · active comparison maximum</p>') || !html.includes('<p class="chart-scale" id="moduleChartScale">Scale 0 → 11.5 m · active comparison maximum</p>') || !html.includes('<p class="sr-only" id="comparisonChartScaleStatus" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('<div class="chart-axis-guide bar-axis-guide" id="ratioChartAxis" aria-hidden="true">') || !html.includes('<div class="chart-axis-guide bar-axis-guide" id="heightChartAxis" aria-hidden="true">') || !html.includes('<div class="chart-axis-guide module-axis-guide" id="moduleChartAxis" aria-hidden="true">') || !app.includes('const ratioScale = $("#ratioChartScale");') || !app.includes('const chartScaleStatus = $("#comparisonChartScaleStatus");') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} ${unit}.`;') || !app.includes('const ratioAxisMid = $("#ratioChartAxisMid");') || !app.includes('ratioAxisMid.textContent = number(maxRatio / 2, 2);') || !app.includes('heightAxisMid.textContent = number(maxHeightRatio / 2, 2);') || !app.includes('moduleAxisMid.textContent = `${number(maxModule / 2, 2)} ${unit}`;') || !app.includes('ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;') || !app.includes('heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;') || !app.includes('moduleScale.textContent = `Scale 0 → ${number(maxModule)} ${unit} · active comparison maximum`;') || !app.includes('class="chart-study-meta"') || !styles.includes('.chart-axis-guide {') || !styles.includes('.bar-axis-guide {') || !styles.includes('.module-axis-guide {') || !styles.includes('.chart-scale {') || !styles.includes('.chart-study-meta {')) throw new Error('Comparison charts must expose dynamic axis, live range announcements, maximum-scale, and study-context information');
+          if (!html.includes('id="profile-chart-heading"') || !html.includes('<div class="profile-compare-head" aria-hidden="true">') || !html.includes('id="profileCompare" role="list"') || !html.includes('id="profileChartScale">Scale 0 → 100 · interpretive reading score</p>') || !app.includes('function renderProfileCompare()') || !app.includes('renderProfileCompare();') || !app.includes('profileScores(study).map') || !app.includes('class="profile-compare-fill"') || !app.includes('aria-valuetext="${score} out of 100"') || !styles.includes('.profile-compare {') || !styles.includes('.profile-compare-row {') || !styles.includes('.profile-compare-track {') || !styles.includes('.profile-compare-fill {')) throw new Error('Comparison charts must include the accessible interpretive reading-profile surface');
           if (!styles.includes('.compare-status-note {') || !html.includes('<span class="sr-only" id="comparisonTableHelp">When the table is focused, use the Left and Right Arrow keys or Home and End to scroll horizontally.</span>') || !html.includes('<span class="sr-only" id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"></span>') || !html.includes('<p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>') || !html.includes('Study names open in Atlas.') || !styles.includes('.comparison-table-copy {') || !styles.includes('.comparison-table-hint {')) throw new Error('Comparison status terminology and table instructions must be exposed');
           if (!html.includes('<caption id="comparisonTableCaption">Recorded study values for the full collection; each row includes its data status and source note.</caption>') || !app.includes('Recorded study values for') || !app.includes('<td class="comparison-status" data-status="${escapeHtml(status)}" aria-label="${escapeHtml(`${statusLabel} (${status}): ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</td>') || !app.includes('<td class="comparison-source"><strong>${escapeHtml(studySource(study))}</strong><span>${escapeHtml(studySourceNote(study))}</span></td>') || !app.includes('const studyDataLabel = (study) =>') || !styles.includes('.comparison-table tbody .comparison-status') || !styles.includes('.comparison-table tbody .comparison-status[data-status="measured"]') || !styles.includes('.comparison-table tbody .comparison-source') || !styles.includes('text-transform: uppercase') || !app.includes('target.setAttribute("aria-label", "Study envelopes; each card identifies its schema-defined data status, source, and source note.")')) throw new Error('Comparison surfaces must expose per-study data status, source provenance, and consistent provenance styling');
           if (!styles.includes('.comparison-table thead th:first-child, .comparison-table tbody th { position: sticky;') || !styles.includes('box-shadow: 1px 0 0 var(--line);') || !styles.includes('.comparison-table thead th { position: sticky; top: 7rem;') || !styles.includes('box-shadow: 0 1px 0 var(--line);') || !styles.includes('body.print-comparison .comparison-table thead th { position: static; background: #fff; box-shadow: none; }')) throw new Error('Comparison table must keep study labels and column headings visible while scrolling without affecting print output');
@@ -3598,6 +3599,45 @@ jobs:
           if (!citationText(study).includes('58.0 ft length × 22.0 ft span × 18.0 ft height') || !svgDescription.includes('length 58 feet, span 22 feet, and height 18 feet') || !svgDescription.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || !svgDescription.includes('Floor area: 1,276 ft²; basis: supplied floor-area estimate.') || !svgDescription.includes('Estimated volume: 14,239 ft³; basis: Bounding area × height × 0.62.')) throw new Error('Citations and SVG descriptions did not use the configured units and provenance context');
           console.log('Schema-backed unit label smoke test passed.');
           NODE
+      - name: Smoke-test comparative reading profiles
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const makeElement = () => ({
+            hidden: false,
+            textContent: '',
+            innerHTML: '',
+            attributes: {},
+            setAttribute(name, value) { this.attributes[name] = value; },
+            removeAttribute(name) { delete this.attributes[name]; }
+          });
+          const context = {
+            URL,
+            window: { location: { href: 'https://example.test/atlas/#compare', hash: '#compare' } },
+            document: {
+              querySelector(selector) {
+                if (!elements.has(selector)) elements.set(selector, makeElement());
+                return elements.get(selector);
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderProfileCompare, state };\n})();');
+          vm.runInNewContext(app, context);
+          const { renderProfileCompare, state } = context.window.__atlasTest;
+          renderProfileCompare();
+          const fullMarkup = elements.get('#profileCompare').innerHTML;
+          const meterCount = (fullMarkup.match(/role="meter"/g) || []).length;
+          if (meterCount !== context.window.CHURCH_GEOMETRY.length * 4 || !fullMarkup.includes('Longitudinal basilica linearity') || !fullMarkup.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || !fullMarkup.includes('aria-valuetext="48 out of 100"') || !fullMarkup.includes('class="profile-compare-fill"')) throw new Error('Comparative reading profiles did not render four accessible scores with provenance context for every study');
+          state.compareIds = ['gothic', 'byzantine'];
+          renderProfileCompare();
+          const focusedMarkup = elements.get('#profileCompare').innerHTML;
+          if (!focusedMarkup.startsWith('<div class="profile-compare-row"') || (focusedMarkup.match(/role="listitem"/g) || []).length !== 2 || !focusedMarkup.includes('High gothic cathedral') || !focusedMarkup.includes('Cross-in-square')) throw new Error('Comparative reading profiles did not honor focused comparison order and scope');
+          console.log('Comparative reading profiles smoke test passed.');
+          NODE
       - name: Smoke-test escaped schema units in comparison surfaces
         run: |
           node - <<'NODE'
@@ -3637,16 +3677,18 @@ jobs:
             }
           };
           context.window.CHURCH_GEOMETRY = context.window.CHURCH_GEOMETRY.map((study, index) => index === 0 ? { ...study, status: 'estimated <review>' } : study);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderComparisonTable, renderCharts };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderComparisonTable, renderCharts, renderProfileCompare };\n})();');
           vm.runInNewContext(app, context);
-          const { renderComparisonTable, renderCharts } = context.window.__atlasTest;
+          const { renderComparisonTable, renderCharts, renderProfileCompare } = context.window.__atlasTest;
           renderComparisonTable();
           renderCharts();
+          renderProfileCompare();
           const table = elements.get('#comparisonTableBody').innerHTML;
           const moduleChart = elements.get('#moduleChart').innerHTML;
           const ratioChart = elements.get('#ratioChart').innerHTML;
+          const profileChart = elements.get('#profileCompare').innerHTML;
           if (!table.includes('&lt;unit&gt;') || table.includes('<unit>') || !moduleChart.includes('&lt;unit&gt;') || moduleChart.includes('<unit>')) throw new Error('Schema unit symbols must remain escaped in HTML comparison surfaces');
-          if (!ratioChart.includes('estimated &lt;review&gt;') || ratioChart.includes('<review>') || ratioChart.includes('<pending review>')) throw new Error('Custom schema status text must remain escaped in comparison chart markup');
+          if (!ratioChart.includes('estimated &lt;review&gt;') || ratioChart.includes('<review>') || ratioChart.includes('<pending review>') || !profileChart.includes('estimated &lt;review&gt;') || profileChart.includes('<review>') || profileChart.includes('<pending review>')) throw new Error('Custom schema status text must remain escaped in comparison chart markup');
           console.log('Escaped schema units in comparison surfaces smoke test passed.');
           NODE
       - name: Smoke-test active study measure summary
