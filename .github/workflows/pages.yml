@@ -351,7 +351,7 @@ jobs:
           const chartRenderEnd = app.indexOf('\n  function catalogGlyph', chartRenderStart);
           if (chartRenderStart < 0 || chartRenderEnd < 0 || !app.slice(chartRenderStart, chartRenderEnd).includes('record: ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}')) throw new Error('Comparison chart row labels must include schema-backed status definitions and source provenance');
           if (!app.includes('role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"')) throw new Error('Drawing SVG must expose separate accessible name and description relationships');
-          for (const token of ['role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Status: ${studyStatusDescription(study)}', 'Reference:']) {
+          for (const token of ['role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description"', 'Overall dimensions are', 'Envelope:', 'Reading:', 'Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}); ${studyStatusDescription(study)}', 'Source: ${studySource(study)}; ${studySourceNote(study)}', 'Floor area: ${floorArea.value}; basis: ${floorArea.basis}.', 'Estimated volume: ${volume.value}; basis: ${volume.basis}.', 'Reference:']) {
             if (!app.includes(token)) throw new Error('Missing accessible drawing description: ' + token);
           }
           for (const token of ['const studySurfaceReading = (study) =>', '$("#activeDescription").textContent = studySurfaceReading(study)', '$("#analysisReading").textContent = studySurfaceReading(study)', 'const reading = studySurfaceReading(study);', 'Reading: ${reading || "No interpretive reading supplied."}']) {
@@ -3594,7 +3594,8 @@ jobs:
           const { geometryUnitName, geometryUnitSymbol, linearMeasure, squareMeasure, cubicMeasure, rawMeasure, citationText, svgBase } = context.window.__atlasTest;
           const study = context.window.CHURCH_GEOMETRY[0];
           if (geometryUnitName() !== 'feet' || geometryUnitSymbol() !== 'ft' || linearMeasure(12) !== '12.0 ft' || squareMeasure(144) !== '144 ft²' || cubicMeasure(1728) !== '1,728 ft³' || rawMeasure(12) !== '12 ft') throw new Error('Schema-backed measurement helpers did not use the configured unit symbol');
-          if (!citationText(study).includes('58.0 ft length × 22.0 ft span × 18.0 ft height') || !svgBase(study, 'Unit test').includes('length 58 feet, span 22 feet, and height 18 feet')) throw new Error('Citations and SVG descriptions did not use the configured unit name');
+          const svgDescription = svgBase(study, 'Unit test');
+          if (!citationText(study).includes('58.0 ft length × 22.0 ft span × 18.0 ft height') || !svgDescription.includes('length 58 feet, span 22 feet, and height 18 feet') || !svgDescription.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || !svgDescription.includes('Floor area: 1,276 ft²; basis: supplied floor-area estimate.') || !svgDescription.includes('Estimated volume: 14,239 ft³; basis: Bounding area × height × 0.62.')) throw new Error('Citations and SVG descriptions did not use the configured units and provenance context');
           console.log('Schema-backed unit label smoke test passed.');
           NODE
       - name: Smoke-test escaped schema units in comparison surfaces
