@@ -1077,6 +1077,9 @@
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
     $("#copyComparisonCitation").addEventListener("click", copyComparisonCitation);
+    $("#copyCatalogRoute").addEventListener("click", copyCatalogRoute);
+    $("#copyStudyRoute").addEventListener("click", copyStudyRoute);
+    $("#copyComparisonRoute").addEventListener("click", copyComparisonRoute);
     $$('[data-dismiss-fallback]').forEach((button) => button.addEventListener("click", () => {
       const fallbackId = button.dataset && button.dataset.dismissFallback;
       const fallbackSelector = fallbackId ? `#${fallbackId}` : "";
@@ -2050,6 +2053,80 @@
     link.textContent = route;
     if (typeof link.setAttribute === "function") link.setAttribute("aria-label", label);
     link.title = label;
+  }
+
+  function routeLinkHref(selector) {
+    const link = $(selector);
+    if (!link) return "";
+    const rawHref = typeof link.getAttribute === "function" ? link.getAttribute("href") || link.href : link.href;
+    if (!rawHref) return "";
+    try {
+      const base = window.location && typeof window.location.href === "string" ? window.location.href : undefined;
+      return typeof URL === "function" ? new URL(rawHref, base).href : rawHref;
+    } catch (error) {
+      return rawHref;
+    }
+  }
+
+  async function copyRoute({ linkSelector, buttonSelector, statusSelector, scope, resetAccessibleLabel, feedbackKey }) {
+    const button = $(buttonSelector);
+    const status = $(statusSelector);
+    if (!button || !status || !beginAsyncAction(button)) return false;
+    try {
+      const href = routeLinkHref(linkSelector);
+      if (!href) {
+        const message = `Copying the ${scope.toLowerCase()} route is unavailable. Select the visible route link manually.`;
+        temporaryButtonFeedback(button, "Unavailable", message, "Copy link", resetAccessibleLabel, feedbackKey);
+        status.textContent = message;
+        return false;
+      }
+      const copied = await copyText(href);
+      if (copied) {
+        const message = `${scope} route copied.`;
+        temporaryButtonFeedback(button, "Copied", message, "Copy link", resetAccessibleLabel, feedbackKey);
+        status.textContent = message;
+        return true;
+      }
+      const message = `Copying the ${scope.toLowerCase()} route is unavailable. Select the visible route link manually.`;
+      temporaryButtonFeedback(button, "Unavailable", message, "Copy link", resetAccessibleLabel, feedbackKey);
+      status.textContent = message;
+      return false;
+    } finally {
+      endAsyncAction(button);
+    }
+  }
+
+  function copyCatalogRoute() {
+    return copyRoute({
+      linkSelector: ".catalog-route-link",
+      buttonSelector: "#copyCatalogRoute",
+      statusSelector: "#catalogRouteStatus",
+      scope: "Catalog view",
+      resetAccessibleLabel: "Copy current catalog route",
+      feedbackKey: "catalog-route-copy"
+    });
+  }
+
+  function copyStudyRoute() {
+    return copyRoute({
+      linkSelector: ".study-route-link",
+      buttonSelector: "#copyStudyRoute",
+      statusSelector: "#studyRouteStatus",
+      scope: "Active study",
+      resetAccessibleLabel: "Copy active study route",
+      feedbackKey: "study-route-copy"
+    });
+  }
+
+  function copyComparisonRoute() {
+    return copyRoute({
+      linkSelector: ".comparison-route-link",
+      buttonSelector: "#copyComparisonRoute",
+      statusSelector: "#comparisonRouteStatus",
+      scope: "Comparison",
+      resetAccessibleLabel: "Copy comparison route",
+      feedbackKey: "comparison-route-copy"
+    });
   }
 
   function renderActiveProvenance(study) {

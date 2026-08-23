@@ -543,6 +543,12 @@ h3 { letter-spacing: -0.04em; }
 .comparison-route { display: block; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; overflow-wrap: anywhere; }
 .catalog-route { margin: 0.45rem 0 0; }
 .study-route { margin: 0.55rem 0 0; }
+.route-copy-button { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 28px; margin-left: 0.35rem; padding: 0.28rem 0.45rem; border: 1px solid var(--line-strong); color: var(--teal); background: transparent; font-family: var(--mono); font-size: 0.49rem; letter-spacing: 0.03em; line-height: 1.2; text-transform: uppercase; transition: 180ms ease; vertical-align: middle; }
+.route-copy-button span:first-child { color: var(--amber); font-size: 0.78rem; line-height: 0; }
+.route-copy-button:hover,
+.route-copy-button:focus-visible { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.route-copy-button.is-complete { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.route-copy-button.is-unavailable { border-color: var(--coral); color: var(--coral); background: var(--coral-soft); }
 .catalog-route a,
 .study-print-route a,
 .comparison-print-route a { color: var(--teal); text-decoration-color: var(--line-strong); text-underline-offset: 0.2em; }
@@ -1061,6 +1067,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .noscript-artifact-actions a,
   .noscript-link,
   .method-dictionary-links a { min-height: 36px; }
+  .route-copy-button { min-height: 36px; }
   .study-nav button { width: 40px; height: 40px; }
   .zoom-control button { width: 36px; height: 36px; }
   .search-field input,
@@ -1158,6 +1165,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .search-clear { width: 36px; height: 36px; }
   .search-field input, .select-wrap select { min-height: 40px; }
   .manual-copy-fallback-dismiss { min-height: 36px; }
+  .route-copy-button { min-height: 36px; }
   .action-recovery .hero-action, .action-recovery-dismiss { min-height: 36px; }
   .noscript-artifact-actions a { min-height: 36px; }
   .noscript-link { display: inline-flex; align-items: center; min-height: 36px; padding: 0.35rem 0.5rem; border: 1px solid var(--coral); background: rgba(231, 127, 98, 0.08); }
@@ -1214,12 +1222,14 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   textarea:focus-visible,
   summary:focus-visible { outline-color: Highlight; }
   .download-button,
+  .route-copy-button,
   .share-button,
   .segment-button,
   .mode-button,
   .layer-button,
   .compare-tray button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .download-button:hover,
+  .route-copy-button:hover,
   .share-button:hover,
   .segment-button:hover,
   .mode-button:hover,
@@ -1356,6 +1366,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-search-note kbd { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .method-dictionary-links a:hover { color: HighlightText; background: Highlight; }
+  .route-copy-button span:first-child { color: ButtonText; }
+  .route-copy-button.is-complete,
+  .route-copy-button.is-unavailable { border-color: Highlight; color: Highlight; background: Canvas; }
   .method-dictionary-item dt,
   .method-dictionary-formulas span { color: Highlight; }
   .method-status-key { border-color: ButtonText; background: Canvas; }
@@ -1465,7 +1478,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .site-footer,
   .compare-view,
   .method-view,
-  .visual-empty-state { display: none !important; }
+  .visual-empty-state,
+  .route-copy-button { display: none !important; }
   .site-header, main, .site-footer { width: 100%; }
   #atlas { display: block !important; }
   .hero { display: block; min-height: 0; padding: 0 0 1.1rem; }

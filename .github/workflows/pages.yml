@@ -145,7 +145,7 @@ jobs:
           const notFoundNarrowEnd = notFound.indexOf('@media (pointer: coarse)', notFoundNarrowStart);
           const notFoundNarrow = notFound.slice(notFoundNarrowStart, notFoundNarrowEnd);
           if (!notFoundNarrow.includes('.home-link { min-height: 44px; }')) throw new Error('404 recovery actions must retain a 44px target at narrow widths');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>']) {
@@ -308,6 +308,7 @@ jobs:
           if (!html.includes('id="printComparison" type="button" aria-label="Print this comparison"') || !html.includes('<p class="comparison-print-route comparison-route" id="comparisonPrintRoute">Direct route · <a class="comparison-route-link"') || !app.includes('function printComparison()') || !app.includes('$("#printComparison").addEventListener("click", printComparison);') || !app.includes('const comparisonRoute = comparisonRouteUrl();') || !app.includes('renderRouteLink(printRoute, ".comparison-route-link", routePath(comparisonRoute)') || !app.includes('temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print comparison", "Print this comparison", "comparison-print")') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print")') || !styles.includes('@page comparison-sheet { size: landscape; margin: 10mm; }') || !styles.includes('body.print-comparison { page: comparison-sheet; }') || !styles.includes('.comparison-route { display: block; margin: -1.25rem 0 1.15rem; }') || !styles.includes('body.print-comparison .comparison-print-route { display: block;') || !styles.includes('body.print-comparison .compare-view { display: block !important;') || !styles.includes('body.print-comparison .compare-intro-side .compare-citation-button') || !styles.includes('body.print-comparison .comparison-table-panel { display: block;') || !styles.includes('body.print-comparison .comparison-table-wrap { overflow: visible; }')) throw new Error('Comparison printing must preserve the active charts, scope, table, route-native link, and visible feedback');
           if (!app.includes('function readableScopeLabel(scope)') || !app.includes('const scope = studyShortName(study);') || !app.includes('const scope = readableScopeLabel(catalogScopeLabel());') || !app.includes('const scope = readableScopeLabel(comparisonScopeLabel(comparison));') || !app.includes('announceKeyboard(`Printing the catalog view for ${scope}.`);') || !app.includes('announceKeyboard(`Printing the comparison for ${scope}.`);')) throw new Error('Print feedback must carry the active study, catalog, or comparison scope');
           if (!html.includes('id="downloadCatalogView" type="button" aria-label="Export current catalog view as JSON"') || !html.includes('id="downloadCatalogCsv" type="button" aria-label="Export current catalog view as CSV"')) throw new Error('Missing catalog export controls');
+          if (!html.includes('id="copyCatalogRoute" type="button" aria-label="Copy current catalog route"') || !html.includes('id="copyStudyRoute" type="button" aria-label="Copy active study route"') || !html.includes('id="copyComparisonRoute" type="button" aria-label="Copy comparison route"') || !html.includes('id="catalogRouteStatus" role="status" aria-live="polite" aria-atomic="true"') || !html.includes('id="studyRouteStatus" role="status" aria-live="polite" aria-atomic="true"') || !html.includes('id="comparisonRouteStatus" role="status" aria-live="polite" aria-atomic="true"') || !app.includes('function routeLinkHref(selector)') || !app.includes('async function copyRoute({') || !app.includes('function copyCatalogRoute()') || !app.includes('function copyStudyRoute()') || !app.includes('function copyComparisonRoute()') || !app.includes('Select the visible route link manually.') || !styles.includes('.route-copy-button { display: inline-flex;') || !styles.includes('.route-copy-button.is-complete') || !styles.includes('.route-copy-button.is-unavailable') || !styles.includes('  .route-copy-button { min-height: 36px; }') || !styles.includes('  .visual-empty-state,\n  .route-copy-button { display: none !important; }')) throw new Error('Visible route links must expose accessible one-click copy controls with print and fallback behavior');
           if (!html.includes('id="shareCatalog" type="button" aria-label="Share current catalog view" aria-controls="catalogShareFallback" aria-expanded="false"')) throw new Error('Missing catalog share control');
           if (!html.includes('id="selectVisibleCompare" type="button" aria-label="Add visible studies to comparison"') || !app.includes('function addVisibleToComparison({ focus = false } = {})') || !app.includes('renderVisibleComparisonAction(visible);') || !styles.includes('.catalog-batch-action')) throw new Error('Missing filter-aware batch comparison action');
           if (!html.includes('id="shareCompare" type="button" aria-label="Share this comparison" aria-controls="compareShareFallback" aria-expanded="false"')) throw new Error('Missing comparison share control');
@@ -495,7 +496,7 @@ jobs:
           if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('textarea:focus-visible') || !styles.includes('.manual-copy-fallback textarea:focus { outline: 2px solid Highlight; outline-offset: 2px; }') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.search-hit { color: HighlightText; background: Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }') || !styles.includes('.compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.compare-selection-chip-axis { color: ButtonText; }') || !styles.includes('.compare-tray-summary { color: ButtonText; }') || !styles.includes('.catalog-batch-action span:first-child { color: ButtonText; }') || !styles.includes('.method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.method-dictionary-formulas span { color: Highlight; }') || !styles.includes('.study-status,') || !styles.includes('.method-return-button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.study-provenance summary::after,') || !styles.includes('.study-nav button:disabled,') || !styles.includes('color: GrayText; }') || !styles.includes('.profile-track,\n  .bar-track,\n  .module-bars { border: 1px solid ButtonText; background: Canvas; }') || !styles.includes('.profile-fill,\n  .bar-fill,\n  .module-bar { background: Highlight; opacity: 1; }') || !styles.includes('.chart-axis-guide { border-top-color: ButtonText; }') || !styles.includes('.visual-empty-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.search-clear { border-color: ButtonText; color: ButtonText; background: ButtonFace; }')) throw new Error('Forced-colors mode must preserve focus, selected-state, recovery, and quantitative meter affordances');
           if (!styles.includes('.search-field input:focus-visible,\n.select-wrap select:focus-visible,\n.manual-copy-fallback textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }')) throw new Error('Custom form controls must retain a visible keyboard focus ring');
           if (!styles.includes('@media (prefers-contrast: more)') || !styles.includes('--ink-muted: #b6c4ba;') || !styles.includes('--line-strong: rgba(213, 229, 214, 0.68);') || !styles.includes('outline-width: 3px;') || !styles.includes('.bar-track,\n  .profile-track,\n  .module-bars { border: 1px solid var(--line-strong); }')) throw new Error('Increased-contrast mode must strengthen text, boundaries, quantitative tracks, and focus rings');
-          if (!styles.includes('.download-button,\n  .share-button,\n  .segment-button,\n  .mode-button,\n  .layer-button,\n  .compare-tray button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.download-button:hover,\n  .share-button:hover,\n  .segment-button:hover,\n  .mode-button:hover,\n  .layer-button:hover,\n  .compare-tray button:hover { border-color: Highlight; color: HighlightText; background: Highlight; }') || !styles.includes('.share-button span:first-child { color: ButtonText; }') || !styles.includes('.compare-tray button:last-child:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }')) throw new Error('Primary action controls must preserve visible system-color states in forced-colors mode');
+          if (!styles.includes('.download-button,\n  .route-copy-button,\n  .share-button,\n  .segment-button,\n  .mode-button,\n  .layer-button,\n  .compare-tray button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.download-button:hover,\n  .route-copy-button:hover,\n  .share-button:hover,\n  .segment-button:hover,\n  .mode-button:hover,\n  .layer-button:hover,\n  .compare-tray button:hover { border-color: Highlight; color: HighlightText; background: Highlight; }') || !styles.includes('.share-button span:first-child { color: ButtonText; }') || !styles.includes('.compare-tray button:last-child:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }')) throw new Error('Primary action controls must preserve visible system-color states in forced-colors mode');
           if (!styles.includes('.runtime-fallback-actions .hero-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }')) throw new Error('Runtime recovery actions must remain visible in forced-colors mode');
           if (!styles.includes('#runtimeFallback:focus { outline-color: Highlight; }')) throw new Error('Runtime recovery focus must remain visible in forced-colors mode');
           if (!styles.includes('position: sticky;') || !styles.includes('.catalog-panel { position: sticky; top: 7rem;') || !styles.includes('background: rgba(17, 24, 23, 0.94);') || !styles.includes('backdrop-filter: blur(14px);') || !styles.includes('scroll-padding-top: 7rem;') || !styles.includes('scroll-margin-top: 7rem;') || !styles.includes('.site-header { background: Canvas; }')) throw new Error('Long-page navigation must keep the header available, keep the catalog below it, and preserve safe hash offsets in forced-colors mode');
@@ -510,6 +511,7 @@ jobs:
           for (const token of ['  .dataset-link,\n  .download-button { min-height: 40px; }', '  .nav-button,\n  .segment-button,\n  .mode-button,\n  .layer-button,\n  .share-button,\n  .drawing-export,\n  .drawing-reset,\n  .filter-chip,\n  .filter-clear-all,\n  .compare-tray button,\n  .shortcut-guide summary,\n  .comparison-table-panel summary,\n  .study-provenance summary,\n  .study-context-note button,\n  .compare-selection-clear,\n  .compare-selection-chip,\n  .catalog-batch-action,\n  .clear-search,\n  .visual-empty-action,\n  .manual-copy-fallback-dismiss,\n  .action-recovery .hero-action,\n  .action-recovery-dismiss,\n  .noscript-artifact-actions a,\n  .noscript-link,\n  .method-dictionary-links a { min-height: 36px; }', '  .study-nav button { width: 40px; height: 40px; }', '  .zoom-control button { width: 36px; height: 36px; }', '  .search-field input,\n  .select-wrap select { min-height: 40px; }']) {
             if (!narrowStyles.includes(token)) throw new Error('Narrow-screen controls must retain consistent phone target sizes: ' + token);
           }
+          if (!narrowStyles.includes('  .route-copy-button { min-height: 36px; }')) throw new Error('Narrow route-copy controls must retain a touch-sized target');
           if (!styles.includes('@media (max-width: 430px)') || !styles.includes('  .header-actions { gap: 0.3rem; }') || !styles.includes('  .dataset-link { padding-inline: 0.6rem; }') || !styles.includes('  .download-button { padding-inline: 0.65rem; }') || !styles.includes('  .tool-row { grid-template-columns: 1fr; }') || !styles.includes('  .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }') || !styles.includes('  .drawing-scale { flex: 0 0 100%; }') || !styles.includes('  .compare-tray { align-items: start; flex-direction: column; }') || !styles.includes('  .compare-tray-actions { width: 100%; justify-content: space-between; }') || !html.includes('<span class="download-label">Download data</span>') || !styles.includes('  .download-button span.download-label { display: inline; font-size: 0; }') || !styles.includes('content: "JSON";') || !styles.includes('content: "Done";') || !html.includes('<span class="study-action-label">Share study</span>') || !html.includes('<span class="study-action-label">Copy citation</span>') || !html.includes('<span class="study-action-label">Study JSON</span>') || !html.includes('<span class="study-action-label">Print sheet</span>') || !styles.includes('  .study-share-actions span.study-action-label { display: inline; font-size: 0; white-space: nowrap; }') || !styles.includes('#shareStudy span.study-action-label::after { content: "Share"; font-size: 0.5rem; }') || !styles.includes('#copyCitation span.study-action-label::after { content: "Cite"; font-size: 0.5rem; }') || !styles.includes('#downloadStudy span.study-action-label::after { content: "JSON"; font-size: 0.5rem; }') || !styles.includes('#printStudy span.study-action-label::after { content: "Print"; font-size: 0.5rem; }') || !styles.includes('  .catalog-summary-actions { flex-wrap: wrap; justify-content: flex-end; }') || !styles.includes('  .catalog-summary .catalog-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }') || !styles.includes('  .catalog-summary .catalog-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }')) throw new Error('Narrow-screen controls must preserve clear visible action labels, compact header spacing, and completion state');
           for (const token of ['#shareStudy.is-copied span.study-action-label::after,', '#shareStudy.is-complete:not(.is-unavailable)', '#copyCitation.is-copied span.study-action-label::after', '#downloadStudy.is-complete:not(.is-unavailable)', '#printStudy.is-unavailable span.study-action-label::after', '.catalog-summary .catalog-share-button.is-complete:not(.is-unavailable)', '.catalog-summary .catalog-citation-button.is-copied', '.catalog-summary .catalog-print-button.is-unavailable', '.compare-intro-side .compare-share-button span:last-child,', '.compare-intro-side .compare-share-button.is-complete:not(.is-unavailable)', '.compare-intro-side .compare-citation-button.is-copied', '.compare-intro-side .compare-print-button.is-unavailable']) {
             if (!styles.includes(token)) throw new Error('Compact action feedback must expose visible success and unavailable states: ' + token);
@@ -1959,6 +1961,94 @@ jobs:
           renderRouteLink(fallback, '.comparison-route-link', 'https://example.test/atlas/#compare', 'Open comparison route');
           if (fallback.textContent !== 'Route · https://example.test/atlas/#compare') throw new Error('Route link renderer did not preserve the fallback route readout');
           console.log('Reproducible route link smoke test passed.');
+          NODE
+
+      - name: Smoke-test route copy actions
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const copied = [];
+          const makeButton = (labelText) => {
+            const label = { textContent: labelText };
+            const classes = new Set();
+            return {
+              disabled: false,
+              attributes: {},
+              title: '',
+              classList: {
+                add(name) { classes.add(name); },
+                remove(name) { classes.delete(name); }
+              },
+              querySelector(selector) { return selector === 'span:last-child' ? label : null; },
+              setAttribute(name, value) { this.attributes[name] = value; },
+              get label() { return label; },
+              get classes() { return classes; }
+            };
+          };
+          const makeLink = (href) => ({
+            href,
+            getAttribute(name) { return name === 'href' ? href : null; }
+          });
+          const catalogButton = makeButton('Copy link');
+          const studyButton = makeButton('Copy link');
+          const comparisonButton = makeButton('Copy link');
+          elements.set('#copyCatalogRoute', catalogButton);
+          elements.set('#copyStudyRoute', studyButton);
+          elements.set('#copyComparisonRoute', comparisonButton);
+          elements.set('#catalogRouteStatus', { textContent: '' });
+          elements.set('#studyRouteStatus', { textContent: '' });
+          elements.set('#comparisonRouteStatus', { textContent: '' });
+          elements.set('.catalog-route-link', makeLink('/atlas/?q=gothic#atlas'));
+          elements.set('.study-route-link', makeLink('/atlas/#atlas/gothic/section/interior/axis/1.3'));
+          elements.set('.comparison-route-link', makeLink('/atlas/?compare=basilica,gothic#compare/basilica,gothic'));
+          const context = {
+            URL,
+            navigator: {
+              clipboard: {
+                writeText(value) {
+                  copied.push(value);
+                  return Promise.resolve();
+                }
+              }
+            },
+            window: {
+              isSecureContext: true,
+              location: { href: 'https://example.test/atlas/' },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { copyCatalogRoute, copyStudyRoute, copyComparisonRoute };\n})();');
+          vm.runInNewContext(app, context);
+          (async () => {
+            const { copyCatalogRoute, copyStudyRoute, copyComparisonRoute } = context.window.__atlasTest;
+            await copyCatalogRoute();
+            await copyStudyRoute();
+            await copyComparisonRoute();
+            const expected = [
+              'https://example.test/atlas/?q=gothic#atlas',
+              'https://example.test/atlas/#atlas/gothic/section/interior/axis/1.3',
+              'https://example.test/atlas/?compare=basilica,gothic#compare/basilica,gothic'
+            ];
+            if (copied.join('|') !== expected.join('|')) throw new Error('Route copy actions did not resolve each visible route to the full URL');
+            if (elements.get('#catalogRouteStatus').textContent !== 'Catalog view route copied.' || elements.get('#studyRouteStatus').textContent !== 'Active study route copied.' || elements.get('#comparisonRouteStatus').textContent !== 'Comparison route copied.') throw new Error('Route copy actions did not announce success in their live regions');
+            if (catalogButton.label.textContent !== 'Copied' || studyButton.label.textContent !== 'Copied' || comparisonButton.label.textContent !== 'Copied') throw new Error('Route copy actions did not expose visible completion labels');
+            if (catalogButton.disabled || catalogButton.attributes['aria-busy'] !== 'false' || studyButton.disabled || comparisonButton.disabled) throw new Error('Route copy actions did not release their busy state');
+            context.navigator.clipboard.writeText = () => Promise.reject(new Error('blocked'));
+            const result = await copyCatalogRoute();
+            if (result !== false || !elements.get('#catalogRouteStatus').textContent.includes('Select the visible route link manually.') || catalogButton.label.textContent !== 'Unavailable' || !catalogButton.classes.has('is-unavailable')) throw new Error('Route copy actions did not expose the manual-selection fallback when clipboard access failed');
+            console.log('Route copy actions smoke test passed.');
+          })().catch((error) => {
+            console.error(error);
+            process.exitCode = 1;
+          });
           NODE
 
       - name: Smoke-test escaped comparison labels
