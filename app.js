@@ -229,6 +229,7 @@
     return `${surface} · ${mode} · ${layerFocusLabel()} · ${zoomPercent()} zoom`;
   };
 
+  const defaultPageTitle = "Sacred Geometry Atlas";
   const defaultPageDescription = "Explore church architecture through plans, sections, modules, axes, and enclosing forms.";
   const setMetaContent = (selector, value) => {
     const target = $(selector);
@@ -237,7 +238,7 @@
   function updateDocumentMetadata(page = state.page) {
     const route = parseRoute();
     const study = activeStudy();
-    let title = "Sacred Geometry Atlas";
+    let title = defaultPageTitle;
     let description = defaultPageDescription;
     if (page === "atlas" && study) {
       const surface = state.surface === "interior" ? "Inside" : "Outside";
@@ -252,12 +253,12 @@
         || state.sort !== "index"
         || state.compareIds.length > 0
       );
-      if (!route.studyId && hasCatalogScope) {
-        title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;
-        description = `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas, with plans, sections, modules, axes, proportions, status labels, and provenance.`;
-      } else {
+      if (route.studyId) {
         title = `${studyIdentityLabel(study)} · ${surface} ${mode} · Sacred Geometry Atlas`;
         description = `${surface} ${mode.toLowerCase()} reading of ${study.name}, a ${study.typology.toLowerCase()} study from ${study.place} (${study.era}); ${studyAxisLabel(study)} and ${study.emphasis}. ${studyStatusLabel(study)}: ${studyStatusDescriptionSentence(study)}`;
+      } else if (hasCatalogScope) {
+        title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;
+        description = `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas, with plans, sections, modules, axes, proportions, status labels, and provenance.`;
       }
     } else if (page === "compare") {
       const selected = selectedComparisonStudies();
@@ -295,6 +296,10 @@
         || state.sort !== "index"
         || state.compareIds.length > 0
       );
+      if (!route.studyId && !hasCatalogScope) {
+        document.title = defaultPageTitle;
+        return;
+      }
       if (!route.studyId && hasCatalogScope) {
         document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;
         return;
