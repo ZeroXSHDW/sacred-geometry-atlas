@@ -354,7 +354,7 @@
                 <span>Add visible to compare</span>
               </button>
             </div>
-            <p class="catalog-export-note" id="catalogExportNote">JSON pairs each raw study with derived readings; CSV carries row-level provenance and any active comparison selection context.</p>
+            <p class="catalog-export-note" id="catalogExportNote">JSON pairs each raw study with derived readings and a direct study route; CSV carries the same route plus row-level provenance and any active comparison selection context.</p>
             <p class="catalog-route" id="catalogRoute">Direct route · <a class="catalog-route-link" href="#atlas" aria-label="Open current catalog view in Atlas" title="Open current catalog view in Atlas">#atlas</a> <button class="route-copy-button" id="copyCatalogRoute" type="button" aria-label="Copy current catalog route" title="Copy current catalog route" aria-controls="catalogRouteFallback" aria-expanded="false"><span aria-hidden="true">⧉</span><span>Copy link</span></button></p>
             <span class="sr-only" id="catalogRouteStatus" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="manual-copy-fallback route-copy-fallback" id="catalogRouteFallback" role="region" aria-labelledby="catalogRouteFallbackHeading" hidden>
@@ -750,7 +750,7 @@
           <summary id="comparisonTableSummary" aria-keyshortcuts="Escape">Read the 6 study records as a table</summary>
           <div class="comparison-table-actions">
             <div class="comparison-table-copy">
-              <p>Recorded dimensions, derived ratios, optional area/volume estimates, and source notes are available here and in the CSV or JSON export. Study names open in Atlas. Both exports carry the schema version, unit system, published schema URL, route, and data-status context.</p>
+              <p>Recorded dimensions, derived ratios, optional area/volume estimates, and source notes are available here and in the CSV or JSON export. Study names open in Atlas. Both exports carry the schema version, unit system, published schema URL, active view route, and data-status context; each record also carries a direct study route.</p>
               <p class="comparison-table-hint">Swipe horizontally on narrow screens · focus the table and use ← → or Home / End.</p>
             </div>
             <div class="comparison-export-actions" role="group" aria-label="Download comparison data">

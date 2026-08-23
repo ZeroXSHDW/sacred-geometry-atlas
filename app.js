@@ -2969,6 +2969,7 @@
       },
       records: visible.map((study) => ({
         study,
+        studyRoute: studyRouteUrl(study.id).href,
         derived: derivedStudyReadings(study)
       })),
       studies: visible
@@ -3175,6 +3176,7 @@
       },
       records: comparison.map((study) => ({
         study,
+        studyRoute: studyRouteUrl(study.id).href,
         derived: derivedStudyReadings(study)
       }))
     };
