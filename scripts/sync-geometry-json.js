@@ -55,6 +55,16 @@ const axisDisplayLabel = (value) => {
 };
 const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;
 const fixed = (value, digits = 1) => Number(value).toFixed(digits);
+const readingProfileScores = (study) => {
+  const ratio = study.length / study.span;
+  const radiality = { central: 100, baroque: 84, basilica: 48, gothic: 42, stave: 36, modern: 28 }[study.type] || 40;
+  return [
+    ["linearity", Math.round(Math.min(100, Math.max(0, ((ratio - 1) / 3.5) * 100)))],
+    ["verticality", Math.round(Math.min(100, Math.max(0, (study.height / study.span / 1.2) * 100)))],
+    ["radiality", radiality],
+    ["repetition", Math.round(Math.min(100, (study.bayCount / 8) * 100))]
+  ];
+};
 const studySource = (study) => study.source || "Unattributed proportional model";
 const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
 const statusDefinition = (study) => {
@@ -256,6 +266,9 @@ function noScriptFallback() {
     const studyMetaId = `atlas-meta-${encodeURIComponent(study.id)}`;
     const floorArea = positiveEstimate(study.floorAreaEstimate);
     const volume = positiveEstimate(study.volumeEstimate);
+    const readingProfile = readingProfileScores(study)
+      .map(([label, score]) => `${label} ${score}`)
+      .join(" · ");
     const readings = [
       `${study.bayCount} bays`,
       `module ${study.module} ${unitSymbol}`,
@@ -264,7 +277,8 @@ function noScriptFallback() {
       `height / span ${fixed(study.height / study.span, 2)}`,
       `symmetry ${fixed(study.symmetry, 2)}`,
       floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}² (supplied floor-area estimate)` : "floor area not supplied (length × span fallback)",
-      volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : ""
+      volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : "",
+      `reading profile (0–100): ${readingProfile}`
     ].filter(Boolean).join(" · ");
     const reading = study.surfaceNote || study.exteriorNote || study.interiorNote || "No interpretive reading supplied.";
     const source = study.source || "Provenance not supplied";
