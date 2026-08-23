@@ -7,6 +7,7 @@ const SHELL_PATHS = [
   "styles.css",
   "favicon.svg",
   "site.webmanifest",
+  "icons/atlas-180.png",
   "icons/atlas-192.png",
   "icons/atlas-512.png",
   "data/geometry.js",

@@ -192,7 +192,7 @@ The Pages workflow pins validation to Node.js 22 so syntax and data checks do no
 
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
 
-The committed public artifact also includes icons/atlas-192.png and icons/atlas-512.png so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon.
+The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon.
 
 ## Add real churches
 

@@ -9,7 +9,7 @@
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />
     <link rel="manifest" id="site-manifest" href="site.webmanifest" />
-    <link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />
+    <link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-180.png" />
     <meta name="application-name" content="Sacred Geometry Atlas" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -186,7 +186,7 @@
         const appleTouchIcon = document.querySelector('#site-apple-touch-icon');
         if (favicon) favicon.href = `${siteRoot}favicon.svg`;
         if (manifest) manifest.href = `${siteRoot}site.webmanifest`;
-        if (appleTouchIcon) appleTouchIcon.href = `${siteRoot}icons/atlas-192.png`;
+        if (appleTouchIcon) appleTouchIcon.href = `${siteRoot}icons/atlas-180.png`;
         document.querySelectorAll('[data-site-root]').forEach((link) => { link.href = siteRoot; });
         document.querySelectorAll('[data-site-dataset]').forEach((link) => { link.href = `${siteRoot}data/geometry.json`; });
         document.querySelectorAll('[data-site-csv]').forEach((link) => { link.href = `${siteRoot}data/geometry.csv`; });

@@ -43,6 +43,7 @@ jobs:
           test -f .nojekyll
           test -s og.png
           test -s favicon.svg
+          test -s icons/atlas-180.png
           test -s icons/atlas-192.png
           test -s icons/atlas-512.png
           test -s site.webmanifest
@@ -117,12 +118,12 @@ jobs:
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const pagesVerifier = fs.readFileSync('scripts/verify-pages-artifact.py', 'utf8');
           if (manifest.name !== 'Sacred Geometry Atlas' || manifest.short_name !== 'Geometry Atlas' || manifest.start_url !== './' || manifest.scope !== './' || manifest.display !== 'standalone' || manifest.theme_color !== '#111817' || !Array.isArray(manifest.categories) || !manifest.categories.includes('education') || !manifest.categories.includes('reference') || !Array.isArray(manifest.shortcuts) || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Explore Atlas' && shortcut.url === './#atlas') || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Compare studies' && shortcut.url === './#compare') || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Read Method' && shortcut.url === './#method') || !Array.isArray(manifest.icons) || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-192.png' && icon.sizes === '192x192' && icon.type === 'image/png') || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-512.png' && icon.sizes === '512x512' && icon.type === 'image/png') || !manifest.icons.some((icon) => icon && icon.src === 'favicon.svg' && icon.type === 'image/svg+xml')) throw new Error('Web manifest must preserve the static Atlas identity, installed-app shortcuts, and complete icon set');
-          for (const [iconPath, size] of [['icons/atlas-192.png', 192], ['icons/atlas-512.png', 512]]) {
+          for (const [iconPath, size] of [['icons/atlas-180.png', 180], ['icons/atlas-192.png', 192], ['icons/atlas-512.png', 512]]) {
             const iconBytes = fs.readFileSync(iconPath);
             const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
             if (!iconBytes.subarray(0, 8).equals(pngSignature) || iconBytes.readUInt32BE(16) !== size || iconBytes.readUInt32BE(20) !== size) throw new Error('Icon ' + iconPath + ' must be a valid ' + size + 'x' + size + ' PNG');
           }
-          if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v2"') || !serviceWorker.includes('icons/atlas-192.png') || !serviceWorker.includes('icons/atlas-512.png') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('function navigationFallback(request)') || !serviceWorker.includes('const isAppShell = requestUrl.pathname === scopePath') || !serviceWorker.includes('new URL(isAppShell ? "index.html" : "404.html", scopeUrl).href') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell, offline 404 recovery, install icons, and network-first fetch strategy');
+          if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v2"') || !serviceWorker.includes('icons/atlas-180.png') || !serviceWorker.includes('icons/atlas-192.png') || !serviceWorker.includes('icons/atlas-512.png') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('function navigationFallback(request)') || !serviceWorker.includes('const isAppShell = requestUrl.pathname === scopePath') || !serviceWorker.includes('new URL(isAppShell ? "index.html" : "404.html", scopeUrl).href') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell, offline 404 recovery, install icons, and network-first fetch strategy');
           if (!app.includes('function registerServiceWorker()') || !app.includes('serviceWorker.register(workerUrl.href, { scope })') || !app.includes('registerServiceWorker();')) throw new Error('Atlas must register the progressive offline app shell');
           if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite connection notice with print and forced-colors styling');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('sortSelectLabel(state.sort, state.sortDirection)') || !app.includes('aria-label="Clear all active catalog settings"') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
@@ -152,7 +153,7 @@ jobs:
             'name="robots" content="index, follow"',
             'rel="canonical" href="./"',
             'rel="manifest" href="site.webmanifest"',
-            'rel="apple-touch-icon" sizes="180x180" href="icons/atlas-192.png"',
+            'rel="apple-touch-icon" sizes="180x180" href="icons/atlas-180.png"',
             'name="application-name" content="Sacred Geometry Atlas"',
             'name="apple-mobile-web-app-title" content="Geometry Atlas"',
             'rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json"',
@@ -163,7 +164,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!styles.includes('-webkit-text-size-adjust: 100%;') || !styles.includes('text-size-adjust: 100%;') || !notFound.includes('-webkit-text-size-adjust: 100%;') || !notFound.includes('text-size-adjust: 100%;')) throw new Error('Mobile pages must stabilize text sizing without disabling user zoom');
-          for (const token of ['icons/atlas-192.png', 'icons/atlas-512.png', '192px', '512px', 'Install Atlas', 'Refresh Atlas']) {
+          for (const token of ['icons/atlas-180.png', 'icons/atlas-192.png', 'icons/atlas-512.png', '180px', '192px', '512px', 'Install Atlas', 'Refresh Atlas']) {
             if (!readme.includes(token)) throw new Error('GitHub Pages publishing guide is missing install icon documentation: ' + token);
           }
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>') || !sitemap.includes('<loc>./data/geometry.json</loc>') || !sitemap.includes('<loc>./data/geometry.csv</loc>') || !sitemap.includes('<loc>./data/geometry.schema.json</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
@@ -182,7 +183,7 @@ jobs:
           for (const token of ['PAGES_BASE_URL', 'json.loads', 'csv.DictReader', 'Published CSV route is not direct and deterministic', 'Published JSON Schema does not match the stamped dataset contract']) {
             if (!pagesVerifier.includes(token)) throw new Error(`Pages artifact contract verification is incomplete: ${token}`);
           }
-          for (const token of ['icons/atlas-192.png', 'icons/atlas-512.png', 'const CACHE_NAME = "sacred-geometry-atlas-v2"']) {
+          for (const token of ['icons/atlas-180.png', 'icons/atlas-192.png', 'icons/atlas-512.png', 'const CACHE_NAME = "sacred-geometry-atlas-v2"']) {
             if (!pagesVerifier.includes(token)) throw new Error('Pages artifact contract verification is missing: ' + token);
           }
           if (!workflow.includes("permissions:\n  contents: read\n\nconcurrency:") || !workflow.includes("  deploy:\n    needs: validate\n    if: github.event_name != 'pull_request'\n    permissions:\n      contents: read\n      pages: write\n      id-token: write")) throw new Error('Pages write and OIDC permissions must be scoped to the deploy job');
@@ -224,10 +225,10 @@ jobs:
           if (!notFound.includes('data-site-root') || !notFound.includes('data-site-dataset') || !notFound.includes('data-site-csv') || !notFound.includes('data-site-schema')) throw new Error('Missing GitHub Pages recovery navigation');
           if (!notFound.includes("hostname.endsWith('.github.io')")) throw new Error('Missing project-site root resolver');
           if (!notFound.includes('<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />')) throw new Error('Missing 404 favicon link');
-          if (!notFound.includes('<link rel="manifest" id="site-manifest" href="site.webmanifest" />') || !notFound.includes('<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />')) throw new Error('Missing 404 install metadata links');
+          if (!notFound.includes('<link rel="manifest" id="site-manifest" href="site.webmanifest" />') || !notFound.includes('<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-180.png" />')) throw new Error('Missing 404 install metadata links');
           if (!notFound.includes('<meta name="application-name" content="Sacred Geometry Atlas" />') || !notFound.includes('<meta name="mobile-web-app-capable" content="yes" />') || !notFound.includes('<meta name="apple-mobile-web-app-capable" content="yes" />') || !notFound.includes('<meta name="apple-mobile-web-app-title" content="Geometry Atlas" />')) throw new Error('Missing 404 app identity metadata');
           if (!notFound.includes("favicon.href = `${siteRoot}favicon.svg`")) throw new Error("Missing 404 favicon root resolver");
-          if (!notFound.includes("manifest.href = `${siteRoot}site.webmanifest`") || !notFound.includes("appleTouchIcon.href = `${siteRoot}icons/atlas-192.png`")) throw new Error('Missing 404 install metadata root resolver');
+          if (!notFound.includes("manifest.href = `${siteRoot}site.webmanifest`") || !notFound.includes("appleTouchIcon.href = `${siteRoot}icons/atlas-180.png`")) throw new Error('Missing 404 install metadata root resolver');
           if (!notFound.includes('link.href = `${siteRoot}data/geometry.json`') || !notFound.includes('link.href = `${siteRoot}data/geometry.csv`') || !notFound.includes('link.href = `${siteRoot}data/geometry.schema.json`')) throw new Error('Missing 404 dataset root resolver');
           if (!html.includes('<div class="data-error" id="dataError" role="main" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" tabindex="-1" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">') || !html.includes('<p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset.') || !html.includes('<a class="hero-action hero-action-primary" href="./" data-recovery-reload>Reload the atlas')) throw new Error('Data-load recovery must expose a main landmark, preserve the current route, and announce its recovery explanation assertively');
           if (!html.includes('<script defer src="data/geometry.js"></script>') || !html.includes('<script defer src="app.js"></script>') || html.indexOf('<script defer src="data/geometry.js"></script>') > html.indexOf('<script defer src="app.js"></script>')) throw new Error('Geometry data and app scripts must load in ordered deferred execution');
@@ -963,6 +964,7 @@ jobs:
           assert(waiting, 'service worker did not skip waiting');
           assert(cacheEntries.has('https://example.test/atlas/index.html'), 'app shell did not cache index');
           assert(cacheEntries.has('https://example.test/atlas/data/geometry.json'), 'app shell did not cache dataset');
+          assert(cacheEntries.has('https://example.test/atlas/icons/atlas-180.png'), 'app shell did not cache the 180px Apple touch icon');
           assert(cacheEntries.has('https://example.test/atlas/icons/atlas-192.png'), 'app shell did not cache the 192px install icon');
           assert(cacheEntries.has('https://example.test/atlas/icons/atlas-512.png'), 'app shell did not cache the 512px install icon');
           await dispatch('activate', {});
@@ -1303,11 +1305,11 @@ jobs:
             return { root: rootLink.href, favicon: favicon.href, manifest: manifest.href, appleTouchIcon: appleTouchIcon.href, dataset: datasetLink.href, csv: csvLink.href, schema: schemaLink.href };
           }
           const sourceLinks = resolveLinks('/sacred-geometry-atlas/missing/study', 'someone.github.io', '../');
-          if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.favicon !== '/sacred-geometry-atlas/favicon.svg' || sourceLinks.manifest !== '/sacred-geometry-atlas/site.webmanifest' || sourceLinks.appleTouchIcon !== '/sacred-geometry-atlas/icons/atlas-192.png' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || sourceLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || sourceLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.manifest} / ${sourceLinks.appleTouchIcon} / ${sourceLinks.dataset} / ${sourceLinks.csv} / ${sourceLinks.schema}`);
+          if (sourceLinks.root !== '/sacred-geometry-atlas/' || sourceLinks.favicon !== '/sacred-geometry-atlas/favicon.svg' || sourceLinks.manifest !== '/sacred-geometry-atlas/site.webmanifest' || sourceLinks.appleTouchIcon !== '/sacred-geometry-atlas/icons/atlas-180.png' || sourceLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || sourceLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || sourceLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 source links did not resolve to the project root: ${sourceLinks.root} / ${sourceLinks.manifest} / ${sourceLinks.appleTouchIcon} / ${sourceLinks.dataset} / ${sourceLinks.csv} / ${sourceLinks.schema}`);
           const rootLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', '../');
-          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.favicon !== '/sacred-geometry-atlas/favicon.svg' || rootLinks.manifest !== '/sacred-geometry-atlas/site.webmanifest' || rootLinks.appleTouchIcon !== '/sacred-geometry-atlas/icons/atlas-192.png' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || rootLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || rootLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.manifest} / ${rootLinks.appleTouchIcon} / ${rootLinks.dataset} / ${rootLinks.csv} / ${rootLinks.schema}`);
+          if (rootLinks.root !== '/sacred-geometry-atlas/' || rootLinks.favicon !== '/sacred-geometry-atlas/favicon.svg' || rootLinks.manifest !== '/sacred-geometry-atlas/site.webmanifest' || rootLinks.appleTouchIcon !== '/sacred-geometry-atlas/icons/atlas-180.png' || rootLinks.dataset !== '/sacred-geometry-atlas/data/geometry.json' || rootLinks.csv !== '/sacred-geometry-atlas/data/geometry.csv' || rootLinks.schema !== '/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 project-root links did not resolve without a trailing slash: ${rootLinks.root} / ${rootLinks.manifest} / ${rootLinks.appleTouchIcon} / ${rootLinks.dataset} / ${rootLinks.csv} / ${rootLinks.schema}`);
           const deployedLinks = resolveLinks('/sacred-geometry-atlas', 'someone.github.io', 'https://someone.github.io/sacred-geometry-atlas/');
-          if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.favicon !== 'https://someone.github.io/sacred-geometry-atlas/favicon.svg' || deployedLinks.manifest !== 'https://someone.github.io/sacred-geometry-atlas/site.webmanifest' || deployedLinks.appleTouchIcon !== 'https://someone.github.io/sacred-geometry-atlas/icons/atlas-192.png' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json' || deployedLinks.csv !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.csv' || deployedLinks.schema !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.manifest} / ${deployedLinks.appleTouchIcon} / ${deployedLinks.dataset} / ${deployedLinks.csv} / ${deployedLinks.schema}`);
+          if (deployedLinks.root !== 'https://someone.github.io/sacred-geometry-atlas/' || deployedLinks.favicon !== 'https://someone.github.io/sacred-geometry-atlas/favicon.svg' || deployedLinks.manifest !== 'https://someone.github.io/sacred-geometry-atlas/site.webmanifest' || deployedLinks.appleTouchIcon !== 'https://someone.github.io/sacred-geometry-atlas/icons/atlas-180.png' || deployedLinks.dataset !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.json' || deployedLinks.csv !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.csv' || deployedLinks.schema !== 'https://someone.github.io/sacred-geometry-atlas/data/geometry.schema.json') throw new Error(`404 deployed links did not preserve the configured project root: ${deployedLinks.root} / ${deployedLinks.manifest} / ${deployedLinks.appleTouchIcon} / ${deployedLinks.dataset} / ${deployedLinks.csv} / ${deployedLinks.schema}`);
           console.log('404 project root resolver smoke test passed.');
           NODE
       - name: Smoke-test route-native catalog links
@@ -4420,6 +4422,7 @@ jobs:
               Path("404.html"),
               Path("app.js"),
               Path("favicon.svg"),
+              Path("icons/atlas-180.png"),
               Path("icons/atlas-192.png"),
               Path("icons/atlas-512.png"),
               Path("index.html"),
@@ -4451,6 +4454,7 @@ jobs:
               "404.html",
               "app.js",
               "favicon.svg",
+              "icons/atlas-180.png",
               "icons/atlas-192.png",
               "icons/atlas-512.png",
               "index.html",
@@ -4540,7 +4544,7 @@ jobs:
               '<a class="home-link home-link-secondary" data-site-schema href="data/geometry.schema.json">': f'<a class="home-link home-link-secondary" data-site-schema href="{schema_url}">',
               '<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />': f'<link rel="icon" id="site-favicon" href="{html.escape(base_url + "favicon.svg", quote=True)}" type="image/svg+xml" />',
               '<link rel="manifest" id="site-manifest" href="site.webmanifest" />': f'<link rel="manifest" id="site-manifest" href="{html.escape(base_url + "site.webmanifest", quote=True)}" />',
-              '<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />': f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{html.escape(base_url + "icons/atlas-192.png", quote=True)}" />',
+              '<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-180.png" />': f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{html.escape(base_url + "icons/atlas-180.png", quote=True)}" />',
           }
           for old, new in not_found_replacements.items():
               if old not in not_found_source:

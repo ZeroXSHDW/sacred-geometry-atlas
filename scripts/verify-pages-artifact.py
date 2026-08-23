@@ -29,6 +29,7 @@ expected_files = {
     "404.html",
     "app.js",
     "favicon.svg",
+    "icons/atlas-180.png",
     "icons/atlas-192.png",
     "icons/atlas-512.png",
     "index.html",
@@ -63,7 +64,7 @@ expected_page = [
     '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />',
     f'<link rel="canonical" href="{base_url}" />',
     '<link rel="manifest" href="site.webmanifest" />',
-    '<link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />',
+    '<link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-180.png" />',
     f'<meta property="og:url" content="{base_url}" />',
     f'<meta property="og:image" content="{base_url}og.png" />',
     f'<meta name="twitter:image" content="{base_url}og.png" />',
@@ -89,7 +90,7 @@ missing.extend(token for token in [
     f'<a class="home-link home-link-secondary" data-site-schema href="{schema_target}">',
     f'<link rel="icon" id="site-favicon" href="{base_url}favicon.svg" type="image/svg+xml" />',
     f'<link rel="manifest" id="site-manifest" href="{base_url}site.webmanifest" />',
-    f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{base_url}icons/atlas-192.png" />',
+    f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{base_url}icons/atlas-180.png" />',
     '<meta name="application-name" content="Sacred Geometry Atlas" />',
     '<meta name="mobile-web-app-capable" content="yes" />',
     '<meta name="apple-mobile-web-app-capable" content="yes" />',
@@ -145,6 +146,7 @@ if (
 ):
     fail("Published web manifest is missing its Atlas navigation shortcuts")
 for icon_path, width, height in (
+    ("icons/atlas-180.png", 180, 180),
     ("icons/atlas-192.png", 192, 192),
     ("icons/atlas-512.png", 512, 512),
 ):
