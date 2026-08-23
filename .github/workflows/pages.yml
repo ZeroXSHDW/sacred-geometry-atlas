@@ -408,7 +408,7 @@ jobs:
           if (!html.includes('<summary aria-keyshortcuts="Escape">Keyboard guide</summary>') || !html.includes('<summary aria-keyshortcuts="Escape">Layer guide</summary>') || !html.includes('<summary id="activeProvenanceSummary" aria-keyshortcuts="Escape">') || !html.includes('<summary id="comparisonTableSummary" aria-keyshortcuts="Escape">') || !app.includes('function handleDisclosureKeydown(event)') || !app.includes('target.closest("details[open]")') || !app.includes('disclosure.open = false;') || !app.includes('restoreFocus(summary);') || !app.includes('window.addEventListener("keydown", handleDisclosureKeydown);')) throw new Error('Open disclosures must support Escape-to-close with summary focus restoration');
           if (!app.includes('function studySearchDimensions(study)') || !app.includes('function studySearchDerivedReadings(study)') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('`length ${study.length} ${unit}`') || !app.includes('`length ${number(study.length)} ${unit}`') || !app.includes('`${study.bayCount} bays`') || !app.includes('`symmetry ${number(study.symmetry, 2)}`') || !app.includes('`section ratio ${number(study.height / study.span, 2)}`') || !app.includes('`module / span ${number(study.module / study.span, 2)}`') || !app.includes('`radial reach ${number(study.radius)} ${unit}`') || !app.includes('floor area ${number(floorAreaEstimate, 0)} ${unit}²')) throw new Error('Catalog search must include labeled geometry and derived readings');
           if (!styles.includes('.search-field input::-webkit-search-cancel-button') || !styles.includes('.search-field input::-ms-clear')) throw new Error('Search field must expose one consistent clear affordance');
-          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'catalog-card-detail', 'class="catalog-card-measure"', 'const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;', 'highlightSearchText(`${study.era} · Axis: ${studyAxisLabel(study)} · ${study.emphasis}`)', 'compare-study-title', 'Length to span ratio', 'function catalogStudyAriaLabel(study, isActive)', 'study.typology}, ${study.place}, ${study.era};', 'number(study.radius)} ${geometryUnitName()};', 'studyAxisLabel(study)}; ${study.emphasis};', 'Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}', 'Source: ${studySource(study)}; ${studySourceNote(study)}', 'catalogStudyAriaLabel(study, isActive)', 'study.place', 'number(study.length)} ${geometryUnitName()} long, span', 'if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });', 'sort: "#sortSelect"', 'if (key === "sort")', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'function isCompactAtlasViewport()', 'const { scroll = true, focus = false, restoreCardFocus = false, reveal = false } = options;', 'const revealCompactStudy = reveal && scroll && isCompactAtlasViewport();', 'showPage("atlas", { scroll: revealCompactStudy ? false : scroll });', 'function scrollActiveStudyIntoView()', 'heading.scrollIntoView({ behavior, block: "start" })', 'if (revealCompactStudy) scrollActiveStudyIntoView();', 'toggleCompare(compareToggle.dataset.compareId, { focus: true })', 'announceStudy(activeStudy(), visible.length)', 'function focusCatalogControl(key, options = {})', 'const { preventScroll = true } = options;', 'control.focus({ preventScroll })', 'focusCatalogControl(key)', 'clearFilter("query", { focus: true })', 'clearCatalogFilters({ resetSort: true, focus: true })', 'clearFilter(chip.dataset.clearFilter, { focus: true })', 'if (focus) focusCatalogControl("query")', 'focusCompareToggle(id)', 'focusStudyCard(id)', 'focusCatalogControl("query", { preventScroll: false });']) {
+          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'catalog-card-detail', 'class="catalog-card-measure"', 'const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;', 'highlightSearchText(`${study.era} · Axis: ${studyAxisLabel(study)} · ${study.emphasis}`)', 'compare-study-title', 'Length to span ratio', 'function catalogStudyAriaLabel(study, isActive)', 'study.typology}, ${study.place}, ${study.era};', 'number(study.radius)} ${geometryUnitName()};', 'studyAxisLabel(study)}; ${study.emphasis};', 'Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}', 'Source: ${studySource(study)}; ${studySourceNote(study)}', 'catalogStudyAriaLabel(study, isActive)', 'study.place', 'number(study.length)} ${geometryUnitName()} long, span', 'if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });', 'sort: "#sortSelect"', 'if (key === "sort")', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'function isCompactAtlasViewport()', 'const { scroll = true, focus = false, restoreCardFocus = false, reveal = false } = options;', 'const revealCompactStudy = reveal && scroll && isCompactAtlasViewport();', 'showPage("atlas", { scroll: revealCompactStudy ? false : scroll });', 'function scrollActiveStudyIntoView()', 'heading.scrollIntoView({ behavior, block: "start" })', 'if (revealCompactStudy) scrollActiveStudyIntoView();', 'toggleCompare(compareToggle.dataset.compareId, { focus: true })', 'announceStudy(activeStudy(), visible.length)', 'function focusCatalogControl(key, options = {})', 'const { preventScroll = true } = options;', 'control.focus({ preventScroll })', 'focusCatalogControl(key)', 'clearFilter("query", { focus: true })', 'clearCatalogFilters({ resetSort: true, focus: true })', 'clearFilter(chip.dataset.clearFilter, { focus: true })', 'if (focus) focusCatalogControl("query")', 'focusCompareToggle(id)', 'focusStudyCard(id)', 'focusCatalogControl("query", { preventScroll: false });', 'cycleStudy(key === "j" ? 1 : -1, { scroll: true, focus: true });']) {
             if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
           }
           if (!app.includes('function focusStudyTarget(id)') || !app.includes('if (focusStudyCard(id)) return "card";') || !app.includes('const emptyState = $("#visualEmptyState");') || !app.includes('return "empty";') || !app.includes('return "heading";') || !app.includes('focusStudyTarget(id);') || !html.includes('id="visualEmptyHeading" tabindex="-1"') || !styles.includes('#visualEmptyHeading:focus-visible')) throw new Error('Opening a filtered-out study must restore focus to a visible Atlas context heading');
@@ -1263,6 +1263,77 @@ jobs:
           const expected = 'Study 02, The high gothic cathedral selected. Current drawing: Inside · Section · axis focus · 130% zoom. 3 studies visible.';
           if (studyStatus.textContent !== expected) throw new Error(`Study selection announcement lost drawing context: ${studyStatus.textContent}`);
           console.log('Study selection announcement smoke test passed.');
+          NODE
+      - name: Smoke-test keyboard study reveal
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const makeElement = () => {
+            const target = {
+              innerHTML: '', textContent: '', value: 'all', hidden: false, disabled: false, open: false,
+              title: '', href: '', checked: false, selectedOptions: [{ textContent: 'All' }], options: [],
+              dataset: {}, style: {}, scrollIntoView() {}, focus(options) { this.focusOptions = options; },
+              classList: { add() {}, remove() {}, toggle() {}, contains() { return false; } },
+              setAttribute() {}, removeAttribute() {}, appendChild() {}, replaceChildren() {}, querySelector() { return makeElement(); },
+              querySelectorAll() { return []; }, addEventListener() {}, click() {}, select() {}, getAttribute() { return ''; }
+            };
+            return new Proxy(target, { get(object, property) {
+              if (property in object) return object[property];
+              if (property === 'length') return 0;
+              if (['map', 'forEach', 'some', 'find'].includes(property)) return Array.prototype[property].bind([]);
+              if (property === 'toString') return () => '';
+              return () => {};
+            }});
+          };
+          const activeHeading = makeElement();
+          const elements = new Map([
+            ['#atlas', makeElement()],
+            ['#compareView', makeElement()],
+            ['#methodView', makeElement()],
+            ['#activeName', activeHeading]
+          ]);
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/basilica', hash: '#atlas/basilica' },
+              history: { pushState() {}, replaceState() {} },
+              matchMedia() { return { matches: false }; },
+              addEventListener() {},
+              scrollTo() {}
+            },
+            document: {
+              title: '',
+              body: { classList: { add() {}, remove() {}, contains() { return false; } } },
+              querySelector(selector) { return elements.get(selector) || makeElement(); },
+              querySelectorAll() { return []; },
+              createElement() { return makeElement(); },
+              activeElement: makeElement()
+            },
+            navigator: {},
+            setTimeout() { return 1; },
+            clearTimeout() {},
+            Blob,
+            URLSearchParams
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const marker = '  init();' + String.fromCharCode(10) + '})();';
+          const app = fs.readFileSync('app.js', 'utf8').replace(marker, '  window.__atlasTest = { state, handleKeyboard };' + String.fromCharCode(10) + '})();');
+          vm.runInNewContext(app, context);
+          const { state, handleKeyboard } = context.window.__atlasTest;
+          const press = (key) => {
+            let prevented = false;
+            activeHeading.focusOptions = null;
+            handleKeyboard({ key, target: { tagName: 'button', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+            return { prevented, focusOptions: activeHeading.focusOptions };
+          };
+          state.page = 'atlas';
+          state.activeId = 'basilica';
+          const forward = press('j');
+          if (!forward.prevented || state.activeId !== 'gothic' || !forward.focusOptions || forward.focusOptions.preventScroll !== false) throw new Error('J navigation did not reveal the newly focused study heading');
+          const backward = press('k');
+          if (!backward.prevented || state.activeId !== 'basilica' || !backward.focusOptions || backward.focusOptions.preventScroll !== false) throw new Error('K navigation did not reveal the newly focused study heading');
+          console.log('Keyboard study reveal smoke test passed.');
           NODE
       - name: Smoke-test empty keyboard navigation recovery
         run: |

@@ -1581,7 +1581,7 @@
     }
     if (key === "j" || key === "k") {
       event.preventDefault();
-      cycleStudy(key === "j" ? 1 : -1, { scroll: false, focus: true });
+      cycleStudy(key === "j" ? 1 : -1, { scroll: true, focus: true });
       return;
     }
     if (["1", "2", "3"].includes(key)) {

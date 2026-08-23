@@ -80,6 +80,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - The catalog marks a study link as the current page only when a study-specific Atlas route is active; the collection route keeps its default selected drawing distinct from page-current navigation semantics.
 - Compact pointer selections reveal the active drawing heading after catalog, comparison-card, or table links, while the activating study card retains focus for a predictable return path.
+- `J` / `K` study navigation reveals the newly focused active-study heading, keeping keyboard movement visible when the drawing is below the current viewport.
 - Narrow phone layouts keep catalog, study, comparison, filter, disclosure, recovery, and artifact actions at consistent 36–40px targets even when the browser does not report a coarse pointer; the branded 404 actions use the same narrow-screen protection.
 - Primary Atlas, Compare, Method, comparison-edit, and Method-return navigation uses real, context-aware hash links, preserving the active catalog scope, comparison selection, and study context for open-in-new-tab, middle-click, and copy-link behavior while ordinary clicks retain in-place focus and history handling.
 - The branded home link preserves normal modified-click and middle-click behavior, while an ordinary click still returns to the Atlas view in place.
@@ -128,7 +129,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 ### Keyboard shortcuts
 
 When the Atlas view is active, press `/` to focus study search, `Esc` to clear a focused search or close an open disclosure,
-`J` / `K` to move through the visible studies (or hear a recovery hint when filters leave none visible), `1` / `2` / `3` to switch between plan, elevation,
+`J` / `K` to move through the visible studies and reveal the newly focused study heading (or hear a recovery hint when filters leave none visible), `1` / `2` / `3` to switch between plan, elevation,
 and section, `I` / `O` to switch inside/outside, `+` / `-` to zoom in/out, and `R` to reset zoom. These shortcuts remain
 available while Atlas controls are focused; text fields, links, and disclosure summaries retain
 their native keyboard behavior.
