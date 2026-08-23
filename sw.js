@@ -10,6 +10,7 @@ const SHELL_PATHS = [
   "icons/atlas-180.png",
   "icons/atlas-192.png",
   "icons/atlas-512.png",
+  "icons/atlas-maskable.svg",
   "data/geometry.js",
   "data/geometry.json",
   "data/geometry.csv",

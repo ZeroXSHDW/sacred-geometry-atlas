@@ -33,6 +33,7 @@ expected_files = {
     "icons/atlas-180.png",
     "icons/atlas-192.png",
     "icons/atlas-512.png",
+    "icons/atlas-maskable.svg",
     "index.html",
     "og.png",
     "robots.txt",
@@ -135,6 +136,7 @@ manifest_icons = {
 required_manifest_icons = {
     "icons/atlas-192.png": {"sizes": "192x192", "type": "image/png"},
     "icons/atlas-512.png": {"sizes": "512x512", "type": "image/png"},
+    "icons/atlas-maskable.svg": {"sizes": "any", "type": "image/svg+xml", "purpose": "maskable"},
     "favicon.svg": {"sizes": "any", "type": "image/svg+xml"},
 }
 if (
@@ -189,6 +191,9 @@ if not all(token in service_worker for token in (
     'networkFirst(request)',
 )):
     fail("Published service worker is missing its versioned app shell or fetch strategy")
+maskable_icon = (site / "icons/atlas-maskable.svg").read_text()
+if '<rect width="32" height="32" fill="#111817"/>' not in maskable_icon or 'transform="translate(3.2 3.2) scale(.8)"' not in maskable_icon:
+    fail("Published maskable icon does not preserve its opaque background and safe-zone mark")
 
 try:
     dataset = json.loads((site / "data/geometry.json").read_text())

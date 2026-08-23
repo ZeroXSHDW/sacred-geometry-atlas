@@ -48,6 +48,12 @@
       "purpose": "any"
     },
     {
+      "src": "icons/atlas-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
       "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",

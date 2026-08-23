@@ -46,6 +46,7 @@ jobs:
           test -s icons/atlas-180.png
           test -s icons/atlas-192.png
           test -s icons/atlas-512.png
+          test -s icons/atlas-maskable.svg
           test -s site.webmanifest
           test -s sw.js
           test -s robots.txt
@@ -117,13 +118,15 @@ jobs:
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const pagesVerifier = fs.readFileSync('scripts/verify-pages-artifact.py', 'utf8');
-          if (manifest.name !== 'Sacred Geometry Atlas' || manifest.short_name !== 'Geometry Atlas' || manifest.start_url !== './' || manifest.scope !== './' || manifest.display !== 'standalone' || manifest.theme_color !== '#111817' || !Array.isArray(manifest.categories) || !manifest.categories.includes('education') || !manifest.categories.includes('reference') || !Array.isArray(manifest.shortcuts) || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Explore Atlas' && shortcut.url === './#atlas') || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Compare studies' && shortcut.url === './#compare') || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Read Method' && shortcut.url === './#method') || !Array.isArray(manifest.icons) || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-192.png' && icon.sizes === '192x192' && icon.type === 'image/png') || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-512.png' && icon.sizes === '512x512' && icon.type === 'image/png') || !manifest.icons.some((icon) => icon && icon.src === 'favicon.svg' && icon.type === 'image/svg+xml')) throw new Error('Web manifest must preserve the static Atlas identity, installed-app shortcuts, and complete icon set');
+          if (manifest.name !== 'Sacred Geometry Atlas' || manifest.short_name !== 'Geometry Atlas' || manifest.start_url !== './' || manifest.scope !== './' || manifest.display !== 'standalone' || manifest.theme_color !== '#111817' || !Array.isArray(manifest.categories) || !manifest.categories.includes('education') || !manifest.categories.includes('reference') || !Array.isArray(manifest.shortcuts) || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Explore Atlas' && shortcut.url === './#atlas') || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Compare studies' && shortcut.url === './#compare') || !manifest.shortcuts.some((shortcut) => shortcut && shortcut.name === 'Read Method' && shortcut.url === './#method') || !Array.isArray(manifest.icons) || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-192.png' && icon.sizes === '192x192' && icon.type === 'image/png') || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-512.png' && icon.sizes === '512x512' && icon.type === 'image/png') || !manifest.icons.some((icon) => icon && icon.src === 'icons/atlas-maskable.svg' && icon.sizes === 'any' && icon.type === 'image/svg+xml' && icon.purpose === 'maskable') || !manifest.icons.some((icon) => icon && icon.src === 'favicon.svg' && icon.type === 'image/svg+xml')) throw new Error('Web manifest must preserve the static Atlas identity, installed-app shortcuts, and complete icon set');
           for (const [iconPath, size] of [['icons/atlas-180.png', 180], ['icons/atlas-192.png', 192], ['icons/atlas-512.png', 512]]) {
             const iconBytes = fs.readFileSync(iconPath);
             const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
             if (!iconBytes.subarray(0, 8).equals(pngSignature) || iconBytes.readUInt32BE(16) !== size || iconBytes.readUInt32BE(20) !== size) throw new Error('Icon ' + iconPath + ' must be a valid ' + size + 'x' + size + ' PNG');
           }
-          if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v2"') || !serviceWorker.includes('icons/atlas-180.png') || !serviceWorker.includes('icons/atlas-192.png') || !serviceWorker.includes('icons/atlas-512.png') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('function navigationFallback(request)') || !serviceWorker.includes('const isAppShell = requestUrl.pathname === scopePath') || !serviceWorker.includes('new URL(isAppShell ? "index.html" : "404.html", scopeUrl).href') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell, offline 404 recovery, install icons, and network-first fetch strategy');
+          const maskableIcon = fs.readFileSync('icons/atlas-maskable.svg', 'utf8');
+          if (!maskableIcon.includes('<rect width="32" height="32" fill="#111817"/>') || !maskableIcon.includes('transform="translate(3.2 3.2) scale(.8)"')) throw new Error('Maskable icon must preserve its opaque background and safe-zone mark');
+          if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v2"') || !serviceWorker.includes('icons/atlas-180.png') || !serviceWorker.includes('icons/atlas-192.png') || !serviceWorker.includes('icons/atlas-512.png') || !serviceWorker.includes('icons/atlas-maskable.svg') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('function navigationFallback(request)') || !serviceWorker.includes('const isAppShell = requestUrl.pathname === scopePath') || !serviceWorker.includes('new URL(isAppShell ? "index.html" : "404.html", scopeUrl).href') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell, offline 404 recovery, install icons, and network-first fetch strategy');
           if (!workflow.includes('PAGES_CACHE_NAME: sacred-geometry-atlas-${{ github.sha }}') || !workflow.includes('source_cache_marker') || !pagesVerifier.includes('PAGES_CACHE_NAME') || !pagesVerifier.includes('sacred-geometry-atlas-(?:v2|[0-9a-f]{40})')) throw new Error('Pages deployment must stamp and verify a revision-specific offline-shell cache name');
           if (!app.includes('function registerServiceWorker()') || !app.includes('serviceWorker.register(workerUrl.href, { scope })') || !app.includes('registerServiceWorker();')) throw new Error('Atlas must register the progressive offline app shell');
           if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('const setConnectionState = (connectionState) =>') || !app.includes('setConnectionState("offline")') || !app.includes('setConnectionState("online")') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[data-connection-state="online"]') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite, state-aware connection notice with print and forced-colors styling');
@@ -165,7 +168,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!styles.includes('-webkit-text-size-adjust: 100%;') || !styles.includes('text-size-adjust: 100%;') || !notFound.includes('-webkit-text-size-adjust: 100%;') || !notFound.includes('text-size-adjust: 100%;')) throw new Error('Mobile pages must stabilize text sizing without disabling user zoom');
-          for (const token of ['icons/atlas-180.png', 'icons/atlas-192.png', 'icons/atlas-512.png', '180px', '192px', '512px', 'Install Atlas', 'Refresh Atlas']) {
+          for (const token of ['icons/atlas-180.png', 'icons/atlas-192.png', 'icons/atlas-512.png', 'icons/atlas-maskable.svg', '180px', '192px', '512px', 'Install Atlas', 'Refresh Atlas']) {
             if (!readme.includes(token)) throw new Error('GitHub Pages publishing guide is missing install icon documentation: ' + token);
           }
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>') || !sitemap.includes('<loc>./data/geometry.json</loc>') || !sitemap.includes('<loc>./data/geometry.csv</loc>') || !sitemap.includes('<loc>./data/geometry.schema.json</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
@@ -1048,6 +1051,7 @@ jobs:
           assert(cacheEntries.has('https://example.test/atlas/icons/atlas-180.png'), 'app shell did not cache the 180px Apple touch icon');
           assert(cacheEntries.has('https://example.test/atlas/icons/atlas-192.png'), 'app shell did not cache the 192px install icon');
           assert(cacheEntries.has('https://example.test/atlas/icons/atlas-512.png'), 'app shell did not cache the 512px install icon');
+          assert(cacheEntries.has('https://example.test/atlas/icons/atlas-maskable.svg'), 'app shell did not cache the maskable install icon');
           await dispatch('activate', {});
           assert(claimed, 'service worker did not claim clients');
           assert(deletedCaches.includes('sacred-geometry-atlas-old'), 'old cache was not retired');
@@ -4679,6 +4683,7 @@ jobs:
               Path("icons/atlas-180.png"),
               Path("icons/atlas-192.png"),
               Path("icons/atlas-512.png"),
+              Path("icons/atlas-maskable.svg"),
               Path("index.html"),
               Path("og.png"),
               Path("robots.txt"),
@@ -4711,6 +4716,7 @@ jobs:
               "icons/atlas-180.png",
               "icons/atlas-192.png",
               "icons/atlas-512.png",
+              "icons/atlas-maskable.svg",
               "index.html",
               "og.png",
               "robots.txt",

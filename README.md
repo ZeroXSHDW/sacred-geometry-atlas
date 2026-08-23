@@ -115,7 +115,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The branded GitHub Pages 404 recovery surface honors the same stored preference when its bootstrap runs and follows the system color scheme in its CSS-only fallback.
 - A network-first [`sw.js`](sw.js) offline shell keeps the Atlas root, data artifacts, and branded 404 recovery page available after a successful visit, serving the app shell only for Atlas-root navigations and the recovery page for missing paths while preferring fresh network content when connectivity returns; the Pages deploy stamps the cache name with the GitHub commit SHA so each published revision retires the previous offline shell predictably, while local checkouts retain the stable v2 cache name.
 - An accessible connection notice announces offline mode and the return to connectivity without competing with the drawing or print surfaces; the restored state uses the Atlas’s positive teal treatment before it fades away.
-- The 180px Apple touch icon plus standard 192px and 512px raster install icons are derived from the established favicon and included in the offline shell and curated Pages artifact; the 192px and 512px icons are also declared in the web manifest.
+- The 180px Apple touch icon plus standard 192px and 512px raster install icons are derived from the established favicon and included in the offline shell and curated Pages artifact; the 192px and 512px icons are also declared in the web manifest alongside a safe-zone maskable SVG icon for launchers that apply adaptive shapes.
 - Browsers that expose an install prompt receive a capability-gated Install Atlas action with live acceptance, dismissal, and installed-state feedback; unsupported browsers keep the header uncluttered.
 - Already-open tabs surface a newer offline-shell version after an existing service-worker controller updates, with a route-preserving Refresh Atlas action instead of silently leaving the tab on an older shell.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
@@ -194,7 +194,7 @@ The Pages workflow pins validation to Node.js 22 so syntax and data checks do no
 
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
 
-The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon.
+The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon and the safe-zone icons/atlas-maskable.svg launcher mark.
 
 ## Add real churches
 
