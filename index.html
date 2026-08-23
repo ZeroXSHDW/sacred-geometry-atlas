@@ -809,6 +809,10 @@
               <span aria-hidden="true">←</span>
               <span>Open current study</span>
             </a>
+            <button class="share-button method-share-button" id="shareMethod" type="button" aria-label="Share method guide" aria-controls="methodShareFallback" aria-expanded="false" title="Share method guide">
+              <span aria-hidden="true">↗</span>
+              <span>Share guide</span>
+            </button>
             <button class="share-button method-print-button" id="printMethod" type="button" aria-label="Print method guide" title="Print method guide">
               <span aria-hidden="true">⎙</span>
               <span>Print guide</span>
@@ -825,6 +829,15 @@
           </div>
           <textarea id="methodRouteFallbackText" rows="2" readonly aria-label="Method route URL" aria-describedby="methodRouteFallbackHint"></textarea>
           <p class="manual-copy-fallback-hint" id="methodRouteFallbackHint">The full route is selected for copying.</p>
+        </div>
+        <span class="sr-only" id="methodShareStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+        <div class="manual-copy-fallback" id="methodShareFallback" role="region" aria-labelledby="methodShareFallbackHeading" hidden>
+          <div class="manual-copy-fallback-heading-row">
+            <p class="manual-copy-fallback-heading" id="methodShareFallbackHeading">Copy this Method share message manually</p>
+            <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="methodShareFallback" type="button" aria-label="Hide Method share message manual-copy field" title="Hide manual-copy field">Hide</button>
+          </div>
+          <textarea id="methodShareFallbackText" rows="4" readonly aria-label="Method share message and link" aria-describedby="methodShareFallbackHint"></textarea>
+          <p class="manual-copy-fallback-hint" id="methodShareFallbackHint">The guide message and route are selected for copying.</p>
         </div>
 
         <div class="method-hero">

@@ -153,6 +153,7 @@
   let citationResetTimer;
   let catalogCitationResetTimer;
   let comparisonCitationResetTimer;
+  let methodShareResetTimer;
   let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
   let lastCatalogStatusFilter = null;
@@ -1074,6 +1075,7 @@
     $("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
+    $("#shareMethod").addEventListener("click", shareMethod);
     $("#copyCatalogCitation").addEventListener("click", copyCatalogCitation);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
@@ -1342,7 +1344,8 @@
     "#catalogRouteFallback": "#copyCatalogRoute",
     "#studyRouteFallback": "#copyStudyRoute",
     "#comparisonRouteFallback": "#copyComparisonRoute",
-    "#methodRouteFallback": "#copyMethodRoute"
+    "#methodRouteFallback": "#copyMethodRoute",
+    "#methodShareFallback": "#shareMethod"
   };
   const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
@@ -2431,6 +2434,53 @@
     }
   }
 
+  async function shareMethod() {
+    const button = $("#shareMethod");
+    const status = $("#methodShareStatus");
+    if (!button || !status || !beginAsyncAction(button)) return;
+    try {
+      hideManualCopyFallbacks();
+      const contextStudy = methodContextStudy();
+      const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
+      const shareUrl = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
+      const sharePayload = {
+        title: contextStudy ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas` : "Sacred Geometry Atlas · Method guide",
+        text: `Read the Method guide${contextStudy ? ` alongside ${studyShortName(contextStudy)}` : ""} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions.`,
+        url: shareUrl
+      };
+
+      const nativeShareResult = await attemptNativeShare(sharePayload);
+      if (nativeShareResult === "shared") {
+        temporaryButtonFeedback(button, "Shared", `Method guide shared: ${scope}`, "Share guide", "Share method guide", "share-method");
+        status.textContent = `Method guide shared for ${scope}.`;
+        return;
+      }
+      if (nativeShareResult === "cancelled") {
+        status.textContent = "Method guide sharing cancelled.";
+        return;
+      }
+
+      const copied = await copyText(sharePayloadText(sharePayload));
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Copied", `Method guide share text and link copied: ${scope}`);
+        status.textContent = `Method guide share text and link for ${scope} copied.`;
+        window.clearTimeout(methodShareResetTimer);
+        methodShareResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Share guide", "Share method guide");
+        }, 2200);
+      } else {
+        const fallbackShown = revealManualCopyFallback("#methodShareFallback", "#methodShareFallbackText", sharePayloadText(sharePayload));
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The Method share message and route are shown below for manual copying."
+          : "Copying was unavailable. Use the Method route from the address bar and the guide details shown here.";
+      }
+    } finally {
+      endAsyncAction(button);
+    }
+  }
+
   function catalogScopeLabel() {
     const parts = [];
     if (state.query) parts.push(`results matching “${state.query}”`);
@@ -2748,8 +2798,7 @@
 
   function printMethod() {
     const button = $("#printMethod");
-    const route = parseRoute();
-    const contextStudy = route.contextStudyId ? studies.find((study) => study.id === route.contextStudyId) : null;
+    const contextStudy = methodContextStudy();
     const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
     if (typeof window.print !== "function") {
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print guide", "Print method guide", "method-print");
@@ -2771,6 +2820,11 @@
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print guide", "Print method guide", "method-print");
       announceKeyboard("Printing is unavailable in this browser.");
     }
+  }
+
+  function methodContextStudy() {
+    const route = parseRoute();
+    return route.contextStudyId ? studies.find((study) => study.id === route.contextStudyId) : null;
   }
 
   function printCatalog() {

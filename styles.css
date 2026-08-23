@@ -1488,6 +1488,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-view,
   .method-view,
   .method-return-button,
+  .method-share-button,
   .method-print-button,
   .visual-empty-state,
   .route-copy-button { display: none !important; }
