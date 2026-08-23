@@ -28,6 +28,7 @@ jobs:
         run: |
           node --check app.js
           node --check data/geometry.js
+          node --check sw.js
           node --check scripts/sync-geometry-json.js
           python3 -m py_compile scripts/verify-pages-artifact.py
           node scripts/sync-geometry-json.js --check
@@ -43,6 +44,7 @@ jobs:
           test -s og.png
           test -s favicon.svg
           test -s site.webmanifest
+          test -s sw.js
           test -s robots.txt
           test -s sitemap.xml
           node - <<'NODE'
@@ -102,6 +104,7 @@ jobs:
           console.log(`Geometry schema validation passed: ${source.studies.length} records.`);
           const html = fs.readFileSync('index.html', 'utf8');
           const manifest = JSON.parse(fs.readFileSync('site.webmanifest', 'utf8'));
+          const serviceWorker = fs.readFileSync('sw.js', 'utf8');
           const notFound = fs.readFileSync('404.html', 'utf8');
           const app = fs.readFileSync('app.js', 'utf8');
           const styles = fs.readFileSync('styles.css', 'utf8');
@@ -112,6 +115,8 @@ jobs:
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
           const pagesVerifier = fs.readFileSync('scripts/verify-pages-artifact.py', 'utf8');
           if (manifest.name !== 'Sacred Geometry Atlas' || manifest.short_name !== 'Geometry Atlas' || manifest.start_url !== './' || manifest.scope !== './' || manifest.display !== 'standalone' || manifest.theme_color !== '#111817' || !Array.isArray(manifest.icons) || !manifest.icons.some((icon) => icon && icon.src === 'favicon.svg' && icon.type === 'image/svg+xml')) throw new Error('Web manifest must preserve the static Atlas identity and favicon icon');
+          if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v1"') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell and network-first fetch strategy');
+          if (!app.includes('function registerServiceWorker()') || !app.includes('navigator.serviceWorker.register(workerUrl.href, { scope })') || !app.includes('registerServiceWorker();')) throw new Error('Atlas must register the progressive offline app shell');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
           if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
@@ -156,7 +161,7 @@ jobs:
           const notFoundNarrowEnd = notFound.indexOf('@media (pointer: coarse)', notFoundNarrowStart);
           const notFoundNarrow = notFound.slice(notFoundNarrowStart, notFoundNarrowEnd);
           if (!notFoundNarrow.includes('.home-link { min-height: 44px; }')) throw new Error('404 recovery actions must retain a 44px target at narrow widths');
-          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'site.webmanifest', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Method guide; clipboard', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
+          for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'site.webmanifest', 'sw.js', 'offline shell', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Method guide; clipboard', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
           for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify curated Pages artifact', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) {
@@ -721,6 +726,116 @@ jobs:
           } finally {
             fs.rmSync(temporaryRoot, { recursive: true, force: true });
           }
+          NODE
+      - name: Smoke-test offline app shell
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          (async () => {
+          const assert = (condition, message) => {
+            if (!condition) throw new Error(message);
+          };
+          const cacheEntries = new Map();
+          const deletedCaches = [];
+          let waiting = false;
+          let claimed = false;
+          let online = true;
+          const response = (url, body = url) => ({
+            ok: true,
+            url,
+            body,
+            clone() {
+              return response(this.url, this.body);
+            }
+          });
+          const cache = {
+            async addAll(urls) {
+              urls.forEach((url) => cacheEntries.set(String(url), response(String(url))));
+            },
+            async put(request, value) {
+              cacheEntries.set(typeof request === 'string' ? request : request.url, value);
+            }
+          };
+          const cachesApi = {
+            async open() {
+              return cache;
+            },
+            async match(request) {
+              return cacheEntries.get(typeof request === 'string' ? request : request.url) || null;
+            },
+            async keys() {
+              return ['sacred-geometry-atlas-old', 'sacred-geometry-atlas-v1'];
+            },
+            async delete(key) {
+              deletedCaches.push(key);
+              return true;
+            }
+          };
+          const handlers = {};
+          const self = {
+            registration: { scope: 'https://example.test/atlas/' },
+            location: { origin: 'https://example.test' },
+            clients: {
+              async claim() {
+                claimed = true;
+              }
+            },
+            async skipWaiting() {
+              waiting = true;
+            },
+            addEventListener(type, handler) {
+              handlers[type] = handler;
+            }
+          };
+          const context = {
+            self,
+            caches: cachesApi,
+            URL,
+            Response: { error() { return { ok: false, type: 'error' }; } },
+            fetch: async (request) => {
+              if (!online) throw new Error('offline');
+              return response(request.url, 'network');
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('sw.js', 'utf8'), context);
+          const dispatch = async (type, event) => {
+            let lifecycle;
+            let fetchResponse;
+            handlers[type]({
+              ...event,
+              waitUntil(value) {
+                lifecycle = value;
+              },
+              respondWith(value) {
+                fetchResponse = value;
+              }
+            });
+            if (lifecycle) await lifecycle;
+            return fetchResponse ? await fetchResponse : null;
+          };
+          await dispatch('install', {});
+          assert(waiting, 'service worker did not skip waiting');
+          assert(cacheEntries.has('https://example.test/atlas/index.html'), 'app shell did not cache index');
+          assert(cacheEntries.has('https://example.test/atlas/data/geometry.json'), 'app shell did not cache dataset');
+          await dispatch('activate', {});
+          assert(claimed, 'service worker did not claim clients');
+          assert(deletedCaches.includes('sacred-geometry-atlas-old'), 'old cache was not retired');
+          online = false;
+          const offlineNavigation = await dispatch('fetch', {
+            request: { method: 'GET', mode: 'navigate', url: 'https://example.test/atlas/a-missing-path' }
+          });
+          assert(offlineNavigation && offlineNavigation.url === 'https://example.test/atlas/index.html', 'offline navigation did not fall back to cached index');
+          online = true;
+          const freshAsset = await dispatch('fetch', {
+            request: { method: 'GET', mode: 'same-origin', url: 'https://example.test/atlas/styles.css' }
+          });
+          assert(freshAsset && freshAsset.body === 'network', 'network-first fetch did not prefer fresh asset content');
+          console.log('Offline app-shell install, recovery, update, and cache cleanup smoke test passed.');
+          })().catch((error) => {
+            console.error(error);
+            process.exitCode = 1;
+          });
           NODE
       - name: Audit HTML accessibility references
         run: |
@@ -4010,6 +4125,7 @@ jobs:
               Path("site.webmanifest"),
               Path("sitemap.xml"),
               Path("styles.css"),
+              Path("sw.js"),
           ]
           custom_domain = Path("CNAME")
           if custom_domain.exists() and not custom_domain.is_file():
@@ -4038,6 +4154,7 @@ jobs:
               "site.webmanifest",
               "sitemap.xml",
               "styles.css",
+              "sw.js",
               "data/geometry.csv",
               "data/geometry.js",
               "data/geometry.json",

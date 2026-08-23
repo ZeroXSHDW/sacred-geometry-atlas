@@ -109,6 +109,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The Method view keeps the current study and active Atlas scope in context with a study-aware deep link, a visible scope label, live status/provenance counts, scope-aware sharing and citations, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A repository-relative `site.webmanifest` gives compatible browsers a standalone, dark-themed Geometry Atlas identity without adding a build step or server dependency.
+- A network-first [`sw.js`](sw.js) offline shell keeps the Atlas, data artifacts, and recovery page available after a successful visit while preferring fresh network content when connectivity returns.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, 404-reference, and geometry-schema validation on pull requests and before GitHub Pages deployment.
@@ -182,7 +183,7 @@ If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository
 
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
 
-The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
+The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
 
 ## Add real churches
 
@@ -246,6 +247,7 @@ The project has no build step. Check JavaScript syntax, serve the files, and tes
 ```bash
 node --check app.js
 node --check data/geometry.js
+node --check sw.js
 node --check scripts/sync-geometry-json.js
 node scripts/sync-geometry-json.js --check
 node -e "JSON.parse(require('fs').readFileSync('data/geometry.json', 'utf8'))"

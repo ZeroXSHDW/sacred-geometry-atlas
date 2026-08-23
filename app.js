@@ -271,7 +271,25 @@
     document.title = page[0].toUpperCase() + page.slice(1) + " · Sacred Geometry Atlas";
   }
 
+  function registerServiceWorker() {
+    if (typeof navigator === "undefined" || !navigator.serviceWorker || typeof navigator.serviceWorker.register !== "function") return;
+    const baseUrl = typeof document !== "undefined" && document.baseURI
+      ? document.baseURI
+      : typeof window !== "undefined" && window.location && window.location.href
+        ? window.location.href
+        : "";
+    if (!baseUrl || typeof URL !== "function") return;
+    try {
+      const workerUrl = new URL("sw.js", baseUrl);
+      const scope = new URL("./", workerUrl).pathname;
+      navigator.serviceWorker.register(workerUrl.href, { scope }).catch(() => {});
+    } catch (error) {
+      // Offline support is progressive enhancement; keep the atlas usable if registration is unavailable.
+    }
+  }
+
   function init() {
+    registerServiceWorker();
     if (dataIssue) {
       document.body.classList.remove("no-js");
       document.body.classList.add("data-error-state");

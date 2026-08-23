@@ -35,6 +35,7 @@ expected_files = {
     "site.webmanifest",
     "sitemap.xml",
     "styles.css",
+    "sw.js",
     "data/geometry.csv",
     "data/geometry.js",
     "data/geometry.json",
@@ -51,6 +52,7 @@ if custom_domain.is_file() and (site / "CNAME").read_text() != custom_domain.rea
 
 page = (site / "index.html").read_text()
 manifest = (site / "site.webmanifest").read_text()
+service_worker = (site / "sw.js").read_text()
 not_found = (site / "404.html").read_text()
 robots = (site / "robots.txt").read_text()
 sitemap = (site / "sitemap.xml").read_text()
@@ -97,6 +99,15 @@ if (
     or not any(icon.get("src") == "favicon.svg" and icon.get("type") == "image/svg+xml" for icon in manifest_data["icons"] if isinstance(icon, dict))
 ):
     fail("Published web manifest is missing its static Atlas identity or favicon icon")
+if not all(token in service_worker for token in (
+    'self.addEventListener("install"',
+    'self.addEventListener("activate"',
+    'self.addEventListener("fetch"',
+    'const CACHE_NAME = "sacred-geometry-atlas-v1"',
+    'data/geometry.json',
+    'networkFirst(request)',
+)):
+    fail("Published service worker is missing its versioned app shell or fetch strategy")
 
 try:
     dataset = json.loads((site / "data/geometry.json").read_text())
