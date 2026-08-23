@@ -1032,6 +1032,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .hero-stats { justify-content: space-between; gap: 0.75rem; }
   .share-button { padding: 0.5rem; }
   .share-button span:last-child { display: none; }
+  .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
+  .search-clear { width: 36px; height: 36px; }
   .study-share-actions span.study-action-label { display: inline; font-size: 0; white-space: nowrap; }
   #shareStudy span.study-action-label::after { content: "Share"; font-size: 0.5rem; }
   #copyCitation span.study-action-label::after { content: "Cite"; font-size: 0.5rem; }

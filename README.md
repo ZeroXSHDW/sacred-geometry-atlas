@@ -80,6 +80,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Catalog study entries are real route links as well as in-place selectors, so a study can be opened in a new tab or copied from the browser without losing the current drawing context.
 - The catalog marks a study link as the current page only when a study-specific Atlas route is active; the collection route keeps its default selected drawing distinct from page-current navigation semantics.
 - Compact pointer selections reveal the active drawing heading after catalog, comparison-card, or table links, while the activating study card retains focus for a predictable return path.
+- Narrow catalog layouts keep the icon-only comparison and search-clear controls touch-sized even when the browser does not report a coarse pointer, so small-window keyboard and pointer paths retain comfortable targets.
 - Primary Atlas, Compare, Method, comparison-edit, and Method-return navigation uses real, context-aware hash links, preserving the active catalog scope, comparison selection, and study context for open-in-new-tab, middle-click, and copy-link behavior while ordinary clicks retain in-place focus and history handling.
 - The branded home link preserves normal modified-click and middle-click behavior, while an ordinary click still returns to the Atlas view in place.
 - Browser tab titles follow the active study, drawing state, catalog scope, and comparison selection.
