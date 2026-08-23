@@ -229,7 +229,60 @@
     return `${surface} · ${mode} · ${layerFocusLabel()} · ${zoomPercent()} zoom`;
   };
 
+  const defaultPageDescription = "Explore church architecture through plans, sections, modules, axes, and enclosing forms.";
+  const setMetaContent = (selector, value) => {
+    const target = $(selector);
+    if (target && typeof target.setAttribute === "function") target.setAttribute("content", value);
+  };
+  function updateDocumentMetadata(page = state.page) {
+    const route = parseRoute();
+    const study = activeStudy();
+    let title = "Sacred Geometry Atlas";
+    let description = defaultPageDescription;
+    if (page === "atlas" && study) {
+      const surface = state.surface === "interior" ? "Inside" : "Outside";
+      const mode = state.mode[0].toUpperCase() + state.mode.slice(1);
+      const hasCatalogScope = Boolean(
+        state.query
+        || state.filter !== "all"
+        || state.filterPlace !== "all"
+        || state.filterEra !== "all"
+        || state.filterAxis !== "all"
+        || state.filterStatus !== "all"
+        || state.sort !== "index"
+        || state.compareIds.length > 0
+      );
+      if (!route.studyId && hasCatalogScope) {
+        title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;
+        description = `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas, with plans, sections, modules, axes, proportions, status labels, and provenance.`;
+      } else {
+        title = `${studyIdentityLabel(study)} · ${surface} ${mode} · Sacred Geometry Atlas`;
+        description = `${surface} ${mode.toLowerCase()} reading of ${study.name}, a ${study.typology.toLowerCase()} study from ${study.place} (${study.era}); ${studyAxisLabel(study)} and ${study.emphasis}. ${studyStatusLabel(study)}: ${studyStatusDescriptionSentence(study)}`;
+      }
+    } else if (page === "compare") {
+      const selected = selectedComparisonStudies();
+      const selectionLabel = selected.length
+        ? selected.map((candidate) => studyIdentityLabel(candidate)).join(", ")
+        : "the full collection";
+      title = selected.length ? `Compare ${selectionLabel} · Sacred Geometry Atlas` : "Compare studies · Sacred Geometry Atlas";
+      description = `Compare ${selectionLabel} through plans, sections, modules, axes, proportional readings, data status, and provenance.`;
+    } else if (page === "method") {
+      const contextStudy = route.contextStudyId ? studies.find((candidate) => candidate.id === route.contextStudyId) : null;
+      title = contextStudy ? `Method · ${studyIdentityLabel(contextStudy)} · Sacred Geometry Atlas` : "Method · Sacred Geometry Atlas";
+      description = contextStudy
+        ? `Read the Sacred Geometry Atlas method guide with ${studyIdentityLabel(contextStudy)} in context: axes, modules, envelopes, symmetry, derived readings, and evidence labels.`
+        : "Read the Sacred Geometry Atlas method guide for axes, modules, envelopes, symmetry, derived readings, and evidence labels.";
+    }
+    setMetaContent('meta[name="description"]', description);
+    setMetaContent('meta[property="og:title"]', title);
+    setMetaContent('meta[property="og:description"]', description);
+    setMetaContent('meta[name="twitter:title"]', title);
+    setMetaContent('meta[name="twitter:description"]', description);
+    if (window.location && typeof window.location.href === "string") setMetaContent('meta[property="og:url"]', window.location.href);
+  }
+
   function updateDocumentTitle(page = state.page) {
+    updateDocumentMetadata(page);
     if (page === "atlas" && activeStudy()) {
       const route = parseRoute();
       const hasCatalogScope = Boolean(

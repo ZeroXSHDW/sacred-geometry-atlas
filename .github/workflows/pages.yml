@@ -4719,6 +4719,68 @@ jobs:
           console.log('Blocked export feedback smoke test passed.');
           NODE
 
+      - name: Smoke-test route-aware share metadata
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const dataContext = { window: {} };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), dataContext);
+          const selectors = [
+            'meta[name="description"]',
+            'meta[property="og:title"]',
+            'meta[property="og:description"]',
+            'meta[property="og:url"]',
+            'meta[name="twitter:title"]',
+            'meta[name="twitter:description"]'
+          ];
+          const metas = new Map(selectors.map((selector) => [selector, {
+            content: '',
+            setAttribute(name, value) { this[name] = value; }
+          }]));
+          const location = { href: 'https://example.github.io/sacred-geometry-atlas/#atlas/gothic/section/interior/axis', hash: '#atlas/gothic/section/interior/axis' };
+          const context = {
+            window: {
+              CHURCH_GEOMETRY: dataContext.window.CHURCH_GEOMETRY,
+              CHURCH_GEOMETRY_SCHEMA: dataContext.window.CHURCH_GEOMETRY_SCHEMA,
+              location
+            },
+            document: {
+              title: '',
+              querySelector(selector) { return metas.get(selector) || null; },
+              querySelectorAll() { return []; }
+            },
+            URL,
+            console
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, updateDocumentTitle };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, updateDocumentTitle } = context.window.__atlasTest;
+          const content = (selector) => metas.get(selector).content;
+          const setRoute = (hash) => {
+            location.hash = hash;
+            location.href = `https://example.github.io/sacred-geometry-atlas/${hash}`;
+          };
+          state.page = 'atlas';
+          state.activeId = 'gothic';
+          state.mode = 'section';
+          state.surface = 'interior';
+          state.layer = 'axis';
+          setRoute('#atlas/gothic/section/interior/axis');
+          updateDocumentTitle('atlas');
+          if (!content('meta[property="og:title"]').includes('High gothic cathedral') || !content('meta[name="description"]').includes('Northern Europe') || content('meta[property="og:url"]') !== location.href) throw new Error('Study metadata did not follow the active deep link');
+          state.page = 'compare';
+          state.compareIds = ['basilica', 'gothic'];
+          setRoute('#compare/basilica,gothic');
+          updateDocumentTitle('compare');
+          if (!content('meta[property="og:title"]').includes('Longitudinal basilica') || !content('meta[property="og:title"]').includes('High gothic cathedral') || !content('meta[name="twitter:description"]').includes('provenance')) throw new Error('Comparison metadata did not identify its selected studies');
+          state.page = 'method';
+          setRoute('#method/gothic');
+          updateDocumentTitle('method');
+          if (!content('meta[name="twitter:title"]').includes('Method') || !content('meta[property="og:description"]').includes('High gothic cathedral')) throw new Error('Method metadata did not preserve study context');
+          console.log('Route-aware metadata smoke test passed.');
+          NODE
+
   deploy:
     needs: validate
     if: github.event_name != 'pull_request'
