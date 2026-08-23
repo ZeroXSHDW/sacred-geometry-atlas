@@ -132,8 +132,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 When the Atlas view is active, press `/` to focus study search, `Esc` to clear a focused search or close an open disclosure,
 `J` / `K` to move through the visible studies and reveal the newly focused study heading (or hear a recovery hint when filters leave none visible), `1` / `2` / `3` to switch between plan, elevation,
 and section, `I` / `O` to switch inside/outside, `+` / `-` to zoom in/out, and `R` to reset zoom. These shortcuts remain
-available while Atlas controls are focused; text fields, links, and disclosure summaries retain
-their native keyboard behavior.
+work from the page or from a matching Atlas control that advertises the same shortcut; text fields,
+links, disclosure summaries, and unrelated buttons retain their native keyboard behavior.
 When two or more studies are selected, press `C` to open the focused comparison.
 
 ## Run locally

@@ -287,7 +287,7 @@ jobs:
           for (const token of ['data-surface="exterior" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-mode="plan" type="button" aria-pressed="true" aria-controls="geometryCanvas"', 'data-layer="all" type="button" aria-pressed="true" aria-controls="geometryCanvas"']) {
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
           }
-          if (!html.includes('aria-keyshortcuts="j"') || !html.includes('aria-keyshortcuts="k"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="c"') || !html.includes('aria-keyshortcuts="i"') || !html.includes('aria-keyshortcuts="o"') || !html.includes('aria-keyshortcuts="-"') || !html.includes('aria-keyshortcuts="+"') || !html.includes('<kbd>+</kbd> <kbd>-</kbd>') || !html.includes('<kbd>C</kbd>') || !html.includes('Open focused comparison') || !app.includes('const zoomDeltaForKey = (key) =>') || !app.includes('const zoomDelta = zoomDeltaForKey(key);') || !app.includes('if (key === "c")') || !app.includes('showPage("compare");') || !app.includes('Select at least two studies to open comparison.')) throw new Error('Shortcut metadata must match the implemented Atlas controls');
+          if (!html.includes('aria-keyshortcuts="j"') || !html.includes('aria-keyshortcuts="k"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="c"') || !html.includes('aria-keyshortcuts="i"') || !html.includes('aria-keyshortcuts="o"') || !html.includes('aria-keyshortcuts="-"') || !html.includes('aria-keyshortcuts="+"') || !html.includes('<kbd>+</kbd> <kbd>-</kbd>') || !html.includes('<kbd>C</kbd>') || !html.includes('Open focused comparison') || !html.includes('matching shortcut control') || !app.includes('const zoomDeltaForKey = (key) =>') || !app.includes('const zoomDelta = zoomDeltaForKey(key);') || !app.includes('if (tagName === "button")') || !app.includes('String(target.getAttribute("aria-keyshortcuts") || "")') || !app.includes('if (!declaredShortcuts.includes(key)) return;') || !app.includes('if (key === "c")') || !app.includes('showPage("compare");') || !app.includes('Select at least two studies to open comparison.')) throw new Error('Shortcut metadata must match the implemented Atlas controls');
           for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom" aria-controls="geometryCanvas"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true" aria-label="06 of 06 studies; the full collection."']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
@@ -1125,8 +1125,12 @@ jobs:
           handleKeyboard({ key: 'c', target: { tagName: 'body', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
           if (!prevented || keyboardStatus.textContent !== 'Select at least two studies to open comparison.') throw new Error('Comparison shortcut must explain when more selection is needed');
           prevented = false;
-          handleKeyboard({ key: 'c', target: { tagName: 'button', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
-          if (!prevented || keyboardStatus.textContent !== 'Select at least two studies to open comparison.') throw new Error('Global Atlas shortcuts were disabled while a control had focus');
+          handleKeyboard({ key: 'c', target: { tagName: 'button', isContentEditable: false, getAttribute(name) { return name === 'aria-keyshortcuts' ? 'c' : ''; } }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+          if (!prevented || keyboardStatus.textContent !== 'Select at least two studies to open comparison.') throw new Error('A matching shortcut control did not preserve its Atlas shortcut');
+          prevented = false;
+          const unrelatedButtonStatus = keyboardStatus.textContent;
+          handleKeyboard({ key: 'c', target: { tagName: 'button', isContentEditable: false, getAttribute() { return ''; } }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+          if (prevented || keyboardStatus.textContent !== unrelatedButtonStatus) throw new Error('An unrelated button hijacked a global Atlas shortcut');
           if (zoomDeltaForKey('+') !== 0.15 || zoomDeltaForKey('-') !== -0.15 || zoomDeltaForKey('x') !== 0) throw new Error('Drawing zoom keyboard mapping did not expose plus/minus increments only');
           state.mode = 'section';
           state.surface = 'interior';
@@ -1338,7 +1342,13 @@ jobs:
           const press = (key) => {
             let prevented = false;
             activeHeading.focusOptions = null;
-            handleKeyboard({ key, target: { tagName: 'button', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+            handleKeyboard({ key, target: { tagName: 'button', isContentEditable: false, getAttribute(name) { return name === 'aria-keyshortcuts' ? key : ''; } }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
+            return { prevented, focusOptions: activeHeading.focusOptions };
+          };
+          const pressUnrelatedButton = (key) => {
+            let prevented = false;
+            activeHeading.focusOptions = null;
+            handleKeyboard({ key, target: { tagName: 'button', isContentEditable: false, getAttribute() { return ''; } }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
             return { prevented, focusOptions: activeHeading.focusOptions };
           };
           state.page = 'atlas';
@@ -1347,7 +1357,9 @@ jobs:
           if (!forward.prevented || state.activeId !== 'gothic' || !forward.focusOptions || forward.focusOptions.preventScroll !== false) throw new Error('J navigation did not reveal the newly focused study heading');
           const backward = press('k');
           if (!backward.prevented || state.activeId !== 'basilica' || !backward.focusOptions || backward.focusOptions.preventScroll !== false) throw new Error('K navigation did not reveal the newly focused study heading');
-          console.log('Keyboard study reveal smoke test passed.');
+          const unrelated = pressUnrelatedButton('j');
+          if (unrelated.prevented || state.activeId !== 'basilica' || unrelated.focusOptions) throw new Error('An unrelated button hijacked the study navigation shortcut');
+          console.log('Keyboard study reveal and shortcut scope smoke test passed.');
           NODE
       - name: Smoke-test empty keyboard navigation recovery
         run: |

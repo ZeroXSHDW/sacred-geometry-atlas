@@ -1556,10 +1556,17 @@
   }
 
   function handleKeyboard(event) {
-    const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : "";
-    if (["input", "select", "textarea", "summary", "a"].includes(tagName) || event.target.isContentEditable) return;
-    if (event.metaKey || event.ctrlKey || event.altKey || state.page !== "atlas") return;
+    const target = event.target || {};
+    const tagName = target.tagName ? target.tagName.toLowerCase() : "";
+    if (["input", "select", "textarea", "summary", "a"].includes(tagName) || target.isContentEditable) return;
     const key = event.key.toLowerCase();
+    if (tagName === "button") {
+      const declaredShortcuts = typeof target.getAttribute === "function"
+        ? String(target.getAttribute("aria-keyshortcuts") || "").toLowerCase().split(/\s+/).filter(Boolean)
+        : [];
+      if (!declaredShortcuts.includes(key)) return;
+    }
+    if (event.metaKey || event.ctrlKey || event.altKey || state.page !== "atlas") return;
     if (key === "/") {
       event.preventDefault();
       focusCatalogControl("query", { preventScroll: false });
