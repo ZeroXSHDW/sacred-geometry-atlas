@@ -1,4 +1,4 @@
-const CACHE_NAME = "sacred-geometry-atlas-v1";
+const CACHE_NAME = "sacred-geometry-atlas-v2";
 const SHELL_PATHS = [
   "./",
   "index.html",
@@ -7,6 +7,8 @@ const SHELL_PATHS = [
   "styles.css",
   "favicon.svg",
   "site.webmanifest",
+  "icons/atlas-192.png",
+  "icons/atlas-512.png",
   "data/geometry.js",
   "data/geometry.json",
   "data/geometry.csv",

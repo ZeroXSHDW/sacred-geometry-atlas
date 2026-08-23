@@ -29,6 +29,8 @@ expected_files = {
     "404.html",
     "app.js",
     "favicon.svg",
+    "icons/atlas-192.png",
+    "icons/atlas-512.png",
     "index.html",
     "og.png",
     "robots.txt",
@@ -59,6 +61,7 @@ sitemap = (site / "sitemap.xml").read_text()
 expected_page = [
     f'<link rel="canonical" href="{base_url}" />',
     '<link rel="manifest" href="site.webmanifest" />',
+    '<link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />',
     f'<meta property="og:url" content="{base_url}" />',
     f'<meta property="og:image" content="{base_url}og.png" />',
     f'<meta name="twitter:image" content="{base_url}og.png" />',
@@ -88,6 +91,16 @@ try:
     manifest_data = json.loads(manifest)
 except json.JSONDecodeError as error:
     fail(f"Published web manifest is not valid JSON: {error}")
+manifest_icons = {
+    icon.get("src"): icon
+    for icon in manifest_data.get("icons", [])
+    if isinstance(icon, dict) and isinstance(icon.get("src"), str)
+}
+required_manifest_icons = {
+    "icons/atlas-192.png": {"sizes": "192x192", "type": "image/png"},
+    "icons/atlas-512.png": {"sizes": "512x512", "type": "image/png"},
+    "favicon.svg": {"sizes": "any", "type": "image/svg+xml"},
+}
 if (
     manifest_data.get("name") != "Sacred Geometry Atlas"
     or manifest_data.get("short_name") != "Geometry Atlas"
@@ -95,15 +108,29 @@ if (
     or manifest_data.get("scope") != "./"
     or manifest_data.get("display") != "standalone"
     or manifest_data.get("theme_color") != "#111817"
-    or not isinstance(manifest_data.get("icons"), list)
-    or not any(icon.get("src") == "favicon.svg" and icon.get("type") == "image/svg+xml" for icon in manifest_data["icons"] if isinstance(icon, dict))
+    or any(
+        manifest_icons.get(src, {}).get(key) != value
+        for src, requirements in required_manifest_icons.items()
+        for key, value in requirements.items()
+    )
 ):
-    fail("Published web manifest is missing its static Atlas identity or favicon icon")
+    fail("Published web manifest is missing its static Atlas identity or complete icon set")
+for icon_path, width, height in (
+    ("icons/atlas-192.png", 192, 192),
+    ("icons/atlas-512.png", 512, 512),
+):
+    icon_bytes = (site / icon_path).read_bytes()
+    if (
+        icon_bytes[:8] != b"\x89PNG\r\n\x1a\n"
+        or int.from_bytes(icon_bytes[16:20], "big") != width
+        or int.from_bytes(icon_bytes[20:24], "big") != height
+    ):
+        fail(f"Published icon has an invalid PNG signature or dimensions: {icon_path}")
 if not all(token in service_worker for token in (
     'self.addEventListener("install"',
     'self.addEventListener("activate"',
     'self.addEventListener("fetch"',
-    'const CACHE_NAME = "sacred-geometry-atlas-v1"',
+    'const CACHE_NAME = "sacred-geometry-atlas-v2"',
     'data/geometry.json',
     'networkFirst(request)',
 )):

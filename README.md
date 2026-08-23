@@ -111,6 +111,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A repository-relative `site.webmanifest` gives compatible browsers a standalone, dark-themed Geometry Atlas identity without adding a build step or server dependency.
 - A network-first [`sw.js`](sw.js) offline shell keeps the Atlas, data artifacts, and recovery page available after a successful visit while preferring fresh network content when connectivity returns.
 - An accessible connection notice announces offline mode and the return to connectivity without competing with the drawing or print surfaces.
+- Standard 192px and 512px raster install icons are derived from the established favicon and included in the manifest, offline shell, and curated Pages artifact.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, 404-reference, and geometry-schema validation on pull requests and before GitHub Pages deployment.
@@ -185,6 +186,8 @@ If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository
 The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
 
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, and the data artifacts required by the site.
+
+The committed public artifact also includes icons/atlas-192.png and icons/atlas-512.png so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon.
 
 ## Add real churches
 
