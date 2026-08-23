@@ -123,7 +123,7 @@ jobs:
             if (!iconBytes.subarray(0, 8).equals(pngSignature) || iconBytes.readUInt32BE(16) !== size || iconBytes.readUInt32BE(20) !== size) throw new Error('Icon ' + iconPath + ' must be a valid ' + size + 'x' + size + ' PNG');
           }
           if (!serviceWorker.includes('self.addEventListener("install"') || !serviceWorker.includes('self.addEventListener("activate"') || !serviceWorker.includes('self.addEventListener("fetch"') || !serviceWorker.includes('const CACHE_NAME = "sacred-geometry-atlas-v2"') || !serviceWorker.includes('icons/atlas-192.png') || !serviceWorker.includes('icons/atlas-512.png') || !serviceWorker.includes('data/geometry.json') || !serviceWorker.includes('networkFirst(request)')) throw new Error('Service worker must preserve its versioned app shell, install icons, and network-first fetch strategy');
-          if (!app.includes('function registerServiceWorker()') || !app.includes('navigator.serviceWorker.register(workerUrl.href, { scope })') || !app.includes('registerServiceWorker();')) throw new Error('Atlas must register the progressive offline app shell');
+          if (!app.includes('function registerServiceWorker()') || !app.includes('serviceWorker.register(workerUrl.href, { scope })') || !app.includes('registerServiceWorker();')) throw new Error('Atlas must register the progressive offline app shell');
           if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite connection notice with print and forced-colors styling');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
@@ -163,7 +163,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!styles.includes('-webkit-text-size-adjust: 100%;') || !styles.includes('text-size-adjust: 100%;') || !notFound.includes('-webkit-text-size-adjust: 100%;') || !notFound.includes('text-size-adjust: 100%;')) throw new Error('Mobile pages must stabilize text sizing without disabling user zoom');
-          for (const token of ['icons/atlas-192.png', 'icons/atlas-512.png', '192px', '512px', 'Install Atlas']) {
+          for (const token of ['icons/atlas-192.png', 'icons/atlas-512.png', '192px', '512px', 'Install Atlas', 'Refresh Atlas']) {
             if (!readme.includes(token)) throw new Error('GitHub Pages publishing guide is missing install icon documentation: ' + token);
           }
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>') || !sitemap.includes('<loc>./data/geometry.json</loc>') || !sitemap.includes('<loc>./data/geometry.csv</loc>') || !sitemap.includes('<loc>./data/geometry.schema.json</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
@@ -330,6 +330,7 @@ jobs:
           if (drawingExportStart < 0 || drawingExportEnd < 0 || !drawingExport.includes('const status = $("#drawingDownloadStatus");') || drawingExport.includes('const status = $("#downloadStatus");')) throw new Error('Drawing export must announce completion through its dedicated status channel');
           if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON" title="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
           if (!html.includes('<button class="download-button install-button" id="installApp" type="button" aria-label="Install Sacred Geometry Atlas" title="Install Sacred Geometry Atlas" hidden>') || !html.includes('<span class="sr-only" id="installStatus" role="status" aria-live="polite" aria-atomic="true"></span>') || !app.includes('function setupInstallPrompt()') || !app.includes('setupInstallPrompt();') || !app.includes('window.addEventListener("beforeinstallprompt"') || !app.includes('window.addEventListener("appinstalled"') || !styles.includes('.install-button')) throw new Error('Installable Atlas support must expose a capability-gated action and live feedback');
+          if (!html.includes('<div class="update-status" id="updateStatus" role="region" aria-labelledby="updateStatusText" hidden>') || !html.includes('<button class="update-status-action" id="reloadForUpdate" type="button">Refresh Atlas</button>') || !app.includes('controllerchange') || !app.includes('updatefound') || !app.includes('A newer Atlas version is ready.') || !styles.includes('.update-status') || !styles.includes('.update-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !styles.includes('.update-status-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.update-status,')) throw new Error('Service-worker updates must expose an accessible refresh handoff');
           if (!html.includes('id="clearSearchInput" type="button" aria-label="Clear search" title="Clear search"')) throw new Error('Search clear control must expose its compact-control tooltip');
           if (!html.includes('id="downloadStudy" type="button" aria-label="Download active study as JSON"')) throw new Error('Missing accessible study-data download label');
           if (!html.includes('id="shareStudy" type="button" aria-label="Share current study" aria-controls="shareFallback" aria-expanded="false" title="Share current study"') || !app.includes('button.title = accessibleLabel;')) throw new Error('Study share feedback must expose a synchronized compact-control tooltip');
@@ -915,6 +916,82 @@ jobs:
             listeners.appinstalled();
             if (status.textContent !== 'Sacred Geometry Atlas is installed.') throw new Error('Installed event did not provide live feedback');
             console.log('Install prompt affordance smoke test passed.');
+          })().catch((error) => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE
+      - name: Smoke-test service-worker update handoff
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          (async () => {
+            const source = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { registerServiceWorker };\n})();');
+            const createContext = (controller) => {
+              const serviceWorkerListeners = {};
+              const buttonListeners = {};
+              let reloaded = false;
+              const update = { hidden: true };
+              const updateText = { textContent: '' };
+              const updateButton = {
+                addEventListener(type, handler) {
+                  buttonListeners[type] = handler;
+                }
+              };
+              const registration = {
+                waiting: null,
+                installing: null,
+                listeners: {},
+                addEventListener(type, handler) {
+                  this.listeners[type] = handler;
+                }
+              };
+              const serviceWorker = {
+                controller,
+                addEventListener(type, handler) {
+                  serviceWorkerListeners[type] = handler;
+                },
+                register() {
+                  return Promise.resolve(registration);
+                }
+              };
+              const context = {
+                window: {
+                  __atlasTest: null,
+                  location: {
+                    href: 'https://example.test/atlas/index.html',
+                    reload() {
+                      reloaded = true;
+                    }
+                  }
+                },
+                navigator: { serviceWorker },
+                document: {
+                  baseURI: 'https://example.test/atlas/index.html',
+                  querySelector(selector) {
+                    if (selector === '#updateStatus') return update;
+                    if (selector === '#updateStatusText') return updateText;
+                    if (selector === '#reloadForUpdate') return updateButton;
+                    return null;
+                  }
+                },
+                URL
+              };
+              vm.runInNewContext(source, context);
+              return { context, serviceWorkerListeners, buttonListeners, registration, update, updateText, get reloaded() { return reloaded; } };
+            };
+            const firstVisit = createContext(null);
+            firstVisit.context.window.__atlasTest.registerServiceWorker();
+            firstVisit.serviceWorkerListeners.controllerchange();
+            if (!firstVisit.update.hidden) throw new Error('First service-worker control acquisition should not show an update notice');
+            const existingVisit = createContext({ id: 'existing-controller' });
+            existingVisit.context.window.__atlasTest.registerServiceWorker();
+            existingVisit.serviceWorkerListeners.controllerchange();
+            if (existingVisit.update.hidden || existingVisit.updateText.textContent !== 'A newer Atlas version is ready.') throw new Error('Existing tabs did not receive the new-version notice');
+            await existingVisit.buttonListeners.click();
+            if (!existingVisit.reloaded) throw new Error('Refresh Atlas did not preserve the route through a page reload');
+            console.log('Service-worker update handoff smoke test passed.');
           })().catch((error) => {
             console.error(error);
             process.exitCode = 1;

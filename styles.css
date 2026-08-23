@@ -155,6 +155,12 @@ summary:focus-visible {
 .connection-status { display: flex; align-items: center; gap: 0.55rem; width: min(1440px, calc(100% - 96px)); margin: 0.65rem auto 0; padding: 0.55rem 0.75rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
 .connection-status[hidden] { display: none; }
 .connection-status-mark { color: var(--coral); font-size: 0.9rem; line-height: 1; }
+.update-status { display: flex; align-items: center; gap: 0.65rem; width: min(1440px, calc(100% - 96px)); margin: 0.65rem auto 0; padding: 0.55rem 0.75rem; border: 1px solid rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.04em; line-height: 1.35; text-transform: uppercase; }
+.update-status[hidden] { display: none; }
+.update-status-mark { flex: 0 0 auto; color: var(--amber); font-size: 0.9rem; line-height: 1; }
+.update-status-text { flex: 1 1 15rem; min-width: 0; }
+.update-status-action { flex: 0 0 auto; min-height: 30px; padding: 0.35rem 0.55rem; border: 1px solid var(--teal); color: var(--teal); background: transparent; font-family: var(--mono); font-size: 0.54rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
+.update-status-action:hover { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .data-error { width: min(820px, calc(100% - 96px)); min-height: min(560px, 70vh); margin: 4rem auto; padding: clamp(2rem, 6vw, 5rem); border: 1px solid rgba(231, 127, 98, 0.42); background: linear-gradient(135deg, rgba(231, 127, 98, 0.09), rgba(24, 33, 31, 0.76)); }
 .data-error .eyebrow { margin-bottom: 1.5rem; color: var(--coral); }
 .data-error h1 { max-width: 17ch; margin-bottom: 1.1rem; font-size: clamp(2.8rem, 7vw, 5.8rem); }
@@ -958,7 +964,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 [hidden] { display: none !important; }
 
 @media (max-width: 1050px) {
-  .site-header, .connection-status, main, .site-footer { width: min(100% - 48px, 900px); }
+  .site-header, .connection-status, .update-status, main, .site-footer { width: min(100% - 48px, 900px); }
   .main-nav { margin-left: 0; }
   .atlas-layout { grid-template-columns: minmax(205px, 240px) 1fr; gap: 2.2rem; }
   .detail-grid { grid-template-columns: repeat(2, 1fr); }
@@ -990,7 +996,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 }
 
 @media (max-width: 740px) {
-  .site-header, .connection-status, main, .site-footer { width: min(100% - 32px, 600px); }
+  .site-header, .connection-status, .update-status, main, .site-footer { width: min(100% - 32px, 600px); }
   .noscript-index { width: min(100% - 32px, 600px); padding: 1.3rem; }
   .data-error { width: min(100% - 32px, 600px); min-height: auto; margin: 2rem auto; padding: 2rem 1.3rem; }
   .runtime-fallback { width: min(100% - 32px, 600px); margin: 2rem auto; padding: 1.4rem 1.3rem; }
@@ -1247,6 +1253,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .manual-copy-fallback-dismiss { min-height: 36px; }
   .route-copy-button { min-height: 36px; }
   .action-recovery .hero-action, .action-recovery-dismiss { min-height: 36px; }
+  .update-status-action { min-height: 36px; }
   .noscript-artifact-actions a { min-height: 36px; }
   .noscript-link { display: inline-flex; align-items: center; min-height: 36px; padding: 0.35rem 0.5rem; border: 1px solid var(--coral); background: rgba(231, 127, 98, 0.08); }
   .noscript-link:hover,
@@ -1298,6 +1305,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .site-header { background: Canvas; }
   .connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }
   .connection-status-mark { color: Highlight; }
+  .update-status { border-color: ButtonText; color: CanvasText; background: Canvas; }
+  .update-status-mark { color: Highlight; }
+  .update-status-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .update-status-action:hover { border-color: Highlight; color: HighlightText; background: Highlight; }
   button:focus-visible,
   a:focus-visible,
   input:focus-visible,
@@ -1575,6 +1586,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   body { background: #fff; color: var(--ink); font-size: 10.5pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   .site-header,
   .connection-status,
+  .update-status,
   .hero-actions,
   .hero-stats,
   .catalog-panel,

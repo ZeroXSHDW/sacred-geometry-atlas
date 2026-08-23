@@ -113,6 +113,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - An accessible connection notice announces offline mode and the return to connectivity without competing with the drawing or print surfaces.
 - Standard 192px and 512px raster install icons are derived from the established favicon and included in the manifest, offline shell, and curated Pages artifact.
 - Browsers that expose an install prompt receive a capability-gated Install Atlas action with live acceptance, dismissal, and installed-state feedback; unsupported browsers keep the header uncluttered.
+- Already-open tabs surface a newer offline-shell version after an existing service-worker controller updates, with a route-preserving Refresh Atlas action instead of silently leaving the tab on an older shell.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, 404-reference, and geometry-schema validation on pull requests and before GitHub Pages deployment.

@@ -273,6 +273,38 @@
 
   function registerServiceWorker() {
     if (typeof navigator === "undefined" || !navigator.serviceWorker || typeof navigator.serviceWorker.register !== "function") return;
+    const update = $("#updateStatus");
+    const updateText = $("#updateStatusText");
+    const updateAction = $("#reloadForUpdate");
+    const showUpdate = () => {
+      if (!update || !updateText) return;
+      updateText.textContent = "A newer Atlas version is ready.";
+      update.hidden = false;
+    };
+    if (updateAction && typeof updateAction.addEventListener === "function") {
+      updateAction.addEventListener("click", () => {
+        if (window.location && typeof window.location.reload === "function") window.location.reload();
+      });
+    }
+    const serviceWorker = navigator.serviceWorker;
+    let hadController = Boolean(serviceWorker.controller);
+    if (typeof serviceWorker.addEventListener === "function") {
+      serviceWorker.addEventListener("controllerchange", () => {
+        if (hadController) showUpdate();
+        hadController = true;
+      });
+    }
+    const watchRegistration = (registration) => {
+      if (!registration || typeof registration.addEventListener !== "function") return;
+      if (hadController && registration.waiting) showUpdate();
+      registration.addEventListener("updatefound", () => {
+        const installing = registration.installing;
+        if (!installing || typeof installing.addEventListener !== "function") return;
+        installing.addEventListener("statechange", () => {
+          if (installing.state === "installed" && hadController) showUpdate();
+        });
+      });
+    };
     const baseUrl = typeof document !== "undefined" && document.baseURI
       ? document.baseURI
       : typeof window !== "undefined" && window.location && window.location.href
@@ -282,7 +314,9 @@
     try {
       const workerUrl = new URL("sw.js", baseUrl);
       const scope = new URL("./", workerUrl).pathname;
-      navigator.serviceWorker.register(workerUrl.href, { scope }).catch(() => {});
+      const registration = serviceWorker.register(workerUrl.href, { scope });
+      if (registration && typeof registration.then === "function") registration.then(watchRegistration).catch(() => {});
+      else watchRegistration(registration);
     } catch (error) {
       // Offline support is progressive enhancement; keep the atlas usable if registration is unavailable.
     }
