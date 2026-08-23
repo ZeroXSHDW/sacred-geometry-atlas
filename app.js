@@ -3450,7 +3450,7 @@
     const schemaUrl = publishedGeometrySchemaUrl();
     const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
     const headers = [
-      "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
     ];
@@ -3462,6 +3462,7 @@
         study.id,
         studyShortName(study),
         study.typology,
+        study.index,
         study.place,
         study.era,
         study.axis,
@@ -3511,7 +3512,7 @@
     const comparisonIds = comparisonSelection.map(({ id }) => id).join(",");
     const comparisonContext = comparisonSelectionCsvText(comparisonSelection);
     const headers = [
-      "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders, "Sort key", "Sort direction"
     ];
@@ -3523,6 +3524,7 @@
         study.id,
         studyShortName(study),
         study.typology,
+        study.index,
         study.place,
         study.era,
         study.axis,

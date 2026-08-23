@@ -109,14 +109,14 @@ try:
 except (OSError, csv.Error) as error:
     fail(f"Published CSV dataset could not be read: {error}")
 
-required_csv_fields = {"ID", "Status", "Route", "Schema URL", "Reading profile basis"}
+required_csv_fields = {"ID", "Index", "Status", "Route", "Schema URL", "Reading profile basis"}
 if not reader.fieldnames or not required_csv_fields.issubset(reader.fieldnames):
-    fail("Published CSV is missing its route, status, or schema columns")
+    fail("Published CSV is missing its index, route, status, or schema columns")
 if len(rows) != len(studies):
     fail(f"Published CSV has {len(rows)} records; expected {len(studies)}")
 expected_profile_context = "linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count; Interpretive proportional tendencies, not empirical measurements."
 for study, row in zip(studies, rows):
-    if row.get("ID") != study.get("id") or row.get("Status") != study.get("status"):
+    if row.get("ID") != study.get("id") or row.get("Index") != study.get("index") or row.get("Status") != study.get("status"):
         fail(f"Published CSV row does not match dataset record: {study.get('id')}")
     encoded_id = quote(str(study.get("id", "")), safe="-_.!~*'()")
     expected_route = f"#atlas/{encoded_id}/plan/exterior/all"

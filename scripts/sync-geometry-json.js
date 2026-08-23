@@ -85,7 +85,7 @@ const csvCell = (value) => {
 function staticCsv() {
   const unit = payload.schema.unitSymbol || "m";
   const headers = [
-    "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+    "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
     `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
     "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL", "Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"
   ];
@@ -100,6 +100,7 @@ function staticCsv() {
       study.id,
       study.shortName || study.name,
       study.typology,
+      study.index,
       study.place,
       study.era,
       study.axis,
