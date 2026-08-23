@@ -3941,7 +3941,7 @@
       const volume = volumeReading(study);
       const readingProfile = Object.fromEntries(profileScores(study));
       const profileCell = (key, label) => {
-        const profileLabel = `${studyShortName(study)} ${label} profile: ${profileMeterValueText(key, readingProfile[key])}`;
+        const profileLabel = `${studyIdentityLabel(study)} ${label} profile: ${profileMeterValueText(key, readingProfile[key])}`;
         const profileTitle = `Interpretive 0–100 score; ${READING_PROFILE_BASIS_BY_KEY[key] || "proportional tendency"}`;
         return `<td class="comparison-profile-cell" data-profile="${key}" aria-label="${escapeHtml(profileLabel)}" title="${escapeHtml(profileTitle)}">${readingProfile[key]}</td>`;
       };
