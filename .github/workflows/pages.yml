@@ -447,6 +447,7 @@ jobs:
             if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
           }
           if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
+          if (!app.includes('const pendingStudy = selectedComparisonStudies()[0];') || !app.includes('`Compare · ${studyShortName(pendingStudy)} selected · Sacred Geometry Atlas`')) throw new Error('Pending comparison titles must identify the selected study');
           if (!app.includes('const methodScope = catalogScopeLabel();') || !app.includes('const catalogSuffix = methodScope === "the full collection" ? "" : ` · ${methodScope}`;') || !app.includes('`Method · ${studyShortName(contextStudy)}${catalogSuffix} · Sacred Geometry Atlas`') || !app.includes('`Method${catalogSuffix} · Sacred Geometry Atlas`')) throw new Error('Method titles must preserve the active study context and catalog scope');
           for (const token of ['state.mode = route.mode || "plan";', 'state.surface = route.surface || "exterior";', 'state.layer = route.layer || "all";', 'requestedPage,', 'requestedStudy,', 'let normalizedStudyRoute = false;', 'let includeStudyInNormalizedRoute = true;', 'let normalizedCompareRoute = false;', 'let normalizedPageRoute = false;', 'const hasRequestedStudy = Boolean(route.requestedStudy);', 'route.requestedPage !== route.page', 'window.location.hash !== routeHash("atlas", true)', 'normalizedCompareRoute = window.location.hash !== routeHash("compare", false);', 'includeStudyInNormalizedRoute = false;', 'if (normalizedStudyRoute) {', 'replaceRoute("atlas", includeStudyInNormalizedRoute);', 'updateDocumentTitle("atlas");', 'if (normalizedCompareRoute) {', 'replaceRoute("compare", false);', 'updateDocumentTitle("compare");', 'const canonicalPageHash = route.page === "method" && route.contextStudyId', 'replaceRoute(route.page, route.page === "method" && Boolean(route.contextStudyId));', 'showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });\n    replaceCatalogRoute();', 'if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute)', 'if (state.page === "atlas" && !visible.length) replaceRoute("atlas", false);']) {
             if (!app.includes(token)) throw new Error('Partial study routes must restore drawing defaults: ' + token);
@@ -2389,6 +2390,10 @@ jobs:
           if (methodScopeNote(emptyRecords) !== 'Atlas scope · results matching “no matching study” · 0 records' || !statusIntro.textContent.includes('for 0 records') || !statusList.innerHTML.includes('0 records')) throw new Error('Method evidence guidance did not remain honest for an empty filtered Atlas scope');
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Return to Atlas catalog' || action.href !== '/atlas/?q=no+matching+study#atlas' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not preserve the catalog fallback route for an empty result set');
+          state.query = '';
+          state.compareIds = ['basilica'];
+          updateDocumentTitle('compare');
+          if (context.document.title !== 'Compare · Longitudinal basilica selected · Sacred Geometry Atlas') throw new Error('Pending comparison title did not identify the selected study');
           console.log('Method return context smoke test passed.');
           NODE
 

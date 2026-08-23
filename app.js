@@ -246,7 +246,10 @@
       return;
     }
     if (page === "compare" && state.compareIds.length === 1) {
-      document.title = `Compare · 1 selected · Sacred Geometry Atlas`;
+      const pendingStudy = selectedComparisonStudies()[0];
+      document.title = pendingStudy
+        ? `Compare · ${studyShortName(pendingStudy)} selected · Sacred Geometry Atlas`
+        : "Compare · 1 selected · Sacred Geometry Atlas";
       return;
     }
     if (page === "method") {
