@@ -8,19 +8,21 @@
     <script>
       (() => {
         const storageKey = "sacred-geometry-atlas-theme";
-        const validThemes = ["light", "dark"];
-        let storedTheme = "";
+        const validModes = ["system", "light", "dark"];
+        let storedMode = "";
         try {
-          storedTheme = window.localStorage.getItem(storageKey) || "";
+          storedMode = window.localStorage.getItem(storageKey) || "";
         } catch (error) {
           // A private or restricted context can decline local preference storage.
         }
         const systemTheme = typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches
           ? "light"
           : "dark";
-        const theme = validThemes.includes(storedTheme) ? storedTheme : systemTheme;
+        const mode = validModes.includes(storedMode) ? storedMode : "system";
+        const theme = mode === "system" ? systemTheme : mode;
         document.documentElement.dataset.theme = theme;
-        document.documentElement.dataset.themeSource = validThemes.includes(storedTheme) ? "user" : "system";
+        document.documentElement.dataset.themeMode = mode;
+        document.documentElement.dataset.themeSource = mode === "system" ? "system" : "user";
         document.documentElement.style.colorScheme = theme;
         const themeColor = document.querySelector('meta[name="theme-color"]');
         if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f4f6f1" : "#111817");
@@ -237,9 +239,9 @@
           <span class="download-icon" aria-hidden="true">⊞</span>
           <span class="download-label">Install Atlas</span>
         </button>
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Use light color theme" title="Use light color theme" aria-pressed="false" hidden>
+        <button class="theme-toggle" id="themeToggle" type="button" data-theme-mode="system" aria-label="Color theme: System. Switch to light theme" title="Color theme: System. Switch to light theme" hidden>
           <span class="theme-toggle-icon" aria-hidden="true">◐</span>
-          <span class="theme-toggle-label">Light</span>
+          <span class="theme-toggle-label">System</span>
         </button>
       </div>
       <span class="sr-only" id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"></span>

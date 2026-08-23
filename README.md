@@ -109,8 +109,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - The Method view keeps the current study and active Atlas scope in context with a study-aware deep link, a visible scope label, live status/provenance counts, scope-aware sharing and citations, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A repository-relative `site.webmanifest` gives compatible browsers a standalone Geometry Atlas identity without adding a build step or server dependency.
-- A device-aware Light/Dark theme control follows the operating-system color preference until a visitor chooses, persists that choice locally, updates browser chrome, and keeps the reading surface legible in forced-colors and print contexts.
-- The branded GitHub Pages 404 recovery surface reads the same stored preference and system color scheme, including when JavaScript is unavailable.
+- A device-aware System/Light/Dark theme control follows the operating-system color preference by default, lets visitors cycle to explicit light or dark modes and back to System, persists that choice locally, updates browser chrome, and keeps the reading surface legible in forced-colors and print contexts.
+- The branded GitHub Pages 404 recovery surface honors the same stored preference when its bootstrap runs and follows the system color scheme in its CSS-only fallback.
 - A network-first [`sw.js`](sw.js) offline shell keeps the Atlas, data artifacts, and recovery page available after a successful visit while preferring fresh network content when connectivity returns.
 - An accessible connection notice announces offline mode and the return to connectivity without competing with the drawing or print surfaces.
 - Standard 192px and 512px raster install icons are derived from the established favicon and included in the manifest, offline shell, and curated Pages artifact.

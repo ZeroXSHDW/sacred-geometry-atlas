@@ -277,6 +277,7 @@
     const button = $("#themeToggle");
     const status = $("#themeStatus");
     if (!root || !button) return;
+    const themeModes = ["system", "light", "dark"];
     const label = $(".theme-toggle-label", button);
     const icon = $(".theme-toggle-icon", button);
     const themeColor = document.querySelector('meta[name="theme-color"]');
@@ -284,36 +285,41 @@
       ? window.matchMedia("(prefers-color-scheme: light)")
       : null;
     const systemTheme = () => mediaQuery && mediaQuery.matches ? "light" : "dark";
-    const applyTheme = (theme, source = root.dataset.themeSource || "system", announcement = "") => {
-      const normalizedTheme = theme === "light" ? "light" : "dark";
-      const nextTheme = normalizedTheme === "light" ? "dark" : "light";
+    const modeLabel = (mode) => mode[0].toUpperCase() + mode.slice(1);
+    const normalizeMode = (mode) => themeModes.includes(mode) ? mode : "system";
+    const nextMode = (mode) => themeModes[(themeModes.indexOf(normalizeMode(mode)) + 1) % themeModes.length];
+    const currentMode = () => normalizeMode(root.dataset.themeMode || (root.dataset.themeSource === "user" ? root.dataset.theme : "system"));
+    const applyMode = (mode, announcement = "") => {
+      const normalizedMode = normalizeMode(mode);
+      const normalizedTheme = normalizedMode === "system" ? systemTheme() : normalizedMode;
+      const followingMode = nextMode(normalizedMode);
       root.dataset.theme = normalizedTheme;
-      root.dataset.themeSource = source;
+      root.dataset.themeMode = normalizedMode;
+      root.dataset.themeSource = normalizedMode === "system" ? "system" : "user";
       root.style.colorScheme = normalizedTheme;
       if (themeColor) themeColor.setAttribute("content", normalizedTheme === "light" ? "#f4f6f1" : "#111817");
-      if (label) label.textContent = nextTheme[0].toUpperCase() + nextTheme.slice(1);
+      if (label) label.textContent = modeLabel(normalizedMode);
       if (icon) icon.textContent = normalizedTheme === "light" ? "☼" : "◐";
-      button.setAttribute("aria-label", `Use ${nextTheme} color theme`);
-      button.setAttribute("title", `Use ${nextTheme} color theme`);
-      button.setAttribute("aria-pressed", normalizedTheme === "light" ? "true" : "false");
+      button.dataset.themeMode = normalizedMode;
+      button.setAttribute("aria-label", `Color theme: ${modeLabel(normalizedMode)}. Switch to ${modeLabel(followingMode).toLowerCase()} theme`);
+      button.setAttribute("title", `Color theme: ${modeLabel(normalizedMode)} · switch to ${modeLabel(followingMode)}`);
       if (announcement && status) status.textContent = announcement;
     };
-    const initialTheme = root.dataset.theme === "light" ? "light" : "dark";
-    applyTheme(initialTheme, root.dataset.themeSource === "user" ? "user" : "system");
+    applyMode(currentMode());
     button.hidden = false;
     button.addEventListener("click", () => {
-      const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+      const followingMode = nextMode(currentMode());
       try {
-        window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+        window.localStorage.setItem(THEME_STORAGE_KEY, followingMode);
       } catch (error) {
         // Keep the current session preference even when storage is unavailable.
       }
-      applyTheme(nextTheme, "user", `${nextTheme[0].toUpperCase() + nextTheme.slice(1)} theme enabled.`);
+      applyMode(followingMode, `${modeLabel(followingMode)} color theme enabled.`);
     });
     if (mediaQuery) {
       const followSystem = () => {
-        if (root.dataset.themeSource === "user") return;
-        applyTheme(systemTheme(), "system");
+        if (currentMode() !== "system") return;
+        applyMode("system");
       };
       if (typeof mediaQuery.addEventListener === "function") mediaQuery.addEventListener("change", followSystem);
       else if (typeof mediaQuery.addListener === "function") mediaQuery.addListener(followSystem);

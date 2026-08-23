@@ -11,18 +11,20 @@
     <script>
       (() => {
         const storageKey = "sacred-geometry-atlas-theme";
-        let storedTheme = "";
+        const validModes = ["system", "light", "dark"];
+        let storedMode = "";
         try {
-          storedTheme = window.localStorage.getItem(storageKey) || "";
+          storedMode = window.localStorage.getItem(storageKey) || "";
         } catch (error) {
           // A private or restricted context can decline local preference storage.
         }
-        const theme = storedTheme === "light" || storedTheme === "dark"
-          ? storedTheme
-          : typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches
-            ? "light"
-            : "dark";
+        const mode = validModes.includes(storedMode) ? storedMode : "system";
+        const systemTheme = typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark";
+        const theme = mode === "system" ? systemTheme : mode;
         document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themeMode = mode;
         document.documentElement.style.colorScheme = theme;
         const themeColor = document.querySelector('meta[name="theme-color"]');
         if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f4f6f1" : "#111817");

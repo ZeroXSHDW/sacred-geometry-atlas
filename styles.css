@@ -367,9 +367,11 @@ main,
 .install-button .download-icon { color: var(--teal); }
 .theme-toggle { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.62rem 0.72rem; border: 1px solid var(--line); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; text-transform: uppercase; transition: 180ms ease; }
 .theme-toggle:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
-.theme-toggle[aria-pressed="true"] { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.theme-toggle[data-theme-mode="light"] { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+.theme-toggle[data-theme-mode="dark"] { border-color: var(--teal); color: var(--teal); background: var(--teal-soft); }
 .theme-toggle-icon { color: var(--amber); font-size: 0.9rem; line-height: 0; }
-.theme-toggle[aria-pressed="true"] .theme-toggle-icon { color: var(--teal); }
+.theme-toggle[data-theme-mode="light"] .theme-toggle-icon { color: var(--teal); }
+.theme-toggle[data-theme-mode="dark"] .theme-toggle-icon { color: var(--amber); }
 
 .hero {
   display: flex;
