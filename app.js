@@ -2285,10 +2285,24 @@
     return `Reading profile: ${readingProfileValues(study)}. ${READING_PROFILE_NOTE} Basis: ${READING_PROFILE_BASIS}.`;
   }
 
+  function readingProfileShareText(study) {
+    return `Reading profile (interpretive 0–100): ${readingProfileValues(study, ", ")}. ${READING_PROFILE_NOTE} Basis: ${READING_PROFILE_BASIS}.`;
+  }
+
   function comparisonReadingProfileSummary(comparison) {
     if (!comparison.length) return "";
     const values = comparison.map((study) => `${studyShortName(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
     return ` Reading profiles (0–100, interpretive): ${values}. Basis: ${READING_PROFILE_BASIS}; ${READING_PROFILE_NOTE}`;
+  }
+
+  function comparisonReadingProfileShareText(comparison) {
+    if (!comparison.length) return "";
+    const values = comparison.map((study) => `${studyShortName(study)} — ${readingProfileValues(study, ", ")}`).join("; ");
+    return `Reading profiles (interpretive 0–100): ${values}. ${READING_PROFILE_NOTE} Basis: ${READING_PROFILE_BASIS}.`;
+  }
+
+  function readingProfileGuideShareText() {
+    return `Reading profile key: four interpretive 0–100 scores. ${READING_PROFILE_NOTE} Basis: ${READING_PROFILE_BASIS}.`;
   }
 
   function derivedStudyReadings(study) {
@@ -2475,7 +2489,7 @@
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
-        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. Reading profile (interpretive 0–100): ${readingProfileValues(study, ", ")}. Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
+        text: `Explore ${study.name} in the Sacred Geometry Atlas — ${studyAxisLabel(study)}, ${state.surface} ${state.mode} view, ${layerFocusLabel()}, ${zoomPercent()} zoom. ${readingProfileShareText(study)} Data status: ${studyStatusLabel(study).toLowerCase()}. Source: ${studySource(study)}; ${studySourceNote(study)}`,
         url: shareUrl.href
       };
 
@@ -2525,7 +2539,7 @@
       const shareUrl = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
       const sharePayload = {
         title: contextStudy ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas` : "Sacred Geometry Atlas · Method guide",
-        text: `Read the Method guide${contextStudy ? ` alongside ${studyShortName(contextStudy)}` : ""}${scopeContext} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions.`,
+        text: `Read the Method guide${contextStudy ? ` alongside ${studyShortName(contextStudy)}` : ""}${scopeContext} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions. ${readingProfileGuideShareText()}`,
         url: shareUrl
       };
 
@@ -2635,8 +2649,10 @@
     const selection = selected.length
       ? ` Comparison selection: ${selected.map((study) => `${studyShortName(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}. Selection provenance: ${selected.map((study) => `${studyShortName(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
       : "";
+    const profileRecords = selected.length ? selected : records;
+    const profileContext = comparisonReadingProfileSummary(profileRecords);
     const schema = geometrySchema();
-    return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}.${selection} Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
+    return `Sacred Geometry Atlas. Catalog view: ${catalogScopeLabel()}; ${recordLabel}.${selection}${profileContext} Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
   }
 
   async function copyCatalogCitation() {
@@ -2678,9 +2694,11 @@
       const shareUrl = catalogViewRouteUrl();
       const selected = selectedComparisonStudies();
       const selectionText = selected.length ? ` Selected comparison: ${comparisonSelectionShareText(selected)}. ${comparisonSelectionProvenanceText(selected)}` : "";
+      const profileRecords = selected.length ? selected : visibleStudies();
+      const profileContext = comparisonReadingProfileShareText(profileRecords);
       const sharePayload = {
         title: "Sacred Geometry Atlas · catalog view",
-        text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.${selectionText}`,
+        text: `Explore ${catalogScopeLabel()} in the Sacred Geometry Atlas.${selectionText}${profileContext ? ` ${profileContext}` : ""}`,
         url: shareUrl.href
       };
 
@@ -2733,9 +2751,11 @@
         ? `${comparisonSelectionShareText(pending)} selected; choose one more study for a focused comparison`
         : selectionLabel;
       const selectionProvenance = comparisonSelectionProvenanceText(focused ? selected : pending);
+      const profileRecords = focused ? selected : pending.length ? pending : comparison;
+      const profileContext = comparisonReadingProfileShareText(profileRecords);
       const sharePayload = {
         title: "Sacred Geometry Atlas comparison",
-        text: `Compare ${shareLabel} in the Sacred Geometry Atlas.${selectionProvenance ? ` ${selectionProvenance}` : ""}`,
+        text: `Compare ${shareLabel} in the Sacred Geometry Atlas.${selectionProvenance ? ` ${selectionProvenance}` : ""}${profileContext ? ` ${profileContext}` : ""}`,
         url: shareUrl.href
       };
 
@@ -2866,7 +2886,7 @@
     const context = contextStudy
       ? ` Current study context: ${studyShortName(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNote(contextStudy)}.`
       : "";
-    return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract. Scope: ${catalogScope}; ${recordLabel}.${context} Evidence note: ${methodProvenanceText(records, methodProvenanceSubject(records))} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
+    return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract. Scope: ${catalogScope}; ${recordLabel}.${context} Evidence note: ${methodProvenanceText(records, methodProvenanceSubject(records))} ${readingProfileGuideShareText()} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
   }
 
   async function copyMethodCitation() {
