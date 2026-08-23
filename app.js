@@ -2162,17 +2162,27 @@
     const additions = visible.filter((study) => !state.compareIds.includes(study.id));
     const visibleCount = visible.length;
     const additionCount = additions.length;
+    const visibleStudyLabel = visibleCount === 1 ? "study" : "studies";
+    const additionStudyLabel = additionCount === 1 ? "study" : "studies";
     const isComplete = visibleCount > 0 && additionCount === 0;
+    const completeLabel = visibleCount === 1
+      ? "The visible study is already in comparison"
+      : `All ${visibleCount} visible studies are already in comparison`;
     const label = visibleCount === 0
       ? "No visible studies to add to comparison"
       : isComplete
-        ? `All ${visibleCount} visible ${visibleCount === 1 ? "study is" : "studies are"} already in comparison`
-        : `Add ${additionCount} visible ${additionCount === 1 ? "study" : "studies"} to comparison`;
+        ? completeLabel
+        : `Add ${additionCount} visible ${additionStudyLabel} to comparison`;
+    const visibleText = visibleCount === 0
+      ? "No visible studies"
+      : isComplete
+        ? `All ${visibleCount} visible ${visibleStudyLabel} selected`
+        : `Add ${additionCount} visible ${additionStudyLabel}`;
     button.disabled = visibleCount === 0 || isComplete;
     button.setAttribute("aria-label", label);
     button.title = label;
     const text = button.querySelector("span:last-child");
-    if (text) text.textContent = visibleCount === 0 ? "No visible studies" : isComplete ? "Visible selected" : "Add visible to compare";
+    if (text) text.textContent = visibleText;
   }
 
   function emptyCatalogMessage() {
@@ -4083,14 +4093,16 @@
     const geometryKicker = $("#geometryCompareKicker");
     const scope = $("#compareScope");
     const helper = $("#compareHelper");
+    const atlasSelectionHint = "Use a + control or the Add visible to compare action in the Atlas.";
+    const atlasSelectionHintLower = "use a + control or the Add visible to compare action in the Atlas.";
     if (sectionNote) sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;
     if (geometryKicker) geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";
     if (scope) scope.textContent = focused ? `${selected} selected` : partial ? "1 selected · choose one more" : "Full collection";
     if (helper) helper.textContent = focused
-      ? `Focused comparison is using the studies you selected in the Atlas.${currentStudyContext} Open a study from a geometry card or its table link.`
+      ? `Focused comparison is using the studies you selected in the Atlas. ${atlasSelectionHint}${currentStudyContext} Open a study from a geometry card or its table link.`
       : partial
-        ? "One study is selected for comparison. Select one more study in the Atlas to create a focused comparison; the full collection is shown until then."
-        : "Select two or more studies with the + controls in the Atlas to create a focused comparison. Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.";
+        ? `One study is selected for comparison. Select one more study in the Atlas; ${atlasSelectionHintLower} The full collection is shown until then.`
+        : `Select two or more studies with the + controls in the Atlas to create a focused comparison. ${atlasSelectionHint} Without a selection, the full collection is shown; geometry cards and table links open studies in Atlas.`;
     const comparisonStatusHelp = $("#comparisonStatusHelp");
     if (comparisonStatusHelp) comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");
     const printRoute = $("#comparisonPrintRoute");
