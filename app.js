@@ -1197,6 +1197,10 @@
     if (state.filterAxis !== "all") filters.push({ key: "axis", label: `Axis: ${$("#filterAxis").selectedOptions[0].textContent}` });
     if (state.filterStatus !== "all") filters.push({ key: "status", label: `Data status: ${$("#filterStatus").selectedOptions[0].textContent}` });
     if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });
+    const activeSettingsLabel = filters.length
+      ? `${filters.length} active catalog ${filters.length === 1 ? "setting" : "settings"}`
+      : "Active catalog settings";
+    target.setAttribute("aria-label", activeSettingsLabel);
     target.hidden = filters.length === 0;
     target.innerHTML = filters.length
       ? `${filters.map(({ key, label }) => `

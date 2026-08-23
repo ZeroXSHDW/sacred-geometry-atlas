@@ -245,7 +245,7 @@ jobs:
           }
           if (!styles.includes('.nav-count {') || !styles.includes('  justify-content: center;\n  gap: 0.38rem;') || !styles.includes('.nav-count { border-color: Highlight; color: HighlightText; background: Highlight; }')) throw new Error('Compare navigation count must remain aligned and visible in forced-colors mode');
           if (!html.includes('id="emptyStateMessage"')) throw new Error('Missing contextual catalog empty state');
-          if (!html.includes('<span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Catalog scope changes must have a live status channel');
+          if (!html.includes('<span class="sr-only" id="catalogLiveStatus" role="status" aria-live="polite" aria-atomic="true"></span>') || !html.includes('<div class="active-filters" id="activeFilters" role="group" aria-label="Active catalog settings" hidden>') || !app.includes('const activeSettingsLabel = filters.length') || !app.includes('target.setAttribute("aria-label", activeSettingsLabel);')) throw new Error('Catalog scope changes must expose a live status channel and a count-aware active-settings group');
           if (!html.includes('<div class="visual-empty-state" id="visualEmptyState" role="region" aria-labelledby="visualEmptyHeading" aria-describedby="visualEmptyMessage" hidden>') || !html.includes('id="visualEmptyContext" hidden') || !app.includes('emptyState.setAttribute("aria-describedby", activeStudyOutsideCatalog') || !app.includes('? "visualEmptyMessage visualEmptyContext"') || !app.includes(': "visualEmptyMessage");')) throw new Error('Missing contextual visual empty state');
           if (!html.includes('<button class="clear-search" id="clearSearch" type="button">Clear filters</button>') || !html.includes('id="clearVisualFilters" type="button" aria-label="Clear catalog filters"')) throw new Error('Catalog empty-state recovery actions must remain wired to their accessible styling contracts');
           if (!html.includes('<a class="hero-action" data-method-link href="#methodView">Read the method')) throw new Error('Method link must target the real section');
@@ -844,7 +844,7 @@ jobs:
           const elements = new Map();
           const makeSelect = (options = []) => ({ options, selectedOptions: [], appendChild(option) { this.options.push(option); } });
           const searchInput = { value: '' };
-          const activeFilters = { hidden: true, innerHTML: '' };
+          const activeFilters = { hidden: true, innerHTML: '', attributes: {}, setAttribute(name, value) { this.attributes[name] = value; } };
           const filterSelect = makeSelect();
           const filterPlace = makeSelect();
           const filterEra = makeSelect();
@@ -947,13 +947,15 @@ jobs:
           for (const label of ['Typology: Gothic · 1', 'Location: Northern Europe · 1', 'Era: 12th–15th century · 1', 'Axis: Longitudinal axis · 2', 'Data status: Schematic · 6', 'Sort: Name · A–Z']) {
             if (!activeFilters.innerHTML.includes(label)) throw new Error(`Active filter chip lost its context label: ${label}`);
           }
-          if (activeFilters.hidden || !activeFilters.innerHTML.includes('aria-label="Clear Data status: Schematic · 6"')) throw new Error('Active filter chips did not expose a visible, descriptive data-status clearing action');
+          if (activeFilters.hidden || activeFilters.attributes['aria-label'] !== '6 active catalog settings' || !activeFilters.innerHTML.includes('aria-label="Clear Data status: Schematic · 6"')) throw new Error('Active catalog settings did not expose its count and a descriptive data-status clearing action');
           state.filter = 'all';
           state.filterPlace = 'all';
           state.filterEra = 'all';
           state.filterAxis = 'all';
           state.filterStatus = 'all';
           state.sort = 'index';
+          renderActiveFilters();
+          if (!activeFilters.hidden || activeFilters.attributes['aria-label'] !== 'Active catalog settings') throw new Error('Active catalog settings did not reset its accessible name after clearing the view');
           if (drawingState.textContent !== 'Outside · Plan · all geometry · 100% zoom') throw new Error(`Initial drawing context did not render: ${drawingState.textContent}`);
           const axisLayer = layerButtons.find((button) => button.dataset.layer === 'axis');
           if (!axisLayer || axisLayer['aria-label'] !== 'Axis focus: Directional lines and central geometric guides.' || axisLayer.title !== axisLayer['aria-label']) throw new Error('Drawing layer controls did not expose their accessible definitions');
