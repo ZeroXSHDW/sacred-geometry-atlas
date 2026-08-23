@@ -426,6 +426,10 @@
     return `Scope: ${scope}; ${count} ${count === 1 ? "study" : "studies"}`;
   }
 
+  function readableScopeLabel(scope) {
+    return scope === "full collection" ? "the full collection" : scope;
+  }
+
   function dataStatusDefinitions() {
     const schemaDefinitions = window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions;
     return schemaStatusValues().reduce((definitions, status) => {
@@ -2602,15 +2606,16 @@
     const study = activeStudy();
     const button = $("#printStudy");
     if (!study) return;
+    const scope = studyShortName(study);
     if (typeof window.print !== "function") {
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print");
       announceKeyboard("Printing is unavailable in this browser.");
       return;
     }
-    announceKeyboard(`Printing ${study.name} study sheet.`);
+    announceKeyboard(`Printing ${scope} study sheet.`);
     try {
       window.print();
-      if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print sheet", "Print active study sheet", "study-print");
+      if (button) temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print sheet", "Print active study sheet", "study-print");
     } catch (error) {
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print sheet", "Print active study sheet", "study-print");
       announceKeyboard("Printing is unavailable in this browser.");
@@ -2620,6 +2625,7 @@
   function printCatalog() {
     const visible = visibleStudies();
     const button = $("#printCatalog");
+    const scope = readableScopeLabel(catalogScopeLabel());
     if (!visible.length) {
       announceKeyboard("There are no visible studies to print.");
       return;
@@ -2635,10 +2641,10 @@
     };
     document.body.classList.add("print-catalog");
     if (typeof window.addEventListener === "function") window.addEventListener("afterprint", cleanup, { once: true });
-    announceKeyboard(`Printing catalog view: ${catalogScopeLabel()}.`);
+    announceKeyboard(`Printing the catalog view for ${scope}.`);
     try {
       window.print();
-      if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print", "Print the current catalog view", "catalog-print");
+      if (button) temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print", "Print the current catalog view", "catalog-print");
     } catch (error) {
       cleanup();
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print", "Print the current catalog view", "catalog-print");
@@ -2649,6 +2655,7 @@
   function printComparison() {
     const comparison = comparisonStudies();
     const button = $("#printComparison");
+    const scope = readableScopeLabel(comparisonScopeLabel(comparison));
     if (!comparison.length) return;
     if (typeof window.print !== "function") {
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print");
@@ -2665,10 +2672,10 @@
     document.body.classList.add("print-comparison");
     if (panel) panel.open = true;
     if (typeof window.addEventListener === "function") window.addEventListener("afterprint", cleanup, { once: true });
-    announceKeyboard(`Printing ${comparison.length} study comparison.`);
+    announceKeyboard(`Printing the comparison for ${scope}.`);
     try {
       window.print();
-      if (button) temporaryButtonFeedback(button, "Print opened", "Print dialog opened", "Print comparison", "Print this comparison", "comparison-print");
+      if (button) temporaryButtonFeedback(button, "Print opened", `Print dialog opened for ${scope}`, "Print comparison", "Print this comparison", "comparison-print");
     } catch (error) {
       cleanup();
       if (button) temporaryButtonFeedback(button, "Unavailable", "Printing is unavailable in this browser.", "Print comparison", "Print this comparison", "comparison-print");
