@@ -96,8 +96,8 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Print-ready comparison sheets that preserve the active full-collection or focused comparison, visible provenance context, charts, the complete comparison table, and a reproducible route.
 - A Print view action for the active catalog scope, preserving visible records, filter/sort chips, schema-backed status guidance, and the direct route on a compact research sheet.
 - Study and comparison print surfaces expose those reproducible routes as native links, so a researcher can reopen or copy the exact view before printing.
-- Active catalog, study, and comparison views keep their direct route visible on screen, so each reproducible hash link is discoverable before a share, citation, or print action.
-- Each visible catalog, study, and comparison route also has a one-click Copy link action that copies the full URL, announces success, and reveals a focused readonly manual-copy field when clipboard access is unavailable; the controls disappear from print output.
+- Active catalog, study, comparison, and Method views keep their direct route visible on screen, so each reproducible hash link is discoverable before a share, citation, or print action.
+- Each visible catalog, study, comparison, and Method route also has a one-click Copy link action that copies the full URL, announces success, and reveals a focused readonly manual-copy field when clipboard access is unavailable; the controls disappear from print output.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
 - A schema-driven Method evidence key that pairs each data-status label with its definition and live record count, including custom statuses.
 - A Method data dictionary that explains the stable identity, context, geometry, rhythm, interpretation, provenance, and optional-estimate fields behind the JSON/CSV records, with direct links to both artifacts.

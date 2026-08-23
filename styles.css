@@ -540,9 +540,11 @@ h3 { letter-spacing: -0.04em; }
 .study-print-route { display: none; }
 .catalog-route,
 .study-route,
-.comparison-route { display: block; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; overflow-wrap: anywhere; }
+.comparison-route,
+.method-route { display: block; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; overflow-wrap: anywhere; }
 .catalog-route { margin: 0.45rem 0 0; }
 .study-route { margin: 0.55rem 0 0; }
+.method-route { margin: -1.45rem 0 1.15rem; }
 .route-copy-button { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 28px; margin-left: 0.35rem; padding: 0.28rem 0.45rem; border: 1px solid var(--line-strong); color: var(--teal); background: transparent; font-family: var(--mono); font-size: 0.49rem; letter-spacing: 0.03em; line-height: 1.2; text-transform: uppercase; transition: 180ms ease; vertical-align: middle; }
 .route-copy-button span:first-child { color: var(--amber); font-size: 0.78rem; line-height: 0; }
 .route-copy-button:hover,
@@ -551,13 +553,16 @@ h3 { letter-spacing: -0.04em; }
 .route-copy-button.is-unavailable { border-color: var(--coral); color: var(--coral); background: var(--coral-soft); }
 .catalog-route a,
 .study-print-route a,
-.comparison-print-route a { color: var(--teal); text-decoration-color: var(--line-strong); text-underline-offset: 0.2em; }
+.comparison-print-route a,
+.method-route a { color: var(--teal); text-decoration-color: var(--line-strong); text-underline-offset: 0.2em; }
 .catalog-route a:hover,
 .catalog-route a:focus-visible,
 .study-print-route a:hover,
 .study-print-route a:focus-visible,
 .comparison-print-route a:hover,
-.comparison-print-route a:focus-visible { color: var(--amber); text-decoration-color: currentColor; }
+.comparison-print-route a:focus-visible,
+.method-route a:hover,
+.method-route a:focus-visible { color: var(--amber); text-decoration-color: currentColor; }
 .study-header-actions { display: flex; flex-direction: column; align-items: end; gap: 1.25rem; }
 .study-nav { display: inline-flex; align-items: center; gap: 0.35rem; }
 .study-nav-position { color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
@@ -1344,13 +1349,16 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .noscript-empty { border-top-color: ButtonText; color: CanvasText; }
   .catalog-route a,
   .study-print-route a,
-  .comparison-print-route a { color: LinkText; text-decoration-color: LinkText; }
+  .comparison-print-route a,
+  .method-route a { color: LinkText; text-decoration-color: LinkText; }
   .catalog-route a:hover,
   .catalog-route a:focus-visible,
   .study-print-route a:hover,
   .study-print-route a:focus-visible,
   .comparison-print-route a:hover,
-  .comparison-print-route a:focus-visible { color: Highlight; }
+  .comparison-print-route a:focus-visible,
+  .method-route a:hover,
+  .method-route a:focus-visible { color: Highlight; }
   .catalog-batch-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .catalog-batch-action span:first-child { color: ButtonText; }
   .catalog-batch-action:disabled { border-color: GrayText; color: GrayText; }

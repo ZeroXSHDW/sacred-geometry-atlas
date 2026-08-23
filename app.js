@@ -1080,6 +1080,7 @@
     $("#copyCatalogRoute").addEventListener("click", copyCatalogRoute);
     $("#copyStudyRoute").addEventListener("click", copyStudyRoute);
     $("#copyComparisonRoute").addEventListener("click", copyComparisonRoute);
+    $("#copyMethodRoute").addEventListener("click", copyMethodRoute);
     $$('[data-dismiss-fallback]').forEach((button) => button.addEventListener("click", () => {
       const fallbackId = button.dataset && button.dataset.dismissFallback;
       const fallbackSelector = fallbackId ? `#${fallbackId}` : "";
@@ -1339,7 +1340,8 @@
     "#comparisonCitationFallback": "#copyComparisonCitation",
     "#catalogRouteFallback": "#copyCatalogRoute",
     "#studyRouteFallback": "#copyStudyRoute",
-    "#comparisonRouteFallback": "#copyComparisonRoute"
+    "#comparisonRouteFallback": "#copyComparisonRoute",
+    "#methodRouteFallback": "#copyMethodRoute"
   };
   const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
@@ -2009,6 +2011,11 @@
   }
 
   function renderMethodContext(study = activeStudy(), visible = visibleStudies()) {
+    const methodRoute = $("#methodRoute");
+    if (methodRoute) {
+      const routeLabel = study ? `Open method route for ${studyShortName(study)}` : "Open method route";
+      renderRouteLink(methodRoute, ".method-route-link", methodNavigationUrl(), routeLabel);
+    }
     const target = $("#methodContextNote");
     if (!target) return;
     const route = parseRoute();
@@ -2139,6 +2146,19 @@
       scope: "Comparison",
       resetAccessibleLabel: "Copy comparison route",
       feedbackKey: "comparison-route-copy"
+    });
+  }
+
+  function copyMethodRoute() {
+    return copyRoute({
+      linkSelector: ".method-route-link",
+      buttonSelector: "#copyMethodRoute",
+      statusSelector: "#methodRouteStatus",
+      fallbackSelector: "#methodRouteFallback",
+      fallbackTextSelector: "#methodRouteFallbackText",
+      scope: "Method",
+      resetAccessibleLabel: "Copy method route",
+      feedbackKey: "method-route-copy"
     });
   }
 
