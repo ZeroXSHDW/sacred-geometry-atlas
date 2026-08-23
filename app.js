@@ -2234,6 +2234,10 @@
     }
   }
 
+  function sharePayloadText(payload) {
+    return [payload.text, payload.url].filter(Boolean).join("\n");
+  }
+
   async function shareStudy() {
     const study = activeStudy();
     const button = $("#shareStudy");
@@ -2259,22 +2263,22 @@
         return;
       }
 
-      const copied = await copyText(shareUrl.href);
+      const copied = await copyText(sharePayloadText(sharePayload));
 
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Link copied", "Share link copied");
-        status.textContent = `A shareable link for ${study.name} was copied.`;
+        setButtonFeedback(button, "Copied", "Share text and link copied");
+        status.textContent = `Share text and link for ${study.name} copied.`;
         window.clearTimeout(shareResetTimer);
         shareResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
           setButtonFeedback(button, "Share study", "Share current study");
         }, 2200);
       } else {
-        const fallbackShown = revealManualCopyFallback("#shareFallback", "#shareFallbackText", shareUrl.href);
+        const fallbackShown = revealManualCopyFallback("#shareFallback", "#shareFallbackText", sharePayloadText(sharePayload));
         status.textContent = fallbackShown
-          ? "Copying was unavailable. The share link is shown below for manual copying."
-          : "Copying was unavailable. You can copy the page URL from the address bar.";
+          ? "Copying was unavailable. The share message and link are shown below for manual copying."
+          : "Copying was unavailable. Use the page URL from the address bar and the study details shown here.";
       }
     } finally {
       endAsyncAction(button);
@@ -2413,21 +2417,21 @@
         return;
       }
 
-      const copied = await copyText(shareUrl.href);
+      const copied = await copyText(sharePayloadText(sharePayload));
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Link copied", "Catalog view link copied");
-        status.textContent = "A shareable catalog view link was copied.";
+        setButtonFeedback(button, "Copied", "Catalog share text and link copied");
+        status.textContent = "Catalog share text and link copied.";
         window.clearTimeout(catalogShareResetTimer);
         catalogShareResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
           setButtonFeedback(button, "Share view", "Share current catalog view");
         }, 2200);
       } else {
-        const fallbackShown = revealManualCopyFallback("#catalogShareFallback", "#catalogShareFallbackText", shareUrl.href);
+        const fallbackShown = revealManualCopyFallback("#catalogShareFallback", "#catalogShareFallbackText", sharePayloadText(sharePayload));
         status.textContent = fallbackShown
-          ? "Copying was unavailable. The catalog link is shown below for manual copying."
-          : "Copying was unavailable. You can copy the catalog URL from the address bar.";
+          ? "Copying was unavailable. The catalog share message and link are shown below for manual copying."
+          : "Copying was unavailable. Use the catalog URL from the address bar and the view details shown here.";
       }
     } finally {
       endAsyncAction(button);
@@ -2466,21 +2470,21 @@
         return;
       }
 
-      const copied = await copyText(shareUrl.href);
+      const copied = await copyText(sharePayloadText(sharePayload));
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Link copied", "Comparison link copied");
-        status.textContent = "A shareable comparison link was copied.";
+        setButtonFeedback(button, "Copied", "Comparison share text and link copied");
+        status.textContent = "Comparison share text and link copied.";
         window.clearTimeout(compareShareResetTimer);
         compareShareResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
           setButtonFeedback(button, "Share comparison", "Share this comparison");
         }, 2200);
       } else {
-        const fallbackShown = revealManualCopyFallback("#compareShareFallback", "#compareShareFallbackText", shareUrl.href);
+        const fallbackShown = revealManualCopyFallback("#compareShareFallback", "#compareShareFallbackText", sharePayloadText(sharePayload));
         status.textContent = fallbackShown
-          ? "Copying was unavailable. The comparison link is shown below for manual copying."
-          : "Copying was unavailable. You can copy the comparison URL from the address bar.";
+          ? "Copying was unavailable. The comparison share message and link are shown below for manual copying."
+          : "Copying was unavailable. Use the comparison URL from the address bar and the view details shown here.";
       }
     } finally {
       endAsyncAction(button);
