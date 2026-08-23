@@ -27,6 +27,14 @@ async function cacheResponse(request, response) {
   return response;
 }
 
+function navigationFallback(request) {
+  const scopeUrl = new URL(self.registration.scope);
+  const requestUrl = new URL(request.url);
+  const scopePath = scopeUrl.pathname.endsWith("/") ? scopeUrl.pathname : `${scopeUrl.pathname}/`;
+  const isAppShell = requestUrl.pathname === scopePath || requestUrl.pathname === `${scopePath}index.html`;
+  return new URL(isAppShell ? "index.html" : "404.html", scopeUrl).href;
+}
+
 async function networkFirst(request) {
   try {
     return await cacheResponse(request, await fetch(request));
@@ -34,7 +42,7 @@ async function networkFirst(request) {
     const cached = await caches.match(request);
     if (cached) return cached;
     if (request.mode === "navigate") {
-      return (await caches.match(new URL("index.html", self.registration.scope).href)) || Response.error();
+      return (await caches.match(navigationFallback(request))) || Response.error();
     }
     return Response.error();
   }
