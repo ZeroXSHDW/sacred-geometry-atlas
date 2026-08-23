@@ -3987,6 +3987,11 @@
     const selectedStudies = state.compareIds
       .map((id) => studies.find((study) => study.id === id))
       .filter(Boolean);
+    const visibleStudyIds = new Set(visibleStudies().map((study) => study.id));
+    const outsideCount = selectedStudies.filter((study) => !visibleStudyIds.has(study.id)).length;
+    const outsideLabel = outsideCount
+      ? `${outsideCount} selected ${outsideCount === 1 ? "study" : "studies"} outside current catalog view`
+      : "";
     const selectedNames = selectedStudies.map((study) => `${study.index} · ${studyShortName(study)}`);
     const selectedStatuses = selectedStudies.map((study) => `${studyIdentityLabel(study)} (${studyStatusLabel(study).toLowerCase()})`);
     const statusSummary = studyStatusSummary(selectedStudies);
@@ -4009,9 +4014,9 @@
       summary.hidden = !preview;
     }
     if (provenance) {
-      provenance.textContent = selectedCount ? `Data status · ${statusSummary}` : "";
-      provenance.title = selectedCount ? statusDefinitions : "";
-      provenance.setAttribute("aria-label", selectedCount ? `Data status: ${statusSummary}. ${statusDefinitions}` : "");
+      provenance.textContent = selectedCount ? `Data status · ${statusSummary}${outsideLabel ? ` · ${outsideLabel}` : ""}` : "";
+      provenance.title = selectedCount ? `${statusDefinitions}${outsideLabel ? ` ${outsideLabel}.` : ""}` : "";
+      provenance.setAttribute("aria-label", selectedCount ? `Data status: ${statusSummary}. ${statusDefinitions}${outsideLabel ? ` ${outsideLabel}.` : ""}` : "");
       provenance.hidden = selectedCount === 0;
     }
     open.disabled = selectedCount < 2;
