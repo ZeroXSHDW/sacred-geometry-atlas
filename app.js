@@ -3353,7 +3353,9 @@
     const comparison = selectedComparisonStudies();
     selection.hidden = !comparison.length;
     const heading = $("#compareSelectionHeading");
-    if (heading) heading.textContent = focused ? "Focused selection" : "Pending selection";
+    const selectionCount = comparison.length;
+    const selectionCountLabel = `${selectionCount} ${selectionCount === 1 ? "study" : "studies"}`;
+    if (heading) heading.textContent = `${focused ? "Focused selection" : "Pending selection"} · ${selectionCountLabel}`;
     list.innerHTML = comparison.length ? comparison.map((study) => {
       const axisLabel = studyAxisLabel(study);
       const status = studyDataLabel(study);
