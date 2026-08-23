@@ -87,7 +87,16 @@
   const studyStatusLabel = (study) => statusDisplayName(studyStatus(study));
   const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
-  const studySourceUrl = (study) => study.sourceUrl || "";
+  const studySourceUrl = (study) => {
+    const value = typeof study?.sourceUrl === "string" ? study.sourceUrl.trim() : "";
+    if (!value || typeof URL !== "function") return "";
+    try {
+      const parsed = new URL(value);
+      return parsed.protocol === "http:" || parsed.protocol === "https:" ? value : "";
+    } catch (error) {
+      return "";
+    }
+  };
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const sentenceText = (value) => {
     const text = String(value ?? "").trim();
@@ -2279,6 +2288,8 @@
       const currentAttribute = isCurrentRoute ? ' aria-current="page"' : "";
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       const statusLabel = studyStatusLabel(study);
+      const sourceUrl = studySourceUrl(study);
+      const sourceLabel = `Open source for ${studyIdentityLabel(study)}: ${studySource(study)}`;
       return `
         <li class="catalog-entry">
           <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
@@ -2293,6 +2304,7 @@
             </span>
             ${catalogGlyph(study)}
           </a>
+          ${sourceUrl ? `<a class="catalog-source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(sourceLabel)}" title="${escapeHtml(sourceLabel)}"><span aria-hidden="true">↗</span><span>Source</span></a>` : ""}
           <button class="compare-toggle ${isCompared ? "is-selected" : ""}" data-compare-id="${escapeHtml(study.id)}" type="button" aria-pressed="${isCompared}" aria-label="${escapeHtml(compareLabel)}" title="${escapeHtml(compareLabel)}">${isCompared ? "✓" : "+"}</button>
         </li>
       `;

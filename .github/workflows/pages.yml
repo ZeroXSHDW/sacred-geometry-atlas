@@ -30,7 +30,9 @@ jobs:
           node --check data/geometry.js
           node --check sw.js
           node --check scripts/sync-geometry-json.js
+          node --check scripts/validate-geometry-data.js
           python3 -m py_compile scripts/verify-pages-artifact.py
+          node scripts/validate-geometry-data.js
           node scripts/sync-geometry-json.js --check
           test -s index.html
           test -s 404.html
@@ -40,6 +42,7 @@ jobs:
           test -s data/geometry.csv
           test -s data/geometry.schema.json
           test -s scripts/sync-geometry-json.js
+          test -s scripts/validate-geometry-data.js
           test -s scripts/verify-pages-artifact.py
           test -f .nojekyll
           test -s og.png
@@ -81,13 +84,14 @@ jobs:
           for (const status of statusValues) {
             if (typeof statusDefinitions[status] !== 'string' || !statusDefinitions[status].trim()) throw new Error(`Schema is missing a definition for status: ${status}`);
           }
-          if (publishedSchema.$schema !== 'https://json-schema.org/draft/2020-12/schema' || publishedSchema.$id !== './geometry.schema.json' || !publishedSchema.required?.includes('schemaUrl') || publishedSchema.properties?.schemaUrl?.const !== source.schemaUrl || publishedSchema.$defs?.study?.properties?.status?.enum?.join('|') !== [...statusValues].join('|') || !publishedSchema.properties?.schema?.properties?.units?.description || !publishedSchema.properties?.schema?.properties?.unitSymbol?.description || !publishedSchema.$defs?.study?.properties?.floorAreaEstimate?.description || !publishedSchema.$defs?.study?.properties?.volumeEstimate?.description || !publishedSchema.$defs?.study?.properties?.volumeBasis?.description) throw new Error('data/geometry.schema.json is missing the generated schema contract or estimate documentation');
+          if (publishedSchema.$schema !== 'https://json-schema.org/draft/2020-12/schema' || publishedSchema.$id !== './geometry.schema.json' || !publishedSchema.required?.includes('schemaUrl') || publishedSchema.properties?.schemaUrl?.const !== source.schemaUrl || publishedSchema.$defs?.study?.properties?.status?.enum?.join('|') !== [...statusValues].join('|') || !publishedSchema.$defs?.study?.properties?.sourceUrl?.pattern?.startsWith('^https?://') || !publishedSchema.properties?.schema?.properties?.units?.description || !publishedSchema.properties?.schema?.properties?.unitSymbol?.description || !publishedSchema.$defs?.study?.properties?.floorAreaEstimate?.description || !publishedSchema.$defs?.study?.properties?.volumeEstimate?.description || !publishedSchema.$defs?.study?.properties?.volumeBasis?.description) throw new Error('data/geometry.schema.json is missing the generated schema contract or estimate documentation');
           const ids = new Set();
           const indexes = new Set();
           source.studies.forEach((study, index) => {
             for (const field of requiredTextFields) {
               if (typeof study[field] !== 'string' || !study[field].trim()) throw new Error(`Study ${index + 1} has missing text field: ${field}`);
             }
+            if (!/^https?:\/\//i.test(study.sourceUrl.trim())) throw new Error(`Study ${study.id || index + 1} must use an absolute http(s) sourceUrl`);
             for (const field of requiredNumericFields) {
               if (!Number.isFinite(study[field]) || (field === 'symmetry' ? study[field] < 0 : study[field] <= 0)) throw new Error(`Study ${study.id || index + 1} has invalid numeric field: ${field}`);
             }
@@ -210,7 +214,7 @@ jobs:
           }
           if (!html.includes('<p class="hero-data-note" id="heroDataNote" data-status="schematic" role="note"') || !html.includes('id="heroDataNoteText"') || !html.includes('id="heroDataNoteDefinition"') || !styles.includes('.hero-aside {') || !styles.includes('.hero-data-note {') || !styles.includes('.hero-data-note-definition {') || !styles.includes('.hero-data-note[data-status="measured"]') || !styles.includes('.hero-data-note[data-status="mixed"]')) throw new Error('The landing hero must surface schema-driven dataset provenance with readable responsive styling');
           if (!styles.includes('.catalog-card-status:not([data-status="schematic"]):not([data-status="measured"])') || !styles.includes('.comparison-table tbody .comparison-status:not([data-status="schematic"]):not([data-status="measured"])') || !styles.includes('--coral-soft:')) throw new Error('Schema-extensible status badges must have a distinct non-schematic visual treatment');
-          if (!html.includes('<div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">') || !html.includes('<span class="study-nav-position" id="studyNavPosition">01 / 06 visible</span>') || !styles.includes('.study-nav-position {') || !app.includes('const activeStudyOutsideCatalog = visible.length > 0 && currentIndex < 0') || !app.includes('const positionLabel = currentIndex >= 0') || !app.includes('navigation.setAttribute("aria-label", currentIndex >= 0')) throw new Error('Study navigation must expose its position within the visible collection');
+          if (!html.includes('<div class="study-nav" id="studyNav" role="group" aria-label="Move between studies">') || !html.includes('<span class="study-nav-position" id="studyNavPosition">01 / 24 visible</span>') || !styles.includes('.study-nav-position {') || !app.includes('const activeStudyOutsideCatalog = visible.length > 0 && currentIndex < 0') || !app.includes('const positionLabel = currentIndex >= 0') || !app.includes('navigation.setAttribute("aria-label", currentIndex >= 0')) throw new Error('Study navigation must expose its position within the visible collection');
           for (const token of ['function renderHeroStats()', 'studyCount: studies.length', 'modeCount: validModes.size', 'profileCount: activeStudy() ? profileScores(activeStudy()).length : 0', 'renderHeroStats();', 'function renderHeroProvenance()', 'const summaryTarget = $("#heroDataNoteText")', 'const definitionTarget = $("#heroDataNoteDefinition")', 'const noteStatus = activeStatuses.length === 1', 'note.setAttribute("data-status", noteStatus);', 'renderHeroProvenance();', 'function atlasSchemaNoteText(records = studies)', 'function renderAtlasSchemaNote()', 'renderAtlasSchemaNote();']) {
             if (!app.includes(token)) throw new Error('Hero statistics must derive from live atlas state: ' + token);
           }
@@ -302,7 +306,7 @@ jobs:
           if (!html.includes('<span id="compare" class="route-anchor" aria-hidden="true"></span>') || !html.includes('<span id="method" class="route-anchor" aria-hidden="true"></span>') || !styles.includes('.route-anchor { display: block; height: 0; scroll-margin-top: 7rem; }')) throw new Error('Compare and Method routes must expose native fragment targets alongside the app routes');
           if (!app.includes('function handleViewNavigation(event)') || !app.includes('$$("[data-view]").forEach((link) => link.addEventListener("click", handleViewNavigation));') || !app.includes('event.preventDefault();') || !app.includes('showPage(link.dataset.view, { routeStudy: link.dataset.view === "method" });') || !styles.includes('text-decoration: none;')) throw new Error('Primary navigation must preserve native route links and enhanced in-place navigation');
           if (!html.includes('<p class="section-note" id="compareSectionNote">Relative readings · full collection</p>') || !html.includes('<span class="card-kicker" id="geometryCompareKicker">00 / collection geometry</span>') || !app.includes('function renderCompareContext()') || !app.includes('const compareScopeLabel = focused ? "selected collection" : "full collection";') || !app.includes('sectionNote.textContent = `Relative readings · ${compareScopeLabel}`;') || !app.includes('geometryKicker.textContent = focused ? "00 / selected geometry" : "00 / collection geometry";')) throw new Error('Comparison copy must identify the active full or focused collection');
-          if (!html.includes('<summary id="comparisonTableSummary" aria-keyshortcuts="Escape">Read the 6 study records as a table</summary>') || !app.includes('const summary = $("#comparisonTableSummary");') || !app.includes('Read the ${comparison.length} selected study records as a table') || !app.includes('Read the ${comparison.length} study records as a table')) throw new Error('Comparison table trigger must identify its active record scope');
+          if (!html.includes('<summary id="comparisonTableSummary" aria-keyshortcuts="Escape">Read the 24 study records as a table</summary>') || !app.includes('const summary = $("#comparisonTableSummary");') || !app.includes('Read the ${comparison.length} selected study records as a table') || !app.includes('Read the ${comparison.length} study records as a table')) throw new Error('Comparison table trigger must identify its active record scope');
           if (!app.includes('class="comparison-table-study-link"') || !app.includes('data-table-study') || !app.includes('comparisonTable.addEventListener("click"') || !app.includes('const studyLinkLabel = `Open study ${study.index}, ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;') || !app.includes('const currentStudyAttribute = isActive ? \' aria-current="true"\' : "";') || !app.includes('${currentStudyAttribute} aria-label="${escapeHtml(studyLinkLabel)}"') || !app.includes('escapeHtml(studyStatusDescription(study))') || !styles.includes('.comparison-table-study-link {')) throw new Error('Comparison table study names must provide route-native Atlas links with curated index, axis, status, source provenance, escaped labels, and generic current-study semantics');
           if (!app.includes('class="chart-status"') || !app.includes('class="chart-axis-context"') || !app.includes('class="bar-label" aria-hidden="true"') || !app.includes('class="bar-value" aria-hidden="true"') || !app.includes('class="module-name" aria-hidden="true"') || !app.includes('class="module-value" aria-hidden="true"') || !app.includes('const meterAttributes = (study, label, value, maximum, valueText) =>') || !app.includes('role="meter" aria-label=') || !app.includes('aria-valuemax="${number(maximum, 2)}"') || !styles.includes('.chart-status {') || !styles.includes('.chart-status[data-status="measured"]') || !styles.includes('.chart-axis-context {') || !styles.includes('.chart-status,\n  .chart-status[data-status="measured"]')) throw new Error('Comparison charts must expose visible axis context, schema-backed provenance chips, semantic meter ranges, and non-duplicative accessible labels');
           if (!styles.includes('font-size: 0.5rem; letter-spacing: 0.05em; line-height: 1.2; text-transform: uppercase; }') || !styles.includes('font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }') || !styles.includes('.study-status {') || !styles.includes('font-size: 0.55rem; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }')) throw new Error('Data-status and axis-context labels must retain a legible compact baseline');
@@ -337,7 +341,7 @@ jobs:
             if (!html.includes(token)) throw new Error('Missing initial pressed state: ' + token);
           }
           if (!html.includes('aria-keyshortcuts="j"') || !html.includes('aria-keyshortcuts="k"') || !html.includes('id="openCompare" type="button" aria-controls="compareView" aria-keyshortcuts="c"') || !html.includes('aria-keyshortcuts="i"') || !html.includes('aria-keyshortcuts="o"') || !html.includes('aria-keyshortcuts="-"') || !html.includes('aria-keyshortcuts="+"') || !html.includes('<kbd>+</kbd> <kbd>-</kbd>') || !html.includes('<kbd>C</kbd>') || !html.includes('Open focused comparison') || !html.includes('matching shortcut control') || !app.includes('const zoomDeltaForKey = (key) =>') || !app.includes('const zoomDelta = zoomDeltaForKey(key);') || !app.includes('if (tagName === "button")') || !app.includes('String(target.getAttribute("aria-keyshortcuts") || "")') || !app.includes('if (!declaredShortcuts.includes(key)) return;') || !app.includes('if (key === "c")') || !app.includes('showPage("compare");') || !app.includes('Select at least two studies to open comparison.')) throw new Error('Shortcut metadata must match the implemented Atlas controls');
-          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom" aria-controls="geometryCanvas"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true" aria-label="06 of 06 studies; the full collection."']) {
+          for (const token of ['id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas"', 'id="resetDrawing" type="button" aria-label="Reset drawing to outside plan, all geometry, and 100% zoom" aria-controls="geometryCanvas"', 'id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas"', 'id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas"', 'id="zoomReadout" role="status" aria-live="polite"', 'id="catalogResultCount" role="status" aria-live="polite" aria-atomic="true" aria-label="24 of 24 studies; the full collection."']) {
             if (!html.includes(token)) throw new Error(`Missing accessible zoom control: ${token}`);
           }
           if (!html.includes('id="zoomOut" type="button" aria-label="Zoom out" aria-controls="geometryCanvas" aria-keyshortcuts="-" title="Zoom out"') || !html.includes('id="zoomReset" type="button" aria-label="Reset zoom to 100%" aria-controls="geometryCanvas" aria-keyshortcuts="r" title="Reset zoom to 100%"') || !html.includes('id="zoomIn" type="button" aria-label="Zoom in" aria-controls="geometryCanvas" aria-keyshortcuts="+" title="Zoom in"')) throw new Error('Zoom controls must expose compact-control tooltips and keyboard shortcuts');
@@ -444,7 +448,7 @@ jobs:
           for (const token of ['<th scope="col">Study / index</th>', '<th scope="col" data-unit-header="length">Length (m)</th>', '<th scope="col">Status</th>', '<th scope="col">Source / provenance</th>', '<th scope="col">Length ÷ span</th>', '<th scope="col">Height ÷ span</th>', '<th scope="col">Bay count</th>', '<th scope="col" data-unit-header="module">Module (m)</th>', '<th scope="col" data-unit-header="radius">Radius (m)</th>', '<th scope="col">Symmetry index</th>', '<th scope="col">Linearity (0–100)</th>', '<th scope="col">Verticality (0–100)</th>', '<th scope="col">Radiality (0–100)</th>', '<th scope="col">Repetition (0–100)</th>']) {
             if (!html.includes(token)) throw new Error('Comparison table header is missing clear units or meaning: ' + token);
           }
-          for (const token of ['<p class="compare-status-note" id="comparisonStatusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>', '<div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Study envelopes; each card identifies its schema-defined data status, source, and source note." aria-describedby="comparisonStatusHelp">', '<div class="bar-chart" id="ratioChart" role="list" aria-label="Length to span ratios; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp ratioChartScale">', '<div class="bar-chart" id="heightChart" role="list" aria-label="Height to span ratios; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp heightChartScale">', '<div class="module-chart" id="moduleChart" role="list" aria-label="Bay rhythm and module sizes; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp moduleChartScale">', '<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp comparisonTableProfileHelp comparisonStatusHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">']) {
+          for (const token of ['<p class="compare-status-note" id="comparisonStatusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 24 schematic · 0 measured.</p>', '<div class="geometry-compare-grid" id="geometryCompare" role="group" aria-label="Study envelopes; each card identifies its schema-defined data status, source, and source note." aria-describedby="comparisonStatusHelp">', '<div class="bar-chart" id="ratioChart" role="list" aria-label="Length to span ratios; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp ratioChartScale">', '<div class="bar-chart" id="heightChart" role="list" aria-label="Height to span ratios; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp heightChartScale">', '<div class="module-chart" id="moduleChart" role="list" aria-label="Bay rhythm and module sizes; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp moduleChartScale">', '<div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Scrollable study comparison table" aria-describedby="comparisonTableHelp comparisonTableProfileHelp comparisonStatusHelp" aria-keyshortcuts="ArrowLeft ArrowRight Home End">']) {
             if (!html.includes(token)) throw new Error('Comparison status explanation is not wired to every visual surface: ' + token);
           }
           if (!html.includes('<p class="chart-scale" id="ratioChartScale">Scale 0 → 2.71 · active comparison maximum</p>') || !html.includes('<p class="chart-scale" id="heightChartScale">Scale 0 → 1.53 · active comparison maximum</p>') || !html.includes('<p class="chart-scale" id="moduleChartScale">Scale 0 → 11.5 m · active comparison maximum</p>') || !html.includes('<p class="sr-only" id="comparisonChartScaleStatus" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('<div class="chart-axis-guide bar-axis-guide" id="ratioChartAxis" aria-hidden="true">') || !html.includes('<div class="chart-axis-guide bar-axis-guide" id="heightChartAxis" aria-hidden="true">') || !html.includes('<div class="chart-axis-guide module-axis-guide" id="moduleChartAxis" aria-hidden="true">') || !app.includes('const ratioScale = $("#ratioChartScale");') || !app.includes('const chartScaleStatus = $("#comparisonChartScaleStatus");') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('chartScaleStatus.textContent = `Comparison ranges updated: length to span 0 → ${number(maxRatio, 2)}; height to span 0 → ${number(maxHeightRatio, 2)}; module 0 → ${number(maxModule)} ${unit}.`;') || !app.includes('const ratioAxisMid = $("#ratioChartAxisMid");') || !app.includes('ratioAxisMid.textContent = number(maxRatio / 2, 2);') || !app.includes('heightAxisMid.textContent = number(maxHeightRatio / 2, 2);') || !app.includes('moduleAxisMid.textContent = `${number(maxModule / 2, 2)} ${unit}`;') || !app.includes('ratioScale.textContent = `Scale 0 → ${number(maxRatio, 2)} · active comparison maximum`;') || !app.includes('heightScale.textContent = `Scale 0 → ${number(maxHeightRatio, 2)} · active comparison maximum`;') || !app.includes('moduleScale.textContent = `Scale 0 → ${number(maxModule)} ${unit} · active comparison maximum`;') || !app.includes('class="chart-study-meta"') || !styles.includes('.chart-axis-guide {') || !styles.includes('.bar-axis-guide {') || !styles.includes('.module-axis-guide {') || !styles.includes('.chart-scale {') || !styles.includes('.chart-study-meta {')) throw new Error('Comparison charts must expose dynamic axis, live range announcements, maximum-scale, and study-context information');
@@ -542,7 +546,7 @@ jobs:
           if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
           if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
           if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures and reading profiles sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction and reading-profile ordering must be explained to assistive technology');
-          if (!html.includes('<select id="filterSelect" aria-describedby="filterHelp">') || !html.includes('<select id="filterPlace" aria-describedby="filterHelp">') || !html.includes('<select id="filterEra" aria-describedby="filterHelp">') || !html.includes('<select id="filterAxis" aria-describedby="filterHelp">') || !html.includes('<select id="filterStatus" aria-describedby="filterHelp statusHelp">') || !html.includes('<p class="catalog-filter-note" id="filterHelp">Filter counts reflect the current search and the other active filters.</p>') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 6 schematic · 0 measured.</p>') || !styles.includes('.catalog-filter-note {') || !styles.includes('.catalog-data-note {') || !app.includes('function schemaStatusValues()') || !app.includes('const allowedStatusValues = new Set(schemaStatusValues());') || !app.includes('const validStatuses = new Set(["all", ...schemaStatusValues()]);') || !app.includes('function studyStatusCounts(records = studies)') || !app.includes('function statusGuidanceText(records = studies, scope = "the full collection")') || !app.includes('function catalogStatusGuidanceText(records = visibleStudies())') || !app.includes('const catalogFilterSpecs = [') || !app.includes('function catalogFilterScopeRecords(excludedKey = "")') || !app.includes('function replaceSelectOptions(select, options)') || !app.includes('function renderCatalogFilterOptions()') || !app.includes('const scope = catalogFilterScopeRecords(stateKey);') || !app.includes('label: `${allLabel} · ${scope.length}`') || !app.includes('statusHelp.textContent = catalogStatusGuidanceText(visible);') || !app.includes('const statusGuidance = statusGuidanceText(studies, "the full collection");') || !app.includes('comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");') || !app.includes('const countsText = statuses.map((status) =>')) throw new Error('Catalog filters must expose scope-aware counts and schema-backed provenance');
+          if (!html.includes('<select id="filterSelect" aria-describedby="filterHelp">') || !html.includes('<select id="filterPlace" aria-describedby="filterHelp">') || !html.includes('<select id="filterEra" aria-describedby="filterHelp">') || !html.includes('<select id="filterAxis" aria-describedby="filterHelp">') || !html.includes('<select id="filterStatus" aria-describedby="filterHelp statusHelp">') || !html.includes('<p class="catalog-filter-note" id="filterHelp">Filter counts reflect the current search and the other active filters.</p>') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 24 schematic · 0 measured.</p>') || !styles.includes('.catalog-filter-note {') || !styles.includes('.catalog-data-note {') || !app.includes('function schemaStatusValues()') || !app.includes('const allowedStatusValues = new Set(schemaStatusValues());') || !app.includes('const validStatuses = new Set(["all", ...schemaStatusValues()]);') || !app.includes('function studyStatusCounts(records = studies)') || !app.includes('function statusGuidanceText(records = studies, scope = "the full collection")') || !app.includes('function catalogStatusGuidanceText(records = visibleStudies())') || !app.includes('const catalogFilterSpecs = [') || !app.includes('function catalogFilterScopeRecords(excludedKey = "")') || !app.includes('function replaceSelectOptions(select, options)') || !app.includes('function renderCatalogFilterOptions()') || !app.includes('const scope = catalogFilterScopeRecords(stateKey);') || !app.includes('label: `${allLabel} · ${scope.length}`') || !app.includes('statusHelp.textContent = catalogStatusGuidanceText(visible);') || !app.includes('const statusGuidance = statusGuidanceText(studies, "the full collection");') || !app.includes('comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");') || !app.includes('const countsText = statuses.map((status) =>')) throw new Error('Catalog filters must expose scope-aware counts and schema-backed provenance');
           if (!html.includes('<span class="select-label">Typology</span>') || !html.includes('<span class="select-label">Sort by</span>') || !html.includes('<span class="select-label">Location</span>') || !html.includes('<span class="select-label">Era</span>') || !html.includes('<span class="select-label">Axis</span>') || !html.includes('<span class="select-label">Data status</span>') || !styles.includes('.select-wrap { position: relative; display: grid; gap: 0.28rem; }') || !styles.includes('.select-label {') || !styles.includes('.select-wrap::after { position: absolute; top: 1.62rem;') || !app.includes('const eras = new Set(studies.map((study) => study.era));') || !app.includes('const axes = new Set(studies.map((study) => study.axis));') || !app.includes('state.filterEra = eras.has(requestedEra) ? requestedEra : "all";') || !app.includes('state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";')) throw new Error('Catalog controls must retain visible labels while era and axis filters remain bookmarkable and accessible');
           if (!app.includes('if (state.filterEra !== "all") filters.push({ key: "era"') || !app.includes('if (key === "era")') || !app.includes('if (state.filterEra !== "all") parts.push(`era: ${state.filterEra}`);') || !app.includes('if (state.filterAxis !== "all") filters.push({ key: "axis"') || !app.includes('if (key === "axis")') || !app.includes('if (state.filterAxis !== "all") parts.push(`axis: ${axisDisplayLabel(state.filterAxis)}`);')) throw new Error('Era and axis filters must expose clearable catalog scope');
           for (const token of ['label: `Typology: ${$("#filterSelect").selectedOptions[0].textContent}`', 'label: `Location: ${$("#filterPlace").selectedOptions[0].textContent}`', 'label: `Era: ${$("#filterEra").selectedOptions[0].textContent}`', 'label: `Axis: ${$("#filterAxis").selectedOptions[0].textContent}`', 'label: `Data status: ${$("#filterStatus").selectedOptions[0].textContent}`']) {
@@ -779,15 +783,24 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const statusLabel = (status) => String(status).trim().split(/[\s_-]+/).filter(Boolean).map((word) => word[0].toUpperCase() + word.slice(1)).join(" ");
+          const expectedHero = () => {
+            const counts = Object.fromEntries(context.window.CHURCH_GEOMETRY_SCHEMA.statusValues.map((status) => [status, context.window.CHURCH_GEOMETRY.filter((study) => study.status === status).length]));
+            const summary = context.window.CHURCH_GEOMETRY_SCHEMA.statusValues.map((status) => `${String(counts[status] || 0).padStart(2, "0")} ${status.toLowerCase()}`).join(" · ");
+            const definition = context.window.CHURCH_GEOMETRY_SCHEMA.statusValues.filter((status) => counts[status] > 0).map((status) => `${statusLabel(status)} = ${context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions[status] || "Data status is not documented."}`).join(" ");
+            return { counts, summary, definition };
+          };
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderHeroProvenance };\n})();');
           vm.runInNewContext(app, context);
           const { renderHeroProvenance } = context.window.__atlasTest;
           renderHeroProvenance();
-          if (elements.get('#heroDataNoteText').textContent !== '06 schematic · 00 measured' || elements.get('#heroDataNoteDefinition').textContent !== 'Schematic = Illustrative proportions; not a measured survey.' || elements.get('#heroDataNote').attributes['data-status'] !== 'schematic') throw new Error('Hero provenance summary did not expose the current schema-backed status counts, definition, and state cue');
+          const initialHero = expectedHero();
+          if (elements.get('#heroDataNoteText').textContent !== initialHero.summary || elements.get('#heroDataNoteDefinition').textContent !== initialHero.definition || elements.get('#heroDataNote').attributes['data-status'] !== 'schematic') throw new Error('Hero provenance summary did not expose the current schema-backed status counts, definition, and state cue');
           context.window.CHURCH_GEOMETRY[0].status = 'measured';
           context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.measured = 'Custom measured definition.';
           renderHeroProvenance();
-          if (elements.get('#heroDataNoteText').textContent !== '05 schematic · 01 measured' || elements.get('#heroDataNoteDefinition').textContent !== 'Schematic = Illustrative proportions; not a measured survey. Measured = Custom measured definition.' || elements.get('#heroDataNote').attributes['data-status'] !== 'mixed' || !elements.get('#heroDataNote').attributes['aria-label'].includes('Measured = Custom measured definition.')) throw new Error('Hero provenance summary did not follow a changed record status, schema definition, or mixed-state cue');
+          const mixedHero = expectedHero();
+          if (elements.get('#heroDataNoteText').textContent !== mixedHero.summary || elements.get('#heroDataNoteDefinition').textContent !== mixedHero.definition || elements.get('#heroDataNote').attributes['data-status'] !== 'mixed' || !elements.get('#heroDataNote').attributes['aria-label'].includes('Measured = Custom measured definition.')) throw new Error('Hero provenance summary did not follow a changed record status, schema definition, or mixed-state cue');
           console.log('Hero provenance summary smoke test passed.');
           NODE
       - name: Smoke-test connection recovery status
@@ -1517,6 +1530,15 @@ jobs:
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
           const firstStudy = context.window.CHURCH_GEOMETRY[0];
           const secondStudy = context.window.CHURCH_GEOMETRY[1];
+          const lastStudy = context.window.CHURCH_GEOMETRY[context.window.CHURCH_GEOMETRY.length - 1];
+          const studyCount = context.window.CHURCH_GEOMETRY.length;
+          const studyCountLabel = String(studyCount).padStart(2, '0');
+          const schematicCount = context.window.CHURCH_GEOMETRY.filter((study) => study.status === 'schematic').length;
+          const gothicCount = context.window.CHURCH_GEOMETRY.filter((study) => study.typology === 'Gothic').length;
+          const sixthCenturyCount = context.window.CHURCH_GEOMETRY.filter((study) => study.era === '6th century').length;
+          const longitudinalCount = context.window.CHURCH_GEOMETRY.filter((study) => study.axis === 'Longitudinal').length;
+          const radialCount = context.window.CHURCH_GEOMETRY.filter((study) => study.axis === 'Radial').length;
+          const studyIdentity = (study) => `Study ${study.index}, ${study.shortName || study.name}`;
           elements.set('#searchInput', searchInput);
           elements.set('#activeFilters', activeFilters);
           elements.set('#filterSelect', filterSelect);
@@ -1536,52 +1558,75 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, methodNavigationUrl, comparisonNavigationUrl, viewNavigationUrl, updateViewNavigationLinks, parseRoute, handleKeyboard, handleDisclosureKeydown, handleViewNavigation, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, renderCatalogFilterOptions, renderActiveFilters, visibleStudies, catalogScopeLabel, catalogStatusGuidanceText, renderCatalogResultCount, syncCatalogFromUrl, normalizeCatalogQuery, zoomDeltaForKey };\n})();');
           vm.runInNewContext(app, context);
           const { state, routeHash, navigationUrl, atlasStudyNavigationUrl, catalogViewRouteUrl, studyRouteUrl, studyRoutePath, methodNavigationUrl, comparisonNavigationUrl, viewNavigationUrl, updateViewNavigationLinks, parseRoute, handleKeyboard, handleDisclosureKeydown, handleViewNavigation, renderStudyNav, renderControls, drawPlan, drawElevation, drawSection, studySearchText, highlightSearchText, searchMatchContext, catalogStudyAriaLabel, populateFilter, renderCatalogFilterOptions, renderActiveFilters, visibleStudies, catalogScopeLabel, catalogStatusGuidanceText, renderCatalogResultCount, syncCatalogFromUrl, normalizeCatalogQuery, zoomDeltaForKey } = context.window.__atlasTest;
+          const records = context.window.CHURCH_GEOMETRY;
+          const totalCount = records.length;
+          const padCount = (count) => String(count).padStart(2, '0');
+          const schema = context.window.CHURCH_GEOMETRY_SCHEMA;
+          const statusValues = schema.statusValues;
+          const statusLabel = (value) => String(value).charAt(0).toUpperCase() + String(value).slice(1);
+          const statusCount = (value, scope = records) => scope.filter((study) => study.status === value).length;
+          const axisLabel = (value) => /axis$/i.test(value) ? value : `${value} axis`;
+          const countBy = (key, value) => records.filter((study) => study[key] === value).length;
+          const uniqueStudyFor = (key) => records.find((study) => countBy(key, study[key]) === 1) || records[0];
+          const uniqueEraStudy = uniqueStudyFor('era');
+          const uniqueAxisStudy = uniqueStudyFor('axis');
+          const multiTermQuery = `${secondStudy.typology.toLowerCase()} ${secondStudy.place.split(',')[0].trim().toLowerCase()}`;
+          const identityLabel = (study) => `Study ${study.index}, ${study.shortName || study.name}`;
+          const scopeCountText = (count) => `${padCount(count)} of ${padCount(totalCount)} studies`;
+          const statusSummary = (scope) => statusValues.map((value) => `${statusCount(value, scope)} ${statusLabel(value).toLowerCase()}`).join(' · ');
           populateFilter();
           renderControls();
           const disclosureEvent = { key: 'Escape', target: disclosureTarget, prevented: false, preventDefault() { this.prevented = true; } };
           handleDisclosureKeydown(disclosureEvent);
           if (!disclosureEvent.prevented || disclosure.open || disclosureSummary.focusCalls !== 1 || keyboardStatus.textContent !== 'Keyboard guide closed.') throw new Error('Escape did not close the open disclosure, restore summary focus, and announce the handoff');
-          renderCatalogResultCount(6);
-          if (catalogResultCount.textContent !== '06 of 06 studies' || catalogResultCount.attributes['aria-label'] !== '06 of 06 studies; the full collection.' || catalogLiveStatus.textContent !== '') throw new Error('Initial catalog result announcement was not concise and scoped');
+          renderCatalogResultCount(totalCount);
+          if (catalogResultCount.textContent !== scopeCountText(totalCount) || catalogResultCount.attributes['aria-label'] !== `${scopeCountText(totalCount)}; the full collection.` || catalogLiveStatus.textContent !== '') throw new Error('Initial catalog result announcement was not concise and scoped');
           state.query = 'gothic';
           state.filterAxis = 'Longitudinal';
           state.sort = 'name';
           state.sortDirection = 'asc';
-          renderCatalogResultCount(1);
-          if (catalogResultCount.attributes['aria-label'] !== '01 of 06 studies; results matching “gothic”, axis: Longitudinal axis, sorted by name (A–Z).' || catalogLiveStatus.textContent !== 'Catalog updated: results matching “gothic”, axis: Longitudinal axis, sorted by name (A–Z).') throw new Error('Catalog scope announcement did not include query, filter, sort, and accessible result context');
-          if (normalizeCatalogQuery('  Gothic   Chartres  ') !== 'gothic chartres') throw new Error('Catalog query normalization did not collapse repeated whitespace');
-          state.query = 'gothic chartres';
-          renderCatalogResultCount(1);
-          if (catalogLiveStatus.textContent !== 'Catalog updated: results matching “gothic chartres”, axis: Longitudinal axis, sorted by name (A–Z).') throw new Error('Catalog scope announcement did not update when the result count stayed the same');
+          const axisFilteredCount = visibleStudies().length;
+          renderCatalogResultCount(axisFilteredCount);
+          const axisFilteredScope = catalogScopeLabel();
+          if (catalogResultCount.attributes['aria-label'] !== `${scopeCountText(axisFilteredCount)}; ${axisFilteredScope}.` || catalogLiveStatus.textContent !== `Catalog updated: ${axisFilteredScope}.`) throw new Error('Catalog scope announcement did not include query, filter, sort, and accessible result context');
+          if (normalizeCatalogQuery(`  ${secondStudy.typology}   ${secondStudy.place.split(',')[0]}  `) !== multiTermQuery) throw new Error('Catalog query normalization did not collapse repeated whitespace');
+          state.query = multiTermQuery;
+          const multiTermScopedCount = visibleStudies().length;
+          renderCatalogResultCount(multiTermScopedCount);
+          const multiTermScope = catalogScopeLabel();
+          if (catalogLiveStatus.textContent !== `Catalog updated: ${multiTermScope}.`) throw new Error('Catalog scope announcement did not update when the result count stayed the same');
           state.query = '';
           state.filterAxis = 'all';
           state.sort = 'index';
-          renderCatalogResultCount(6);
+          renderCatalogResultCount(totalCount);
           if (catalogLiveStatus.textContent !== 'Catalog updated: the full collection.') throw new Error('Catalog scope announcement did not describe the restored full collection');
           state.filterStatus = 'schematic';
-          renderCatalogResultCount(6);
-          if (catalogLiveStatus.textContent !== 'Catalog updated: data status: schematic records. Data status filter: Schematic. Illustrative proportions; not a measured survey.') throw new Error('Catalog status filter announcement did not include the schema-backed definition');
+          const schematicScopeCount = visibleStudies().length;
+          renderCatalogResultCount(schematicScopeCount);
+          const schematicScope = catalogScopeLabel();
+          if (catalogLiveStatus.textContent !== `Catalog updated: ${schematicScope}. Data status filter: ${statusLabel('schematic')}. ${schema.statusDefinitions.schematic}`) throw new Error('Catalog status filter announcement did not include the schema-backed definition');
           state.filterStatus = 'all';
-          renderCatalogResultCount(6);
+          renderCatalogResultCount(totalCount);
           if (catalogLiveStatus.textContent !== 'Catalog updated: the full collection. Data status filter cleared.') throw new Error('Catalog status filter announcement did not describe a cleared filter');
-          state.filter = 'Gothic';
-          state.filterPlace = 'Chartres, France';
-          state.filterEra = '13th century';
-          state.filterAxis = 'Longitudinal';
+          state.filter = secondStudy.typology;
+          state.filterPlace = secondStudy.place;
+          state.filterEra = secondStudy.era;
+          state.filterAxis = secondStudy.axis;
           state.filterStatus = 'schematic';
           state.sort = 'name';
-          if (catalogScopeLabel() !== 'typology: Gothic, location: Chartres, France, era: 13th century, axis: Longitudinal axis, data status: schematic records, sorted by name (A–Z)') throw new Error(`Catalog scope labels were not self-describing: ${catalogScopeLabel()}`);
-          filterSelect.selectedOptions = [{ textContent: 'Gothic · 1' }];
-          filterPlace.selectedOptions = [{ textContent: 'Chartres, France · 1' }];
-          filterEra.selectedOptions = [{ textContent: '13th century · 1' }];
-          filterAxis.selectedOptions = [{ textContent: 'Longitudinal axis · 2' }];
-          filterStatus.selectedOptions = [{ textContent: 'Schematic · 6' }];
+          const activeScope = catalogScopeLabel();
+          if (activeScope !== `typology: ${secondStudy.typology}, location: ${secondStudy.place}, era: ${secondStudy.era}, axis: ${axisLabel(secondStudy.axis)}, data status: schematic records, sorted by name (A–Z)`) throw new Error(`Catalog scope labels were not self-describing: ${activeScope}`);
+          filterSelect.selectedOptions = [{ textContent: `${secondStudy.typology} · ${countBy('typology', secondStudy.typology)}` }];
+          filterPlace.selectedOptions = [{ textContent: `${secondStudy.place} · ${countBy('place', secondStudy.place)}` }];
+          filterEra.selectedOptions = [{ textContent: `${secondStudy.era} · ${countBy('era', secondStudy.era)}` }];
+          filterAxis.selectedOptions = [{ textContent: `${axisLabel(secondStudy.axis)} · ${countBy('axis', secondStudy.axis)}` }];
+          filterStatus.selectedOptions = [{ textContent: `Schematic · ${schematicCount}` }];
           sortSelect.selectedOptions = [{ textContent: 'Name · A–Z' }];
           renderActiveFilters();
-          for (const label of ['Typology: Gothic · 1', 'Location: Chartres, France · 1', 'Era: 13th century · 1', 'Axis: Longitudinal axis · 2', 'Data status: Schematic · 6', 'Sort: Name · A–Z']) {
+          for (const label of [`Typology: ${secondStudy.typology} · ${countBy('typology', secondStudy.typology)}`, `Location: ${secondStudy.place} · ${countBy('place', secondStudy.place)}`, `Era: ${secondStudy.era} · ${countBy('era', secondStudy.era)}`, `Axis: ${axisLabel(secondStudy.axis)} · ${countBy('axis', secondStudy.axis)}`, `Data status: Schematic · ${schematicCount}`, 'Sort: Name · A–Z']) {
             if (!activeFilters.innerHTML.includes(label)) throw new Error(`Active filter chip lost its context label: ${label}`);
           }
-          if (activeFilters.hidden || activeFilters.attributes['aria-label'] !== '6 active catalog settings' || !activeFilters.innerHTML.includes('aria-label="Clear Data status: Schematic · 6"')) throw new Error('Active catalog settings did not expose its count and a descriptive data-status clearing action');
+          if (activeFilters.hidden || activeFilters.attributes['aria-label'] !== '6 active catalog settings' || !activeFilters.innerHTML.includes(`aria-label="Clear Data status: Schematic · ${schematicCount}"`)) throw new Error('Active catalog settings did not expose its count and a descriptive data-status clearing action');
           state.sortDirection = 'desc';
           sortSelect.selectedOptions = [{ textContent: 'Name · Z–A' }];
           renderActiveFilters();
@@ -1612,72 +1657,77 @@ jobs:
           if (!zoomIn.disabled || zoomIn.title !== 'Zoom in (maximum 160%)') throw new Error('Maximum zoom control did not expose its endpoint state');
           state.zoom = 1.3;
           renderControls();
-          if (!filterSelect.options.some((option) => option.textContent === 'All typologies · 6') || !filterSelect.options.some((option) => option.textContent === 'Gothic · 1')) throw new Error('Typology filter did not expose scope-aware counts');
-          if (!filterEra.options.some((option) => option.textContent === '6th century · 1')) throw new Error('Era filter did not expose study periods and counts');
-          if (!filterAxis.options.some((option) => option.textContent === 'Longitudinal axis · 2')) throw new Error('Axis filter did not expose geometry axes and counts');
-          if (filterStatus.options[0].textContent !== 'All statuses · 6' || filterStatus.options[1].textContent !== 'Schematic · 6' || filterStatus.options[2].textContent !== 'Measured · 0') throw new Error('Status filter did not expose full-collection counts');
+          if (!filterSelect.options.some((option) => option.textContent === `All typologies · ${totalCount}`) || !filterSelect.options.some((option) => option.textContent === `${secondStudy.typology} · ${countBy('typology', secondStudy.typology)}`)) throw new Error('Typology filter did not expose scope-aware counts');
+          if (!filterEra.options.some((option) => option.textContent === `${uniqueEraStudy.era} · ${countBy('era', uniqueEraStudy.era)}`)) throw new Error('Era filter did not expose study periods and counts');
+          if (!filterAxis.options.some((option) => option.textContent === `${axisLabel(uniqueAxisStudy.axis)} · ${countBy('axis', uniqueAxisStudy.axis)}`)) throw new Error('Axis filter did not expose geometry axes and counts');
+          if (filterStatus.options[0].textContent !== `All statuses · ${totalCount}` || filterStatus.options[1].textContent !== `Schematic · ${statusCount('schematic')}` || filterStatus.options[2].textContent !== `Measured · ${statusCount('measured')}`) throw new Error('Status filter did not expose full-collection counts');
           state.query = 'gothic';
           renderCatalogFilterOptions();
-          if (!filterSelect.options.some((option) => option.textContent === 'All typologies · 1') || !filterSelect.options.some((option) => option.textContent === 'Gothic · 1') || !filterStatus.options.some((option) => option.textContent === 'Schematic · 1')) throw new Error('Catalog filter counts did not follow the active search scope');
+          const gothicScopeCount = visibleStudies().length;
+          if (!filterSelect.options.some((option) => option.textContent === `All typologies · ${gothicScopeCount}`) || !filterSelect.options.some((option) => option.textContent === `Gothic · ${gothicCount}`) || !filterStatus.options.some((option) => option.textContent === `Schematic · ${gothicScopeCount}`)) throw new Error('Catalog filter counts did not follow the active search scope');
           state.query = '';
           renderCatalogFilterOptions();
-          context.window.location.href = 'https://example.test/atlas/?era=6th%20century#atlas/basilica/plan/exterior/all';
+          context.window.location.href = `https://example.test/atlas/?era=${encodeURIComponent(uniqueEraStudy.era)}#atlas/${firstStudy.id}/plan/exterior/all`;
           syncCatalogFromUrl();
-          if (state.filterEra !== '6th century' || filterEra.value !== '6th century') throw new Error('Era filter did not restore from the catalog URL');
-          context.window.location.href = 'https://example.test/atlas/?axis=Radial#atlas/basilica/plan/exterior/all';
+          if (state.filterEra !== uniqueEraStudy.era || filterEra.value !== uniqueEraStudy.era) throw new Error('Era filter did not restore from the catalog URL');
+          context.window.location.href = `https://example.test/atlas/?axis=${encodeURIComponent(uniqueAxisStudy.axis)}#atlas/${firstStudy.id}/plan/exterior/all`;
           syncCatalogFromUrl();
-          if (state.filterAxis !== 'Radial' || filterAxis.value !== 'Radial') throw new Error('Axis filter did not restore from the catalog URL');
-          context.window.location.href = 'https://example.test/atlas/?q=central%20plan#atlas/basilica/plan/exterior/all';
+          if (state.filterAxis !== uniqueAxisStudy.axis || filterAxis.value !== uniqueAxisStudy.axis) throw new Error('Axis filter did not restore from the catalog URL');
+          context.window.location.href = `https://example.test/atlas/?q=central%20plan#atlas/${firstStudy.id}/plan/exterior/all`;
           syncCatalogFromUrl();
-          context.window.location.hash = '#atlas/basilica/plan/exterior/all';
-          context.window.location.href = 'https://example.test/atlas/?q=%20%20GOTHIC%20%20%20CHARTRES%20%20#atlas/basilica/plan/exterior/all';
+          context.window.location.hash = `#atlas/${firstStudy.id}/plan/exterior/all`;
+          context.window.location.href = `https://example.test/atlas/?q=%20%20${encodeURIComponent(secondStudy.typology.toUpperCase())}%20%20%20${encodeURIComponent(secondStudy.place.split(',')[0].toUpperCase())}%20%20#atlas/${firstStudy.id}/plan/exterior/all`;
           syncCatalogFromUrl();
-          if (state.query !== 'gothic chartres' || searchInput.value !== 'gothic chartres' || !catalogViewRouteUrl().search.includes('q=gothic+chartres')) throw new Error('Catalog route hydration did not canonicalize repeated query whitespace');
+          if (state.query !== multiTermQuery || searchInput.value !== multiTermQuery || !catalogViewRouteUrl().search.includes(`q=${multiTermQuery.replace(/ /g, '+')}`)) throw new Error('Catalog route hydration did not canonicalize repeated query whitespace');
           const atlasRoute = parseRoute();
-          if (atlasRoute.page !== 'atlas' || atlasRoute.contextStudyId !== 'basilica') throw new Error('Atlas route parser did not preserve study context');
-          context.window.location.href = 'https://example.test/atlas/?q=central%20plan#method/gothic';
-          context.window.location.hash = '#method/gothic';
+          if (atlasRoute.page !== 'atlas' || atlasRoute.contextStudyId !== firstStudy.id) throw new Error('Atlas route parser did not preserve study context');
+          context.window.location.href = `https://example.test/atlas/?q=central%20plan#method/${secondStudy.id}`;
+          context.window.location.hash = `#method/${secondStudy.id}`;
           const methodRoute = parseRoute();
-          if (methodRoute.page !== 'method' || methodRoute.contextStudyId !== 'gothic') throw new Error('Method route parser did not preserve study context');
-          if (routeHash('method', true, 'gothic') !== '#method/gothic' || routeHash('method', false) !== '#method') throw new Error('Method route hash did not preserve or clear study context');
-          context.window.location.href = 'https://example.test/atlas/?compare=basilica#compare';
+          if (methodRoute.page !== 'method' || methodRoute.contextStudyId !== secondStudy.id) throw new Error('Method route parser did not preserve study context');
+          if (routeHash('method', true, secondStudy.id) !== `#method/${secondStudy.id}` || routeHash('method', false) !== '#method') throw new Error('Method route hash did not preserve or clear study context');
+          context.window.location.href = `https://example.test/atlas/?compare=${firstStudy.id}#compare`;
           context.window.location.hash = '#compare';
           const partialCompareRoute = parseRoute();
-          if (partialCompareRoute.page !== 'compare' || partialCompareRoute.compareIds.join(',') !== 'basilica') throw new Error('Compare route parser did not preserve a partial selection carried in the query');
-          context.window.location.href = 'https://example.test/atlas/#compare/basilica';
-          context.window.location.hash = '#compare/basilica';
+          if (partialCompareRoute.page !== 'compare' || partialCompareRoute.compareIds.join(',') !== firstStudy.id) throw new Error('Compare route parser did not preserve a partial selection carried in the query');
+          context.window.location.href = `https://example.test/atlas/#compare/${firstStudy.id}`;
+          context.window.location.hash = `#compare/${firstStudy.id}`;
           const hashPartialCompareRoute = parseRoute();
-          if (hashPartialCompareRoute.page !== 'compare' || hashPartialCompareRoute.compareIds.join(',') !== 'basilica') throw new Error('Compare route parser did not preserve a partial selection carried in the hash');
+          if (hashPartialCompareRoute.page !== 'compare' || hashPartialCompareRoute.compareIds.join(',') !== firstStudy.id) throw new Error('Compare route parser did not preserve a partial selection carried in the hash');
           state.query = '';
-          state.filterEra = '6th century';
+          state.filterEra = uniqueEraStudy.era;
           const eraVisible = visibleStudies();
-          if (eraVisible.length !== 1 || eraVisible[0].id !== 'basilica') throw new Error('Era filter did not narrow the catalog to the expected study');
+          if (eraVisible.length !== 1 || eraVisible[0].id !== uniqueEraStudy.id) throw new Error('Era filter did not narrow the catalog to the expected study');
           state.filterEra = 'all';
-          state.filterAxis = 'Radial';
+          state.filterAxis = uniqueAxisStudy.axis;
           const axisVisible = visibleStudies();
-          if (axisVisible.length !== 1 || axisVisible[0].id !== 'byzantine') throw new Error('Axis filter did not narrow the catalog to the radial study');
+          if (axisVisible.length !== 1 || axisVisible[0].id !== uniqueAxisStudy.id) throw new Error('Axis filter did not narrow the catalog to the expected study');
           state.filterAxis = 'all';
-          state.query = 'gothic chartres';
+          state.query = multiTermQuery;
           const multiTermVisible = visibleStudies();
-          if (multiTermVisible.length !== 1 || multiTermVisible[0].id !== 'gothic') throw new Error('Multi-term search did not match across study fields');
-          if (!catalogStatusGuidanceText(multiTermVisible).includes('Counts for results matching “gothic chartres”: 1 schematic · 0 measured.')) throw new Error('Catalog status guidance did not follow the filtered scope');
-          state.compareIds = ['basilica', 'gothic'];
-          state.activeId = 'gothic';
-          context.window.location.href = 'https://example.test/atlas/?q=gothic%20chartres&compare=basilica%2Cgothic#atlas/gothic/plan/exterior/all';
+          if (multiTermVisible.length !== 1 || multiTermVisible[0].id !== secondStudy.id) throw new Error('Multi-term search did not match across study fields');
+          if (!catalogStatusGuidanceText(multiTermVisible).includes(`Counts for results matching “${multiTermQuery}”: ${statusSummary(multiTermVisible)}.`)) throw new Error('Catalog status guidance did not follow the filtered scope');
+          state.compareIds = [firstStudy.id, secondStudy.id];
+          state.activeId = secondStudy.id;
+          context.window.location.href = `https://example.test/atlas/?q=${multiTermQuery.replace(/ /g, '%20')}&compare=${firstStudy.id}%2C${secondStudy.id}#atlas/${secondStudy.id}/plan/exterior/all`;
           updateViewNavigationLinks();
           const compareNavLink = navLinks.find((link) => link.dataset.view === 'compare');
           const methodNavLink = navLinks.find((link) => link.dataset.view === 'method');
-          if (methodNavigationUrl() !== '/atlas/?q=gothic+chartres&compare=basilica,gothic#method/gothic' || methodNavLink.href !== methodNavigationUrl() || methodLink.href !== methodNavigationUrl()) throw new Error(`Method links did not preserve the active study, catalog scope, and comparison selection: ${methodNavigationUrl()} / ${methodNavLink.href} / ${methodLink.href}`);
-          if (comparisonNavigationUrl() !== '/atlas/?q=gothic+chartres#compare/basilica,gothic' || viewNavigationUrl('compare') !== comparisonNavigationUrl() || compareNavLink.href !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve the focused selection: ${comparisonNavigationUrl()} / ${compareNavLink.href}`);
-          state.compareIds = ['basilica'];
-          if (comparisonNavigationUrl() !== '/atlas/?q=gothic+chartres&compare=basilica#compare' || viewNavigationUrl('compare') !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve a partial selection: ${comparisonNavigationUrl()}`);
-          state.compareIds = ['basilica', 'gothic'];
+          const expectedMethodNavigation = `/atlas/?q=${multiTermQuery.replace(/ /g, '+')}&compare=${firstStudy.id},${secondStudy.id}#method/${secondStudy.id}`;
+          if (methodNavigationUrl() !== expectedMethodNavigation || methodNavLink.href !== methodNavigationUrl() || methodLink.href !== methodNavigationUrl()) throw new Error(`Method links did not preserve the active study, catalog scope, and comparison selection: ${methodNavigationUrl()} / ${methodNavLink.href} / ${methodLink.href}`);
+          const expectedComparisonNavigation = `/atlas/?q=${multiTermQuery.replace(/ /g, '+')}#compare/${firstStudy.id},${secondStudy.id}`;
+          if (comparisonNavigationUrl() !== expectedComparisonNavigation || viewNavigationUrl('compare') !== comparisonNavigationUrl() || compareNavLink.href !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve the focused selection: ${comparisonNavigationUrl()} / ${compareNavLink.href}`);
+          state.compareIds = [firstStudy.id];
+          const expectedPartialComparisonNavigation = `/atlas/?q=${multiTermQuery.replace(/ /g, '+')}&compare=${firstStudy.id}#compare`;
+          if (comparisonNavigationUrl() !== expectedPartialComparisonNavigation || viewNavigationUrl('compare') !== comparisonNavigationUrl()) throw new Error(`Compare links did not preserve a partial selection: ${comparisonNavigationUrl()}`);
+          state.compareIds = [firstStudy.id, secondStudy.id];
           const contextualAtlasHref = viewNavigationUrl('atlas');
-          if (contextualAtlasHref !== '/atlas/?q=gothic+chartres&compare=basilica,gothic#atlas' || navLinks.find((link) => link.dataset.view === 'atlas').href !== contextualAtlasHref) throw new Error(`Atlas link did not preserve the catalog scope: ${contextualAtlasHref}`);
-          context.window.location.href = 'https://example.test/atlas/?q=central%20plan#atlas/basilica/plan/exterior/all';
-          const stateAwareStudyHref = atlasStudyNavigationUrl('gothic');
+          const expectedContextualAtlasHref = `/atlas/?q=${multiTermQuery.replace(/ /g, '+')}&compare=${firstStudy.id},${secondStudy.id}#atlas`;
+          if (contextualAtlasHref !== expectedContextualAtlasHref || navLinks.find((link) => link.dataset.view === 'atlas').href !== contextualAtlasHref) throw new Error(`Atlas link did not preserve the catalog scope: ${contextualAtlasHref}`);
+          context.window.location.href = `https://example.test/atlas/?q=central%20plan#atlas/${firstStudy.id}/plan/exterior/all`;
+          const stateAwareStudyHref = atlasStudyNavigationUrl(secondStudy.id);
           const stateAwareCatalogHref = catalogViewRouteUrl();
-          if (!stateAwareStudyHref.includes('q=gothic+chartres') || !stateAwareStudyHref.includes('compare=basilica,gothic') || !stateAwareCatalogHref.href.includes('q=gothic+chartres') || !stateAwareCatalogHref.href.includes('compare=basilica,gothic')) throw new Error(`Route links did not use current catalog state: ${stateAwareStudyHref} / ${stateAwareCatalogHref.href}`);
+          if (!stateAwareStudyHref.includes(`q=${multiTermQuery.replace(/ /g, '+')}`) || !stateAwareStudyHref.includes(`compare=${firstStudy.id},${secondStudy.id}`) || !stateAwareCatalogHref.href.includes(`q=${multiTermQuery.replace(/ /g, '+')}`) || !stateAwareCatalogHref.href.includes(`compare=${firstStudy.id},${secondStudy.id}`)) throw new Error(`Route links did not use current catalog state: ${stateAwareStudyHref} / ${stateAwareCatalogHref.href}`);
           state.compareIds = [];
           const highlighted = highlightSearchText('Gothic · Chartres, France');
           if (!highlighted.includes('<mark class="search-hit">Gothic</mark>') || !highlighted.includes('<mark class="search-hit">Chartres</mark>')) throw new Error('Catalog search did not highlight matching terms');
@@ -1691,11 +1741,11 @@ jobs:
           state.query = 'apollinare';
           if (searchMatchContext(context.window.CHURCH_GEOMETRY[0]) !== 'Found in reference') throw new Error('Catalog search did not explain a hidden reference match');
           state.query = 'illustrative proportions';
-          if (visibleStudies().length !== 6 || searchMatchContext(context.window.CHURCH_GEOMETRY[0]) !== 'Found in provenance' || !catalogStudyAriaLabel(context.window.CHURCH_GEOMETRY[0], false).includes('Found in provenance')) throw new Error('Catalog search did not index schema-backed provenance definitions or explain the hidden match');
+          if (visibleStudies().length !== schematicCount || searchMatchContext(context.window.CHURCH_GEOMETRY[0]) !== 'Found in provenance' || !catalogStudyAriaLabel(context.window.CHURCH_GEOMETRY[0], false).includes('Found in provenance')) throw new Error('Catalog search did not index schema-backed provenance definitions or explain the hidden match');
           state.query = 'radiality';
           if (!studySearchText(context.window.CHURCH_GEOMETRY[0]).includes('reading profile radiality 48') || searchMatchContext(context.window.CHURCH_GEOMETRY[0]) !== 'Found in reading profile' || !catalogStudyAriaLabel(context.window.CHURCH_GEOMETRY[0], false).includes('Found in reading profile')) throw new Error('Catalog search did not index reading-profile scores or explain their hidden match context');
           state.query = '01';
-          if (visibleStudies().length !== 1 || !studySearchText(context.window.CHURCH_GEOMETRY[0]).includes('01') || searchMatchContext(context.window.CHURCH_GEOMETRY[0]) !== 'Found in study index' || !catalogStudyAriaLabel(context.window.CHURCH_GEOMETRY[0], false).includes('Found in study index') || !highlightSearchText('01').includes('<mark class="search-hit">01</mark>')) throw new Error('Catalog search did not index, explain, and highlight the curated study index');
+          if (!visibleStudies().some((study) => study.id === firstStudy.id) || !studySearchText(firstStudy).includes(firstStudy.index) || !searchMatchContext(firstStudy).includes('Found in study index') || !catalogStudyAriaLabel(firstStudy, false).includes('Found in study index') || !highlightSearchText(firstStudy.index).includes(`<mark class="search-hit">${firstStudy.index}</mark>`)) throw new Error('Catalog search did not index, explain, and highlight the curated study index');
           state.query = '';
           let navPrevented = false;
           handleViewNavigation({ currentTarget: { dataset: { view: 'compare' } }, button: 1, metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, preventDefault() { navPrevented = true; } });
@@ -1705,7 +1755,7 @@ jobs:
           if (navPrevented) throw new Error('Command-click navigation must preserve native view links');
           let prevented = false;
           state.page = 'atlas';
-          state.compareIds = ['basilica'];
+          state.compareIds = [firstStudy.id];
           handleKeyboard({ key: 'c', target: { tagName: 'body', isContentEditable: false }, metaKey: false, ctrlKey: false, altKey: false, preventDefault() { prevented = true; } });
           if (!prevented || keyboardStatus.textContent !== 'Select one more study to open comparison.') throw new Error('Comparison shortcut must give a singular next step for a partial selection');
           prevented = false;
@@ -1725,15 +1775,16 @@ jobs:
           state.layer = 'axis';
           state.zoom = 1.3;
           state.query = 'central plan';
-          state.compareIds = ['basilica', 'gothic'];
-          const hash = routeHash('atlas', true, 'gothic');
+          state.compareIds = [firstStudy.id, secondStudy.id];
+          const hash = routeHash('atlas', true, secondStudy.id);
           const href = navigationUrl(hash);
-          if (hash !== '#atlas/gothic/section/interior/axis/1.3') throw new Error(`Unexpected study route: ${hash}`);
-          if (href !== '/atlas/?q=central%20plan#atlas/gothic/section/interior/axis/1.3') throw new Error(`Catalog scope was not preserved: ${href}`);
-          const comparisonHref = atlasStudyNavigationUrl('gothic');
-          if (comparisonHref !== '/atlas/?q=central+plan&compare=basilica,gothic#atlas/gothic/section/interior/axis/1.3') throw new Error(`Focused comparison context was not preserved: ${comparisonHref}`);
-          const printRoute = studyRoutePath('gothic');
-          if (printRoute !== '/atlas/#atlas/gothic/section/interior/axis/1.3' || studyRouteUrl('gothic').searchParams.has('q')) throw new Error(`Reproducible study route did not clear catalog scope: ${printRoute}`);
+          const expectedStudyHash = `#atlas/${secondStudy.id}/section/interior/axis/1.3`;
+          if (hash !== expectedStudyHash) throw new Error(`Unexpected study route: ${hash}`);
+          if (href !== `/atlas/?q=central%20plan${expectedStudyHash}`) throw new Error(`Catalog scope was not preserved: ${href}`);
+          const comparisonHref = atlasStudyNavigationUrl(secondStudy.id);
+          if (comparisonHref !== `/atlas/?q=central+plan&compare=${firstStudy.id},${secondStudy.id}${expectedStudyHash}`) throw new Error(`Focused comparison context was not preserved: ${comparisonHref}`);
+          const printRoute = studyRoutePath(secondStudy.id);
+          if (printRoute !== `/atlas/${expectedStudyHash}` || studyRouteUrl(secondStudy.id).searchParams.has('q')) throw new Error(`Reproducible study route did not clear catalog scope: ${printRoute}`);
           const navigation = { setAttribute(name, value) { this[name] = value; } };
           const position = { textContent: '' };
           const previous = { disabled: false, setAttribute(name, value) { this[name] = value; }, title: '' };
@@ -1745,16 +1796,16 @@ jobs:
           state.query = '';
           state.activeId = firstStudy.id;
           renderStudyNav();
-          if (position.textContent !== '01 / 06 visible' || navigation['aria-label'] !== 'Move between studies; showing study 1 of 6 visible studies' || previous['aria-label'] !== 'Previous study: Study 06, Church of the Light' || next['aria-label'] !== 'Next study: Study 02, Chartres Cathedral' || previous.title !== 'Previous: Study 06, Church of the Light' || next.title !== 'Next: Study 02, Chartres Cathedral' || previous.disabled || next.disabled) throw new Error('Full study navigation position and indexed destinations did not render');
+          if (position.textContent !== `01 / ${studyCountLabel} visible` || navigation['aria-label'] !== `Move between studies; showing study 1 of ${studyCount} visible studies` || previous['aria-label'] !== `Previous study: ${studyIdentity(lastStudy)}` || next['aria-label'] !== `Next study: ${studyIdentity(secondStudy)}` || previous.title !== `Previous: ${studyIdentity(lastStudy)}` || next.title !== `Next: ${studyIdentity(secondStudy)}` || previous.disabled || next.disabled) throw new Error('Full study navigation position and indexed destinations did not render');
           state.query = 'gothic';
           state.activeId = secondStudy.id;
           renderStudyNav();
-          if (position.textContent !== '01 / 01 visible' || navigation['aria-label'] !== 'Move between studies; showing study 1 of 1 visible studies' || !previous.disabled || !next.disabled) throw new Error('Filtered study navigation position did not render');
-          state.activeId = 'basilica';
+          if (position.textContent !== `01 / ${String(gothicCount).padStart(2, '0')} visible` || navigation['aria-label'] !== `Move between studies; showing study 1 of ${gothicCount} visible studies` || previous.disabled || next.disabled) throw new Error('Filtered study navigation position did not render');
+          state.activeId = firstStudy.id;
           renderStudyNav();
-          if (position.textContent !== 'Outside / 01 visible' || navigation['aria-label'] !== 'Move between studies; current study is outside the 1 visible study' || previous.disabled || next.disabled) throw new Error('Out-of-scope study navigation did not expose its visible recovery target');
+          if (position.textContent !== `Outside / ${String(gothicCount).padStart(2, '0')} visible` || navigation['aria-label'] !== `Move between studies; current study is outside the ${gothicCount} visible studies` || previous.disabled || next.disabled) throw new Error('Out-of-scope study navigation did not expose its visible recovery target');
           state.query = '';
-          state.activeId = 'basilica';
+          state.activeId = firstStudy.id;
           const searchText = studySearchText(context.window.CHURCH_GEOMETRY[0]);
           if (!searchText.includes('section ratio 0.60') || !searchText.includes('module / span 0.27') || !searchText.includes('radial reach 15.0 m')) throw new Error('Catalog search did not index derived readings');
           const specialCharacterStudy = { ...context.window.CHURCH_GEOMETRY[0], emphasis: 'Light & <line>' };
@@ -2197,14 +2248,16 @@ jobs:
           const htmlEncode = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
           const firstStatusLabel = firstStudy.status.replace(/(^|[_-])([a-z])/g, (_match, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
           const firstAxisLabel = /axis$/i.test(firstStudy.axis) ? firstStudy.axis : `${firstStudy.axis} axis`;
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderList, refreshCatalog, state };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderList, refreshCatalog, state, studySourceUrl };\n})();');
           vm.runInNewContext(app, context);
-          const { renderList, refreshCatalog, state } = context.window.__atlasTest;
+          const { renderList, refreshCatalog, state, studySourceUrl } = context.window.__atlasTest;
+          if (studySourceUrl({ sourceUrl: 'javascript:alert(1)' }) !== '' || studySourceUrl({ sourceUrl: 'data:text/html,unsafe' }) !== '' || studySourceUrl(firstStudy) !== firstStudy.sourceUrl) throw new Error('Source links must reject unsafe protocols while preserving absolute http(s) references');
           renderList();
           if (catalogRouteLink.href !== '/atlas/#atlas' || catalogRouteLink.textContent !== '/atlas/#atlas') throw new Error(`Catalog route link did not render the current full-collection route: ${catalogRouteLink.href} / ${catalogRouteLink.textContent}`);
           if (list.innerHTML.includes('aria-current="page"')) throw new Error('Collection-only Atlas route incorrectly marked the default selected study as the current page');
           if (catalogPrint.disabled) throw new Error('Catalog print action was disabled while the full collection was visible');
-          if (!list.innerHTML.includes(`class="catalog-card-status" data-status="${htmlEncode(firstStudy.status)}" title="${htmlEncode(context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions[firstStudy.status])}">${htmlEncode(firstStatusLabel)}</span>`) || !list.innerHTML.includes(`${htmlEncode(firstStudy.era)} · Axis: ${htmlEncode(firstAxisLabel)} · ${htmlEncode(firstStudy.emphasis)}`) || !list.innerHTML.includes(`class="catalog-card-measure">${firstStudy.length} × ${firstStudy.span} × ${firstStudy.height} m · radius ${firstStudy.radius} m</span>`) || !list.innerHTML.includes(`primary radius ${Number(firstStudy.radius).toFixed(1)} meters`) || !list.innerHTML.includes(`Data status: ${htmlEncode(firstStatusLabel)} (${htmlEncode(firstStudy.status)}); ${htmlEncode(context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions[firstStudy.status])}`) || !list.innerHTML.includes(`Source: ${htmlEncode(firstStudy.source)}; ${htmlEncode(firstStudy.sourceNote)}`) || !list.innerHTML.includes(htmlEncode(firstAxisLabel)) || !list.innerHTML.includes(`title="Add study ${htmlEncode(firstStudy.index)}, ${htmlEncode(firstStudy.name)} to comparison"`)) throw new Error('Catalog card did not render its curated index, axis context, geometry measures, accessible radius, explicit schema-backed status, source note, or compact comparison tooltip');
+          const firstSourceLabel = `Open source for Study ${firstStudy.index}, ${firstStudy.shortName || firstStudy.name}: ${firstStudy.source}`;
+          if (!list.innerHTML.includes(`class="catalog-source-link" href="${htmlEncode(firstStudy.sourceUrl)}" target="_blank" rel="noopener noreferrer"`) || !list.innerHTML.includes(`aria-label="${htmlEncode(firstSourceLabel)}"`) || !list.innerHTML.includes(`<span>Source</span>`) || !list.innerHTML.includes(`class="catalog-card-status" data-status="${htmlEncode(firstStudy.status)}" title="${htmlEncode(context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions[firstStudy.status])}">${htmlEncode(firstStatusLabel)}</span>`) || !list.innerHTML.includes(`${htmlEncode(firstStudy.era)} · Axis: ${htmlEncode(firstAxisLabel)} · ${htmlEncode(firstStudy.emphasis)}`) || !list.innerHTML.includes(`class="catalog-card-measure">${firstStudy.length} × ${firstStudy.span} × ${firstStudy.height} m · radius ${firstStudy.radius} m</span>`) || !list.innerHTML.includes(`primary radius ${Number(firstStudy.radius).toFixed(1)} meters`) || !list.innerHTML.includes(`Data status: ${htmlEncode(firstStatusLabel)} (${htmlEncode(firstStudy.status)}); ${htmlEncode(context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions[firstStudy.status])}`) || !list.innerHTML.includes(`Source: ${htmlEncode(firstStudy.source)}; ${htmlEncode(firstStudy.sourceNote)}`) || !list.innerHTML.includes(htmlEncode(firstAxisLabel)) || !list.innerHTML.includes(`title="Add study ${htmlEncode(firstStudy.index)}, ${htmlEncode(firstStudy.name)} to comparison"`)) throw new Error('Catalog card did not render its curated index, axis context, geometry measures, accessible radius, explicit schema-backed status, source link, source note, or compact comparison tooltip');
           context.window.location.href = `https://example.test/atlas/#atlas/${firstStudy.id}/plan/exterior/all`;
           context.window.location.hash = `#atlas/${firstStudy.id}/plan/exterior/all`;
           renderList();
@@ -2619,7 +2672,7 @@ jobs:
           renderCharts();
           if (!ratioScale.textContent.startsWith('Scale 0 → ') || !heightScale.textContent.startsWith('Scale 0 → ') || !moduleScale.textContent.startsWith('Scale 0 → ') || !chartScaleStatus.textContent.startsWith('Comparison ranges updated: length to span 0 → ') || !ratioAxisMid.textContent || !ratioAxisMax.textContent || !heightAxisMid.textContent || !heightAxisMax.textContent || !moduleAxisMid.textContent || !moduleAxisMax.textContent) throw new Error('Comparison chart scales, live range announcement, and visual axis guides did not follow the full collection');
           renderComparisonTable();
-          if (tableSummary.textContent !== 'Read the 6 study records as a table' || !tableCaption.textContent.includes('full collection')) throw new Error('Full collection table scope copy did not update');
+          if (tableSummary.textContent !== 'Read the ' + context.window.CHURCH_GEOMETRY.length + ' study records as a table' || !tableCaption.textContent.includes('full collection')) throw new Error('Full collection table scope copy did not update');
           state.compareIds = ['basilica', 'gothic'];
           showPage('atlas', { scroll: false });
           const finalUrl = new URL(location.href);
@@ -3237,14 +3290,16 @@ jobs:
           if (contextNote.textContent !== 'Current study · ' + firstStudyIdentity || methodRouteLink.href !== '/atlas/#method/basilica' || methodRouteLink.textContent !== '/atlas/#method/basilica' || methodRouteLink['aria-label'] !== 'Open method route for ' + firstStudyIdentity) throw new Error('Method view did not name its indexed preserved study context or render its direct route');
           state.query = 'gothic';
           const gothicRecords = visibleStudies();
+          const gothicRecordCount = gothicRecords.length;
+          const gothicRecordLabel = `${gothicRecordCount} ${gothicRecordCount === 1 ? 'record' : 'records'}`;
           renderMethodProvenance(gothicRecords);
           updateDocumentTitle('method');
           if (context.document.title !== 'Method · ' + firstStudyIdentity + ' · results matching “gothic” · Sacred Geometry Atlas') throw new Error('Method title did not preserve the indexed active filtered Atlas scope');
-          if (methodScopeNote(gothicRecords) !== 'Atlas scope · results matching “gothic” · 1 record' || !provenanceNote.textContent.startsWith('The current Atlas scope (results matching “gothic”) uses schematic proportional studies.') || !statusIntro.textContent.includes('for 1 record') || !statusList.innerHTML.includes('1 record')) throw new Error('Method evidence guidance did not follow the active filtered Atlas scope');
+          if (methodScopeNote(gothicRecords) !== `Atlas scope · results matching “gothic” · ${gothicRecordLabel}` || !provenanceNote.textContent.startsWith('The current Atlas scope (results matching “gothic”) uses schematic proportional studies.') || !statusIntro.textContent.includes(`for ${gothicRecordLabel}`) || !statusList.innerHTML.includes(gothicRecordLabel)) throw new Error('Method evidence guidance did not follow the active filtered Atlas scope');
           renderMethodReturnAction();
           if (action['aria-label'] !== 'Return to Atlas catalog' || action.href !== '/atlas/?q=gothic#atlas' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not fall back to the filtered Atlas catalog route');
           renderMethodContext();
-          if (contextNote.textContent !== 'Study context · ' + firstStudyIdentity + ' · outside current catalog · Atlas scope · results matching “gothic” · 1 record' || methodRouteLink.href !== '/atlas/?q=gothic#method/basilica') throw new Error('Method view did not explain an indexed out-of-scope study context, expose the filtered scope, or preserve the filtered direct route');
+          if (contextNote.textContent !== 'Study context · ' + firstStudyIdentity + ' · outside current catalog · Atlas scope · results matching “gothic” · ' + gothicRecordLabel || methodRouteLink.href !== '/atlas/?q=gothic#method/basilica') throw new Error('Method view did not explain an indexed out-of-scope study context, expose the filtered scope, or preserve the filtered direct route');
           state.query = 'no matching study';
           const emptyRecords = visibleStudies();
           renderMethodProvenance(emptyRecords);
@@ -4051,8 +4106,10 @@ jobs:
           state.page = 'atlas';
           state.compareIds = ['basilica', 'gothic'];
           copyCatalogCitation().then(() => {
-            if (visibleStudies().length !== 1 || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-unavailable') || visibleLabel.textContent !== 'Unavailable') throw new Error('Catalog citation fallback did not restore the copy button state or expose its Unavailable state');
-            if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('Catalog view: results matching “basilica”, axis: Longitudinal axis, 2 selected for comparison, sorted by name (A–Z); 1 record') || !fallbackText.value.includes('Comparison selection: ' + firstIdentity + ' (' + firstStudy.status + '); ' + secondIdentity + ' (' + secondStudy.status + ').') || !fallbackText.value.includes('Reading profiles (0–100, interpretive):') || !fallbackText.value.includes('Basis: linearity = length ÷ span') || !fallbackText.value.includes('Schema v1.1; units: meters') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
+            const visibleCount = visibleStudies().length;
+            const visibleCountLabel = `${visibleCount} ${visibleCount === 1 ? 'record' : 'records'}`;
+            if (!visibleStudies().some((study) => study.id === 'basilica') || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-unavailable') || visibleLabel.textContent !== 'Unavailable') throw new Error('Catalog citation fallback did not restore the copy button state or expose its Unavailable state');
+            if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('Catalog view: results matching “basilica”, axis: Longitudinal axis, 2 selected for comparison, sorted by name (A–Z); ' + visibleCountLabel) || !fallbackText.value.includes('Comparison selection: ' + firstIdentity + ' (' + firstStudy.status + '); ' + secondIdentity + ' (' + secondStudy.status + ').') || !fallbackText.value.includes('Reading profiles (0–100, interpretive):') || !fallbackText.value.includes('Basis: linearity = length ÷ span') || !fallbackText.value.includes('Schema v1.1; units: meters') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
               throw new Error('Catalog citation fallback did not reveal and select the citation text');
             }
             if (!status.textContent.includes('catalog citation is shown below for manual copying')) throw new Error('Catalog citation fallback did not announce its manual-copy state');
@@ -4425,6 +4482,8 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, methodStatusKeyIntroText, renderMethodStatusKey, renderMethodProvenance };\n})();');
           vm.runInNewContext(app, context);
           const { dataStatusDefinitions, studyStatusDescription, statusGuidanceText, renderActiveProvenance, atlasSchemaNoteText, methodProvenanceText, methodReadingsIntroText, methodStatusKeyIntroText, renderMethodStatusKey, renderMethodProvenance } = context.window.__atlasTest;
+          const studyCount = context.window.CHURCH_GEOMETRY.length;
+          const schematicCount = context.window.CHURCH_GEOMETRY.filter((study) => study.status === 'schematic').length;
           const definitions = dataStatusDefinitions();
           if (definitions.schematic !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic || definitions.measured !== context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.measured) throw new Error('Status definitions did not come from the dataset schema');
           if (studyStatusDescription({ status: 'schematic' }) !== definitions.schematic || studyStatusDescription({ status: 'measured' }) !== definitions.measured) throw new Error('Study status descriptions are not schema-backed');
@@ -4433,7 +4492,7 @@ jobs:
           if (methodReadingsIntroText() !== 'These readings describe the proportional model; they are analytical aids, not measured survey results.' || methodReadingsIntroText([{ status: 'measured' }]) !== "These readings use records labeled measured; each record's provenance note identifies its source context." || methodReadingsIntroText([{ status: 'schematic' }, { status: 'measured' }]) !== 'These readings combine multiple data-status categories; use each record\'s status definition and provenance note to distinguish analytical aids from source-supported values.') throw new Error('Derived-reading guidance did not follow the collection status mix');
           renderMethodProvenance();
           if (elements.get('#methodReadingsIntro').textContent !== 'These readings describe the proportional model; they are analytical aids, not measured survey results.') throw new Error('Rendered derived-reading guidance did not expose the current schema-backed evidence context');
-          if (methodStatusKeyIntroText() !== 'The published schema defines 2 data statuses for 6 records; counts: 6 schematic · 0 measured; each record carries one label and a provenance note.' || elements.get('#methodStatusKeyIntro').textContent !== methodStatusKeyIntroText() || !elements.get('#methodStatusKeyList').innerHTML.includes('Schematic') || !elements.get('#methodStatusKeyList').innerHTML.includes('6 records') || !elements.get('#methodStatusKeyList').innerHTML.includes('Illustrative proportions; not a measured survey.') || !elements.get('#methodStatusKeyList').innerHTML.includes('data-status="measured"')) throw new Error('Method evidence key did not expose schema labels, definitions, live counts, and accessible status guidance');
+          if (methodStatusKeyIntroText() !== `The published schema defines 2 data statuses for ${studyCount} records; counts: ${schematicCount} schematic · 0 measured; each record carries one label and a provenance note.` || elements.get('#methodStatusKeyIntro').textContent !== methodStatusKeyIntroText() || !elements.get('#methodStatusKeyList').innerHTML.includes('Schematic') || !elements.get('#methodStatusKeyList').innerHTML.includes(`${studyCount} records`) || !elements.get('#methodStatusKeyList').innerHTML.includes('Illustrative proportions; not a measured survey.') || !elements.get('#methodStatusKeyList').innerHTML.includes('data-status="measured"')) throw new Error('Method evidence key did not expose schema labels, definitions, live counts, and accessible status guidance');
           const originalCollectionNote = context.window.CHURCH_GEOMETRY_SCHEMA.note;
           context.window.CHURCH_GEOMETRY_SCHEMA.note = 'Custom collection note.';
           if (methodProvenanceText([{ status: 'schematic' }]) !== 'Custom collection note. Each record carries a status and provenance note.') throw new Error('Method provenance warning did not use the schema collection note');
@@ -4443,7 +4502,7 @@ jobs:
           renderActiveProvenance({ status: 'measured' });
           if (status.textContent !== 'Measured' || status.attributes['data-status'] !== 'measured' || status.title !== definitions.measured || status.attributes['aria-label'] !== `Measured (measured): ${definitions.measured}`) throw new Error('Active study provenance styling did not follow a measured record');
           const guidance = statusGuidanceText();
-          if (!guidance.includes(`Schematic = ${definitions.schematic}`) || !guidance.includes(`Measured = ${definitions.measured}`) || !guidance.includes('6 schematic · 0 measured')) throw new Error('Visible status guidance did not preserve definitions and counts');
+          if (!guidance.includes(`Schematic = ${definitions.schematic}`) || !guidance.includes(`Measured = ${definitions.measured}`) || !guidance.includes(`${schematicCount} schematic · 0 measured`)) throw new Error('Visible status guidance did not preserve definitions and counts');
           const selectedGuidance = statusGuidanceText(context.window.CHURCH_GEOMETRY.slice(0, 2), '2 selected studies');
           if (!selectedGuidance.includes('Counts for 2 selected studies: 2 schematic · 0 measured')) throw new Error('Focused status guidance did not follow the comparison scope');
           console.log('Schema-backed status guidance smoke test passed.');
@@ -4765,7 +4824,8 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { exportCompletionScope, fullAtlasCsvPayload };\n})();');
           vm.runInNewContext(app, context);
           const { exportCompletionScope, fullAtlasCsvPayload } = context.window.__atlasTest;
-          if (exportCompletionScope(context.window.CHURCH_GEOMETRY, 'full collection') !== 'Scope: full collection; 6 studies') throw new Error('Full-collection export announcement lost its count or scope');
+          const studyCount = context.window.CHURCH_GEOMETRY.length;
+          if (exportCompletionScope(context.window.CHURCH_GEOMETRY, 'full collection') !== `Scope: full collection; ${studyCount} studies`) throw new Error('Full-collection export announcement lost its count or scope');
           if (exportCompletionScope(context.window.CHURCH_GEOMETRY.slice(0, 1), 'results matching “gothic”') !== 'Scope: results matching “gothic”; 1 study') throw new Error('Filtered export announcement did not use singular count or exact scope');
           const csvRows = fullAtlasCsvPayload().trimEnd().split(/\r?\n/);
           if (csvRows.length !== context.window.CHURCH_GEOMETRY.length + 1 || !csvRows[0].startsWith('"ID","Study","Typology","Index"') || !csvRows[0].includes('"Scope","Route","Study route"') || !csvRows[0].includes('"Reading profile basis"') || !csvRows[1].includes('"full collection"') || !csvRows[1].includes('"https://example.test/atlas/#atlas"') || !csvRows[1].includes('"https://example.test/atlas/#atlas/basilica/plan/exterior/all"')) throw new Error('Full-atlas CSV export must preserve record order, scope, full-collection route, direct study routes, and reading-profile context');

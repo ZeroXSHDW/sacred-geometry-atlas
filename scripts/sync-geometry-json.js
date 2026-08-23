@@ -31,6 +31,21 @@ if (!payload.schema || !Array.isArray(payload.studies)) {
   throw new Error("data/geometry.js did not expose the atlas schema and study collection");
 }
 
+const isSafeSourceUrl = (value) => {
+  const url = typeof value === "string" ? value.trim() : "";
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch (error) {
+    return false;
+  }
+};
+const invalidSourceUrlStudies = payload.studies.filter((study) => !isSafeSourceUrl(study && study.sourceUrl));
+if (invalidSourceUrlStudies.length) {
+  throw new Error(`Each study needs an absolute http(s) sourceUrl: ${invalidSourceUrlStudies.map((study) => study && study.id || "unknown").join(", ")}`);
+}
+
 const rendered = `${JSON.stringify(payload, null, 2)}\n`;
 const isCheck = process.argv.includes("--check");
 
@@ -71,7 +86,7 @@ const readingProfileNote = "Interpretive proportional tendencies, not empirical 
 const readingProfileExportContext = () => `${readingProfileBasis}; ${readingProfileNote}`;
 const studySource = (study) => study.source || "Unattributed proportional model";
 const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
-const studySourceUrl = (study) => study.sourceUrl || "";
+const studySourceUrl = (study) => study.sourceUrl.trim();
 const statusDefinition = (study) => {
   const definitions = payload.schema.statusDefinitions || {};
   return definitions[studyStatus(study)] || "";
@@ -193,7 +208,7 @@ function schemaDocument() {
         "required": [...requiredTextFields, "status", "length", "span", "height", "bayCount", "module", "radius", "symmetry", "details"],
         "properties": {
           ...textProperties,
-          "sourceUrl": { "type": "string", "format": "uri", "description": "Canonical source page for the named reference building or source note." },
+          "sourceUrl": { "type": "string", "minLength": 1, "format": "uri", "pattern": "^https?://", "description": "Canonical absolute http(s) source page for the named reference building or source note." },
           "status": { "type": "string", "minLength": 1, "enum": statusValues, "description": "Schema-defined evidence label for the study record." },
           "length": { "type": "number", "exclusiveMinimum": 0, "description": "Overall longitudinal dimension in the schema unit." },
           "span": { "type": "number", "exclusiveMinimum": 0, "description": "Overall cross-width dimension in the schema unit." },

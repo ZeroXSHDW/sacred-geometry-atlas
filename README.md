@@ -6,7 +6,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 ## What is included
 
-- Six named churches as real reference buildings—Basilica of Sant'Apollinare in Classe, Notre-Dame de Chartres, Hosios Loukas Katholikon, Sant'Andrea al Quirinale, Borgund Stave Church, and Church of the Light—with schematic proportional studies.
+- Twenty-four named churches and chapels as real reference buildings, spanning Early Christian/Byzantine, Romanesque, Gothic, Norman-Arab, timber, Renaissance, Baroque, modern, and contemporary work, each with a source-linked schematic proportional study.
 - Interactive plan, elevation, and section drawings.
 - Outside / inside surface switch.
 - Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
@@ -22,9 +22,11 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Displayed dimensions, SVG labels, citations, comparison tables, and CSV headers use the schema-backed unit symbol, so a changed unit system cannot silently retain metre labels.
 - The Method warning and derived-reading preface adapt when a collection mixes schematic, measured, or custom-status records, so its limitations stay accurate as the atlas grows.
 - A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON, CSV, and JSON Schema artifacts plus the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
+- [`scripts/validate-geometry-data.js`](scripts/validate-geometry-data.js) fails the build for placeholder identities, missing or non-HTTP source URLs, duplicate IDs or indexes, unsourced provenance notes, and unsupported area/volume claims on schematic records.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for floor area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles; floor area identifies whether it uses a supplied estimate or the length × span fallback.
 - Explicit named-building references, linked source pages, provenance, and interpretive reading text for each schematic study.
+- Catalog cards expose a visible source link for every named record, while the runtime and generator accept only absolute `http` or `https` source URLs.
 - Reading-profile bars expose their 0–100 scores as accessible meters, identify each study by curated index and name, name their ratio/typology/bay-count basis in the announced value, and distinguish interpretive proportional tendencies from empirical measurements while keeping duplicate visual score labels out of the accessibility tree.
 - Search across study names, references, provenance definitions, notes, detail vocabulary, numeric geometry dimensions, derived ratios, and reading-profile labels/scores, with multi-word queries matching all terms across the record; repeated whitespace is normalized so shared catalog URLs and scope announcements stay canonical; typology, location, era, geometric axis, and measured/schematic status filtering use explicit catalog keys.
 - Persistent search guidance keeps the searchable fields, all-term matching behavior, `/` focus shortcut, and `Esc` clear shortcut visible after the placeholder disappears.
@@ -205,7 +207,36 @@ The committed public artifact includes a correctly sized 180px icons/atlas-180.p
 
 ## Add real churches
 
-The six current records point to real named churches, while their geometry values remain explicitly schematic, illustrative proportions—not measured surveys of those buildings. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have them.
+The current records point to real named churches, while their geometry values remain explicitly schematic, illustrative proportions—not measured surveys of those buildings. Each record carries a source URL and a source note that separates documented building facts from Atlas interpretation. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
+
+### Current reference list
+
+| Index | Reference building | Source |
+| --- | --- | --- |
+| 01 | Basilica of Sant'Apollinare in Classe | [UNESCO Ravenna](https://whc.unesco.org/en/list/788/) |
+| 02 | Notre-Dame de Chartres Cathedral | [Chartres official architecture guide](https://www.cathedrale-chartres.org/en/cathedrale/monument/architecture/the-13th-century-cathedral/) |
+| 03 | Hosios Loukas Katholikon | [UNESCO Hosios Loukas](https://whc.unesco.org/en/list/537/) |
+| 04 | Sant'Andrea al Quirinale | [Official architecture guide](https://www.gesuiti-santandrea.it/storia-e-arte/architettura/) |
+| 05 | Borgund Stave Church | [Fortidsminneforeningen](https://fortidsminneforeningen.no/en/museum/borgund-stave-church/) |
+| 06 | Church of the Light | [MoMA Tadao Ando catalogue](https://www.moma.org/documents/moma_catalogue_348_300085246.pdf) |
+| 07 | Basilica of San Vitale | [UNESCO Ravenna](https://whc.unesco.org/en/list/788/) |
+| 08 | Hagia Sophia | [UNESCO Historic Areas of Istanbul](https://whc.unesco.org/en/list/356/) |
+| 09 | Speyer Cathedral | [UNESCO](https://whc.unesco.org/en/list/168/) |
+| 10 | Durham Cathedral | [Durham Cathedral official guide](https://www.durhamcathedral.co.uk/explore/the-cathedral-building-and-grounds/the-quire) |
+| 11 | Cathedral of Santiago de Compostela | [Cathedral official history](https://catedraldesantiago.es/en/cathedral/) |
+| 12 | Notre-Dame de Reims Cathedral | [UNESCO](https://whc.unesco.org/en/list/601/) |
+| 13 | Cologne Cathedral | [UNESCO](https://whc.unesco.org/en/list/292/) |
+| 14 | Monreale Cathedral | [UNESCO Arab-Norman property](https://whc.unesco.org/en/list/1487/) |
+| 15 | Basilica Cathedral of Saint-Denis | [Official basilica history](https://www.saint-denis-basilique.fr/en/discover/the-cradle-of-gothic-art) |
+| 16 | Urnes Stave Church | [UNESCO](https://whc.unesco.org/en/list/58/) |
+| 17 | Church of the Transfiguration, Kizhi Pogost | [UNESCO](https://whc.unesco.org/en/list/544/) |
+| 18 | Basilica of San Giorgio Maggiore | [Venice official city guide](https://tour.venice.it/venice/what-to-see/details/basilica-di-san-giorgio-maggiore) |
+| 19 | Il Redentore | [Venice official city guide](https://www.veneziaunica.it/sites/default/files/vu_english_170616.pdf) |
+| 20 | St Paul's Cathedral | [Official cathedral timeline](https://www.stpauls.co.uk/our-timeline) |
+| 21 | Karlskirche | [Official history](https://www.karlskirche.at/en/history/) |
+| 22 | Chapelle Notre-Dame-du-Haut | [UNESCO Le Corbusier property](https://whc.unesco.org/en/list/1321/) |
+| 23 | Cathedral of Brasília | [Cathedral official history](https://catedral.org.br/institucional/historia/) |
+| 24 | Thorncrown Chapel | [Official history](https://www.thorncrown.com/about) |
 
 After editing the source, regenerate the static artifacts with:
 
