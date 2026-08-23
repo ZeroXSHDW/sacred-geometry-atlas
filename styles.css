@@ -141,7 +141,8 @@ summary:focus-visible {
 #visualEmptyHeading:focus-visible,
 #activeName:focus-visible,
 #main-content:focus-visible,
-#noscript-heading:focus-visible {
+#noscript-heading:focus-visible,
+#noscript-method-heading:focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 6px;
 }
@@ -1380,6 +1381,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   #activeName:focus-visible,
   #main-content:focus-visible,
   #noscript-heading:focus-visible,
+  #noscript-method-heading:focus-visible,
   #dataErrorHeading:focus { outline-width: 3px; }
 
   .bar-track,
@@ -1451,7 +1453,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .page-view h2:focus-visible,
   #activeName:focus-visible,
   #main-content:focus-visible,
-  #noscript-heading:focus-visible { outline-color: Highlight; }
+  #noscript-heading:focus-visible,
+  #noscript-method-heading:focus-visible { outline-color: Highlight; }
   .nav-button.is-active,
   .mode-button.is-active,
   .layer-button.is-active { color: Highlight; }
