@@ -125,7 +125,7 @@
     const matchContext = searchMatchContext(study);
     const status = studyStatus(study);
     const statusLabel = statusDisplayName(status);
-    return `${stateLabel}: ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${matchContext ? `; ${matchContext}` : ""}`;
+    return `${stateLabel}: study ${study.index}, ${study.name}; ${study.typology}, ${study.place}, ${study.era}; ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}; ${studyAxisLabel(study)}; ${study.emphasis}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${matchContext ? `; ${matchContext}` : ""}`;
   }
   const validPages = new Set(["atlas", "compare", "method"]);
   const pageAliases = new Map([["methodView", "method"]]);
@@ -1930,7 +1930,7 @@
       const isCompared = state.compareIds.includes(study.id);
       const isCurrentRoute = routeStudyId === study.id && isActive;
       const matchContext = searchMatchContext(study);
-      const compareLabel = `${isCompared ? "Remove" : "Add"} ${study.name} ${isCompared ? "from" : "to"} comparison`;
+      const compareLabel = `${isCompared ? "Remove" : "Add"} study ${study.index}, ${study.name} ${isCompared ? "from" : "to"} comparison`;
       const currentAttribute = isCurrentRoute ? ' aria-current="page"' : "";
       const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;
       const statusLabel = studyStatusLabel(study);
@@ -3890,8 +3890,8 @@
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentLabel = isActive ? " Current Atlas study." : "";
-      const openLabel = `Open ${study.name} in Atlas. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
-      const removeLabel = `Remove ${study.name} from comparison`;
+      const openLabel = `Open study ${study.index}, ${study.name} in Atlas. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
+      const removeLabel = `Remove study ${study.index}, ${study.name} from comparison`;
       const currentCue = isActive ? '<span class="compare-selection-chip-current" title="Current Atlas study">current</span>' : "";
       const currentAttribute = isActive ? ' aria-current="true"' : "";
       return `<div class="compare-selection-chip"><a class="compare-selection-study-link" data-compare-selection-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(openLabel)}" title="${escapeHtml(openLabel)}"><span class="compare-selection-chip-name">${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}</a><button class="compare-selection-chip-remove" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(removeLabel)}" title="${escapeHtml(removeLabel)}"><span aria-hidden="true">×</span></button></div>`;
@@ -3948,7 +3948,7 @@
       const floorAreaLabel = floorArea.numeric !== null
         ? `Floor area estimate: ${floorArea.value}; ${floorArea.basis}.`
         : `Floor area estimate: Not supplied; ${floorArea.basis}.`;
-      const studyLinkLabel = `Open ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;
+      const studyLinkLabel = `Open study ${study.index}, ${studyShortName(study)} in Atlas${isActive ? ". Current Atlas study." : "."} Axis: ${studyAxisLabel(study)}; Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`;
       return `
         <tr>
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentStudyAttribute} aria-label="${escapeHtml(studyLinkLabel)}">${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
@@ -4008,7 +4008,7 @@
 
   function comparisonStudyAriaLabel(study, ratio, section) {
     const status = studyStatus(study);
-    return `Open ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(statusDisplayName(status))} (${escapeHtml(status)}); ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}; Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}. Length to span ratio ${ratio}; height to span ratio ${section}.`;
+    return `Open study ${escapeHtml(study.index)}, ${escapeHtml(study.name)} in the Atlas. ${escapeHtml(study.typology)} study at ${escapeHtml(study.place)}, ${escapeHtml(study.era)}; ${escapeHtml(studyAxisLabel(study))}; ${escapeHtml(study.emphasis)}; Data status: ${escapeHtml(statusDisplayName(status))} (${escapeHtml(status)}); ${escapeHtml(studyStatusDescription(study))}; Source: ${escapeHtml(studySource(study))}; ${escapeHtml(studySourceNote(study))}; Dimensions: ${number(study.length)} ${escapeHtml(geometryUnitName())} long, with a span of ${number(study.span)} ${escapeHtml(geometryUnitName())}, and a height of ${number(study.height)} ${escapeHtml(geometryUnitName())}; primary radius ${number(study.radius)} ${escapeHtml(geometryUnitName())}; Length to span ratio ${ratio}; height to span ratio ${section}.`;
   }
 
   function miniPlan(study) {
