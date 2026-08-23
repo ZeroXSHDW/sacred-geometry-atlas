@@ -1396,6 +1396,15 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-card.is-active { border-inline-start: 3px solid var(--amber); }
 }
 
+@media (prefers-color-scheme: light) and (prefers-contrast: more) {
+  :root:not([data-theme]) {
+    --ink-soft: #34413b;
+    --ink-muted: #53635a;
+    --line: rgba(24, 33, 31, 0.42);
+    --line-strong: rgba(24, 33, 31, 0.72);
+  }
+}
+
 @media (forced-colors: active) {
   .site-header { background: Canvas; }
   .connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }

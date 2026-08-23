@@ -123,7 +123,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Responsive layout, keyboard focus states, forced-colors affordances, view-change focus management, semantic comparison readings, skip navigation, live status feedback, and a no-script study index with reference, provenance, and interpretive context.
 - Forced-colors mode maps meter tracks, fills, chart guides, and the generated SVG drawing instrument to system colors so quantitative and geometric readings remain legible in high-contrast themes.
 - Search, filter, and manual-copy fields keep an explicit keyboard focus ring after their custom visual treatment replaces the browser outline, including in forced-colors mode.
-- A `prefers-contrast: more` layer strengthens muted text, boundaries, meters, selected-study markers, the drawing instrument, and focus rings across the Atlas and branded 404 recovery page without changing the default dark palette.
+- A `prefers-contrast: more` layer strengthens muted text, boundaries, meters, selected-study markers, the drawing instrument, and focus rings across the Atlas and branded 404 recovery page, including a light-system fallback when no script can apply a stored theme.
 - Compact catalog actions keep JSON and CSV format labels visible at tablet widths, then add short Share and Cite labels at phone widths so identical glyphs remain distinguishable.
 - The full-atlas download keeps a compact JSON label at tablet and phone widths, with a visible Done state during export feedback, while its accessible name remains explicit.
 - Active-study Share, Cite, JSON, and Print actions keep compact visible labels at phone widths, while their full accessible names and live feedback remain intact.
