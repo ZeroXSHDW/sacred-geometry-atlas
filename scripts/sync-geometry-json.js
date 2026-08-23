@@ -76,7 +76,7 @@ const statusDefinition = (study) => {
 };
 const csvCell = (value) => {
   const text = String(value ?? "");
-  const safeText = typeof value === "string" && /^[\t\r\n ]*[=+\-@]/.test(text)
+  const safeText = typeof value === "string" && /^\s*[=+\-@]/u.test(text)
     ? `'${text}`
     : text;
   return `"${safeText.replace(/"/g, '""')}"`;
@@ -356,6 +356,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  csvCell,
   readingProfileScores,
   readingProfileBasis,
   readingProfileNote,

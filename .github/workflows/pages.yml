@@ -3129,7 +3129,7 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCitationText, catalogCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, activeStudyCsvPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable };\n})();');
           vm.runInNewContext(app, context);
           const { state, comparisonStudies, comparisonCitationText, catalogCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, activeStudyCsvPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable } = context.window.__atlasTest;
-          for (const formula of ['=SUM(1,2)', ' +CMD', '-1+1', '@A1']) {
+          for (const formula of ['=SUM(1,2)', ' +CMD', '-1+1', '@A1', '\u00a0=SUM(1,2)', '\u2003+CMD', '\u202f@A1']) {
             if (csvCell(formula) !== JSON.stringify(`'${formula}`)) throw new Error(`Formula-like CSV text was not neutralized: ${formula}`);
           }
           if (csvCell('plain text') !== JSON.stringify('plain text')) throw new Error('Ordinary CSV text was changed unexpectedly');
@@ -4374,6 +4374,9 @@ jobs:
           const { renderCharts, renderProfileCompare, renderComparisonTable, profileScores, READING_PROFILE_BASIS, READING_PROFILE_NOTE, state } = context.window.__atlasTest;
           const exportedProfile = require('./scripts/sync-geometry-json.js');
           if (exportedProfile.readingProfileBasis !== READING_PROFILE_BASIS || exportedProfile.readingProfileNote !== READING_PROFILE_NOTE || exportedProfile.readingProfileExportContext() !== `${READING_PROFILE_BASIS}; ${READING_PROFILE_NOTE}`) throw new Error('Interactive and generated reading-profile definitions have drifted');
+          for (const formula of ['\u00a0=SUM(1,2)', '\u2003+CMD', '\u202f@A1']) {
+            if (exportedProfile.csvCell(formula) !== JSON.stringify(`'${formula}`)) throw new Error(`Generated CSV formula-like text was not neutralized: ${formula}`);
+          }
           for (const study of context.window.CHURCH_GEOMETRY) {
             const interactiveScores = profileScores(study);
             const generatedScores = exportedProfile.readingProfileScores(study);
