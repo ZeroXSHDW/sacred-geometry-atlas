@@ -2273,6 +2273,7 @@
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      const scope = studyShortName(study);
       const shareUrl = studyRouteUrl();
       const sharePayload = {
         title: `${studyShortName(study)} · Sacred Geometry Atlas`,
@@ -2282,7 +2283,7 @@
 
       const nativeShareResult = await attemptNativeShare(sharePayload);
       if (nativeShareResult === "shared") {
-        temporaryButtonFeedback(button, "Shared", "Study shared", "Share study", "Share current study", "share-study");
+        temporaryButtonFeedback(button, "Shared", `Study shared: ${scope}`, "Share study", "Share current study", "share-study");
         status.textContent = `${study.name} shared.`;
         return;
       }
@@ -2295,7 +2296,7 @@
 
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Copied", "Share text and link copied");
+        setButtonFeedback(button, "Copied", `Share text and link copied: ${scope}`);
         status.textContent = `Share text and link for ${study.name} copied.`;
         window.clearTimeout(shareResetTimer);
         shareResetTimer = window.setTimeout(() => {
@@ -2397,12 +2398,13 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      const scope = readableScopeLabel(catalogScopeLabel());
       const citation = catalogCitationText();
       const copied = await copyText(citation);
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Citation copied", "Catalog citation copied");
-        status.textContent = "Catalog citation copied.";
+        setButtonFeedback(button, "Citation copied", `Catalog citation copied: ${scope}`);
+        status.textContent = `Citation for ${scope} copied.`;
         window.clearTimeout(catalogCitationResetTimer);
         catalogCitationResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
@@ -2425,6 +2427,7 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      const scope = readableScopeLabel(catalogScopeLabel());
       const shareUrl = catalogViewRouteUrl();
       const selected = selectedComparisonStudies();
       const selectionText = selected.length ? ` Selected comparison: ${comparisonSelectionShareText(selected)}. ${comparisonSelectionProvenanceText(selected)}` : "";
@@ -2436,8 +2439,8 @@
 
       const nativeShareResult = await attemptNativeShare(sharePayload);
       if (nativeShareResult === "shared") {
-        temporaryButtonFeedback(button, "Shared", "Catalog view shared", "Share view", "Share current catalog view", "share-catalog");
-        status.textContent = "Catalog view shared.";
+        temporaryButtonFeedback(button, "Shared", `Catalog view shared: ${scope}`, "Share view", "Share current catalog view", "share-catalog");
+        status.textContent = `Catalog view shared for ${scope}.`;
         return;
       }
       if (nativeShareResult === "cancelled") {
@@ -2448,8 +2451,8 @@
       const copied = await copyText(sharePayloadText(sharePayload));
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Copied", "Catalog share text and link copied");
-        status.textContent = "Catalog share text and link copied.";
+        setButtonFeedback(button, "Copied", `Catalog share text and link copied: ${scope}`);
+        status.textContent = `Catalog share text and link for ${scope} copied.`;
         window.clearTimeout(catalogShareResetTimer);
         catalogShareResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
@@ -2472,9 +2475,11 @@
     if (!button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      const comparison = comparisonStudies();
+      const scope = readableScopeLabel(comparisonScopeLabel(comparison));
       const shareUrl = comparisonRouteUrl();
       const focused = state.compareIds.length >= 2;
-      const selected = focused ? comparisonStudies() : [];
+      const selected = focused ? comparison : [];
       const selectionLabel = comparisonSelectionShareText(selected);
       const pending = state.compareIds.length === 1 ? selectedComparisonStudies() : [];
       const shareLabel = pending.length
@@ -2489,8 +2494,8 @@
 
       const nativeShareResult = await attemptNativeShare(sharePayload);
       if (nativeShareResult === "shared") {
-        temporaryButtonFeedback(button, "Shared", "Comparison shared", "Share comparison", "Share this comparison", "share-comparison");
-        status.textContent = "Comparison shared.";
+        temporaryButtonFeedback(button, "Shared", `Comparison shared: ${scope}`, "Share comparison", "Share this comparison", "share-comparison");
+        status.textContent = `Comparison shared for ${scope}.`;
         return;
       }
       if (nativeShareResult === "cancelled") {
@@ -2501,8 +2506,8 @@
       const copied = await copyText(sharePayloadText(sharePayload));
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Copied", "Comparison share text and link copied");
-        status.textContent = "Comparison share text and link copied.";
+        setButtonFeedback(button, "Copied", `Comparison share text and link copied: ${scope}`);
+        status.textContent = `Comparison share text and link for ${scope} copied.`;
         window.clearTimeout(compareShareResetTimer);
         compareShareResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
@@ -2543,12 +2548,13 @@
     if (!comparison.length || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      const scope = readableScopeLabel(comparisonScopeLabel(comparison));
       const citation = comparisonCitationText(comparison);
       const copied = await copyText(citation);
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Citation copied", "Comparison citation copied");
-        status.textContent = "Comparison citation copied.";
+        setButtonFeedback(button, "Citation copied", `Comparison citation copied: ${scope}`);
+        status.textContent = `Citation for ${scope} copied.`;
         window.clearTimeout(comparisonCitationResetTimer);
         comparisonCitationResetTimer = window.setTimeout(() => {
           button.classList.remove("is-copied");
@@ -2580,11 +2586,12 @@
     if (!study || !button || !status || !beginAsyncAction(button)) return;
     try {
       hideManualCopyFallbacks();
+      const scope = studyShortName(study);
       const citation = citationText(study);
       const copied = await copyText(citation);
       if (copied) {
         button.classList.add("is-copied");
-        setButtonFeedback(button, "Citation copied", "Citation copied");
+        setButtonFeedback(button, "Citation copied", `Citation copied: ${scope}`);
         status.textContent = `Citation for ${study.name} copied.`;
         window.clearTimeout(citationResetTimer);
         citationResetTimer = window.setTimeout(() => {

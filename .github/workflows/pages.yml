@@ -400,14 +400,14 @@ jobs:
           const refreshStart = app.indexOf('function refreshCatalog()');
           const refreshEnd = app.indexOf('\n  function renderAll()', refreshStart);
           if (refreshStart < 0 || refreshEnd < 0 || app.slice(refreshStart, refreshEnd).includes('renderCatalogResultCount(')) throw new Error('Catalog refresh must announce its result count only through renderList');
-          for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Copied", "Share text and link copied");', 'setButtonFeedback(button, "Copied", "Catalog share text and link copied");', 'setButtonFeedback(button, "Copied", "Comparison share text and link copied");', 'setButtonFeedback(button, "Citation copied", "Citation copied");', 'setButtonFeedback(button, "Citation copied", "Catalog citation copied");', 'setButtonFeedback(button, "Citation copied", "Comparison citation copied");']) {
+          for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Copied", `Share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Copied", `Catalog share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Copied", `Comparison share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Catalog citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Comparison citation copied: ${scope}`);']) {
             if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
           }
           if (!app.includes('try {\n        await navigator.clipboard.writeText(value);\n        return true;\n      } catch (error) {\n        // Continue with the textarea fallback if the permissioned API rejects.') || !app.includes('const previousFocus = document.activeElement;') || !app.includes('previousFocus.focus({ preventScroll: true });')) throw new Error('Copy fallback must handle clipboard rejection and restore initiating focus');
           for (const token of ['exportCompletionScope([study], `${studyShortName(study)} · ${drawingStateLabel()}`)', 'exportCompletionScope([study], studyShortName(study))', 'exportCompletionScope(studies, "full collection")', 'exportCompletionScope(visible, catalogScopeLabel())', 'exportCompletionScope(comparison, comparisonScopeLabel(comparison))']) {
             if (!app.includes(token)) throw new Error('Export actions must expose scope-aware completion feedback: ' + token);
           }
-          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'const SYNC_ACTION_COOLDOWN_MS = 400;', 'function endAsyncAction(button, delay = 0)', 'if (delay > 0) window.setTimeout(release, delay);', 'button.setAttribute("aria-busy", "false");', 'function triggerDownload(filename, contents, type)', 'Download activation is unavailable', 'if (!downloaded)', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON"', 'temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"', 'temporaryButtonFeedback(button, "Shared", "Study shared"', 'temporaryButtonFeedback(button, "Shared", "Catalog view shared"', 'temporaryButtonFeedback(button, "Shared", "Comparison shared"']) {
+          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'const SYNC_ACTION_COOLDOWN_MS = 400;', 'function endAsyncAction(button, delay = 0)', 'if (delay > 0) window.setTimeout(release, delay);', 'button.setAttribute("aria-busy", "false");', 'function triggerDownload(filename, contents, type)', 'Download activation is unavailable', 'if (!downloaded)', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON"', 'temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"', 'temporaryButtonFeedback(button, "Shared", `Study shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Catalog view shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Comparison shared: ${scope}`']) {
             if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
           }
           for (const functionName of ['downloadDrawing()', 'downloadStudy()', 'downloadData()', 'downloadCatalogView()', 'downloadCatalogCsv()', 'downloadComparisonCsv()', 'downloadComparisonJson()']) {
@@ -2363,7 +2363,7 @@ jobs:
             if (shareCalls !== 1) throw new Error('Native share accepted a duplicate activation while busy');
             resolveShare();
             await first;
-            if (status.textContent !== 'The longitudinal basilica shared.' || !sharedPayload || !sharedPayload.text.includes('Longitudinal axis') || !sharedPayload.text.includes('Data status: schematic') || !sharedPayload.text.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared' || button.title !== 'Study shared' || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-complete') || timers.length !== 1) {
+            if (status.textContent !== 'The longitudinal basilica shared.' || !sharedPayload || !sharedPayload.text.includes('Longitudinal axis') || !sharedPayload.text.includes('Data status: schematic') || !sharedPayload.text.includes('Source: Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || visibleLabel.textContent !== 'Shared' || button['aria-label'] !== 'Study shared: Longitudinal basilica' || button.title !== 'Study shared: Longitudinal basilica' || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-complete') || timers.length !== 1) {
               throw new Error('Native share did not expose visible completion feedback or restore its state');
             }
             timers[0]();
@@ -2430,8 +2430,76 @@ jobs:
             state.compareIds = ['basilica'];
             await shareComparison();
             if (!payloads[2] || !payloads[2].text.includes('Longitudinal basilica (Longitudinal axis; schematic) selected; choose one more study for a focused comparison in the Sacred Geometry Atlas. Source context: Longitudinal basilica — Sacred Geometry Atlas proportional model; Illustrative proportions; no measured source.') || payloads[2].url !== 'https://example.test/atlas/?compare=basilica#compare') throw new Error('Partial comparison native share did not preserve pending selection, source context, or route');
-            if (shareCatalogButton.disabled || shareCompareButton.disabled || shareCatalogStatus.textContent !== 'Catalog view shared.' || shareCompareStatus.textContent !== 'Comparison shared.') throw new Error('Native share context smoke test did not restore controls or announce completion');
+            if (shareCatalogButton.disabled || shareCompareButton.disabled || shareCatalogStatus.textContent !== 'Catalog view shared for results matching “basilica”, 2 selected for comparison.' || shareCompareStatus.textContent !== 'Comparison shared for full collection · 1 selected; choose one more for a focused comparison.' || shareCatalogButton['aria-label'] !== 'Catalog view shared: results matching “basilica”, 2 selected for comparison' || shareCompareButton['aria-label'] !== 'Comparison shared: full collection · 1 selected; choose one more for a focused comparison') throw new Error('Native share context smoke test did not restore controls or announce scoped completion');
             console.log('Native share context smoke test passed.');
+          })().catch((error) => { console.error(error); process.exitCode = 1; });
+          NODE
+
+      - name: Smoke-test scoped citation completion feedback
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const makeButton = (label) => {
+            const visibleLabel = { textContent: label };
+            return {
+              disabled: false,
+              classList: { add() {}, remove() {} },
+              querySelector(selector) { return selector === 'span:last-child' ? visibleLabel : null; },
+              setAttribute(name, value) { this[name] = value; },
+              visibleLabel
+            };
+          };
+          const copyCitationButton = makeButton('Copy citation');
+          const copyCatalogCitationButton = makeButton('Copy citation');
+          const copyComparisonCitationButton = makeButton('Copy citation');
+          const statuses = {
+            study: { textContent: '' },
+            catalog: { textContent: '' },
+            comparison: { textContent: '' }
+          };
+          elements.set('#copyCitation', copyCitationButton);
+          elements.set('#citationStatus', statuses.study);
+          elements.set('#copyCatalogCitation', copyCatalogCitationButton);
+          elements.set('#catalogCitationStatus', statuses.catalog);
+          elements.set('#copyComparisonCitation', copyComparisonCitationButton);
+          elements.set('#comparisonCitationStatus', statuses.comparison);
+          const copiedValues = [];
+          const context = {
+            URL,
+            navigator: { clipboard: { writeText: async (value) => { copiedValues.push(value); } } },
+            window: {
+              isSecureContext: true,
+              location: { href: 'https://example.test/atlas/?q=gothic&axis=Longitudinal&sort=name#atlas' },
+              clearTimeout() {},
+              setTimeout() { return 1; },
+              addEventListener() {}
+            },
+            document: {
+              baseURI: 'https://example.test/atlas/',
+              activeElement: copyCitationButton,
+              body: {},
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, copyCitation, copyCatalogCitation, copyComparisonCitation } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, copyCitation, copyCatalogCitation, copyComparisonCitation } = context.window.__atlasTest;
+          (async () => {
+            state.query = 'gothic';
+            state.filterAxis = 'Longitudinal';
+            state.sort = 'name';
+            state.compareIds = ['basilica', 'gothic'];
+            await copyCitation();
+            await copyCatalogCitation();
+            await copyComparisonCitation();
+            if (copiedValues.length !== 3 || copyCitationButton['aria-label'] !== 'Citation copied: Longitudinal basilica' || copyCitationButton.title !== 'Citation copied: Longitudinal basilica' || statuses.study.textContent !== 'Citation for The longitudinal basilica copied.' || copyCatalogCitationButton['aria-label'] !== 'Catalog citation copied: results matching “gothic”, axis: Longitudinal axis, 2 selected for comparison, sorted by name (A–Z)' || statuses.catalog.textContent !== 'Citation for results matching “gothic”, axis: Longitudinal axis, 2 selected for comparison, sorted by name (A–Z) copied.' || copyComparisonCitationButton['aria-label'] !== 'Comparison citation copied: 2 selected studies' || statuses.comparison.textContent !== 'Citation for 2 selected studies copied.' || copyCitationButton.disabled || copyCatalogCitationButton.disabled || copyComparisonCitationButton.disabled) {
+              throw new Error('Successful citation actions did not retain their study, catalog, and comparison scopes');
+            }
+            console.log('Scoped citation completion feedback smoke test passed.');
           })().catch((error) => { console.error(error); process.exitCode = 1; });
           NODE
 
