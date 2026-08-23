@@ -785,6 +785,13 @@ jobs:
                   missing_resources.append(resource)
           if missing_resources:
               raise SystemExit("Missing local HTML resources: " + ", ".join(missing_resources))
+          not_found_parser = AccessibilityAudit()
+          not_found_parser.feed(Path("404.html").read_text())
+          if len(not_found_parser.ids) != len(set(not_found_parser.ids)):
+              raise SystemExit("Duplicate 404 HTML IDs found")
+          not_found_missing = sorted(set(not_found_parser.references) - set(not_found_parser.ids))
+          if not_found_missing:
+              raise SystemExit("Missing 404 ARIA references: " + ", ".join(not_found_missing))
           raw_attribute_ampersands = re.compile(r'="[^"\n]*&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9A-Fa-f]+);)')
           if raw_attribute_ampersands.search(html):
               raise SystemExit("Unescaped ampersand found in an HTML attribute")
@@ -792,7 +799,7 @@ jobs:
           sitemap_namespace = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
           if sitemap_root.tag != f"{sitemap_namespace}urlset" or not sitemap_root.findall(f"{sitemap_namespace}url"):
               raise SystemExit("Sitemap must contain at least one URL entry")
-          print(f"Accessibility and static-reference audit passed: {len(parser.ids)} unique IDs, {len(parser.fragments)} local fragments, {len(set(parser.resources))} local resources.")
+          print(f"Accessibility and static-reference audit passed: {len(parser.ids)} atlas IDs, {len(not_found_parser.ids)} 404 IDs, {len(parser.fragments)} local fragments, {len(set(parser.resources))} local resources.")
           PY
       - name: Smoke-test data-load recovery
         run: |
