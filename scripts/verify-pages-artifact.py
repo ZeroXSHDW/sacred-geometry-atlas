@@ -85,6 +85,10 @@ missing.extend(token for token in [
     f'<a class="home-link home-link-secondary" data-site-schema href="{schema_target}">',
     f'<link rel="manifest" id="site-manifest" href="{base_url}site.webmanifest" />',
     f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{base_url}icons/atlas-192.png" />',
+    '<meta name="application-name" content="Sacred Geometry Atlas" />',
+    '<meta name="mobile-web-app-capable" content="yes" />',
+    '<meta name="apple-mobile-web-app-capable" content="yes" />',
+    '<meta name="apple-mobile-web-app-title" content="Geometry Atlas" />',
 ] if token not in not_found)
 if missing:
     fail("Deployed metadata is incomplete: " + ", ".join(missing))
