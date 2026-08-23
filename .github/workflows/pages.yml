@@ -238,8 +238,8 @@ jobs:
           if (!styles.includes('.download-button span.download-label { display: inline; font-size: 0; white-space: nowrap; }') || !styles.includes('.download-button span.download-label::after { content: "JSON"; font-size: 0.56rem; }') || !styles.includes('.download-button.is-complete span.download-label::after { content: "Done"; }')) throw new Error('Compact full-atlas downloads must retain a visible JSON label and Done completion state');
           if (!styles.includes('.catalog-action#downloadCatalogView span:last-child,\n  .catalog-action#downloadCatalogCsv span:last-child { display: inline; }')) throw new Error('Compact catalog exports must retain visible JSON and CSV format labels');
           if (!html.includes('id="printCatalog"') || !app.includes('function printCatalog()') || !app.includes('$("#printCatalog").addEventListener("click", printCatalog);') || !app.includes('document.body.classList.add("print-catalog");') || !styles.includes('.catalog-print-button span:last-child { display: none; }') || !styles.includes('body.print-catalog .catalog-panel { display: block !important;') || !styles.includes('body.print-catalog .catalog-list { grid-template-columns: repeat(2, minmax(0, 1fr));')) throw new Error('Filtered catalog views must expose an accessible print action and scoped print layout');
-          if (!html.includes('<div class="action-recovery" id="downloadRecovery" role="region" aria-labelledby="downloadRecoveryHeading" tabindex="-1" hidden>') || !html.includes('<p class="action-recovery-message" id="downloadRecoveryHeading" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('<a class="hero-action" href="data/geometry.schema.json">Open the data schema') || !html.includes('id="dismissDownloadRecovery" type="button" aria-label="Dismiss download recovery message" aria-keyshortcuts="Escape" title="Dismiss download recovery message"') || !styles.includes('.action-recovery {') || !styles.includes('.action-recovery-actions {') || !styles.includes('.action-recovery-dismiss:hover') || !styles.includes('#downloadRecovery:focus { outline: 2px solid var(--teal); outline-offset: 4px; }') || !styles.includes('.action-recovery { border-color: ButtonText; background: Canvas; }') || !styles.includes('#downloadRecovery:focus { outline-color: Highlight; }') || !styles.includes('.action-recovery,')) throw new Error('Blocked exports must expose a visible, responsive recovery panel with JSON, CSV, and schema actions');
-          for (const token of ['function hideDownloadRecovery()', 'function showDownloadRecovery(message, focusSelector)', 'function dismissDownloadRecovery()', 'function handleDownloadRecoveryKeydown(event)', '$("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);', '$("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);', 'showDownloadRecovery("SVG export was blocked.', 'showDownloadRecovery("The study export was blocked.', 'showDownloadRecovery("The file download was blocked.', 'showDownloadRecovery("The catalog export was blocked.', 'showDownloadRecovery("The comparison export was blocked.']) {
+          if (!html.includes('<div class="action-recovery" id="downloadRecovery" role="region" aria-labelledby="downloadRecoveryHeading" tabindex="-1" hidden>') || !html.includes('<p class="action-recovery-message" id="downloadRecoveryHeading" role="status" aria-live="polite" aria-atomic="true"></p>') || !html.includes('<a class="hero-action hero-action-primary" id="downloadRecoveryContext"') || !html.includes('data-download-recovery-context-label') || !html.includes('<a class="hero-action" href="data/geometry.schema.json">Open the data schema') || !html.includes('id="dismissDownloadRecovery" type="button" aria-label="Dismiss download recovery message" aria-keyshortcuts="Escape" title="Dismiss download recovery message"') || !styles.includes('.action-recovery {') || !styles.includes('.action-recovery-actions {') || !styles.includes('.action-recovery-dismiss:hover') || !styles.includes('#downloadRecovery:focus { outline: 2px solid var(--teal); outline-offset: 4px; }') || !styles.includes('.action-recovery { border-color: ButtonText; background: Canvas; }') || !styles.includes('#downloadRecovery:focus { outline-color: Highlight; }') || !styles.includes('.action-recovery,')) throw new Error('Blocked exports must expose a visible, responsive recovery panel with JSON, CSV, and schema actions');
+          for (const token of ['function setDownloadRecoveryContext(context = null)', 'function hideDownloadRecovery()', 'function showDownloadRecovery(message, focusSelector, context = null)', 'function dismissDownloadRecovery()', 'function handleDownloadRecoveryKeydown(event)', '$("#dismissDownloadRecovery").addEventListener("click", dismissDownloadRecovery);', '$("#downloadRecovery").addEventListener("keydown", handleDownloadRecoveryKeydown);', 'showDownloadRecovery("SVG export was blocked.', 'showDownloadRecovery("The study export was blocked.', 'showDownloadRecovery("The file download was blocked.', 'showDownloadRecovery("The catalog export was blocked.', 'showDownloadRecovery("The comparison export was blocked.', 'href: studyRoutePath(study.id)', 'href: routePath(catalogViewRouteUrl())', 'href: routePath(comparisonRouteUrl())']) {
             if (!app.includes(token)) throw new Error('Download recovery behavior is incomplete: ' + token);
           }
           const initStart = app.indexOf('function init()');
@@ -3985,6 +3985,59 @@ jobs:
           dismissDownloadRecovery();
           if (!recovery.hidden || recovery.focusCalls !== 2 || downloadButton.focusCalls !== 2) throw new Error('Visible download recovery did not dismiss and restore focus');
           console.log('Visible download recovery smoke test passed.');
+          NODE
+
+      - name: Smoke-test contextual download recovery routes
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const recovery = {
+            hidden: true,
+            focus() {}
+          };
+          const heading = { textContent: '' };
+          const contextLabel = { textContent: '' };
+          const contextLink = {
+            hidden: true,
+            href: '',
+            title: '',
+            attributes: {},
+            querySelector(selector) {
+              return selector === '[data-download-recovery-context-label]' ? contextLabel : null;
+            },
+            setAttribute(name, value) {
+              this.attributes[name] = value;
+            }
+          };
+          elements.set('#downloadRecovery', recovery);
+          elements.set('#downloadRecoveryHeading', heading);
+          elements.set('#downloadRecoveryContext', contextLink);
+          const context = {
+            URL,
+            navigator: {},
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas/gothic/section/interior/axis/1.3' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { showDownloadRecovery, hideDownloadRecovery } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { showDownloadRecovery, hideDownloadRecovery } = context.window.__atlasTest;
+          showDownloadRecovery('The catalog export was blocked.', '#downloadCatalogView', {
+            href: '/atlas/?q=gothic#atlas',
+            label: 'Open current catalog view'
+          });
+          if (contextLink.hidden || contextLink.href !== '/atlas/?q=gothic#atlas' || contextLabel.textContent !== 'Open current catalog view' || contextLink.attributes['aria-label'] !== 'Open current catalog view' || contextLink.title !== 'Open current catalog view') throw new Error('Download recovery did not expose the exact contextual route action');
+          hideDownloadRecovery();
+          if (!contextLink.hidden) throw new Error('Download recovery did not hide its stale contextual route action');
+          console.log('Contextual download recovery route smoke test passed.');
           NODE
 
       - name: Smoke-test recovery focus handoff

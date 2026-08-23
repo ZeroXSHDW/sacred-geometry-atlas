@@ -1646,20 +1646,38 @@
     restoreFocus(focusTarget);
   }
 
+  function setDownloadRecoveryContext(context = null) {
+    const action = $("#downloadRecoveryContext");
+    if (!action) return;
+    const href = context && typeof context.href === "string" ? context.href : "";
+    const label = context && typeof context.label === "string" ? context.label : "";
+    action.hidden = !href || !label;
+    if (!href || !label) return;
+    action.href = href;
+    action.setAttribute("aria-label", label);
+    action.title = label;
+    const labelTarget = typeof action.querySelector === "function"
+      ? action.querySelector("[data-download-recovery-context-label]")
+      : null;
+    if (labelTarget) labelTarget.textContent = label;
+  }
+
   function hideDownloadRecovery() {
     const recovery = $("#downloadRecovery");
     const focusTarget = hasFocusWithin(recovery) ? $(downloadRecoveryFocusTarget) : null;
     if (recovery) recovery.hidden = true;
+    setDownloadRecoveryContext();
     downloadRecoveryFocusTarget = "";
     restoreFocus(focusTarget);
     return Boolean(focusTarget);
   }
 
-  function showDownloadRecovery(message, focusSelector) {
+  function showDownloadRecovery(message, focusSelector, context = null) {
     const recovery = $("#downloadRecovery");
     const heading = $("#downloadRecoveryHeading");
     if (!recovery || !heading) return;
     heading.textContent = message;
+    setDownloadRecoveryContext(context);
     recovery.hidden = false;
     downloadRecoveryFocusTarget = focusSelector || "";
     restoreFocus(recovery);
@@ -3505,7 +3523,10 @@
     const downloaded = triggerDownload(filename, `<?xml version="1.0" encoding="UTF-8"?>\n${source}`, "image/svg+xml;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "SVG download is unavailable in this browser. Use Print sheet to preserve the current view instead.";
-      showDownloadRecovery("SVG export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadDrawing");
+      showDownloadRecovery("SVG export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadDrawing", {
+        href: studyRoutePath(study.id),
+        label: "Open current drawing route"
+      });
       return;
     }
     hideDownloadRecovery();
@@ -3528,7 +3549,10 @@
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
       if (status) status.textContent = "Study JSON download is unavailable in this browser. Use the static dataset link instead.";
-      showDownloadRecovery("The study export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadStudy");
+      showDownloadRecovery("The study export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadStudy", {
+        href: studyRoutePath(study.id),
+        label: "Open active study route"
+      });
       return;
     }
     hideDownloadRecovery();
@@ -3640,7 +3664,10 @@
     const downloaded = triggerDownload(filename, payload, "application/json");
     if (!downloaded) {
       if (status) status.textContent = "Catalog view download is unavailable in this browser. Share the catalog URL instead.";
-      showDownloadRecovery("The catalog export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogView");
+      showDownloadRecovery("The catalog export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogView", {
+        href: routePath(catalogViewRouteUrl()),
+        label: "Open current catalog view"
+      });
       return;
     }
     hideDownloadRecovery();
@@ -3666,7 +3693,10 @@
       const downloaded = triggerDownload(filename, `\uFEFF${catalogCsvPayload(visible)}`, "text/csv;charset=utf-8");
       if (!downloaded) {
         if (status) status.textContent = "Catalog CSV download is unavailable in this browser. Share the catalog URL instead.";
-        showDownloadRecovery("The catalog CSV export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogCsv");
+        showDownloadRecovery("The catalog CSV export was blocked. Use Share view to preserve this filtered route, or open the static dataset.", "#downloadCatalogCsv", {
+          href: routePath(catalogViewRouteUrl()),
+          label: "Open current catalog view"
+        });
         return;
       }
       hideDownloadRecovery();
@@ -3845,7 +3875,10 @@
     const downloaded = triggerDownload(filename, `\uFEFF${comparisonCsvPayload(comparison)}`, "text/csv;charset=utf-8");
     if (!downloaded) {
       if (status) status.textContent = "Comparison CSV download is unavailable in this browser. Share the comparison URL instead.";
-      showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparison");
+      showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparison", {
+        href: routePath(comparisonRouteUrl()),
+        label: "Open comparison route"
+      });
       return;
     }
     hideDownloadRecovery();
@@ -3872,7 +3905,10 @@
       const downloaded = triggerDownload(filename, payload, "application/json");
       if (!downloaded) {
         if (status) status.textContent = "Comparison JSON download is unavailable in this browser. Share the comparison URL instead.";
-        showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparisonJson");
+        showDownloadRecovery("The comparison export was blocked. Use Share comparison to preserve this selection, or open the static dataset.", "#downloadComparisonJson", {
+          href: routePath(comparisonRouteUrl()),
+          label: "Open comparison route"
+        });
         return;
       }
       hideDownloadRecovery();
