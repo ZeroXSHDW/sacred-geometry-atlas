@@ -163,7 +163,7 @@ jobs:
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
           if (!styles.includes('-webkit-text-size-adjust: 100%;') || !styles.includes('text-size-adjust: 100%;') || !notFound.includes('-webkit-text-size-adjust: 100%;') || !notFound.includes('text-size-adjust: 100%;')) throw new Error('Mobile pages must stabilize text sizing without disabling user zoom');
-          for (const token of ['icons/atlas-192.png', 'icons/atlas-512.png', '192px', '512px']) {
+          for (const token of ['icons/atlas-192.png', 'icons/atlas-512.png', '192px', '512px', 'Install Atlas']) {
             if (!readme.includes(token)) throw new Error('GitHub Pages publishing guide is missing install icon documentation: ' + token);
           }
           if (!robots.includes('User-agent: *') || !robots.includes('Allow: /') || !robots.includes('Sitemap: ./sitemap.xml') || !sitemap.includes('<loc>./</loc>') || !sitemap.includes('<loc>./data/geometry.json</loc>') || !sitemap.includes('<loc>./data/geometry.csv</loc>') || !sitemap.includes('<loc>./data/geometry.schema.json</loc>')) throw new Error('Repository-relative crawl metadata is incomplete');
@@ -329,6 +329,7 @@ jobs:
           const drawingExport = app.slice(drawingExportStart, drawingExportEnd);
           if (drawingExportStart < 0 || drawingExportEnd < 0 || !drawingExport.includes('const status = $("#drawingDownloadStatus");') || drawingExport.includes('const status = $("#downloadStatus");')) throw new Error('Drawing export must announce completion through its dedicated status channel');
           if (!html.includes('id="downloadData" type="button" aria-label="Download full atlas data as JSON" title="Download full atlas data as JSON"')) throw new Error('Missing accessible full-data download label');
+          if (!html.includes('<button class="download-button install-button" id="installApp" type="button" aria-label="Install Sacred Geometry Atlas" title="Install Sacred Geometry Atlas" hidden>') || !html.includes('<span class="sr-only" id="installStatus" role="status" aria-live="polite" aria-atomic="true"></span>') || !app.includes('function setupInstallPrompt()') || !app.includes('setupInstallPrompt();') || !app.includes('window.addEventListener("beforeinstallprompt"') || !app.includes('window.addEventListener("appinstalled"') || !styles.includes('.install-button')) throw new Error('Installable Atlas support must expose a capability-gated action and live feedback');
           if (!html.includes('id="clearSearchInput" type="button" aria-label="Clear search" title="Clear search"')) throw new Error('Search clear control must expose its compact-control tooltip');
           if (!html.includes('id="downloadStudy" type="button" aria-label="Download active study as JSON"')) throw new Error('Missing accessible study-data download label');
           if (!html.includes('id="shareStudy" type="button" aria-label="Share current study" aria-controls="shareFallback" aria-expanded="false" title="Share current study"') || !app.includes('button.title = accessibleLabel;')) throw new Error('Study share feedback must expose a synchronized compact-control tooltip');
@@ -849,6 +850,71 @@ jobs:
           });
           assert(freshAsset && freshAsset.body === 'network', 'network-first fetch did not prefer fresh asset content');
           console.log('Offline app-shell install, recovery, update, and cache cleanup smoke test passed.');
+          })().catch((error) => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE
+      - name: Smoke-test install prompt affordance
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          (async () => {
+            const listeners = {};
+            const buttonListeners = {};
+            const button = {
+              hidden: true,
+              disabled: false,
+              attributes: {},
+              addEventListener(type, handler) {
+                buttonListeners[type] = handler;
+              },
+              setAttribute(name, value) {
+                this.attributes[name] = value;
+              }
+            };
+            const status = { textContent: '' };
+            const context = {
+              window: {
+                __atlasTest: null,
+                addEventListener(type, handler) {
+                  listeners[type] = handler;
+                },
+                matchMedia() {
+                  return { matches: false };
+                }
+              },
+              navigator: { standalone: false },
+              document: {
+                querySelector(selector) {
+                  if (selector === '#installApp') return button;
+                  if (selector === '#installStatus') return status;
+                  return null;
+                }
+              }
+            };
+            const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { setupInstallPrompt };\n})();');
+            vm.runInNewContext(app, context);
+            context.window.__atlasTest.setupInstallPrompt();
+            if (!button.hidden) throw new Error('Install action should be hidden before the browser exposes a prompt');
+            let prevented = false;
+            let prompted = false;
+            listeners.beforeinstallprompt({
+              preventDefault() {
+                prevented = true;
+              },
+              async prompt() {
+                prompted = true;
+              },
+              userChoice: Promise.resolve({ outcome: 'accepted' })
+            });
+            if (!prevented || button.hidden) throw new Error('Install prompt event did not reveal the accessible action');
+            await buttonListeners.click();
+            if (!prompted || !button.hidden || status.textContent !== 'Sacred Geometry Atlas installation accepted.') throw new Error('Accepted install prompt did not provide completion feedback');
+            listeners.appinstalled();
+            if (status.textContent !== 'Sacred Geometry Atlas is installed.') throw new Error('Installed event did not provide live feedback');
+            console.log('Install prompt affordance smoke test passed.');
           })().catch((error) => {
             console.error(error);
             process.exitCode = 1;

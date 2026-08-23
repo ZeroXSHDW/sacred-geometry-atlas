@@ -318,9 +318,62 @@
     if (typeof navigator !== "undefined" && navigator.onLine === false) showOffline();
   }
 
+  function setupInstallPrompt() {
+    const button = $("#installApp");
+    const status = $("#installStatus");
+    if (!button || !status || typeof window === "undefined" || typeof window.addEventListener !== "function") return;
+    let deferredPrompt = null;
+    const isStandalone = () => {
+      const displayMode = typeof window.matchMedia === "function"
+        && window.matchMedia("(display-mode: standalone)").matches;
+      return Boolean(displayMode || (typeof navigator !== "undefined" && navigator.standalone === true));
+    };
+    const hideInstall = () => {
+      button.hidden = true;
+    };
+    const showInstall = () => {
+      if (!isStandalone()) button.hidden = false;
+    };
+    const handleBeforeInstallPrompt = (event) => {
+      if (!event || typeof event.preventDefault !== "function") return;
+      event.preventDefault();
+      deferredPrompt = event;
+      showInstall();
+    };
+    const handleInstall = async () => {
+      if (!deferredPrompt || !beginAsyncAction(button)) return;
+      const promptEvent = deferredPrompt;
+      deferredPrompt = null;
+      try {
+        if (typeof promptEvent.prompt !== "function") throw new Error("Install prompt unavailable");
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        status.textContent = choice && choice.outcome === "accepted"
+          ? "Sacred Geometry Atlas installation accepted."
+          : "Installation prompt dismissed.";
+        hideInstall();
+      } catch (error) {
+        status.textContent = "Installation is unavailable in this browser.";
+        hideInstall();
+      } finally {
+        endAsyncAction(button);
+      }
+    };
+    hideInstall();
+    button.addEventListener("click", handleInstall);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", () => {
+      deferredPrompt = null;
+      hideInstall();
+      status.textContent = "Sacred Geometry Atlas is installed.";
+    });
+    if (isStandalone()) hideInstall();
+  }
+
   function init() {
     registerServiceWorker();
     setupConnectionStatus();
+    setupInstallPrompt();
     if (dataIssue) {
       document.body.classList.remove("no-js");
       document.body.classList.add("data-error-state");

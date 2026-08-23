@@ -315,6 +315,7 @@ main,
 
 .download-button:hover { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
 .download-icon { color: var(--amber); font-size: 1rem; line-height: 0; }
+.install-button .download-icon { color: var(--teal); }
 
 .hero {
   display: flex;
@@ -969,6 +970,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button span.download-label { display: inline; font-size: 0; white-space: nowrap; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.56rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
+  .download-button.install-button span.download-label::after { content: "Install"; }
   .catalog-action span:last-child { display: none; }
   .catalog-action#downloadCatalogView span:last-child,
   .catalog-action#downloadCatalogCsv span:last-child { display: inline; }
@@ -1137,6 +1139,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .download-button span.download-label { display: inline; font-size: 0; }
   .download-button span.download-label::after { content: "JSON"; font-size: 0.62rem; }
   .download-button.is-complete span.download-label::after { content: "Done"; }
+  .download-button.install-button span.download-label { display: inline; font-size: 0; }
+  .download-button.install-button span.download-label::after { content: "Install"; font-size: 0.62rem; }
   .catalog-summary-actions { flex-wrap: wrap; justify-content: flex-end; }
   .catalog-summary .catalog-share-button span:last-child,
   .catalog-summary .catalog-citation-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
@@ -1320,6 +1324,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .share-button span:first-child { color: ButtonText; }
   .sort-direction-toggle:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }
   .sort-direction-icon { color: ButtonText; }
+  .download-icon { color: ButtonText; }
   .compare-tray button:last-child:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }
   #runtimeFallback:focus { outline-color: Highlight; }
   #visualEmptyHeading:focus-visible { outline-color: Highlight; }
