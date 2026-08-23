@@ -6,7 +6,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 ## What is included
 
-- Six representative church typologies with schematic proportional studies.
+- Six named churches as real reference buildings—Basilica of Sant'Apollinare in Classe, Notre-Dame de Chartres, Hosios Loukas Katholikon, Sant'Andrea al Quirinale, Borgund Stave Church, and Church of the Light—with schematic proportional studies.
 - Interactive plan, elevation, and section drawings.
 - Outside / inside surface switch.
 - Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
@@ -24,7 +24,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A dependency-free [`scripts/sync-geometry-json.js`](scripts/sync-geometry-json.js) command regenerates the committed JSON, CSV, and JSON Schema artifacts plus the no-JavaScript plain-text index from the editable geometry source, with a `--check` mode used by GitHub Actions.
 - One-click drawing reset that returns surface, mode, layer focus, and zoom to their default state.
 - Derived readings for floor area, section ratio, module ratio, radial reach, estimated volume, and four proportion profiles; floor area identifies whether it uses a supplied estimate or the length × span fallback.
-- Explicit reference, provenance, and interpretive reading text for each schematic study.
+- Explicit named-building references, linked source pages, provenance, and interpretive reading text for each schematic study.
 - Reading-profile bars expose their 0–100 scores as accessible meters, identify each study by curated index and name, name their ratio/typology/bay-count basis in the announced value, and distinguish interpretive proportional tendencies from empirical measurements while keeping duplicate visual score labels out of the accessibility tree.
 - Search across study names, references, provenance definitions, notes, detail vocabulary, numeric geometry dimensions, derived ratios, and reading-profile labels/scores, with multi-word queries matching all terms across the record; repeated whitespace is normalized so shared catalog URLs and scope announcements stay canonical; typology, location, era, geometric axis, and measured/schematic status filtering use explicit catalog keys.
 - Persistent search guidance keeps the searchable fields, all-term matching behavior, `/` focus shortcut, and `Esc` clear shortcut visible after the placeholder disappears.
@@ -205,7 +205,7 @@ The committed public artifact includes a correctly sized 180px icons/atlas-180.p
 
 ## Add real churches
 
-The current values are explicitly schematic, illustrative proportions—not a measured survey of every church. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii when you have them.
+The six current records point to real named churches, while their geometry values remain explicitly schematic, illustrative proportions—not measured surveys of those buildings. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have them.
 
 After editing the source, regenerate the static artifacts with:
 
@@ -223,14 +223,15 @@ Each record should include:
   index: "07",
   name: "Display name",
   shortName: "Short display name",
-  churchName: "Actual building name, or a clearly labelled representative study",
+  churchName: "Actual building name",
   typology: "Basilica",
   place: "Region or location",
   era: "Date or period",
   emphasis: "Processional axis",
   status: "schematic", // use a value declared in CHURCH_GEOMETRY_SCHEMA.statusValues
-  source: "Survey, archive, publication, or atlas model",
-  sourceNote: "Short provenance note",
+  source: "Survey, archive, publication, or official reference page",
+  sourceUrl: "https://example.org/source-page",
+  sourceNote: "Name the real reference building and state whether the geometry is measured or schematic.",
   length: 58,
   span: 22,
   height: 18,
@@ -256,7 +257,7 @@ Each record should include:
 
 The symmetry index is normalized from 0 to 1; `0` is valid for an intentionally asymmetric study, while physical dimensions and counts remain positive.
 
-The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status and the collection-level `note`. Those same definitions and the note drive the visible filter/comparison guidance, Method warning, no-JavaScript fallback, and accessible study labels, with comparison counts following the focused selection when one is active, so the interface and exports use one provenance vocabulary. Each generated JSON export also includes a `schemaUrl` and a `provenance` object with its scope, record count, status counts, and those schema-backed definitions; live exports resolve the schema URL against the page origin. The committed [`data/geometry.json`](data/geometry.json) and [`data/geometry.csv`](data/geometry.csv) artifacts are generated from the same source and checked in CI so they cannot drift from [`data/geometry.js`](data/geometry.js), then receive the final absolute schema URL during Pages deployment. The Pages workflow also compares the browser’s reading-profile formulas and basis note with the generator used for CSV and no-JavaScript output, so an interactive score cannot silently diverge from a published record. Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
+The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status and the collection-level `note`. Those same definitions and the note drive the visible filter/comparison guidance, Method warning, no-JavaScript fallback, and accessible study labels, with comparison counts following the focused selection when one is active, so the interface and exports use one provenance vocabulary. Each generated JSON export also includes a `schemaUrl` and a `provenance` object with its scope, record count, status counts, and those schema-backed definitions; each record carries a required `sourceUrl` for its named reference building. Live exports resolve the schema URL against the page origin. The committed [`data/geometry.json`](data/geometry.json) and [`data/geometry.csv`](data/geometry.csv) artifacts are generated from the same source and checked in CI so they cannot drift from [`data/geometry.js`](data/geometry.js), then receive the final absolute schema URL during Pages deployment. The Pages workflow also compares the browser’s reading-profile formulas and basis note with the generator used for CSV and no-JavaScript output, so an interactive score cannot silently diverge from a published record. Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
 
 ## Test locally
 

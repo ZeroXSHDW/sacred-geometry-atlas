@@ -15,7 +15,7 @@
     return values.length ? values : Object.keys(FALLBACK_DATA_STATUS_DEFINITIONS);
   }
   const allowedStatusValues = new Set(schemaStatusValues());
-  const requiredStudyTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "status", "source", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
+  const requiredStudyTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "status", "source", "sourceUrl", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
   const requiredStudyNumericFields = ["length", "span", "height", "bayCount", "module", "radius", "symmetry"];
   const nonNegativeStudyNumericFields = new Set(["symmetry"]);
   const isRenderableStudy = (study) => {
@@ -87,6 +87,7 @@
   const studyStatusLabel = (study) => statusDisplayName(studyStatus(study));
   const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
+  const studySourceUrl = (study) => study.sourceUrl || "";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
   const sentenceText = (value) => {
     const text = String(value ?? "").trim();
@@ -2173,7 +2174,7 @@
     return [
       study.index,
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
-      study.emphasis, study.axis, studyAxisLabel(study), study.envelope, studySource(study), studySourceNote(study),
+      study.emphasis, study.axis, studyAxisLabel(study), study.envelope, studySource(study), studySourceUrl(study), studySourceNote(study),
       study.surfaceNote, study.exteriorNote, study.interiorNote, volumeBasis, studyStatus(study),
       studyStatusDescription(study),
       ...dimensions,
@@ -2411,7 +2412,14 @@
     const printRoute = $("#printRoute");
     renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id), `Open ${studyIdentityLabel(study)} route in Atlas`);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
-    $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNoteSentence(study)}`;
+    const activeSource = $("#activeSource");
+    if (activeSource) {
+      const source = escapeHtml(studySource(study));
+      const sourceLink = studySourceUrl(study)
+        ? `<a href="${escapeHtml(studySourceUrl(study))}" target="_blank" rel="noopener noreferrer">${source} <span aria-hidden="true">↗</span></a>`
+        : source;
+      activeSource.innerHTML = `Source · ${sourceLink} · ${escapeHtml(studySourceNoteSentence(study))}`;
+    }
     $("#activeIndex").textContent = study.index;
     $("#activeDescription").textContent = studySurfaceReading(study) || "No interpretive reading supplied.";
     $("#analysisReading").textContent = studySurfaceReading(study) || "No interpretive note supplied.";
@@ -3771,7 +3779,7 @@
     const schemaUrl = publishedGeometrySchemaUrl();
     const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
     const headers = [
-      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note", "Source URL",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "View surface", "View mode", "Layer focus", "Zoom", "Schema version", "Units", "Schema URL", ...profileHeaders
     ];
@@ -3791,6 +3799,7 @@
       study.churchName || study.name,
       studySource(study),
       studySourceNote(study),
+      studySourceUrl(study),
       number(study.length),
       number(study.span),
       number(study.length / study.span, 2),
@@ -3898,7 +3907,7 @@
     const schemaUrl = publishedGeometrySchemaUrl();
     const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
     const headers = [
-      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note", "Source URL",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
     ];
@@ -3919,6 +3928,7 @@
         study.churchName || study.name,
         studySource(study),
         studySourceNote(study),
+        studySourceUrl(study),
         number(study.length),
         number(study.span),
         number(study.length / study.span, 2),
@@ -4048,7 +4058,7 @@
     const schemaUrl = publishedGeometrySchemaUrl();
     const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
     const headers = [
-      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note", "Source URL",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
     ];
@@ -4069,6 +4079,7 @@
         study.churchName || study.name,
         studySource(study),
         studySourceNote(study),
+        studySourceUrl(study),
         number(study.length),
         number(study.span),
         number(study.length / study.span, 2),
@@ -4110,7 +4121,7 @@
     const comparisonIds = comparisonSelection.map(({ id }) => id).join(",");
     const comparisonContext = comparisonSelectionCsvText(comparisonSelection);
     const headers = [
-      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note", "Source URL",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
       "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders, "Sort key", "Sort direction"
     ];
@@ -4131,6 +4142,7 @@
         study.churchName || study.name,
         studySource(study),
         studySourceNote(study),
+        studySourceUrl(study),
         number(study.length),
         number(study.span),
         number(study.length / study.span, 2),
@@ -4567,7 +4579,7 @@
           <th scope="row"><a class="comparison-table-study-link" data-table-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentStudyAttribute} aria-label="${escapeHtml(studyLinkLabel)}"><span class="comparison-table-study-index" aria-hidden="true">${escapeHtml(study.index)}</span>${escapeHtml(studyShortName(study))}${isActive ? ' <span class="comparison-table-study-state">current</span>' : ""} <span aria-hidden="true">↗</span></a></th>
           <td>${escapeHtml(studyAxisLabel(study))}</td>
           <td class="comparison-status" data-status="${escapeHtml(status)}" aria-label="${escapeHtml(`${statusLabel} (${status}): ${studyStatusDescription(study)}`)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</td>
-          <td class="comparison-source"><strong>${escapeHtml(studySource(study))}</strong><span>${escapeHtml(studySourceNote(study))}</span></td>
+          <td class="comparison-source"><strong>${studySourceUrl(study) ? `<a href="${escapeHtml(studySourceUrl(study))}" target="_blank" rel="noopener noreferrer">${escapeHtml(studySource(study))} <span aria-hidden="true">↗</span></a>` : escapeHtml(studySource(study))}</strong><span>${escapeHtml(studySourceNote(study))}</span></td>
           <td>${escapedLinearMeasure(study.length)}</td>
           <td>${escapedLinearMeasure(study.span)}</td>
           <td>${number(ratio, 2)}</td>

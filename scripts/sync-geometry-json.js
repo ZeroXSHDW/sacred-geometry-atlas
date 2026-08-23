@@ -71,6 +71,7 @@ const readingProfileNote = "Interpretive proportional tendencies, not empirical 
 const readingProfileExportContext = () => `${readingProfileBasis}; ${readingProfileNote}`;
 const studySource = (study) => study.source || "Unattributed proportional model";
 const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
+const studySourceUrl = (study) => study.sourceUrl || "";
 const statusDefinition = (study) => {
   const definitions = payload.schema.statusDefinitions || {};
   return definitions[studyStatus(study)] || "";
@@ -86,7 +87,7 @@ const csvCell = (value) => {
 function staticCsv() {
   const unit = payload.schema.unitSymbol || "m";
   const headers = [
-    "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+    "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note", "Source URL",
     `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
     "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Schema version", "Units", "Schema URL", "Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"
   ];
@@ -110,6 +111,7 @@ function staticCsv() {
       study.churchName || study.name,
       studySource(study),
       studySourceNote(study),
+      studySourceUrl(study),
       fixed(study.length),
       fixed(study.span),
       fixed(study.length / study.span, 2),
@@ -143,7 +145,7 @@ function schemaDocument() {
     ? payload.schema.statusValues.filter((status) => typeof status === "string" && status.trim())
     : [];
   const statusDefinitionProperties = Object.fromEntries(statusValues.map((status) => [status, { type: "string", minLength: 1 }]));
-  const requiredTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "source", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
+  const requiredTextFields = ["id", "index", "name", "shortName", "typology", "place", "era", "emphasis", "type", "churchName", "source", "sourceUrl", "sourceNote", "envelope", "axis", "surfaceNote", "exteriorNote", "interiorNote"];
   const textProperties = Object.fromEntries(requiredTextFields.map((field) => [field, { type: "string", minLength: 1 }]));
   return {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -191,6 +193,7 @@ function schemaDocument() {
         "required": [...requiredTextFields, "status", "length", "span", "height", "bayCount", "module", "radius", "symmetry", "details"],
         "properties": {
           ...textProperties,
+          "sourceUrl": { "type": "string", "format": "uri", "description": "Canonical source page for the named reference building or source note." },
           "status": { "type": "string", "minLength": 1, "enum": statusValues, "description": "Schema-defined evidence label for the study record." },
           "length": { "type": "number", "exclusiveMinimum": 0, "description": "Overall longitudinal dimension in the schema unit." },
           "span": { "type": "number", "exclusiveMinimum": 0, "description": "Overall cross-width dimension in the schema unit." },
@@ -299,15 +302,19 @@ function noScriptFallback() {
     ].filter(Boolean).join(" · ");
     const reading = study.surfaceNote || study.exteriorNote || study.interiorNote || "No interpretive reading supplied.";
     const source = study.source || "Provenance not supplied";
+    const sourceUrl = studySourceUrl(study);
     const sourceNote = study.sourceNote || "Provenance note not supplied";
     const statusLabel = statusDisplayName(studyStatus(study)).toLowerCase();
     const statusDefinitionText = statusDefinitions[studyStatus(study)] || "Data status is not documented.";
     const interactiveRoute = `./${studyRoute}`;
     const interactiveLabel = `Open study ${study.index}, ${study.name} in the interactive Atlas; JavaScript required`;
-    return `          <li id="${escapeHtml(studyRoute.slice(1))}" tabindex="-1"><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong><a class="noscript-study-link" href="${escapeHtml(studyRoute)}" aria-label="Jump to the static record for study ${escapeHtml(study.index)}, ${escapeHtml(study.name)}; interactive drawings require JavaScript" aria-describedby="${escapeHtml(studyMetaId)} ${escapeHtml(studyDerivedId)} ${escapeHtml(studyProvenanceId)} ${escapeHtml(studyReadingId)}">${escapeHtml(study.name)}</a></strong><span class="noscript-record-actions"><a class="noscript-interactive-link" href="${escapeHtml(interactiveRoute)}" aria-label="${escapeHtml(interactiveLabel)}">Open interactive view <span aria-hidden="true">↗</span></a></span><small id="${escapeHtml(studyMetaId)}">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(axisDisplayLabel(study.axis))} · ${escapeHtml(statusLabel)} (${escapeHtml(statusDefinitionText)}) · ${escapeHtml(dimensions)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-derived" id="${escapeHtml(studyDerivedId)}">Readings: ${escapeHtml(readings)}</span><span class="noscript-provenance" id="${escapeHtml(studyProvenanceId)}">Provenance: ${escapeHtml(source)} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading" id="${escapeHtml(studyReadingId)}">Reading: ${escapeHtml(reading)}</span></span></li>`;
+    const sourceMarkup = sourceUrl
+      ? `<a class="noscript-source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)} <span aria-hidden="true">↗</span></a>`
+      : escapeHtml(source);
+    return `          <li id="${escapeHtml(studyRoute.slice(1))}" tabindex="-1"><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong><a class="noscript-study-link" href="${escapeHtml(studyRoute)}" aria-label="Jump to the static record for study ${escapeHtml(study.index)}, ${escapeHtml(study.name)}; interactive drawings require JavaScript" aria-describedby="${escapeHtml(studyMetaId)} ${escapeHtml(studyDerivedId)} ${escapeHtml(studyProvenanceId)} ${escapeHtml(studyReadingId)}">${escapeHtml(study.name)}</a></strong><span class="noscript-record-actions"><a class="noscript-interactive-link" href="${escapeHtml(interactiveRoute)}" aria-label="${escapeHtml(interactiveLabel)}">Open interactive view <span aria-hidden="true">↗</span></a></span><small id="${escapeHtml(studyMetaId)}">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(axisDisplayLabel(study.axis))} · ${escapeHtml(statusLabel)} (${escapeHtml(statusDefinitionText)}) · ${escapeHtml(dimensions)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-derived" id="${escapeHtml(studyDerivedId)}">Readings: ${escapeHtml(readings)}</span><span class="noscript-provenance" id="${escapeHtml(studyProvenanceId)}">Provenance: ${sourceMarkup} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading" id="${escapeHtml(studyReadingId)}">Reading: ${escapeHtml(reading)}</span></span></li>`;
   }).join("\n");
   const intro = hasStudies
-    ? `${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} ${escapeHtml(provenanceLabel)} ${payload.studies.length === 1 ? "study" : "studies"} of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in ${escapeHtml(unitName)}. ${escapeHtml(schemaNote)}.`
+    ? `${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} named churches anchor ${escapeHtml(provenanceLabel)} geometry ${payload.studies.length === 1 ? "study" : "studies"}, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in ${escapeHtml(unitName)}. ${escapeHtml(schemaNote)}.`
     : `No studies are currently available in the church geometry collection. ${escapeHtml(schemaNote)}.`;
   const collection = hasStudies
     ? [
