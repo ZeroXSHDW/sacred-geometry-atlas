@@ -3513,7 +3513,7 @@
     const headers = [
       "ID", "Study", "Typology", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
       `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
-      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Comparison IDs", "Comparison selection context", "Route", "Study route", "Schema version", "Units", "Schema URL", ...profileHeaders, "Sort key", "Sort direction"
     ];
     const rows = visible.map((study) => {
       const floorArea = floorAreaReading(study);
@@ -3556,7 +3556,9 @@
         readingProfile.verticality,
         readingProfile.radiality,
         readingProfile.repetition,
-        readingProfileExportContext()
+        readingProfileExportContext(),
+        state.sort,
+        state.sortDirection
       ];
     });
     return [headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
