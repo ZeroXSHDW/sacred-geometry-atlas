@@ -87,6 +87,12 @@
   const studyStatusDescription = (study) => dataStatusDefinitions()[studyStatus(study)] || "Data status is not documented.";
   const studySource = (study) => study.source || "Unattributed proportional model";
   const studySourceNote = (study) => study.sourceNote || "provenance not supplied";
+  const sentenceText = (value) => {
+    const text = String(value ?? "").trim();
+    return text && /[.!?]$/.test(text) ? text : text ? `${text}.` : "";
+  };
+  const studyStatusDescriptionSentence = (study) => sentenceText(studyStatusDescription(study));
+  const studySourceNoteSentence = (study) => sentenceText(studySourceNote(study));
   const studyShortName = (study) => study.shortName || study.name;
   const studyIdentityLabel = (study, fullName = false) => `Study ${study.index}, ${fullName ? study.name : studyShortName(study)}`;
   function axisDisplayLabel(value) {
@@ -2268,7 +2274,7 @@
     const printRoute = $("#printRoute");
     renderRouteLink(printRoute, ".study-route-link", studyRoutePath(study.id), `Open ${studyIdentityLabel(study)} route in Atlas`);
     $("#activeReference").textContent = `Reference · ${study.churchName || study.name}`;
-    $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNote(study).toLowerCase()}`;
+    $("#activeSource").textContent = `Source · ${studySource(study)} · ${studySourceNoteSentence(study)}`;
     $("#activeIndex").textContent = study.index;
     $("#activeDescription").textContent = studySurfaceReading(study) || "No interpretive reading supplied.";
     $("#analysisReading").textContent = studySurfaceReading(study) || "No interpretive note supplied.";
@@ -2973,8 +2979,8 @@
 
   function comparisonSelectionProvenanceText(selection = []) {
     if (!selection.length) return "";
-    const sourceText = selection.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ");
-    return `Source context: ${sourceText}${/[.!?]$/.test(sourceText.trim()) ? "" : "."}`;
+    const sourceText = selection.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNoteSentence(study)}`).join(" | ");
+    return `Source context: ${sourceText}`;
   }
 
   function comparisonSelectionCsvText(selection = comparisonSelectionExportContext()) {
@@ -2991,8 +2997,9 @@
     ).join(" ");
     const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
     const selected = selectedComparisonStudies();
+    const selectionProvenance = selected.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNoteSentence(study)}`).join(" | ");
     const selection = selected.length
-      ? ` Comparison selection: ${selected.map((study) => `${studyIdentityLabel(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}. Selection provenance: ${selected.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
+      ? ` Comparison selection: ${selected.map((study) => `${studyIdentityLabel(study)} (${studyStatusLabel(study).toLowerCase()})`).join("; ")}. Selection provenance: ${selectionProvenance}`
       : "";
     const profileRecords = selected.length ? selected : records;
     const profileContext = comparisonReadingProfileSummary(profileRecords);
@@ -3146,8 +3153,9 @@
     const records = comparison.length
       ? comparison.map((study) => `${studyIdentityLabel(study)} (${studyAxisLabel(study)}; ${studyStatusLabel(study).toLowerCase()})`).join("; ")
       : "no records";
+    const provenanceText = comparison.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNoteSentence(study)}`).join(" | ");
     const provenance = comparison.length
-      ? ` Sources: ${comparison.map((study) => `${studyIdentityLabel(study)} — ${studySource(study)}; ${studySourceNote(study)}`).join(" | ")}.`
+      ? ` Sources: ${provenanceText}`
       : "";
     const schema = geometrySchema();
     return `Sacred Geometry Atlas. Comparison of ${records}.${provenance}${comparisonReadingProfileSummary(comparison)} Scope: ${scope}. Status definitions: ${statuses || "No documented statuses."} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route.href}`;
@@ -3188,7 +3196,7 @@
     const surface = state.surface === "interior" ? "inside" : "outside";
     const focus = layerFocusLabel();
     const dimensions = `${linearMeasure(study.length)} length × ${linearMeasure(study.span)} span × ${linearMeasure(study.height)} height; ${study.bayCount} bays at ${linearMeasure(study.module)} module; radius ${linearMeasure(study.radius)}; symmetry ${number(study.symmetry, 2)}`;
-    return `${studyIdentityLabel(study, true)} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNote(study)}. Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescription(study)} Dimensions: ${dimensions}. ${readingProfileSummary(study)} ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
+    return `${studyIdentityLabel(study, true)} (${study.churchName || study.name}). ${study.typology} study, ${study.place}, ${study.era}. Axis: ${studyAxisLabel(study)}. ${studySource(study)}; ${studySourceNoteSentence(study)} Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}). Definition: ${studyStatusDescriptionSentence(study)} Dimensions: ${dimensions}. ${readingProfileSummary(study)} ${surface} ${state.mode} view, ${focus}, ${zoomPercent()} zoom. Sacred Geometry Atlas. ${citationUrl.href}`;
   }
 
   async function copyCitation() {
@@ -3229,7 +3237,7 @@
     const schema = geometrySchema();
     const route = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
     const context = contextStudy
-      ? ` Current study context: ${studyIdentityLabel(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNote(contextStudy)}.`
+      ? ` Current study context: ${studyIdentityLabel(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNoteSentence(contextStudy)}`
       : "";
     return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract. Scope: ${catalogScope}; ${recordLabel}.${context} Evidence note: ${methodProvenanceText(records, methodProvenanceSubject(records))} ${readingProfileGuideShareText()} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
   }
@@ -4374,7 +4382,7 @@
     const unitName = geometryUnitName();
     const floorArea = floorAreaReading(study);
     const volume = volumeReading(study);
-    const description = `${surface} ${state.mode} ${studyStatusLabel(study).toLowerCase()} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${studyAxisLabel(study)}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} ${readingProfileSummary(study)} Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}); ${studyStatusDescription(study)} Source: ${studySource(study)}; ${studySourceNote(study)} Reference: ${study.churchName || study.name}. Floor area: ${floorArea.value}; basis: ${floorArea.basis}. Estimated volume: ${volume.value}; basis: ${volume.basis}.`;
+    const description = `${surface} ${state.mode} ${studyStatusLabel(study).toLowerCase()} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${studyAxisLabel(study)}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} ${readingProfileSummary(study)} Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}); ${studyStatusDescriptionSentence(study)} Source: ${studySource(study)}; ${studySourceNoteSentence(study)} Reference: ${study.churchName || study.name}. Floor area: ${floorArea.value}; basis: ${floorArea.basis}. Estimated volume: ${volume.value}; basis: ${volume.basis}.`;
     return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false" lang="en"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path class="dimension-arrow" d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
