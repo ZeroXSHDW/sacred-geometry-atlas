@@ -421,6 +421,11 @@
     return schemaStatusValues().map((status) => `${counts[status] || 0} ${statusDisplayName(status).toLowerCase()}`).join(" · ");
   }
 
+  function exportCompletionScope(records, scope) {
+    const count = records.length;
+    return `Scope: ${scope}; ${count} ${count === 1 ? "study" : "studies"}`;
+  }
+
   function dataStatusDefinitions() {
     const schemaDefinitions = window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions;
     return schemaStatusValues().reduce((definitions, status) => {
@@ -2772,7 +2777,7 @@
       return;
     }
     hideDownloadRecovery();
-    if (status) status.textContent = `Current drawing exported as ${filename}.`;
+    if (status) status.textContent = `Current drawing exported as ${filename}. ${exportCompletionScope([study], `${studyShortName(study)} · ${drawingStateLabel()}`)}.`;
     temporaryButtonFeedback(button, "Exported", "Drawing exported", "SVG", "Export the current drawing as SVG", "drawing-export");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
@@ -2795,7 +2800,7 @@
       return;
     }
     hideDownloadRecovery();
-    if (status) status.textContent = `Active study exported as ${filename}. Data status: ${studyStatusSummary([study])}.`;
+    if (status) status.textContent = `Active study exported as ${filename}. ${exportCompletionScope([study], studyShortName(study))}. Data status: ${studyStatusSummary([study])}.`;
     temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded", "Study JSON", "Download active study as JSON", "study-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
@@ -2873,7 +2878,7 @@
       return;
     }
     hideDownloadRecovery();
-    $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. Data status: ${studyStatusSummary()}.`;
+    $("#downloadStatus").textContent = `Atlas data downloaded as sacred-geometry-atlas.json. ${exportCompletionScope(studies, "full collection")}. Data status: ${studyStatusSummary()}.`;
     temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download data", "Download full atlas data as JSON", "atlas-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
@@ -2900,7 +2905,7 @@
       return;
     }
     hideDownloadRecovery();
-    if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
+    if (status) status.textContent = `Catalog view exported as ${filename}. ${exportCompletionScope(visible, catalogScopeLabel())}. Data status: ${studyStatusSummary(visible)}.`;
     temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON", "Export current catalog view as JSON", "catalog-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
@@ -2926,7 +2931,7 @@
         return;
       }
       hideDownloadRecovery();
-      if (status) status.textContent = `${visible.length} ${visible.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(visible)}.`;
+      if (status) status.textContent = `Catalog CSV exported as ${filename}. ${exportCompletionScope(visible, catalogScopeLabel())}. Data status: ${studyStatusSummary(visible)}.`;
       temporaryButtonFeedback(button, "Exported", "Catalog CSV exported", "CSV", "Export current catalog view as CSV", "catalog-csv-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
@@ -3082,7 +3087,7 @@
       return;
     }
     hideDownloadRecovery();
-    if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
+    if (status) status.textContent = `Comparison CSV exported as ${filename}. ${exportCompletionScope(comparison, comparisonScopeLabel(comparison))}. Data status: ${studyStatusSummary(comparison)}.`;
     temporaryButtonFeedback(button, "Downloaded", "Comparison CSV downloaded", "CSV", "Download comparison data as CSV", "comparison-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
@@ -3109,7 +3114,7 @@
         return;
       }
       hideDownloadRecovery();
-      if (status) status.textContent = `${comparison.length} ${comparison.length === 1 ? "study" : "studies"} exported as ${filename}. Data status: ${studyStatusSummary(comparison)}.`;
+      if (status) status.textContent = `Comparison JSON exported as ${filename}. ${exportCompletionScope(comparison, comparisonScopeLabel(comparison))}. Data status: ${studyStatusSummary(comparison)}.`;
       temporaryButtonFeedback(button, "Downloaded", "Comparison JSON downloaded", "JSON", "Download comparison data as JSON", "comparison-json-download");
     } finally {
       endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);

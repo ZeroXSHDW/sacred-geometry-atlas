@@ -87,6 +87,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Exportable SVG files for the active drawing, preserving the selected surface, view, vector geometry, layer focus, and accessible title/description metadata.
 - Generated study and SVG filenames normalize dataset IDs, so spaces, separators, and punctuation cannot create ambiguous download paths.
 - Download and export actions hold a brief busy state to guard duplicate activation, announce completion through live status feedback, and explain a recovery path when a browser cannot trigger downloads.
+- Generated export completion announcements include the exported record count and the exact catalog or comparison scope, alongside data-status counts, so a download remains identifiable when filenames are not visible.
 - Print-friendly atlas output with a Print sheet action for turning the active study into a readable research sheet; the status definition, schema/unit provenance, and reproducible direct route remain included even when the interactive disclosure is collapsed.
 - Print-ready comparison sheets that preserve the active full-collection or focused comparison, visible provenance context, charts, the complete comparison table, and a reproducible route.
 - A Print view action for the active catalog scope, preserving visible records, filter/sort chips, schema-backed status guidance, and the direct route on a compact research sheet.
