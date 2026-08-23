@@ -138,6 +138,7 @@
           <div><dt>Symmetry index</dt><dd>A normalized 0–1 reading of how closely the plan mirrors itself.</dd></div>
           <div><dt>Floor area reading</dt><dd>Uses a supplied floor-area estimate when available; otherwise it uses length × span. Each record names the basis.</dd></div>
           <div><dt>Estimated volume</dt><dd>An optional estimate; its calculation basis and provenance travel with the record.</dd></div>
+          <div><dt>Reading profile</dt><dd>Four interpretive 0–100 scores: normalized length ÷ span, height ÷ span, a typology cue, and normalized bay count. They describe tendencies, not empirical measurements.</dd></div>
         </dl>
         <div class="noscript-artifact-actions" role="group" aria-label="Open static atlas artifacts">
           <a href="data/geometry.json">Open JSON dataset <span aria-hidden="true">↗</span></a>
@@ -624,7 +625,7 @@
               </div>
               <div class="profile-readout">
                 <div class="profile-heading"><span>reading profile</span><span>0 — 100 · interpretive score</span></div>
-                <p class="profile-note" id="profileNote">These scores describe proportional tendencies, not empirical measurements.</p>
+                <p class="profile-note" id="profileNote">These scores describe proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.</p>
                 <div class="profile-row" id="profileRow" role="list" aria-label="Reading profile scores" aria-describedby="profileNote"></div>
               </div>
             </div>
@@ -752,9 +753,9 @@
               <span class="card-symbol" aria-hidden="true">◌</span>
             </div>
             <div class="profile-compare-head" aria-hidden="true"><span>Study / axis</span><span class="profile-compare-head-grid"><span>Linearity</span><span>Verticality</span><span>Radiality</span><span>Repetition</span></span></div>
-            <div class="profile-compare" id="profileCompare" role="list" aria-label="Interpretive reading profiles; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp profileChartScale"></div>
+            <div class="profile-compare" id="profileCompare" role="list" aria-label="Interpretive reading profiles; each row identifies axis, schema-defined data status, and source provenance." aria-describedby="comparisonStatusHelp profileChartScale profileChartNote"></div>
             <p class="chart-scale" id="profileChartScale">Scale 0 → 100 · interpretive reading score</p>
-            <p class="chart-note">These four scores describe proportional tendencies, not empirical measurements.</p>
+            <p class="chart-note" id="profileChartNote">These four scores describe proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.</p>
           </div>
         </div>
 
@@ -950,7 +951,7 @@
             </div>
             <div class="method-reading-item">
               <dt>Reading profile</dt>
-              <dd>Four interpretive 0–100 scores for linearity, verticality, radiality, and repetition—not empirical measurements.</dd>
+              <dd>Four interpretive 0–100 scores. Linearity and verticality follow normalized length ÷ span and height ÷ span; radiality follows a typology cue; repetition follows normalized bay count. They describe proportional tendencies, not empirical measurements.</dd>
             </div>
           </dl>
         </section>
