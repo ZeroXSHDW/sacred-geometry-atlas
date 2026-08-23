@@ -29,6 +29,7 @@ jobs:
           node --check app.js
           node --check data/geometry.js
           node --check scripts/sync-geometry-json.js
+          python3 -m py_compile scripts/verify-pages-artifact.py
           node scripts/sync-geometry-json.js --check
           test -s index.html
           test -s 404.html
@@ -37,6 +38,7 @@ jobs:
           test -s data/geometry.csv
           test -s data/geometry.schema.json
           test -s scripts/sync-geometry-json.js
+          test -s scripts/verify-pages-artifact.py
           test -f .nojekyll
           test -s og.png
           test -s favicon.svg
@@ -106,6 +108,7 @@ jobs:
           const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
           const readme = fs.readFileSync('README.md', 'utf8');
           const workflow = fs.readFileSync('.github/workflows/pages.yml', 'utf8');
+          const pagesVerifier = fs.readFileSync('scripts/verify-pages-artifact.py', 'utf8');
           if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
           const structuredDataMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
           if (!structuredDataMatch) throw new Error('Missing collection JSON-LD metadata');
@@ -148,8 +151,11 @@ jobs:
           for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Method guide; clipboard', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
-          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify deployed site metadata', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>']) {
+          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify curated Pages artifact', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
+          }
+          for (const token of ['PAGES_BASE_URL', 'json.loads', 'csv.DictReader', 'Published CSV route is not direct and deterministic', 'Published JSON Schema does not match the stamped dataset contract']) {
+            if (!pagesVerifier.includes(token)) throw new Error(`Pages artifact contract verification is incomplete: ${token}`);
           }
           if (!workflow.includes("permissions:\n  contents: read\n\nconcurrency:") || !workflow.includes("  deploy:\n    needs: validate\n    if: github.event_name != 'pull_request'\n    permissions:\n      contents: read\n      pages: write\n      id-token: write")) throw new Error('Pages write and OIDC permissions must be scoped to the deploy job');
           if (!workflow.includes('      - name: Prepare Pages artifact') || !workflow.includes('site = Path("_site")') || !workflow.includes('path: "_site"') || workflow.includes('\n          path: "."') || !workflow.includes('custom_domain = Path("CNAME")') || !workflow.includes('expected.add("CNAME")') || !workflow.includes('expected_files.add("CNAME")')) throw new Error('Pages deployment must upload a curated public-site artifact and preserve an optional CNAME');
@@ -3842,83 +3848,11 @@ jobs:
           sitemap.write_text(sitemap_source)
           print(f"Stamped absolute Pages metadata and crawl URLs for {base_url}")
           PY
-      - name: Verify deployed site metadata
+      - name: Verify curated Pages artifact
         env:
           PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
         run: |
-          python3 - <<'PY'
-          import os
-          from pathlib import Path
-
-          base_url = os.environ["PAGES_BASE_URL"].rstrip("/") + "/"
-          site = Path("_site")
-          expected_files = {
-              ".nojekyll",
-              "404.html",
-              "app.js",
-              "favicon.svg",
-              "index.html",
-              "og.png",
-              "robots.txt",
-              "sitemap.xml",
-              "styles.css",
-              "data/geometry.csv",
-              "data/geometry.js",
-              "data/geometry.json",
-              "data/geometry.schema.json",
-          }
-          custom_domain = Path("CNAME")
-          if custom_domain.is_file():
-              expected_files.add("CNAME")
-          actual_files = {path.relative_to(site).as_posix() for path in site.rglob("*") if path.is_file()}
-          if actual_files != expected_files:
-              raise SystemExit(f"Published artifact contains unexpected files: {sorted(actual_files)}")
-          if custom_domain.is_file() and (site / "CNAME").read_text() != custom_domain.read_text():
-              raise SystemExit("Published custom-domain CNAME does not match the repository CNAME")
-          page = (site / "index.html").read_text()
-          not_found = (site / "404.html").read_text()
-          robots = (site / "robots.txt").read_text()
-          sitemap = (site / "sitemap.xml").read_text()
-          dataset = (site / "data/geometry.json").read_text()
-          csv = (site / "data/geometry.csv").read_text()
-          schema = (site / "data/geometry.schema.json").read_text()
-          expected = [
-              f'<link rel="canonical" href="{base_url}" />',
-              f'<meta property="og:url" content="{base_url}" />',
-              f'<meta property="og:image" content="{base_url}og.png" />',
-              f'<meta name="twitter:image" content="{base_url}og.png" />',
-              f'"@id": "{base_url}data/geometry.json"',
-              f'"contentUrl": "{base_url}data/geometry.json"',
-              f'"contentUrl": "{base_url}data/geometry.csv"',
-              f'"contentUrl": "{base_url}data/geometry.schema.json"',
-              f'Sitemap: {base_url}sitemap.xml',
-              f'<loc>{base_url}</loc>',
-              f'<loc>{base_url}data/geometry.json</loc>',
-              f'<loc>{base_url}data/geometry.csv</loc>',
-              f'<loc>{base_url}data/geometry.schema.json</loc>',
-          ]
-          missing = [token for token in expected[:8] if token not in page]
-          missing.extend(token for token in expected[8:] if token not in (robots + sitemap))
-          expected_artifacts = [
-              f'"schemaUrl": "{base_url}data/geometry.schema.json"',
-              f'"{base_url}data/geometry.schema.json"',
-              f'"$id": "{base_url}data/geometry.schema.json"',
-              f'"const": "{base_url}data/geometry.schema.json"',
-          ]
-          missing.extend(token for token in expected_artifacts[:1] if token not in dataset)
-          missing.extend(token for token in expected_artifacts[1:2] if token not in csv)
-          missing.extend(token for token in expected_artifacts[2:] if token not in schema)
-          expected_404 = [
-              f'<a class="home-link" data-site-root href="{base_url}">',
-              f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
-              f'<a class="home-link home-link-secondary" data-site-csv href="{base_url}data/geometry.csv">',
-              f'<a class="home-link home-link-secondary" data-site-schema href="{base_url}data/geometry.schema.json">',
-          ]
-          missing.extend(token for token in expected_404 if token not in not_found)
-          if missing:
-              raise SystemExit("Deployed metadata is incomplete: " + ", ".join(missing))
-          print("Absolute Pages metadata verified.")
-          PY
+          python3 scripts/verify-pages-artifact.py
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
