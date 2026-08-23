@@ -2943,7 +2943,12 @@
       schema: window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" },
       schemaUrl: publishedGeometrySchemaUrl(),
       provenance: exportProvenance(studies, "full collection"),
-      studies
+      studies,
+      records: studies.map((study) => ({
+        study,
+        studyRoute: studyRouteUrl(study.id).href,
+        derived: derivedStudyReadings(study)
+      }))
     };
   }
 
