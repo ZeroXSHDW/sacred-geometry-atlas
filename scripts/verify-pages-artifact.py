@@ -99,6 +99,7 @@ expected_page = [
     f'"contentUrl": "{base_url}data/geometry.json"',
     f'"contentUrl": "{base_url}data/geometry.csv"',
     f'"contentUrl": "{schema_target}"',
+    '<link rel="alternate" type="text/html" title="Sacred Geometry Atlas static collection" href="static.html" />',
 ]
 missing = [token for token in expected_page if token not in page]
 missing.extend(token for token in [

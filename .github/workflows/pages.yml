@@ -164,11 +164,13 @@ jobs:
             'name="apple-mobile-web-app-title" content="Geometry Atlas"',
             'rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json"',
             'rel="alternate" type="text/csv" title="Sacred Geometry Atlas dataset as CSV" href="data/geometry.csv"',
-            'rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json"'
+            'rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json"',
+            'rel="alternate" type="text/html" title="Sacred Geometry Atlas static collection" href="static.html"'
           ];
           for (const token of requiredMetadata) {
             if (!html.includes(token)) throw new Error(`Missing metadata: ${token}`);
           }
+          if (!html.includes('href="static.html">Open the static index')) throw new Error('The landing view must expose the script-free collection as a first-viewport research route');
           if (!styles.includes('-webkit-text-size-adjust: 100%;') || !styles.includes('text-size-adjust: 100%;') || !notFound.includes('-webkit-text-size-adjust: 100%;') || !notFound.includes('text-size-adjust: 100%;')) throw new Error('Mobile pages must stabilize text sizing without disabling user zoom');
           for (const token of ['icons/atlas-180.png', 'icons/atlas-192.png', 'icons/atlas-512.png', 'icons/atlas-maskable.svg', '180px', '192px', '512px', 'Install Atlas', 'Refresh Atlas']) {
             if (!readme.includes(token)) throw new Error('GitHub Pages publishing guide is missing install icon documentation: ' + token);
