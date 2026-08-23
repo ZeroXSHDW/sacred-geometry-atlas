@@ -760,6 +760,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .compare-selection-chip:hover { border-color: var(--coral); color: var(--ink); background: rgba(231, 127, 98, 0.08); }
 .compare-selection-study-link { display: inline-flex; min-width: 0; flex: 1 1 auto; align-items: center; gap: 0.55rem; padding: 0.42rem 0.55rem 0.42rem 0.65rem; color: inherit; text-decoration: none; }
 .compare-selection-study-link:hover { color: var(--ink); }
+.compare-selection-chip-index { flex: 0 0 auto; color: var(--amber); font-size: 0.52rem; letter-spacing: 0.05em; }
 .compare-selection-chip-name { overflow: hidden; max-width: 22ch; text-overflow: ellipsis; white-space: nowrap; }
 .compare-selection-chip-axis { flex: 0 0 auto; color: var(--teal); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
 .compare-selection-chip-status { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.24rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
@@ -804,7 +805,9 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .bar-label { display: grid; min-width: 0; align-content: center; gap: 0.14rem; overflow: hidden; color: var(--ink-soft); font-size: 0.65rem; }
 .bar-row.is-active .bar-label,
 .module-row.is-active .module-name { color: var(--ink); }
-.chart-study-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chart-study-name { display: flex; min-width: 0; align-items: baseline; gap: 0.35rem; overflow: hidden; }
+.chart-study-index { flex: 0 0 auto; color: var(--amber); font-family: var(--mono); font-size: 0.72em; letter-spacing: 0.05em; }
+.chart-study-name-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .chart-study-meta { display: flex; min-width: 0; align-items: center; gap: 0.3rem; overflow: hidden; }
 .chart-axis-context { min-width: 0; overflow: hidden; color: var(--ink-muted); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.03em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
 .chart-status { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.22rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
@@ -1382,6 +1385,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-selection-chip-axis { color: ButtonText; }
   .compare-selection-chip-remove span { color: ButtonText; }
   .compare-selection-chip span:last-child { color: ButtonText; }
+  .compare-selection-chip-index,
+  .chart-study-index { color: Highlight; }
   .compare-study-open { color: Highlight; }
   .compare-study-card.is-active { border-color: Highlight; box-shadow: inset 3px 0 0 Highlight; }
   .compare-study-card.is-active .compare-study-open { color: Highlight; }
