@@ -355,6 +355,10 @@ function staticFallbackDocument(source) {
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="site.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-180.png" />
+    <meta name="application-name" content="Sacred Geometry Atlas" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Geometry Atlas" />
     <link rel="alternate" type="application/json" title="Sacred Geometry Atlas dataset" href="data/geometry.json" />
     <link rel="alternate" type="text/csv" title="Sacred Geometry Atlas dataset as CSV" href="data/geometry.csv" />
     <link rel="alternate" type="application/schema+json" title="Sacred Geometry Atlas data schema" href="data/geometry.schema.json" />
