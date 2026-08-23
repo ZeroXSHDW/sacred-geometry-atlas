@@ -328,6 +328,12 @@
       }
       applyMode(followingMode, `${modeLabel(followingMode)} color theme enabled.`);
     });
+    const syncTheme = (event) => {
+      if (!event || event.key !== THEME_STORAGE_KEY) return;
+      const syncedMode = normalizeMode(event.newValue);
+      applyMode(syncedMode, `${modeLabel(syncedMode)} color theme synced from another Atlas tab.`);
+    };
+    if (typeof window.addEventListener === "function") window.addEventListener("storage", syncTheme);
     if (mediaQuery) {
       const followSystem = () => {
         if (currentMode() !== "system") return;
