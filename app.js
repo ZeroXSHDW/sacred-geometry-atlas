@@ -1191,11 +1191,11 @@
     if (!target) return;
     const filters = [];
     if (state.query) filters.push({ key: "query", label: `Search: “${state.query}”` });
-    if (state.filter !== "all") filters.push({ key: "filter", label: $("#filterSelect").selectedOptions[0].textContent });
-    if (state.filterPlace !== "all") filters.push({ key: "place", label: $("#filterPlace").selectedOptions[0].textContent });
-    if (state.filterEra !== "all") filters.push({ key: "era", label: $("#filterEra").selectedOptions[0].textContent });
-    if (state.filterAxis !== "all") filters.push({ key: "axis", label: $("#filterAxis").selectedOptions[0].textContent });
-    if (state.filterStatus !== "all") filters.push({ key: "status", label: $("#filterStatus").selectedOptions[0].textContent });
+    if (state.filter !== "all") filters.push({ key: "filter", label: `Typology: ${$("#filterSelect").selectedOptions[0].textContent}` });
+    if (state.filterPlace !== "all") filters.push({ key: "place", label: `Location: ${$("#filterPlace").selectedOptions[0].textContent}` });
+    if (state.filterEra !== "all") filters.push({ key: "era", label: `Era: ${$("#filterEra").selectedOptions[0].textContent}` });
+    if (state.filterAxis !== "all") filters.push({ key: "axis", label: `Axis: ${$("#filterAxis").selectedOptions[0].textContent}` });
+    if (state.filterStatus !== "all") filters.push({ key: "status", label: `Data status: ${$("#filterStatus").selectedOptions[0].textContent}` });
     if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${$("#sortSelect").selectedOptions[0].textContent}` });
     target.hidden = filters.length === 0;
     target.innerHTML = filters.length
