@@ -1336,6 +1336,7 @@
     $("#downloadData").addEventListener("click", downloadData);
     $("#downloadCsvData").addEventListener("click", downloadCsvData);
     $("#downloadStudy").addEventListener("click", downloadStudy);
+    $("#downloadStudyCsv").addEventListener("click", downloadStudyCsv);
     $("#downloadCatalogView").addEventListener("click", downloadCatalogView);
     $("#downloadCatalogCsv").addEventListener("click", downloadCatalogCsv);
     $("#downloadComparison").addEventListener("click", downloadComparisonCsv);
@@ -3570,6 +3571,31 @@
     }
   }
 
+  function downloadStudyCsv() {
+    const study = activeStudy();
+    const status = $("#studyCsvDownloadStatus");
+    const button = $("#downloadStudyCsv");
+    hideDownloadRecovery();
+    if (!study || !beginAsyncAction(button)) return;
+    try {
+      const filename = `${safeDownloadPart(study.id)}-sacred-geometry-study.csv`;
+      const downloaded = triggerDownload(filename, `\uFEFF${activeStudyCsvPayload(study)}`, "text/csv;charset=utf-8");
+      if (!downloaded) {
+        if (status) status.textContent = "Study CSV download is unavailable in this browser. Use the static dataset link instead.";
+        showDownloadRecovery("The study CSV export was blocked. Use Print sheet to preserve the current view, or open the static dataset.", "#downloadStudyCsv", {
+          href: studyRoutePath(study.id),
+          label: "Open active study route"
+        });
+        return;
+      }
+      hideDownloadRecovery();
+      if (status) status.textContent = `Active study CSV exported as ${filename}. ${exportCompletionScope([study], studyShortName(study))}. Data status: ${studyStatusSummary([study])}.`;
+      temporaryButtonFeedback(button, "Downloaded", "Study CSV downloaded", "Study CSV", "Download active study as CSV", "study-csv-download");
+    } finally {
+      endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS);
+    }
+  }
+
   function activeStudyExportPayload(study) {
     const shareUrl = studyRouteUrl(study.id);
     return {
@@ -3588,6 +3614,67 @@
       derived: derivedStudyReadings(study),
       study
     };
+  }
+
+  function activeStudyCsvPayload(study) {
+    const route = studyRouteUrl(study.id).href;
+    const scope = "active study";
+    const schema = window.CHURCH_GEOMETRY_SCHEMA || { version: "1.1", units: "meters" };
+    const statusDefinitions = dataStatusDefinitions();
+    const unit = geometryUnitSymbol();
+    const schemaUrl = publishedGeometrySchemaUrl();
+    const profileHeaders = ["Linearity profile (0–100)", "Verticality profile (0–100)", "Radiality profile (0–100)", "Repetition profile (0–100)", "Reading profile basis"];
+    const headers = [
+      "ID", "Study", "Typology", "Index", "Place", "Era", "Axis", "Status", "Status definition", "Reference", "Source", "Source note",
+      `Length (${unit})`, `Span (${unit})`, "Length / span", `Height (${unit})`, "Height / span",
+      "Bay count", `Module (${unit})`, `Radius (${unit})`, `Floor area estimate (${unit}²)`, "Floor area basis", `Volume estimate (${unit}³)`, "Volume basis", "Symmetry index", "Scope", "Route", "Study route", "View surface", "View mode", "Layer focus", "Zoom", "Schema version", "Units", "Schema URL", ...profileHeaders
+    ];
+    const floorArea = floorAreaReading(study);
+    const volume = volumeReading(study);
+    const readingProfile = Object.fromEntries(profileScores(study));
+    const row = [
+      study.id,
+      studyShortName(study),
+      study.typology,
+      study.index,
+      study.place,
+      study.era,
+      study.axis,
+      studyStatus(study),
+      statusDefinitions[studyStatus(study)] || "",
+      study.churchName || study.name,
+      studySource(study),
+      studySourceNote(study),
+      number(study.length),
+      number(study.span),
+      number(study.length / study.span, 2),
+      number(study.height),
+      number(study.height / study.span, 2),
+      study.bayCount,
+      number(study.module),
+      number(study.radius),
+      floorArea.numeric !== null ? number(floorArea.numeric, 0) : "",
+      floorArea.basis,
+      volume.numeric !== null ? number(volume.numeric, 0) : "",
+      volume.basis,
+      number(study.symmetry, 2),
+      scope,
+      route,
+      route,
+      state.surface,
+      state.mode,
+      state.layer,
+      state.zoom,
+      schema.version,
+      schema.units,
+      schemaUrl,
+      readingProfile.linearity,
+      readingProfile.verticality,
+      readingProfile.radiality,
+      readingProfile.repetition,
+      readingProfileExportContext()
+    ];
+    return [headers, row].map((record) => record.map(csvCell).join(",")).join("\r\n") + "\r\n";
   }
 
   function fullAtlasExportPayload() {

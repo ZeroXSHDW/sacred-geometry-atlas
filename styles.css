@@ -1226,11 +1226,13 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   #shareStudy span.study-action-label::after { content: "Share"; font-size: 0.5rem; }
   #copyCitation span.study-action-label::after { content: "Cite"; font-size: 0.5rem; }
   #downloadStudy span.study-action-label::after { content: "JSON"; font-size: 0.5rem; }
+  #downloadStudyCsv span.study-action-label::after { content: "CSV"; font-size: 0.5rem; }
   #printStudy span.study-action-label::after { content: "Print"; font-size: 0.5rem; }
   #shareStudy.is-copied span.study-action-label::after,
   #shareStudy.is-complete:not(.is-unavailable) span.study-action-label::after,
   #copyCitation.is-copied span.study-action-label::after,
-  #downloadStudy.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
+  #downloadStudy.is-complete:not(.is-unavailable) span.study-action-label::after,
+  #downloadStudyCsv.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
   #printStudy.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
   #printStudy.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }
   .download-button span.download-label { display: inline; font-size: 0; }
