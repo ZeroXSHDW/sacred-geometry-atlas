@@ -288,8 +288,39 @@
     }
   }
 
+  function setupConnectionStatus() {
+    const status = $("#connectionStatus");
+    const message = $("#connectionStatusText");
+    if (!status || !message || typeof window === "undefined" || typeof window.addEventListener !== "function") return;
+    let recoveryTimer;
+    const clearRecoveryTimer = () => {
+      if (recoveryTimer && typeof window.clearTimeout === "function") window.clearTimeout(recoveryTimer);
+      recoveryTimer = null;
+    };
+    const showOffline = () => {
+      clearRecoveryTimer();
+      message.textContent = "Offline mode · cached Atlas shell and data are available.";
+      status.hidden = false;
+    };
+    const hideStatus = () => {
+      clearRecoveryTimer();
+      status.hidden = true;
+    };
+    const showOnline = () => {
+      clearRecoveryTimer();
+      message.textContent = "Back online · fresh content will be used for the next request.";
+      status.hidden = false;
+      if (typeof window.setTimeout === "function") recoveryTimer = window.setTimeout(hideStatus, 4200);
+      else status.hidden = true;
+    };
+    window.addEventListener("offline", showOffline);
+    window.addEventListener("online", showOnline);
+    if (typeof navigator !== "undefined" && navigator.onLine === false) showOffline();
+  }
+
   function init() {
     registerServiceWorker();
+    setupConnectionStatus();
     if (dataIssue) {
       document.body.classList.remove("no-js");
       document.body.classList.add("data-error-state");

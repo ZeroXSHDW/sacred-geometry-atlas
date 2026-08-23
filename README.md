@@ -110,6 +110,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - A repository-relative `site.webmanifest` gives compatible browsers a standalone, dark-themed Geometry Atlas identity without adding a build step or server dependency.
 - A network-first [`sw.js`](sw.js) offline shell keeps the Atlas, data artifacts, and recovery page available after a successful visit while preferring fresh network content when connectivity returns.
+- An accessible connection notice announces offline mode and the return to connectivity without competing with the drawing or print surfaces.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
 - A GitHub Actions workflow at `.github/workflows/pages.yml` with static, accessibility, local-fragment, HTML-resource, 404-reference, and geometry-schema validation on pull requests and before GitHub Pages deployment.
