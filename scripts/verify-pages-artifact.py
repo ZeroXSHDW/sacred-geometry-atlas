@@ -87,6 +87,7 @@ missing.extend(token for token in [
     f'<a class="home-link home-link-secondary" data-site-dataset href="{base_url}data/geometry.json">',
     f'<a class="home-link home-link-secondary" data-site-csv href="{base_url}data/geometry.csv">',
     f'<a class="home-link home-link-secondary" data-site-schema href="{schema_target}">',
+    f'<link rel="icon" id="site-favicon" href="{base_url}favicon.svg" type="image/svg+xml" />',
     f'<link rel="manifest" id="site-manifest" href="{base_url}site.webmanifest" />',
     f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{base_url}icons/atlas-192.png" />',
     '<meta name="application-name" content="Sacred Geometry Atlas" />',

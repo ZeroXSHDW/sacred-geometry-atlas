@@ -4537,6 +4537,7 @@ jobs:
               '<a class="home-link home-link-secondary" data-site-dataset href="data/geometry.json">': f'<a class="home-link home-link-secondary" data-site-dataset href="{html.escape(base_url + "data/geometry.json", quote=True)}">',
               '<a class="home-link home-link-secondary" data-site-csv href="data/geometry.csv">': f'<a class="home-link home-link-secondary" data-site-csv href="{html.escape(base_url + "data/geometry.csv", quote=True)}">',
               '<a class="home-link home-link-secondary" data-site-schema href="data/geometry.schema.json">': f'<a class="home-link home-link-secondary" data-site-schema href="{schema_url}">',
+              '<link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />': f'<link rel="icon" id="site-favicon" href="{html.escape(base_url + "favicon.svg", quote=True)}" type="image/svg+xml" />',
               '<link rel="manifest" id="site-manifest" href="site.webmanifest" />': f'<link rel="manifest" id="site-manifest" href="{html.escape(base_url + "site.webmanifest", quote=True)}" />',
               '<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="icons/atlas-192.png" />': f'<link rel="apple-touch-icon" id="site-apple-touch-icon" sizes="180x180" href="{html.escape(base_url + "icons/atlas-192.png", quote=True)}" />',
           }
