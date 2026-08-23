@@ -138,6 +138,8 @@ static_required = [
     '<section class="noscript-method" aria-labelledby="noscript-method-heading">',
     '<a class="nav-button" href="./">Interactive atlas</a>',
     '<a class="nav-button is-active" href="#noscript-heading" aria-current="page">Collection</a>',
+    '<a class="noscript-interactive-link" href="./#atlas/basilica/plan/exterior/all"',
+    '>Open interactive view',
     'href="data/geometry.json"',
     'href="data/geometry.csv"',
     'href="data/geometry.schema.json"',
