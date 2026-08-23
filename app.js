@@ -154,6 +154,7 @@
   let catalogCitationResetTimer;
   let comparisonCitationResetTimer;
   let methodShareResetTimer;
+  let methodCitationResetTimer;
   let downloadRecoveryFocusTarget = "";
   let lastCatalogStatus = "";
   let lastCatalogStatusFilter = null;
@@ -753,7 +754,11 @@
 
   function methodNavigationUrl() {
     const url = applyCatalogRouteState(new URL(window.location.href), true);
-    const study = activeStudy();
+    const route = parseRoute();
+    const contextStudy = route.page === "method" && route.contextStudyId
+      ? studies.find((candidate) => candidate.id === route.contextStudyId)
+      : null;
+    const study = contextStudy || activeStudy();
     url.hash = routeHash("method", Boolean(study), study ? study.id : null);
     return `${url.pathname}${url.search}${url.hash}`;
   }
@@ -1076,6 +1081,7 @@
     $("#shareStudy").addEventListener("click", shareStudy);
     $("#shareCatalog").addEventListener("click", shareCatalog);
     $("#shareMethod").addEventListener("click", shareMethod);
+    $("#copyMethodCitation").addEventListener("click", copyMethodCitation);
     $("#copyCatalogCitation").addEventListener("click", copyCatalogCitation);
     $("#shareCompare").addEventListener("click", shareComparison);
     $("#copyCitation").addEventListener("click", copyCitation);
@@ -1345,7 +1351,8 @@
     "#studyRouteFallback": "#copyStudyRoute",
     "#comparisonRouteFallback": "#copyComparisonRoute",
     "#methodRouteFallback": "#copyMethodRoute",
-    "#methodShareFallback": "#shareMethod"
+    "#methodShareFallback": "#shareMethod",
+    "#methodCitationFallback": "#copyMethodCitation"
   };
   const manualCopyFallbackSelectors = Object.keys(manualCopyFallbackControls);
 
@@ -2770,6 +2777,46 @@
         status.textContent = fallbackShown
           ? "Copying was unavailable. The citation is shown below for manual copying."
           : "Copying was unavailable. You can copy the citation from the study details.";
+      }
+    } finally {
+      endAsyncAction(button);
+    }
+  }
+
+  function methodCitationText() {
+    const contextStudy = methodContextStudy();
+    const schema = geometrySchema();
+    const route = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
+    const context = contextStudy
+      ? ` Current study context: ${studyShortName(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNote(contextStudy)}.`
+      : "";
+    return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract.${context} Evidence note: ${collectionProvenanceNote()} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
+  }
+
+  async function copyMethodCitation() {
+    const button = $("#copyMethodCitation");
+    const status = $("#methodCitationStatus");
+    if (!button || !status || !beginAsyncAction(button)) return;
+    try {
+      hideManualCopyFallbacks();
+      const contextStudy = methodContextStudy();
+      const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
+      const citation = methodCitationText();
+      const copied = await copyText(citation);
+      if (copied) {
+        button.classList.add("is-copied");
+        setButtonFeedback(button, "Citation copied", `Method citation copied: ${scope}`);
+        status.textContent = `Method guide citation for ${scope} copied.`;
+        window.clearTimeout(methodCitationResetTimer);
+        methodCitationResetTimer = window.setTimeout(() => {
+          button.classList.remove("is-copied");
+          setButtonFeedback(button, "Cite guide", "Copy a citation for the Method guide");
+        }, 2200);
+      } else {
+        const fallbackShown = revealManualCopyFallback("#methodCitationFallback", "#methodCitationFallbackText", citation);
+        status.textContent = fallbackShown
+          ? "Copying was unavailable. The Method citation is shown below for manual copying."
+          : "Copying was unavailable. You can copy the Method citation from the guide details.";
       }
     } finally {
       endAsyncAction(button);

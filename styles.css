@@ -388,6 +388,7 @@ h3 { letter-spacing: -0.04em; }
 .section-heading-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 0.7rem; }
 .section-heading-actions .section-note { margin-bottom: 0; }
 .method-return-button { white-space: nowrap; }
+.method-citation-button { white-space: nowrap; }
 .method-print-button { white-space: nowrap; }
 
 .atlas-layout { display: grid; grid-template-columns: minmax(220px, 288px) 1fr; gap: clamp(2.1rem, 5vw, 5.5rem); }
@@ -1123,7 +1124,18 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-intro-side .compare-share-button.is-unavailable span:last-child::after,
   .compare-intro-side .compare-citation-button.is-unavailable span:last-child::after,
   .compare-intro-side .compare-print-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
-  .method-return-button span:last-child { display: inline; }
+  .method-return-button span:last-child,
+  .method-share-button span:last-child,
+  .method-citation-button span:last-child,
+  .method-print-button span:last-child { display: inline; font-size: 0; white-space: nowrap; }
+  .method-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }
+  .method-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }
+  .method-print-button span:last-child::after { content: "Print"; font-size: 0.5rem; }
+  .method-share-button.is-copied span:last-child::after,
+  .method-share-button.is-complete:not(.is-unavailable) span:last-child::after,
+  .method-citation-button.is-copied span:last-child::after,
+  .method-print-button.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .method-print-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
   .drawing-scale { flex: 0 0 100%; }
   .compare-tray { align-items: start; flex-direction: column; }
@@ -1489,6 +1501,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-view,
   .method-return-button,
   .method-share-button,
+  .method-citation-button,
   .method-print-button,
   .visual-empty-state,
   .route-copy-button { display: none !important; }

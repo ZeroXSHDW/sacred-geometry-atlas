@@ -813,6 +813,10 @@
               <span aria-hidden="true">↗</span>
               <span>Share guide</span>
             </button>
+            <button class="share-button method-citation-button" id="copyMethodCitation" type="button" aria-label="Copy a citation for the Method guide" aria-controls="methodCitationFallback" aria-expanded="false" title="Copy a citation for the Method guide">
+              <span aria-hidden="true">⧉</span>
+              <span>Cite guide</span>
+            </button>
             <button class="share-button method-print-button" id="printMethod" type="button" aria-label="Print method guide" title="Print method guide">
               <span aria-hidden="true">⎙</span>
               <span>Print guide</span>
@@ -838,6 +842,15 @@
           </div>
           <textarea id="methodShareFallbackText" rows="4" readonly aria-label="Method share message and link" aria-describedby="methodShareFallbackHint"></textarea>
           <p class="manual-copy-fallback-hint" id="methodShareFallbackHint">The guide message and route are selected for copying.</p>
+        </div>
+        <span class="sr-only" id="methodCitationStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+        <div class="manual-copy-fallback" id="methodCitationFallback" role="region" aria-labelledby="methodCitationFallbackHeading" hidden>
+          <div class="manual-copy-fallback-heading-row">
+            <p class="manual-copy-fallback-heading" id="methodCitationFallbackHeading">Copy this Method citation manually</p>
+            <button class="manual-copy-fallback-dismiss" data-dismiss-fallback="methodCitationFallback" type="button" aria-label="Hide Method citation manual-copy field" title="Hide manual-copy field">Hide</button>
+          </div>
+          <textarea id="methodCitationFallbackText" rows="5" readonly aria-label="Method citation" aria-describedby="methodCitationFallbackHint"></textarea>
+          <p class="manual-copy-fallback-hint" id="methodCitationFallbackHint">The citation is selected for copying.</p>
         </div>
 
         <div class="method-hero">
