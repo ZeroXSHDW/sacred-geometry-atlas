@@ -355,14 +355,22 @@
     if (target) target.textContent = atlasSchemaNoteText();
   }
 
-  function methodProvenanceText(records = studies) {
+  function methodProvenanceText(records = studies, subject = "The current collection") {
     const counts = studyStatusCounts(records);
     const activeStatuses = schemaStatusValues().filter((status) => counts[status] > 0);
-    if (activeStatuses.length === 2 && counts.schematic && counts.measured) return "The collection mixes schematic proportional studies and source-supported dimensions. Use each record's status and provenance note to distinguish them.";
-    if (activeStatuses.length === 1 && counts.measured) return "The current collection uses source-supported dimensions. Each record carries a status and provenance note so its evidence can be identified.";
-    if (activeStatuses.length === 1 && counts.schematic) return `${collectionProvenanceNote()} Each record carries a status and provenance note.`;
+    if (activeStatuses.length === 2 && counts.schematic && counts.measured) {
+      const mixedSubject = subject === "The current collection" ? "The collection" : subject;
+      return `${mixedSubject} mixes schematic proportional studies and source-supported dimensions. Use each record's status and provenance note to distinguish them.`;
+    }
+    if (activeStatuses.length === 1 && counts.measured) return `${subject} uses source-supported dimensions. Each record carries a status and provenance note so its evidence can be identified.`;
+    if (activeStatuses.length === 1 && counts.schematic) {
+      const note = collectionProvenanceNote();
+      return subject === "The current collection"
+        ? `${note} Each record carries a status and provenance note.`
+        : `${subject} uses schematic proportional studies. Collection note: ${note} Each record carries a status and provenance note.`;
+    }
     const labels = activeStatuses.map((status) => `${statusDisplayName(status).toLowerCase()} records`).join(" and ");
-    return `The current collection uses ${labels || "records without a documented status"}. Each record carries a status and provenance note so its evidence can be identified.`;
+    return `${subject} uses ${labels || "records without a documented status"}. Each record carries a status and provenance note so its evidence can be identified.`;
   }
 
   function methodReadingsIntroText(records = studies) {
@@ -398,12 +406,27 @@
       : `<p class="method-status-key-empty">No data-status definitions are published for this collection.</p>`;
   }
 
-  function renderMethodProvenance() {
+  function methodScopeNote(records = visibleStudies()) {
+    const scope = catalogScopeLabel();
+    if (scope === "the full collection") return "";
+    const recordLabel = records.length === 1 ? "record" : "records";
+    return `Atlas scope · ${scope} · ${records.length} ${recordLabel}`;
+  }
+
+  function methodProvenanceSubject(records = studies) {
+    const scope = catalogScopeLabel();
+    return scope === "the full collection"
+      ? "The current collection"
+      : `The current Atlas scope (${scope})`;
+  }
+
+  function renderMethodProvenance(records = studies) {
+    const subject = methodProvenanceSubject(records);
     const target = $("#methodProvenanceNote");
-    if (target) target.textContent = methodProvenanceText();
+    if (target) target.textContent = methodProvenanceText(records, subject);
     const intro = $("#methodReadingsIntro");
-    if (intro) intro.textContent = methodReadingsIntroText();
-    renderMethodStatusKey();
+    if (intro) intro.textContent = methodReadingsIntroText(records);
+    renderMethodStatusKey(records);
   }
 
   function studyStatusCounts(records = studies) {
@@ -1808,10 +1831,12 @@
     }
     updateDocumentTitle("atlas");
     updateCompareTray();
+    renderMethodProvenance(visible);
   }
 
   function renderAll() {
     renderList();
+    renderMethodProvenance(visibleStudies());
     renderStudy();
     renderControls();
     renderDrawing();
@@ -2031,14 +2056,16 @@
     if (!target) return;
     const route = parseRoute();
     const hasContext = Boolean(study && route.page === "method" && route.contextStudyId === study.id);
+    const scopeNote = methodScopeNote(visible);
     if (!hasContext) {
-      target.textContent = "Notes on the atlas model";
+      target.textContent = scopeNote ? `Notes on the atlas model · ${scopeNote}` : "Notes on the atlas model";
       return;
     }
     const isVisible = visible.some((candidate) => candidate.id === study.id);
-    target.textContent = isVisible
+    const context = isVisible
       ? `Current study · ${studyShortName(study)}`
       : `Study context · ${studyShortName(study)} · outside current catalog`;
+    target.textContent = scopeNote ? `${context} · ${scopeNote}` : context;
   }
 
   function renderActiveCatalogContext(study = activeStudy(), visible = visibleStudies()) {
@@ -2315,7 +2342,10 @@
     if (shouldUpdateHash) updateRoute(page, routeStudy);
     if (shouldUpdateHash) replaceCatalogRoute();
     updateViewNavigationLinks();
-    if (page === "method") renderMethodContext();
+    if (page === "method") {
+      renderMethodContext();
+      renderMethodProvenance(visibleStudies());
+    }
     if (scroll) {
       const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
       const pageTarget = page === "atlas" ? atlas : page === "compare" ? compare : method;
@@ -2449,10 +2479,12 @@
       hideManualCopyFallbacks();
       const contextStudy = methodContextStudy();
       const scope = contextStudy ? studyShortName(contextStudy) : "the atlas method";
+      const catalogScope = catalogScopeLabel();
+      const scopeContext = catalogScope === "the full collection" ? "" : ` for ${catalogScope}`;
       const shareUrl = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
       const sharePayload = {
         title: contextStudy ? `Method · ${studyShortName(contextStudy)} · Sacred Geometry Atlas` : "Sacred Geometry Atlas · Method guide",
-        text: `Read the Method guide${contextStudy ? ` alongside ${studyShortName(contextStudy)}` : ""} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions.`,
+        text: `Read the Method guide${contextStudy ? ` alongside ${studyShortName(contextStudy)}` : ""}${scopeContext} in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions.`,
         url: shareUrl
       };
 
@@ -2785,12 +2817,15 @@
 
   function methodCitationText() {
     const contextStudy = methodContextStudy();
+    const records = visibleStudies();
+    const catalogScope = catalogScopeLabel();
+    const recordLabel = records.length === 1 ? "1 record" : `${records.length} records`;
     const schema = geometrySchema();
     const route = routeLinkHref(".method-route-link") || new URL(methodNavigationUrl(), window.location.href).href;
     const context = contextStudy
       ? ` Current study context: ${studyShortName(contextStudy)} (${studyAxisLabel(contextStudy)}; ${studyStatusLabel(contextStudy).toLowerCase()}). Source: ${studySource(contextStudy)}; ${studySourceNote(contextStudy)}.`
       : "";
-    return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract.${context} Evidence note: ${collectionProvenanceNote()} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
+    return `Sacred Geometry Atlas. Method guide: axes, modules, envelopes, symmetry, derived readings, data-status definitions, and the dataset contract. Scope: ${catalogScope}; ${recordLabel}.${context} Evidence note: ${methodProvenanceText(records, methodProvenanceSubject(records))} Schema v${schema.version || "1.1"}; units: ${schema.units || "meters"}. Route: ${route}`;
   }
 
   async function copyMethodCitation() {

@@ -102,7 +102,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - A Method view with an accessible research key for interpreting derived area, ratio, radius, volume, and profile readings.
 - A schema-driven Method evidence key that pairs each data-status label with its definition and live record count, including custom statuses.
 - A Method data dictionary that explains the stable identity, context, geometry, rhythm, interpretation, provenance, and optional-estimate fields behind the JSON/CSV records, with direct links to both artifacts.
-- The Method view keeps the current study in context with a study-aware deep link, a visible context label, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
+- The Method view keeps the current study and active Atlas scope in context with a study-aware deep link, a visible scope label, live status/provenance counts, scope-aware sharing and citations, and a dynamic return-to-study action, or returns to the filtered Atlas catalog when the current study is outside the active view.
 - Branded `og.png` social preview card wired to Open Graph and X metadata.
 - Repository-relative `robots.txt` and `sitemap.xml` crawl templates stamped to the final public Pages URL during deployment.
 - A branded, project-root-aware `404.html` recovery page for missing GitHub Pages paths, with direct routes to the static JSON, CSV, and schema artifacts.
