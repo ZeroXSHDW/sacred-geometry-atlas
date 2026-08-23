@@ -140,9 +140,9 @@ function schemaDocument() {
         "additionalProperties": false,
         "required": ["version", "units", "unitSymbol", "statusValues", "statusDefinitions", "note"],
         "properties": {
-          "version": { "type": "string", "minLength": 1 },
-          "units": { "type": "string", "minLength": 1 },
-          "unitSymbol": { "type": "string", "minLength": 1 },
+          "version": { "type": "string", "minLength": 1, "description": "Version of the published geometry data contract." },
+          "units": { "type": "string", "minLength": 1, "description": "Human-readable unit system used by linear dimensions and derived readings." },
+          "unitSymbol": { "type": "string", "minLength": 1, "description": "Display symbol for the schema unit system, such as m or ft." },
           "statusValues": {
             "type": "array",
             "minItems": 1,
@@ -155,7 +155,7 @@ function schemaDocument() {
             "required": statusValues,
             "properties": statusDefinitionProperties
           },
-          "note": { "type": "string", "minLength": 1 }
+          "note": { "type": "string", "minLength": 1, "description": "Collection-level evidence and provenance note." }
         }
       },
       "studies": {
@@ -170,17 +170,17 @@ function schemaDocument() {
         "required": [...requiredTextFields, "status", "length", "span", "height", "bayCount", "module", "radius", "symmetry", "details"],
         "properties": {
           ...textProperties,
-          "status": { "type": "string", "minLength": 1, "enum": statusValues },
-          "length": { "type": "number", "exclusiveMinimum": 0 },
-          "span": { "type": "number", "exclusiveMinimum": 0 },
-          "height": { "type": "number", "exclusiveMinimum": 0 },
-          "bayCount": { "type": "integer", "exclusiveMinimum": 0 },
-          "module": { "type": "number", "exclusiveMinimum": 0 },
-          "radius": { "type": "number", "exclusiveMinimum": 0 },
-          "symmetry": { "type": "number", "minimum": 0, "maximum": 1 },
-          "floorAreaEstimate": { "type": "number", "exclusiveMinimum": 0 },
-          "volumeEstimate": { "type": "number", "exclusiveMinimum": 0 },
-          "volumeBasis": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "minLength": 1, "enum": statusValues, "description": "Schema-defined evidence label for the study record." },
+          "length": { "type": "number", "exclusiveMinimum": 0, "description": "Overall longitudinal dimension in the schema unit." },
+          "span": { "type": "number", "exclusiveMinimum": 0, "description": "Overall cross-width dimension in the schema unit." },
+          "height": { "type": "number", "exclusiveMinimum": 0, "description": "Overall vertical dimension in the schema unit." },
+          "bayCount": { "type": "integer", "exclusiveMinimum": 0, "description": "Number of notional repeated bays or frames." },
+          "module": { "type": "number", "exclusiveMinimum": 0, "description": "Notional repeated bay or frame module in the schema unit." },
+          "radius": { "type": "number", "exclusiveMinimum": 0, "description": "Primary curved reach in the schema unit." },
+          "symmetry": { "type": "number", "minimum": 0, "maximum": 1, "description": "Normalized 0–1 reading of plan balance; 0 is valid for an intentionally asymmetric study." },
+          "floorAreaEstimate": { "type": "number", "exclusiveMinimum": 0, "description": "Optional supplied floor-area estimate in the schema unit squared; when absent, the interface identifies its length × span fallback." },
+          "volumeEstimate": { "type": "number", "exclusiveMinimum": 0, "description": "Optional estimated volume in the schema unit cubed." },
+          "volumeBasis": { "type": "string", "minLength": 1, "description": "Calculation or source basis for the optional volume estimate." },
           "details": {
             "type": "array",
             "minItems": 1,

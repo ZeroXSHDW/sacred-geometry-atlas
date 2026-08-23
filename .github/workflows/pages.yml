@@ -73,7 +73,7 @@ jobs:
           for (const status of statusValues) {
             if (typeof statusDefinitions[status] !== 'string' || !statusDefinitions[status].trim()) throw new Error(`Schema is missing a definition for status: ${status}`);
           }
-          if (publishedSchema.$schema !== 'https://json-schema.org/draft/2020-12/schema' || publishedSchema.$id !== './geometry.schema.json' || !publishedSchema.required?.includes('schemaUrl') || publishedSchema.properties?.schemaUrl?.const !== source.schemaUrl || publishedSchema.$defs?.study?.properties?.status?.enum?.join('|') !== [...statusValues].join('|')) throw new Error('data/geometry.schema.json is missing the generated schema contract');
+          if (publishedSchema.$schema !== 'https://json-schema.org/draft/2020-12/schema' || publishedSchema.$id !== './geometry.schema.json' || !publishedSchema.required?.includes('schemaUrl') || publishedSchema.properties?.schemaUrl?.const !== source.schemaUrl || publishedSchema.$defs?.study?.properties?.status?.enum?.join('|') !== [...statusValues].join('|') || !publishedSchema.properties?.schema?.properties?.units?.description || !publishedSchema.properties?.schema?.properties?.unitSymbol?.description || !publishedSchema.$defs?.study?.properties?.floorAreaEstimate?.description || !publishedSchema.$defs?.study?.properties?.volumeEstimate?.description || !publishedSchema.$defs?.study?.properties?.volumeBasis?.description) throw new Error('data/geometry.schema.json is missing the generated schema contract or estimate documentation');
           const ids = new Set();
           const indexes = new Set();
           source.studies.forEach((study, index) => {
