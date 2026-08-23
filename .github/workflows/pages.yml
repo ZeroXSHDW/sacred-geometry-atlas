@@ -4754,6 +4754,10 @@ jobs:
             console
           };
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, updateDocumentTitle };\n})();');
+          const searchStart = app.indexOf('$("#searchInput").addEventListener("input"');
+          const searchEnd = app.indexOf('\n    $("#searchInput").addEventListener("keydown"', searchStart);
+          const searchSource = searchStart >= 0 && searchEnd >= 0 ? app.slice(searchStart, searchEnd) : '';
+          if (searchStart < 0 || searchEnd < 0 || searchSource.indexOf('replaceCatalogRoute();') < 0 || searchSource.indexOf('refreshCatalog();') < 0 || searchSource.indexOf('replaceCatalogRoute();') > searchSource.indexOf('refreshCatalog();')) throw new Error('Live catalog search must update the URL before route-aware share metadata refreshes');
           vm.runInNewContext(app, context);
           const { state, updateDocumentTitle } = context.window.__atlasTest;
           const content = (selector) => metas.get(selector).content;

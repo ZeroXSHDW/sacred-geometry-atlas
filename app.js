@@ -1283,8 +1283,8 @@
     });
     $("#searchInput").addEventListener("input", (event) => {
       state.query = normalizeCatalogQuery(event.target.value);
-      refreshCatalog();
       replaceCatalogRoute();
+      refreshCatalog();
     });
     $("#searchInput").addEventListener("keydown", handleSearchKeydown);
     $("#clearSearchInput").addEventListener("click", () => clearFilter("query", { focus: true }));
