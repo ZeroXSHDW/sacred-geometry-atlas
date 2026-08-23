@@ -862,6 +862,7 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .comparison-table-study-link .comparison-table-study-state { color: var(--amber); font-family: var(--mono); font-size: 0.62em; font-weight: 500; letter-spacing: 0.05em; text-decoration: none; text-transform: uppercase; }
 .comparison-table-study-link:hover, .comparison-table-study-link:focus-visible { color: var(--amber); text-decoration-color: currentColor; }
 .comparison-table tbody td { color: var(--teal); }
+.comparison-table tbody .comparison-profile-cell { color: var(--coral); font-variant-numeric: tabular-nums; }
 .comparison-table tbody .comparison-status { color: var(--amber); letter-spacing: 0.04em; text-transform: uppercase; }
 .comparison-table tbody .comparison-status[data-status="measured"] { color: var(--teal); }
 .comparison-table tbody .comparison-status:not([data-status="schematic"]):not([data-status="measured"]) { color: var(--coral); }

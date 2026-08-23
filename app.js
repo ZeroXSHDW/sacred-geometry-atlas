@@ -3788,13 +3788,15 @@
       ? `Read the ${comparison.length} selected study records as a table`
       : `Read the ${comparison.length} study records as a table`;
     if (caption) caption.textContent = isFocused
-      ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status and source note.`
-      : "Recorded study values for the full collection; each row includes its data status and source note.";
+      ? `Recorded study values for ${comparison.length} selected studies; each row includes its data status, source note, and interpretive 0–100 reading-profile scores.`
+      : "Recorded study values for the full collection; each row includes its data status, source note, and interpretive 0–100 reading-profile scores.";
     body.innerHTML = comparison.map((study) => {
       const ratio = study.length / study.span;
       const section = study.height / study.span;
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
+      const readingProfile = Object.fromEntries(profileScores(study));
+      const profileCell = (key, label) => `<td class="comparison-profile-cell" data-profile="${key}" aria-label="${escapeHtml(`${label} profile: ${readingProfile[key]} out of 100; interpretive score`)}" title="Interpretive 0–100 score">${readingProfile[key]}</td>`;
       const status = studyDataLabel(study);
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
@@ -3821,6 +3823,10 @@
           <td aria-label="${escapeHtml(floorAreaLabel)}" title="${escapeHtml(floorArea.basis)}">${escapeHtml(floorArea.value)}</td>
           <td>${escapeHtml(volume.value)}</td>
           <td class="comparison-provenance">${escapeHtml(volume.basis)}</td>
+          ${profileCell("linearity", "Linearity")}
+          ${profileCell("verticality", "Verticality")}
+          ${profileCell("radiality", "Radiality")}
+          ${profileCell("repetition", "Repetition")}
         </tr>
       `;
     }).join("");
