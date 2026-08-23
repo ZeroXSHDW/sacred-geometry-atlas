@@ -1235,6 +1235,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   #copyCitation.is-copied span.study-action-label::after,
   #downloadStudy.is-complete:not(.is-unavailable) span.study-action-label::after,
   #downloadStudyCsv.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
+  #shareStudy.is-unavailable span.study-action-label::after,
+  #copyCitation.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }
   #downloadStudy.is-unavailable span.study-action-label::after,
   #downloadStudyCsv.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }
   #printStudy.is-complete:not(.is-unavailable) span.study-action-label::after { content: "Done"; font-size: 0.5rem; }
@@ -1257,6 +1259,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-summary .catalog-share-button.is-copied span:last-child::after,
   .catalog-summary .catalog-share-button.is-complete:not(.is-unavailable) span:last-child::after,
   .catalog-summary .catalog-citation-button.is-copied span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .catalog-summary .catalog-share-button.is-unavailable span:last-child::after,
+  .catalog-summary .catalog-citation-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .catalog-summary .catalog-print-button.is-complete:not(.is-unavailable) span:last-child { font-size: 0; }
   .catalog-summary .catalog-print-button.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
   .catalog-summary .catalog-print-button.is-unavailable span:last-child { font-size: 0; }
@@ -1288,6 +1292,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-share-button.is-complete:not(.is-unavailable) span:last-child::after,
   .method-citation-button.is-copied span:last-child::after,
   .method-print-button.is-complete:not(.is-unavailable) span:last-child::after { content: "Done"; font-size: 0.5rem; }
+  .method-share-button.is-unavailable span:last-child::after,
+  .method-citation-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .method-print-button.is-unavailable span:last-child::after { content: "Unavailable"; font-size: 0.5rem; }
   .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }
   .drawing-scale { flex: 0 0 100%; }

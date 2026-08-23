@@ -2811,9 +2811,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#shareFallback", "#shareFallbackText", sharePayloadText(sharePayload));
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The share message and link are shown below for manual copying."
           : "Copying was unavailable. Use the page URL from the address bar and the study details shown here.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Share study", "Share current study", "share-study");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -2860,9 +2862,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#methodShareFallback", "#methodShareFallbackText", sharePayloadText(sharePayload));
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The Method share message and route are shown below for manual copying."
           : "Copying was unavailable. Use the Method route from the address bar and the guide details shown here.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Share guide", "Share method guide", "share-method");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -3053,9 +3057,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#catalogCitationFallback", "#catalogCitationFallbackText", citation);
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The catalog citation is shown below for manual copying."
           : "Copying was unavailable. You can copy the catalog citation from the current view details.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for this catalog view", "catalog-citation");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -3103,9 +3109,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#catalogShareFallback", "#catalogShareFallbackText", sharePayloadText(sharePayload));
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The catalog share message and link are shown below for manual copying."
           : "Copying was unavailable. Use the catalog URL from the address bar and the view details shown here.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Share view", "Share current catalog view", "share-catalog");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -3160,9 +3168,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#compareShareFallback", "#compareShareFallbackText", sharePayloadText(sharePayload));
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The comparison share message and link are shown below for manual copying."
           : "Copying was unavailable. Use the comparison URL from the address bar and the view details shown here.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Share comparison", "Share this comparison", "share-comparison");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -3208,9 +3218,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#comparisonCitationFallback", "#comparisonCitationFallbackText", citation);
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The comparison citation is shown below for manual copying."
           : "Copying was unavailable. You can copy the citation from the comparison details.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for this comparison", "comparison-citation");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -3246,9 +3258,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#citationFallback", "#citationFallbackText", citation);
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The citation is shown below for manual copying."
           : "Copying was unavailable. You can copy the citation from the study details.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for the active study", "study-citation");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);
@@ -3289,9 +3303,11 @@
         }, 2200);
       } else {
         const fallbackShown = revealManualCopyFallback("#methodCitationFallback", "#methodCitationFallbackText", citation);
-        status.textContent = fallbackShown
+        const message = fallbackShown
           ? "Copying was unavailable. The Method citation is shown below for manual copying."
           : "Copying was unavailable. You can copy the Method citation from the guide details.";
+        temporaryButtonFeedback(button, "Unavailable", message, "Cite guide", "Copy a citation for the Method guide", "method-citation");
+        status.textContent = message;
       }
     } finally {
       endAsyncAction(button);

@@ -485,7 +485,13 @@ jobs:
           for (const token of ['temporaryButtonFeedback(button, "Unavailable", "SVG download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study JSON download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog view download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison JSON download is unavailable in this browser."']) {
             if (!app.includes(token)) throw new Error('Blocked exports must synchronize the originating control with its Unavailable state: ' + token);
           }
+          for (const token of ['temporaryButtonFeedback(button, "Unavailable", message, "Share study", "Share current study", "share-study")', 'temporaryButtonFeedback(button, "Unavailable", message, "Share guide", "Share method guide", "share-method")', 'temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for this catalog view", "catalog-citation")', 'temporaryButtonFeedback(button, "Unavailable", message, "Share view", "Share current catalog view", "share-catalog")', 'temporaryButtonFeedback(button, "Unavailable", message, "Share comparison", "Share this comparison", "share-comparison")', 'temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for this comparison", "comparison-citation")', 'temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for the active study", "study-citation")', 'temporaryButtonFeedback(button, "Unavailable", message, "Cite guide", "Copy a citation for the Method guide", "method-citation")']) {
+            if (!app.includes(token)) throw new Error('Share and citation fallbacks must synchronize the originating control with its Unavailable state: ' + token);
+          }
           if (!styles.includes('.download-button.is-unavailable span.download-label::after { content: "Unavailable"; }') || !styles.includes('#downloadCsvData.is-unavailable span.download-label::after { content: "Unavailable"; }') || !styles.includes('#downloadStudyCsv.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }')) throw new Error('Blocked export controls must keep their compact Unavailable labels visible');
+          for (const token of ['#shareStudy.is-unavailable span.study-action-label::after', '#copyCitation.is-unavailable span.study-action-label::after', '.catalog-summary .catalog-share-button.is-unavailable span:last-child::after', '.catalog-summary .catalog-citation-button.is-unavailable span:last-child::after', '.compare-intro-side .compare-share-button.is-unavailable span:last-child::after', '.compare-intro-side .compare-citation-button.is-unavailable span:last-child::after', '.method-share-button.is-unavailable span:last-child::after', '.method-citation-button.is-unavailable span:last-child::after']) {
+            if (!styles.includes(token)) throw new Error('Share and citation controls must keep their compact Unavailable labels visible: ' + token);
+          }
           for (const functionName of ['downloadDrawing()', 'downloadStudy()', 'downloadStudyCsv()', 'downloadData()', 'downloadCatalogView()', 'downloadCatalogCsv()', 'downloadComparisonCsv()', 'downloadComparisonJson()']) {
             const start = app.indexOf(`function ${functionName}`);
             const end = app.indexOf('\n  function ', start + 1);
@@ -3466,7 +3472,7 @@ jobs:
             await context.window.__atlasTest.shareMethod();
             const expectedFallback = 'Read the Method guide alongside Study 02, High gothic cathedral for results matching “gothic”, 2 selected for comparison in the Sacred Geometry Atlas — axes, modules, envelopes, symmetry, derived readings, and data-status definitions. Reading profile key: four interpretive 0–100 scores. Interpretive proportional tendencies, not empirical measurements. Basis: linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count.\nhttps://example.test/atlas/?q=gothic&compare=basilica,gothic#method/gothic';
             const fallbackMessage = 'Copying was unavailable. The Method share message and route are shown below for manual copying.';
-            if (fallback.hidden || fallbackText.value !== expectedFallback || !fallbackText.focused || !fallbackText.selected || shareMethodStatus.textContent !== fallbackMessage || shareMethodButton['aria-expanded'] !== 'true') throw new Error('Method share did not reveal a focused manual-copy fallback when native sharing and clipboard access were unavailable');
+            if (fallback.hidden || fallbackText.value !== expectedFallback || !fallbackText.focused || !fallbackText.selected || shareMethodStatus.textContent !== fallbackMessage || shareMethodButton['aria-expanded'] !== 'true' || !classes.has('is-unavailable') || shareMethodButton.querySelector('span:last-child').textContent !== 'Unavailable') throw new Error('Method share did not reveal a focused manual-copy fallback or expose its Unavailable state when native sharing and clipboard access were unavailable');
             console.log('Method sharing smoke test passed.');
           })().catch((error) => { console.error(error); process.exitCode = 1; });
           NODE
@@ -3597,7 +3603,7 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { copyCitation };\n})();');
           vm.runInNewContext(app, context);
           context.window.__atlasTest.copyCitation().then(() => {
-            if (button.disabled || button['aria-busy'] !== 'false') throw new Error('Citation fallback did not restore the copy button state');
+            if (button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-unavailable') || visibleLabel.textContent !== 'Unavailable') throw new Error('Citation fallback did not restore the copy button state or expose its Unavailable state');
             if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('The longitudinal basilica') || !fallbackText.value.includes('Axis: Longitudinal axis.') || !fallbackText.value.includes('Dimensions: 58.0 m length × 22.0 m span × 18.0 m height') || !fallbackText.value.includes('Data status: schematic') || !fallbackText.value.includes('Definition: Illustrative proportions; not a measured survey.') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
               throw new Error('Citation fallback did not reveal and select the citation text');
             }
@@ -3613,9 +3619,13 @@ jobs:
           const vm = require('vm');
           const elements = new Map();
           const visibleLabel = { textContent: 'Cite guide' };
+          const classes = new Set();
           const button = {
             disabled: false,
-            classList: { add() {}, remove() {} },
+            classList: {
+              add(name) { classes.add(name); },
+              remove(name) { classes.delete(name); }
+            },
             querySelector(selector) { return selector === 'span:last-child' ? visibleLabel : null; },
             setAttribute(name, value) { this[name] = value; }
           };
@@ -3660,7 +3670,7 @@ jobs:
           const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { copyMethodCitation };\n})();');
           vm.runInNewContext(app, context);
           context.window.__atlasTest.copyMethodCitation().then(() => {
-            if (button.disabled || button['aria-busy'] !== 'false') throw new Error('Method citation fallback did not restore the citation button state');
+            if (button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-unavailable') || visibleLabel.textContent !== 'Unavailable') throw new Error('Method citation fallback did not restore the citation button state or expose its Unavailable state');
             if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('Method guide: axes, modules, envelopes, symmetry') || !fallbackText.value.includes('Current study context: Study 02, High gothic cathedral') || !fallbackText.value.includes('Reading profile key: four interpretive 0–100 scores.') || !fallbackText.value.includes('Basis: linearity = length ÷ span') || !fallbackText.value.includes('Schema v1.1; units: meters.') || !fallbackText.value.includes('Route: https://example.test/atlas/?q=gothic&compare=basilica,gothic#method/gothic') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
               throw new Error('Method citation fallback did not reveal and select the context-aware citation text');
             }
@@ -3723,7 +3733,7 @@ jobs:
           const { state, copyComparisonCitation, comparisonStudies } = context.window.__atlasTest;
           state.compareIds = ['basilica', 'gothic'];
           copyComparisonCitation().then(() => {
-            if (comparisonStudies().length !== 2 || button.disabled || button['aria-busy'] !== 'false') throw new Error('Comparison citation fallback did not restore the copy button state');
+            if (comparisonStudies().length !== 2 || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-unavailable') || visibleLabel.textContent !== 'Unavailable') throw new Error('Comparison citation fallback did not restore the copy button state or expose its Unavailable state');
             if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('Comparison of Study 01, Longitudinal basilica') || !fallbackText.value.includes('Scope: 2 selected studies') || !fallbackText.value.includes('Schema v1.1; units: meters') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
               throw new Error('Comparison citation fallback did not reveal and select the citation text');
             }
@@ -3791,7 +3801,7 @@ jobs:
           state.page = 'atlas';
           state.compareIds = ['basilica', 'gothic'];
           copyCatalogCitation().then(() => {
-            if (visibleStudies().length !== 1 || button.disabled || button['aria-busy'] !== 'false') throw new Error('Catalog citation fallback did not restore the copy button state');
+            if (visibleStudies().length !== 1 || button.disabled || button['aria-busy'] !== 'false' || !classes.has('is-unavailable') || visibleLabel.textContent !== 'Unavailable') throw new Error('Catalog citation fallback did not restore the copy button state or expose its Unavailable state');
             if (fallback.hidden || button['aria-expanded'] !== 'true' || !fallbackText.value.includes('Catalog view: results matching “basilica”, axis: Longitudinal axis, 2 selected for comparison, sorted by name (A–Z); 1 record') || !fallbackText.value.includes('Comparison selection: Study 01, Longitudinal basilica (schematic); Study 02, High gothic cathedral (schematic).') || !fallbackText.value.includes('Reading profiles (0–100, interpretive):') || !fallbackText.value.includes('Basis: linearity = length ÷ span') || !fallbackText.value.includes('Schema v1.1; units: meters') || fallbackText.focusCalls !== 1 || fallbackText.selectCalls !== 1) {
               throw new Error('Catalog citation fallback did not reveal and select the citation text');
             }
@@ -3810,6 +3820,7 @@ jobs:
             const visibleLabel = { textContent: label };
             const classes = new Set();
             return {
+              classes,
               disabled: false,
               classList: {
                 add(name) { classes.add(name); },
@@ -3895,7 +3906,7 @@ jobs:
               const statusSelector = name === 'shareStudy' ? '#shareStatus' : name === 'shareCatalog' ? '#catalogShareStatus' : '#compareShareStatus';
               const status = elements.get(statusSelector);
               const trigger = name === 'shareStudy' ? shareStudyButton : name === 'shareCatalog' ? shareCatalogButton : shareCompareButton;
-              if (fallback.hidden || trigger['aria-expanded'] !== 'true' || !markers.every((marker) => fallback.text.value.includes(marker)) || fallback.text.focusCalls !== 1 || fallback.text.selectCalls !== 1 || !status.textContent.includes(message)) {
+              if (fallback.hidden || trigger['aria-expanded'] !== 'true' || !trigger.classes.has('is-unavailable') || trigger.querySelector('span:last-child').textContent !== 'Unavailable' || !markers.every((marker) => fallback.text.value.includes(marker)) || fallback.text.focusCalls !== 1 || fallback.text.selectCalls !== 1 || !status.textContent.includes(message)) {
                 throw new Error(`${name} did not reveal and select its descriptive message-and-route fallback`);
               }
             }
