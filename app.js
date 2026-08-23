@@ -3425,25 +3425,49 @@
     hideDownloadRecovery();
     if (!study || !svgElement || !beginAsyncAction(button)) return;
     try {
+    const computedRootStyle = typeof window !== "undefined"
+      && typeof window.getComputedStyle === "function"
+      && typeof document !== "undefined"
+      && document.documentElement
+      ? window.getComputedStyle(document.documentElement)
+      : null;
+    const exportColor = (name, fallback) => {
+      const value = computedRootStyle && typeof computedRootStyle.getPropertyValue === "function"
+        ? computedRootStyle.getPropertyValue(name).trim()
+        : "";
+      return value || fallback;
+    };
+    const exportPalette = {
+      bg: exportColor("--bg-deep", "#0c1110"),
+      ink: exportColor("--ink", "#eef2e9"),
+      grid: exportColor("--grid-line", "rgba(213, 229, 214, .08)"),
+      line: exportColor("--faint-line", "rgba(213, 229, 214, .27)"),
+      amber: exportColor("--amber", "#e9b36c"),
+      teal: exportColor("--teal", "#88c6ba"),
+      coral: exportColor("--coral", "#e77f62"),
+      inkSoft: exportColor("--ink-soft", "#aebbb1"),
+      inkMuted: exportColor("--ink-muted", "#84948a")
+    };
     const exportStyles = `
-      .geometry-svg { background: #0c1110; color: #eef2e9; }
+      .geometry-svg { background: ${exportPalette.bg}; color: ${exportPalette.ink}; }
       .geometry-svg text { font-family: 'DM Mono', 'SFMono-Regular', Consolas, monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
-      .geometry-svg .grid-line { stroke: rgba(213, 229, 214, .08); stroke-width: 1; }
-      .geometry-svg .axis-line { stroke: #88c6ba; stroke-dasharray: 5 6; stroke-width: 1; opacity: .75; }
-      .geometry-svg .primary-line { stroke: #e9b36c; stroke-width: 2; }
-      .geometry-svg .primary-fill { fill: rgba(233, 179, 108, .1); stroke: #e9b36c; stroke-width: 2; }
-      .geometry-svg .interior-fill { fill: rgba(136, 198, 186, .11); stroke: #88c6ba; stroke-width: 2; }
-      .geometry-svg .secondary-line { stroke: #88c6ba; stroke-width: 1.2; }
-      .geometry-svg .tertiary-line { stroke: #e77f62; stroke-width: 1; }
-      .geometry-svg .faint-line { stroke: rgba(213, 229, 214, .27); stroke-width: 1; fill: none; }
-      .geometry-svg .dim-text { fill: #e77f62; font-size: 9px; }
-      .geometry-svg .label-text { fill: #aebbb1; font-size: 9px; }
-      .geometry-svg .small-label { fill: #84948a; font-size: 8px; }
-      .geometry-svg .watermark { fill: rgba(233, 179, 108, .12); font-family: 'Playfair Display', Georgia, serif; font-size: 42px; letter-spacing: -.04em; }
-      .geometry-svg .stone-dot { fill: #e9b36c; }
-      .geometry-svg .column { fill: #0c1110; stroke: #e9b36c; stroke-width: 1.5; }
-      .geometry-svg .crosshair { stroke: #e77f62; stroke-width: 1; }
-      .geometry-svg .dimension-bracket { stroke: #e77f62; stroke-width: 1; }
+      .geometry-svg .grid-line { stroke: ${exportPalette.grid}; stroke-width: 1; }
+      .geometry-svg .axis-line { stroke: ${exportPalette.teal}; stroke-dasharray: 5 6; stroke-width: 1; opacity: .75; }
+      .geometry-svg .primary-line { stroke: ${exportPalette.amber}; stroke-width: 2; }
+      .geometry-svg .primary-fill { fill: ${exportPalette.amber}; fill-opacity: .1; stroke: ${exportPalette.amber}; stroke-width: 2; }
+      .geometry-svg .interior-fill { fill: ${exportPalette.teal}; fill-opacity: .11; stroke: ${exportPalette.teal}; stroke-width: 2; }
+      .geometry-svg .secondary-line { stroke: ${exportPalette.teal}; stroke-width: 1.2; }
+      .geometry-svg .tertiary-line { stroke: ${exportPalette.coral}; stroke-width: 1; }
+      .geometry-svg .faint-line { stroke: ${exportPalette.line}; stroke-width: 1; fill: none; }
+      .geometry-svg .dim-text { fill: ${exportPalette.coral}; font-size: 9px; }
+      .geometry-svg .label-text { fill: ${exportPalette.inkSoft}; font-size: 9px; }
+      .geometry-svg .small-label { fill: ${exportPalette.inkMuted}; font-size: 8px; }
+      .geometry-svg .watermark { fill: ${exportPalette.amber}; fill-opacity: .12; font-family: 'Playfair Display', Georgia, serif; font-size: 42px; letter-spacing: -.04em; }
+      .geometry-svg .stone-dot { fill: ${exportPalette.amber}; }
+      .geometry-svg .column { fill: ${exportPalette.bg}; stroke: ${exportPalette.amber}; stroke-width: 1.5; }
+      .geometry-svg .crosshair { stroke: ${exportPalette.coral}; stroke-width: 1; }
+      .geometry-svg .dimension-bracket { stroke: ${exportPalette.coral}; stroke-width: 1; }
+      .geometry-svg .dimension-arrow { stroke: ${exportPalette.coral}; }
       .geometry-svg.focus-envelope .axis-line, .geometry-svg.focus-envelope .secondary-line, .geometry-svg.focus-envelope .column, .geometry-svg.focus-envelope .stone-dot { opacity: .13; }
       .geometry-svg.focus-envelope .tertiary-line { opacity: .75; }
       .geometry-svg.focus-rhythm .primary-line, .geometry-svg.focus-rhythm .primary-fill, .geometry-svg.focus-rhythm .interior-fill, .geometry-svg.focus-rhythm .dimension-bracket { opacity: .15; }
@@ -4334,7 +4358,7 @@
     const floorArea = floorAreaReading(study);
     const volume = volumeReading(study);
     const description = `${surface} ${state.mode} ${studyStatusLabel(study).toLowerCase()} drawing showing the ${layer} for ${study.name} at ${zoomPercent()} zoom. Overall dimensions are length ${study.length} ${unitName}, span ${study.span} ${unitName}, and height ${study.height} ${unitName}. Envelope: ${study.envelope}. Axis: ${studyAxisLabel(study)}. Rhythm: ${study.bayCount} bays at a ${number(study.module)} ${unitName} module. Primary radius: ${number(study.radius)} ${unitName}. Symmetry index: ${number(study.symmetry, 2)}. Reading: ${reading || "No interpretive reading supplied."} ${readingProfileSummary(study)} Data status: ${studyStatusLabel(study).toLowerCase()} (${studyStatus(study)}); ${studyStatusDescription(study)} Source: ${studySource(study)}; ${studySourceNote(study)} Reference: ${study.churchName || study.name}. Floor area: ${floorArea.value}; basis: ${floorArea.basis}. Estimated volume: ${volume.value}; basis: ${volume.basis}.`;
-    return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
+    return `<svg class="geometry-svg focus-${escapeHtml(state.layer)}" viewBox="0 0 820 510" role="img" aria-labelledby="drawing-title" aria-describedby="drawing-description" focusable="false" lang="en"><title id="drawing-title">${escapeHtml(title)}</title><desc id="drawing-description">${escapeHtml(description)}</desc><defs>
       <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" class="grid-line" fill="none" /></pattern>
       <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path class="dimension-arrow" d="M6 0L0 3L6 6" fill="none" stroke="#e77f62" stroke-width="1" /></marker>
     </defs><rect width="820" height="510" fill="url(#grid)" /><g class="drawing-zoom" transform="translate(410 255) scale(${state.zoom}) translate(-410 -255)"><text class="watermark" x="46" y="466">${escapeHtml(study.index)}</text><text class="small-label" x="48" y="42">${escapeHtml(title)}</text>`;
