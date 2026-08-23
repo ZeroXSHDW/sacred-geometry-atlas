@@ -3,3 +3,8 @@ node_modules/
 dist/
 build/
 *.log
+
+# Generated GitHub Pages upload output and local Python validation caches.
+_site/
+__pycache__/
+*.py[cod]
