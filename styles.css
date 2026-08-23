@@ -284,6 +284,29 @@ summary:focus-visible {
 .skip-link:focus { transform: translateY(0); }
 #runtimeFallback:focus { outline: 2px solid var(--teal); outline-offset: 6px; }
 
+.back-to-top {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: 1.2rem;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 36px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--teal);
+  color: var(--teal);
+  background: var(--panel);
+  box-shadow: 0 0.4rem 1.2rem rgba(7, 12, 11, 0.16);
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: 180ms ease;
+}
+.back-to-top:hover { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); transform: translateY(-2px); }
+.back-to-top span:first-child { color: var(--amber); font-size: 0.9rem; line-height: 1; }
+
 .site-header,
 .connection-status,
 main,
@@ -1343,6 +1366,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 }
 
 @media (pointer: coarse) {
+  .back-to-top { min-height: 40px; }
   .dataset-link,
   .download-button { min-height: 40px; }
   .theme-toggle { min-height: 40px; }
@@ -1437,6 +1461,9 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
 
 @media (forced-colors: active) {
   .site-header { background: Canvas; }
+  .back-to-top { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .back-to-top:hover { border-color: Highlight; color: HighlightText; background: Highlight; }
+  .back-to-top span:first-child { color: Highlight; }
   .connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }
   .connection-status-mark { color: Highlight; }
   .connection-status[data-connection-state="online"] .connection-status-mark { color: Highlight; }
@@ -1754,6 +1781,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .method-print-button,
   .visual-empty-state,
   .route-copy-button { display: none !important; }
+  .back-to-top { display: none !important; }
   .site-header, main, .site-footer { width: 100%; }
   #atlas { display: block !important; }
   .hero { display: block; min-height: 0; padding: 0 0 1.1rem; }

@@ -62,6 +62,7 @@
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const MIN_ZOOM = 0.7;
   const MAX_ZOOM = 1.6;
+  const BACK_TO_TOP_THRESHOLD = 480;
   const SYNC_ACTION_COOLDOWN_MS = 400;
   const zoomPercent = (zoom) => `${Math.round((zoom ?? state.zoom) * 100)}%`;
   const zoomDeltaForKey = (key) => key === "+" ? 0.15 : key === "-" ? -0.15 : 0;
@@ -483,6 +484,34 @@
     if (isStandalone()) hideInstall();
   }
 
+  function updateBackToTop() {
+    const button = $("#backToTop");
+    if (!button) return;
+    const scrollY = Number(window.scrollY ?? window.pageYOffset ?? document.documentElement?.scrollTop ?? 0);
+    button.hidden = !Number.isFinite(scrollY) || scrollY < BACK_TO_TOP_THRESHOLD;
+  }
+
+  function scrollToTop() {
+    const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    if (typeof window.scrollTo === "function") window.scrollTo({ top: 0, behavior });
+    const main = $("#main-content");
+    if (main && typeof main.focus === "function") {
+      try {
+        main.focus({ preventScroll: true });
+      } catch (error) {
+        main.focus();
+      }
+    }
+  }
+
+  function setupBackToTop() {
+    const button = $("#backToTop");
+    if (!button) return;
+    button.addEventListener("click", scrollToTop);
+    updateBackToTop();
+    if (typeof window.addEventListener === "function") window.addEventListener("scroll", updateBackToTop, { passive: true });
+  }
+
   function init() {
     setupThemePreference();
     registerServiceWorker();
@@ -520,6 +549,7 @@
     renderHeroStats();
     populateFilter();
     bindEvents();
+    setupBackToTop();
     window.addEventListener("hashchange", syncFromHash);
     window.addEventListener("popstate", syncFromHash);
     syncFromHash();

@@ -235,6 +235,7 @@ jobs:
           if (!notFound.includes("manifest.href = `${siteRoot}site.webmanifest`") || !notFound.includes("appleTouchIcon.href = `${siteRoot}icons/atlas-180.png`")) throw new Error('Missing 404 install metadata root resolver');
           if (!notFound.includes("methodLink.href = `${siteRoot}#method`")) throw new Error('Missing 404 Method root resolver');
           if (!notFound.includes('link.href = `${siteRoot}data/geometry.json`') || !notFound.includes('link.href = `${siteRoot}data/geometry.csv`') || !notFound.includes('link.href = `${siteRoot}data/geometry.schema.json`')) throw new Error('Missing 404 dataset root resolver');
+          if (!html.includes('<button class="back-to-top" id="backToTop" type="button" aria-controls="main-content"') || !app.includes('const BACK_TO_TOP_THRESHOLD = 480;') || !app.includes('function setupBackToTop()') || !app.includes('window.addEventListener("scroll", updateBackToTop, { passive: true })') || !styles.includes('.back-to-top {') || !styles.includes('.back-to-top { display: none !important; }')) throw new Error('Back-to-top navigation must be progressive, route-safe, and excluded from print output');
           if (!html.includes('<div class="data-error" id="dataError" role="main" aria-labelledby="dataErrorHeading" aria-describedby="dataErrorDescription" tabindex="-1" hidden>') || !html.includes('<h1 id="dataErrorHeading" tabindex="-1">') || !html.includes('<p id="dataErrorDescription" role="alert" aria-live="assertive" aria-atomic="true">The interactive collection is temporarily missing its local dataset.') || !html.includes('<a class="hero-action hero-action-primary" href="./" data-recovery-reload>Reload the atlas')) throw new Error('Data-load recovery must expose a main landmark, preserve the current route, and announce its recovery explanation assertively');
           if (!html.includes('<script defer src="data/geometry.js"></script>') || !html.includes('<script defer src="app.js"></script>') || html.indexOf('<script defer src="data/geometry.js"></script>') > html.indexOf('<script defer src="app.js"></script>')) throw new Error('Geometry data and app scripts must load in ordered deferred execution');
           if (!html.includes('<div class="runtime-fallback" id="runtimeFallback" role="main" aria-labelledby="runtimeFallbackHeading" tabindex="-1">') || !html.includes('<p id="runtimeFallbackHeading" role="status" aria-live="polite" aria-atomic="true"><strong>The atlas is still loading.</strong>')) throw new Error('Missing polite runtime script-failure recovery panel');
@@ -1703,6 +1704,56 @@ jobs:
           context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol = originalUnitSymbol;
           if (!planWithUnsafeUnit.includes('&lt;unit&gt;') || planWithUnsafeUnit.includes('<unit>') || !sectionWithUnsafeUnit.includes('&lt;unit&gt;') || sectionWithUnsafeUnit.includes('<unit>')) throw new Error('Schema unit symbols must be escaped in generated SVG labels');
           console.log('Route-native catalog link smoke test passed.');
+          NODE
+      - name: Smoke-test back-to-top affordance
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const button = {
+            hidden: true,
+            listeners: {},
+            addEventListener(type, handler) { this.listeners[type] = handler; }
+          };
+          const main = {
+            focusCalls: [],
+            focus(options) { this.focusCalls.push(options); }
+          };
+          const events = {};
+          const scrollCalls = [];
+          const context = {
+            window: {
+              CHURCH_GEOMETRY: [],
+              CHURCH_GEOMETRY_SCHEMA: { statusValues: ['schematic'], statusDefinitions: { schematic: 'Illustrative proportions.' } },
+              scrollY: 0,
+              pageYOffset: 0,
+              matchMedia() { return { matches: false }; },
+              addEventListener(type, handler, options) { events[type] = { handler, options }; },
+              scrollTo(options) { scrollCalls.push(options); }
+            },
+            document: {
+              documentElement: { scrollTop: 0 },
+              querySelector(selector) { return selector === '#backToTop' ? button : selector === '#main-content' ? main : null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const source = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { setupBackToTop, updateBackToTop, scrollToTop };\n})();');
+          vm.runInNewContext(source, context);
+          const { setupBackToTop, scrollToTop } = context.window.__atlasTest;
+          setupBackToTop();
+          if (!button.hidden || !events.scroll || events.scroll.options.passive !== true || typeof button.listeners.click !== 'function') throw new Error('Back-to-top setup did not start hidden or register passive scroll and click handlers');
+          context.window.scrollY = 600;
+          events.scroll.handler();
+          if (button.hidden) throw new Error('Back-to-top did not appear after the scroll threshold');
+          button.listeners.click();
+          if (scrollCalls.length !== 1 || scrollCalls[0].top !== 0 || scrollCalls[0].behavior !== 'smooth' || main.focusCalls.length !== 1 || main.focusCalls[0].preventScroll !== true) throw new Error('Back-to-top did not scroll smoothly and return focus to main content');
+          context.window.matchMedia = () => ({ matches: true });
+          scrollToTop();
+          if (scrollCalls[1].behavior !== 'auto') throw new Error('Back-to-top ignored reduced-motion preference');
+          context.window.scrollY = 0;
+          events.scroll.handler();
+          if (!button.hidden) throw new Error('Back-to-top did not hide near the top of the page');
+          console.log('Back-to-top affordance smoke test passed.');
           NODE
       - name: Smoke-test deterministic catalog sorting
         run: |
