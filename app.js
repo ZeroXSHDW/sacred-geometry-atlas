@@ -1086,6 +1086,13 @@
     });
     $("#clearCompareView").addEventListener("click", () => clearComparisonSelection({ focus: true }));
     $("#compareSelection").addEventListener("click", (event) => {
+      const studyLink = event.target.closest("[data-compare-selection-study]");
+      if (studyLink) {
+        if ((event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        selectStudy(studyLink.dataset.compareSelectionStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 });
+        return;
+      }
       const remove = event.target.closest("[data-remove-compare-id]");
       if (remove) removeComparisonStudy(remove.dataset.removeCompareId);
     });
@@ -3778,9 +3785,11 @@
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
       const currentLabel = isActive ? " Current Atlas study." : "";
-      const label = `Remove ${study.name} from comparison. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
+      const openLabel = `Open ${study.name} in Atlas. Axis: ${axisLabel}. Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
+      const removeLabel = `Remove ${study.name} from comparison`;
       const currentCue = isActive ? '<span class="compare-selection-chip-current" title="Current Atlas study">current</span>' : "";
-      return `<button class="compare-selection-chip" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><span>${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}<span aria-hidden="true">×</span></button>`;
+      const currentAttribute = isActive ? ' aria-current="true"' : "";
+      return `<div class="compare-selection-chip"><a class="compare-selection-study-link" data-compare-selection-study="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(openLabel)}" title="${escapeHtml(openLabel)}"><span class="compare-selection-chip-name">${escapeHtml(studyShortName(study))}</span><span class="compare-selection-chip-axis" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="compare-selection-chip-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}</a><button class="compare-selection-chip-remove" data-remove-compare-id="${escapeHtml(study.id)}" type="button" aria-label="${escapeHtml(removeLabel)}" title="${escapeHtml(removeLabel)}"><span aria-hidden="true">×</span></button></div>`;
     }).join("") : "";
     if (clear && comparison.length) {
       const clearLabel = `Clear ${comparison.length} selected ${comparison.length === 1 ? "study" : "studies"}`;

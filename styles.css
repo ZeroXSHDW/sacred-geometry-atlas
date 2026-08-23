@@ -749,14 +749,18 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .compare-selection-clear { padding: 0.32rem 0.48rem; border: 1px solid var(--line-strong); color: var(--ink-muted); background: transparent; font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.04em; text-transform: uppercase; transition: 180ms ease; }
 .compare-selection-clear:hover { border-color: var(--coral); color: var(--coral); background: rgba(231, 127, 98, 0.08); }
 .compare-selection-list { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-.compare-selection-chip { display: inline-flex; min-width: 0; align-items: center; gap: 0.55rem; padding: 0.42rem 0.55rem 0.42rem 0.65rem; border: 1px solid var(--line-strong); color: var(--ink-soft); background: var(--panel); font-family: var(--mono); font-size: 0.57rem; text-align: left; transition: 180ms ease; }
+.compare-selection-chip { display: inline-flex; min-width: 0; align-items: stretch; border: 1px solid var(--line-strong); color: var(--ink-soft); background: var(--panel); font-family: var(--mono); font-size: 0.57rem; text-align: left; transition: 180ms ease; }
 .compare-selection-chip:hover { border-color: var(--coral); color: var(--ink); background: rgba(231, 127, 98, 0.08); }
-.compare-selection-chip span:first-child { overflow: hidden; max-width: 22ch; text-overflow: ellipsis; white-space: nowrap; }
+.compare-selection-study-link { display: inline-flex; min-width: 0; flex: 1 1 auto; align-items: center; gap: 0.55rem; padding: 0.42rem 0.55rem 0.42rem 0.65rem; color: inherit; text-decoration: none; }
+.compare-selection-study-link:hover { color: var(--ink); }
+.compare-selection-chip-name { overflow: hidden; max-width: 22ch; text-overflow: ellipsis; white-space: nowrap; }
 .compare-selection-chip-axis { flex: 0 0 auto; color: var(--teal); font-size: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
 .compare-selection-chip-status { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.24rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.5rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
 .compare-selection-chip-status[data-status="measured"] { border-color: rgba(136, 198, 186, 0.42); color: var(--teal); background: var(--teal-soft); }
 .compare-selection-chip-current { display: inline-flex; flex: 0 0 auto; padding: 0.12rem 0.24rem; border: 1px solid rgba(233, 179, 108, 0.42); color: var(--amber); background: var(--amber-soft); font-size: 0.48rem; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
-.compare-selection-chip span:last-child { color: var(--coral); font-size: 0.9rem; line-height: 0.8; }
+.compare-selection-chip-remove { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-width: 2.2rem; padding: 0.42rem 0.55rem; border: 0; border-left: 1px solid var(--line); color: var(--coral); background: transparent; font-family: var(--mono); font-size: 0.9rem; line-height: 0.8; transition: 180ms ease; }
+.compare-selection-chip-remove:hover,
+.compare-selection-chip-remove:focus-visible { color: var(--ink); background: rgba(231, 127, 98, 0.14); }
 .compare-status-note { margin: 0 0 2rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.5; }
 .comparison-print-route { display: none; }
 .comparison-route { display: block; margin: -1.25rem 0 1.15rem; }
@@ -1163,6 +1167,10 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-tray-actions { width: 100%; justify-content: space-between; }
   .compare-tray-summary { max-width: min(100%, 32ch); }
   .compare-selection-chip { width: 100%; justify-content: space-between; }
+  .compare-selection-study-link,
+  .compare-selection-chip-remove { min-height: 36px; }
+  .compare-selection-study-link { min-width: 0; }
+  .compare-selection-chip-name { max-width: none; min-width: 0; }
   .compare-selection-chip span:first-child { max-width: none; min-width: 0; }
   .tool-row { grid-template-columns: 1fr; }
   .catalog-list { display: block; }
@@ -1199,6 +1207,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }
   .study-context-note button { min-height: 36px; }
   .compare-selection-clear, .compare-selection-chip, .catalog-batch-action { min-height: 36px; }
+  .compare-selection-study-link,
+  .compare-selection-chip-remove { min-height: 36px; }
   .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .clear-search { min-height: 36px; padding: 0.45rem 0.6rem; border-color: var(--amber); background: var(--amber-soft); }
   .clear-search:hover, .clear-search:focus-visible { color: var(--bg); background: var(--amber); }
@@ -1346,11 +1356,15 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-toggle.is-selected { border-color: Highlight; color: HighlightText; background: Highlight; }
   .compare-selection-clear,
   .compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .compare-selection-chip-remove { border-left-color: ButtonText; color: ButtonText; background: ButtonFace; }
+  .compare-selection-chip-remove:hover,
+  .compare-selection-chip-remove:focus-visible { color: HighlightText; background: Highlight; }
   .compare-selection-chip-status,
   .compare-selection-chip-status[data-status="measured"],
   .compare-selection-chip-status:not([data-status="schematic"]):not([data-status="measured"]) { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-current { border-color: ButtonText; color: ButtonText; background: ButtonFace; }
   .compare-selection-chip-axis { color: ButtonText; }
+  .compare-selection-chip-remove span { color: ButtonText; }
   .compare-selection-chip span:last-child { color: ButtonText; }
   .compare-study-open { color: Highlight; }
   .compare-study-card.is-active { border-color: Highlight; box-shadow: inset 3px 0 0 Highlight; }
