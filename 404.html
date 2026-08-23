@@ -4,10 +4,30 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#111817" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" id="site-favicon" href="favicon.svg" type="image/svg+xml" />
     <title>Page not found · Sacred Geometry Atlas</title>
+    <script>
+      (() => {
+        const storageKey = "sacred-geometry-atlas-theme";
+        let storedTheme = "";
+        try {
+          storedTheme = window.localStorage.getItem(storageKey) || "";
+        } catch (error) {
+          // A private or restricted context can decline local preference storage.
+        }
+        const theme = storedTheme === "light" || storedTheme === "dark"
+          ? storedTheme
+          : typeof window.matchMedia === "function" && window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.setAttribute("content", theme === "light" ? "#f4f6f1" : "#111817");
+      })();
+    </script>
     <style>
       :root {
         --ink: #eef2e9;
@@ -19,14 +39,43 @@
         --coral: #e77f62;
         --teal: #88c6ba;
         --line-strong: rgba(213, 229, 214, 0.68);
+        --grid-line: rgba(213, 229, 214, 0.04);
         --mono: 'SFMono-Regular', Consolas, monospace;
         --serif: Georgia, serif;
       }
 
+      :root[data-theme="light"] {
+        --ink: #18211f;
+        --ink-soft: #48554f;
+        --ink-muted: #64736a;
+        --bg: #f4f6f1;
+        --amber: #965b18;
+        --amber-soft: rgba(150, 91, 24, 0.12);
+        --coral: #93412d;
+        --teal: #23665d;
+        --line-strong: rgba(24, 33, 31, 0.42);
+        --grid-line: rgba(24, 33, 31, 0.08);
+      }
+
       * { box-sizing: border-box; }
-      html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+      html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; color-scheme: dark; }
+      html[data-theme="light"] { color-scheme: light; }
+      @media (prefers-color-scheme: light) {
+        :root:not([data-theme]) {
+          --ink: #18211f;
+          --ink-soft: #48554f;
+          --ink-muted: #64736a;
+          --bg: #f4f6f1;
+          --amber: #965b18;
+          --amber-soft: rgba(150, 91, 24, 0.12);
+          --coral: #93412d;
+          --teal: #23665d;
+          --line-strong: rgba(24, 33, 31, 0.42);
+          --grid-line: rgba(24, 33, 31, 0.08);
+        }
+      }
       body { min-height: 100vh; margin: 0; color: var(--ink); background: radial-gradient(circle at 82% 14%, rgba(136, 198, 186, 0.1), transparent 25rem), var(--bg); font-family: Arial, sans-serif; }
-      body::before { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(rgba(213, 229, 214, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(213, 229, 214, 0.04) 1px, transparent 1px); background-size: 32px 32px; content: ''; -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%); mask-image: linear-gradient(to bottom, black, transparent 75%); }
+      body::before { position: fixed; inset: 0; z-index: -1; background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 32px 32px; content: ''; -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%); mask-image: linear-gradient(to bottom, black, transparent 75%); }
       .error-page { display: grid; align-content: center; width: min(100% - 48px, 900px); min-height: calc(100vh - 96px); margin: auto; padding: 4rem 0; }
       .eyebrow { display: flex; align-items: center; gap: 0.7rem; margin: 0 0 1.8rem; color: var(--coral); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; }
       .eyebrow-line { width: 30px; height: 1px; background: currentColor; }
@@ -40,7 +89,7 @@
       .home-link-secondary { border-color: var(--teal); color: var(--teal); background: rgba(136, 198, 186, 0.08); }
       .home-link-secondary:hover, .home-link-secondary:focus-visible { color: var(--bg); background: var(--teal); }
       .home-link span { font-size: 1rem; line-height: 0; }
-      .error-footer { display: flex; justify-content: space-between; width: min(100% - 48px, 900px); margin: auto; padding: 1.25rem 0; border-top: 1px solid rgba(213, 229, 214, 0.14); color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; }
+      .error-footer { display: flex; justify-content: space-between; width: min(100% - 48px, 900px); margin: auto; padding: 1.25rem 0; border-top: 1px solid var(--line-strong); color: var(--ink-muted); font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.03em; }
       .error-footer p { margin: 0; }
       .error-footer strong { color: var(--teal); font-weight: 400; }
       @media (max-width: 600px) {
@@ -63,8 +112,20 @@
           --ink-muted: #b6c4ba;
           --line-strong: rgba(213, 229, 214, 0.92);
         }
+        :root[data-theme="light"] {
+          --ink-soft: #34413b;
+          --ink-muted: #53635a;
+          --line-strong: rgba(24, 33, 31, 0.72);
+        }
         .home-link:focus-visible { outline-width: 3px; }
         .error-footer { border-top-color: var(--line-strong); }
+      }
+      @media (prefers-color-scheme: light) and (prefers-contrast: more) {
+        :root:not([data-theme]) {
+          --ink-soft: #34413b;
+          --ink-muted: #53635a;
+          --line-strong: rgba(24, 33, 31, 0.72);
+        }
       }
       @media (forced-colors: active) {
         .home-link,
