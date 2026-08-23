@@ -270,8 +270,8 @@
         "confidence": "not-applicable",
         "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
         "geometryEvidenceFields": [
-          "reference-dimension",
-          "reference-dimension"
+          "length",
+          "span"
         ],
         "documentaryEvidenceRequired": true
       },
@@ -503,8 +503,8 @@
         "confidence": "not-applicable",
         "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
         "geometryEvidenceFields": [
-          "reference-dimension",
-          "reference-dimension"
+          "length",
+          "height"
         ],
         "documentaryEvidenceRequired": true
       },
@@ -4221,9 +4221,9 @@
         "confidence": "not-applicable",
         "explanation": "Ratios, symmetry, modules, and curve fits can test a geometric hypothesis but cannot identify the historical designer, mason, carpenter, engineer, or construction team. Attribution must come from documentary, archival, epigraphic, or institutional evidence.",
         "geometryEvidenceFields": [
-          "reference-dimension",
-          "reference-dimension",
-          "reference-dimension"
+          "length",
+          "span",
+          "height"
         ],
         "documentaryEvidenceRequired": true
       },

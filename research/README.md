@@ -22,6 +22,8 @@ The default acquisition uses Wikipedia article thumbnails, which generally resol
 
 [`data-probes.json`](data-probes.json) records endpoint reachability and advertised file sizes without downloading large or contact-restricted assets. The Saint Paul's archive is a reachable 2.11 GB public candidate; the probe does not treat reachability as proof of license, scale, or redistribution rights.
 
+If a raw candidate is acquired locally, [`acquired-assets.json`](acquired-assets.json) records its relative path, byte size, SHA-256, source, and evidence limits; [`research/raw/`](raw/) remains ignored because the archive is too large and its redistribution terms are not verified.
+
 The current image pass downloads 24 real thumbnails, but it does not yet claim a complete metric 3D dataset for the collection. A church can therefore have a real image and a source-linked schematic drawing while still being marked `reference-only` or `survey-documented` in the scan register.
 
 ## Math sheet and validation
@@ -33,6 +35,7 @@ Regenerate and validate the layer from the project root with:
 ```bash
 node scripts/analyze-geometry.js
 node scripts/build-research-atlas.js
+node scripts/register-acquired-assets.js
 node scripts/validate-research-data.js
 ```
 

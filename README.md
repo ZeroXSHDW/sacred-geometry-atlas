@@ -217,11 +217,12 @@ The local research layer now contains a real reference image for every study plu
 - [`research/scan-manifest.json`](research/scan-manifest.json) — LiDAR, laser-scan, photogrammetry, model, and survey leads, with open/contact/partial/reference status.
 - [`research/model-metadata.json`](research/model-metadata.json) — public 3D-model topology, author, license, and downloadability metadata for five Sketchfab leads.
 - [`research/data-probes.json`](research/data-probes.json) — endpoint checks and advertised sizes for real dataset candidates, including the 2.11 GB Saint Paul's archive.
+- [`research/acquired-assets.json`](research/acquired-assets.json) — hashes, sizes, and provenance for local raw acquisitions; the raw files remain ignored and are not published.
 - [`research/measurement-register.json`](research/measurement-register.json) — published dimensions versus schematic inputs.
 - [`research/geometry-analysis.json`](research/geometry-analysis.json) — reproducible ratios, simple-fraction checks, and candidate √2/√3/φ comparisons.
 - [`research/constructor-evidence.json`](research/constructor-evidence.json) — documentary designer/patron evidence; geometry is never used to name a constructor.
 
-Regenerate and validate the research layer with `node scripts/fetch-research-assets.js`, `node scripts/fetch-model-metadata.js`, `node scripts/probe-research-data.js`, `node scripts/analyze-geometry.js`, `node scripts/build-research-atlas.js`, `python3 scripts/measure-geometry-assets.py`, and `node scripts/validate-research-data.js`. The image files are research-only until each rights page is verified, and the current Pages artifact deliberately does not publish this unverified image corpus.
+Regenerate and validate the research layer with `node scripts/fetch-research-assets.js`, `node scripts/fetch-model-metadata.js`, `node scripts/probe-research-data.js`, `node scripts/register-acquired-assets.js`, `node scripts/analyze-geometry.js`, `node scripts/build-research-atlas.js`, `python3 scripts/measure-geometry-assets.py`, and `node scripts/validate-research-data.js`. The image files are research-only until each rights page is verified, and the current Pages artifact deliberately does not publish this unverified image corpus.
 
 ### Current reference list
 
