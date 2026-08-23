@@ -26,6 +26,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Reading-profile bars expose their 0–100 scores as accessible meters while keeping the duplicate visual score label out of the accessibility tree, so assistive technology hears one reading per profile.
 - Search across study names, references, provenance definitions, notes, detail vocabulary, numeric geometry dimensions, and derived ratios, with multi-word queries matching all terms across the record; repeated whitespace is normalized so shared catalog URLs and scope announcements stay canonical; typology, location, era, geometric axis, and measured/schematic status filtering use explicit catalog keys.
 - Every catalog filter option shows a scope-aware matching count, so the current search and other active filters make the remaining choices legible before a visitor opens a menu.
+- Visible Typology, Sort by, Location, Era, Axis, and Data status labels keep selected catalog values understandable for sighted visitors as well as assistive technology.
 - Provenance guidance follows the active catalog scope, keeping schematic/measured counts aligned with the records currently shown.
 - Catalog scope changes announce the active query, filters, and sort order alongside the updated result count, without repeating that count in the live status.
 - Changing or clearing the catalog data-status filter also announces the schema-backed status definition, so provenance meaning is available at the moment the filter changes.
