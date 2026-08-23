@@ -326,25 +326,34 @@ function renderNoScriptIndex(source) {
   return `${source.slice(0, start + noScriptStart.length)}\n${noScriptFallback()}\n${source.slice(end)}`;
 }
 
-const currentHtml = fs.readFileSync(htmlPath, "utf8");
-const renderedHtml = renderNoScriptIndex(currentHtml);
-const renderedCsv = staticCsv();
-const renderedSchema = `${JSON.stringify(schemaDocument(), null, 2)}\n`;
+if (require.main === module) {
+  const currentHtml = fs.readFileSync(htmlPath, "utf8");
+  const renderedHtml = renderNoScriptIndex(currentHtml);
+  const renderedCsv = staticCsv();
+  const renderedSchema = `${JSON.stringify(schemaDocument(), null, 2)}\n`;
 
-if (isCheck) {
-  const current = fs.readFileSync(outputPath, "utf8");
-  const currentCsv = fs.readFileSync(csvOutputPath, "utf8");
-  const currentSchema = fs.readFileSync(schemaOutputPath, "utf8");
-  if (current !== rendered || currentCsv !== renderedCsv || currentSchema !== renderedSchema || currentHtml !== renderedHtml) {
-    console.error("Static data artifacts are out of sync; run node scripts/sync-geometry-json.js");
-    process.exitCode = 1;
+  if (isCheck) {
+    const current = fs.readFileSync(outputPath, "utf8");
+    const currentCsv = fs.readFileSync(csvOutputPath, "utf8");
+    const currentSchema = fs.readFileSync(schemaOutputPath, "utf8");
+    if (current !== rendered || currentCsv !== renderedCsv || currentSchema !== renderedSchema || currentHtml !== renderedHtml) {
+      console.error("Static data artifacts are out of sync; run node scripts/sync-geometry-json.js");
+      process.exitCode = 1;
+    } else {
+      console.log(`Geometry JSON, CSV, schema, and no-script index are in sync: ${payload.studies.length} studies.`);
+    }
   } else {
-    console.log(`Geometry JSON, CSV, schema, and no-script index are in sync: ${payload.studies.length} studies.`);
+    fs.writeFileSync(outputPath, rendered);
+    fs.writeFileSync(csvOutputPath, renderedCsv);
+    fs.writeFileSync(schemaOutputPath, renderedSchema);
+    fs.writeFileSync(htmlPath, renderedHtml);
+    console.log(`Wrote data/geometry.json, data/geometry.csv, data/geometry.schema.json, and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
   }
-} else {
-  fs.writeFileSync(outputPath, rendered);
-  fs.writeFileSync(csvOutputPath, renderedCsv);
-  fs.writeFileSync(schemaOutputPath, renderedSchema);
-  fs.writeFileSync(htmlPath, renderedHtml);
-  console.log(`Wrote data/geometry.json, data/geometry.csv, data/geometry.schema.json, and the no-script index from data/geometry.js: ${payload.studies.length} studies.`);
 }
+
+module.exports = {
+  readingProfileScores,
+  readingProfileBasis,
+  readingProfileNote,
+  readingProfileExportContext
+};

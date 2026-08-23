@@ -3656,9 +3656,16 @@ jobs:
             }
           };
           vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
-          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderProfileCompare, state };\n})();');
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderProfileCompare, profileScores, READING_PROFILE_BASIS, READING_PROFILE_NOTE, state };\n})();');
           vm.runInNewContext(app, context);
-          const { renderProfileCompare, state } = context.window.__atlasTest;
+          const { renderProfileCompare, profileScores, READING_PROFILE_BASIS, READING_PROFILE_NOTE, state } = context.window.__atlasTest;
+          const exportedProfile = require('./scripts/sync-geometry-json.js');
+          if (exportedProfile.readingProfileBasis !== READING_PROFILE_BASIS || exportedProfile.readingProfileNote !== READING_PROFILE_NOTE || exportedProfile.readingProfileExportContext() !== `${READING_PROFILE_BASIS}; ${READING_PROFILE_NOTE}`) throw new Error('Interactive and generated reading-profile definitions have drifted');
+          for (const study of context.window.CHURCH_GEOMETRY) {
+            const interactiveScores = profileScores(study);
+            const generatedScores = exportedProfile.readingProfileScores(study);
+            if (JSON.stringify(interactiveScores) !== JSON.stringify(generatedScores)) throw new Error(`Interactive and generated reading-profile scores have drifted for ${study.id}`);
+          }
           renderProfileCompare();
           const fullMarkup = elements.get('#profileCompare').innerHTML;
           const meterCount = (fullMarkup.match(/role="meter"/g) || []).length;
@@ -3667,7 +3674,7 @@ jobs:
           renderProfileCompare();
           const focusedMarkup = elements.get('#profileCompare').innerHTML;
           if (!focusedMarkup.startsWith('<div class="profile-compare-row"') || (focusedMarkup.match(/role="listitem"/g) || []).length !== 2 || !focusedMarkup.includes('High gothic cathedral') || !focusedMarkup.includes('Cross-in-square')) throw new Error('Comparative reading profiles did not honor focused comparison order and scope');
-          console.log('Comparative reading profiles smoke test passed.');
+          console.log('Comparative reading profiles and export parity smoke test passed.');
           NODE
       - name: Smoke-test escaped schema units in comparison surfaces
         run: |
