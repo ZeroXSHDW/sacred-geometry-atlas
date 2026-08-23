@@ -36,6 +36,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 - Visible filter chips with one-click clearing for each active catalog filter or the full filter set.
 - Active filter chips prefix typology, location, era, axis, and data-status values, so a dense filtered view stays self-describing.
 - The active catalog settings group reports its count to assistive technology and keeps search, filters, and sorting state under one consistent label.
+- Catalog search includes each published study index, highlights an index match in the result card, and explains index-only matches in the visible result context and accessible label.
 - Catalog scope labels carry those same prefixes into result announcements, document titles, citations, shares, print feedback, and export provenance.
 - A filter-aware “Add visible to compare” action turns the current catalog view into a comparison set without losing existing selections.
 - The Atlas comparison tray previews selected study names and a compact schema-status summary, including selections outside the current filter view; its live selection label keeps each study's status attached for assistive technology.

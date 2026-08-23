@@ -1808,6 +1808,7 @@
     if (!terms.length) return "";
     const details = Array.isArray(study.details) ? study.details.flat() : [];
     const groups = [
+      ["study index", [study.index]],
       ["reference", [study.churchName]],
       ["provenance", [studySource(study), studySourceNote(study), studyStatus(study), studyStatusDescription(study)]],
       ["reading", [study.axis, studyAxisLabel(study), study.envelope, study.surfaceNote, study.exteriorNote, study.interiorNote, ...details]],
@@ -1828,6 +1829,7 @@
     const profileReadings = studySearchProfileReadings(study);
     const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";
     return [
+      study.index,
       study.name, study.shortName, study.churchName, study.typology, study.place, study.era,
       study.emphasis, study.axis, studyAxisLabel(study), study.envelope, studySource(study), studySourceNote(study),
       study.surfaceNote, study.exteriorNote, study.interiorNote, volumeBasis, studyStatus(study),
@@ -1937,7 +1939,7 @@
       return `
         <li class="catalog-entry">
           <a class="catalog-card ${isActive ? "is-active" : ""}" data-study-id="${escapeHtml(study.id)}" href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"${currentAttribute} aria-label="${escapeHtml(catalogStudyAriaLabel(study, isActive))}">
-            <span class="catalog-number" aria-hidden="true">${escapeHtml(study.index)}</span>
+            <span class="catalog-number" aria-hidden="true">${highlightSearchText(study.index)}</span>
             <span class="catalog-card-copy">
               <span class="catalog-card-title">${highlightSearchText(study.name)}</span>
               <span class="catalog-card-meta">${highlightSearchText(`${study.typology} · ${study.place}`)}</span>
