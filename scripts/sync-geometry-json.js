@@ -279,6 +279,9 @@ function noScriptFallback() {
     const studyReadingId = `atlas-reading-${encodeURIComponent(study.id)}`;
     const floorArea = positiveEstimate(study.floorAreaEstimate);
     const volume = positiveEstimate(study.volumeEstimate);
+    const volumeBasis = volume !== null
+      ? study.volumeBasis || (studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate")
+      : "No estimate supplied";
     const readingProfile = readingProfileScores(study)
       .map(([label, score]) => `${label} ${score}`)
       .join(" · ");
@@ -290,7 +293,7 @@ function noScriptFallback() {
       `height / span ${fixed(study.height / study.span, 2)}`,
       `symmetry ${fixed(study.symmetry, 2)}`,
       floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}² (supplied floor-area estimate)` : "floor area not supplied (length × span fallback)",
-      volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : "",
+      volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³ (${volumeBasis})` : `volume not supplied (${volumeBasis})`,
       `reading profile (interpretive 0–100): ${readingProfile}. ${readingProfileNote} Basis: ${readingProfileBasis}.`
     ].filter(Boolean).join(" · ");
     const reading = study.surfaceNote || study.exteriorNote || study.interiorNote || "No interpretive reading supplied.";
