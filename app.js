@@ -2055,7 +2055,7 @@
     $("#analysisVolumeBasis").textContent = volume.basis;
     $("#activeEquation").textContent = `R = L ÷ span = ${number(ratio, 2)}`;
     $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
-      <div class="profile-item" role="listitem"><div class="profile-label" aria-hidden="true"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)} interpretive score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${escapeHtml(profileMeterValueText(label, score))}"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
+      <div class="profile-item" role="listitem"><div class="profile-label" aria-hidden="true"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(`${studyShortName(study)} ${label} interpretive score`)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${escapeHtml(profileMeterValueText(label, score))}"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
     `).join("");
   }
 
