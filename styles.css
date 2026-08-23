@@ -714,7 +714,8 @@ button[aria-busy="true"] { cursor: progress; opacity: 0.72; }
 .analysis-cell span, .analysis-cell small { display: block; color: var(--ink-muted); font-size: 0.51rem; letter-spacing: 0.04em; }
 .analysis-cell strong { display: block; margin: 0.3rem 0; color: var(--teal); font-family: var(--serif); font-size: 1.27rem; font-weight: 500; }
 .profile-readout { padding-top: 1rem; }
-.profile-heading { display: flex; justify-content: space-between; margin-bottom: 0.7rem; color: var(--ink-muted); font-size: 0.52rem; letter-spacing: 0.05em; }
+.profile-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.35rem 1rem; margin-bottom: 0.35rem; color: var(--ink-muted); font-size: 0.52rem; letter-spacing: 0.05em; }
+.profile-note { margin: 0 0 0.75rem; color: var(--ink-muted); font-family: var(--mono); font-size: 0.52rem; line-height: 1.45; }
 .profile-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
 .profile-item { min-width: 0; }
 .profile-label { display: flex; justify-content: space-between; gap: 0.4rem; margin-bottom: 0.36rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.55rem; }
@@ -1359,6 +1360,7 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .compare-tray-provenance { color: ButtonText; }
   .noscript-derived { color: Highlight; }
   .noscript-provenance { color: Highlight; }
+  .profile-note { color: CanvasText; }
   .noscript-status-key { border-color: ButtonText; background: Canvas; }
   .noscript-status-key-grid { border-color: ButtonText; background: ButtonText; }
   .noscript-status-key-grid > div { background: Canvas; }
