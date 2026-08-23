@@ -273,6 +273,9 @@ function noScriptFallback() {
     const dimensions = [study.length, study.span, study.height].join(" × ") + ` ${unitSymbol}`;
     const studyRoute = `#atlas/${encodeURIComponent(study.id)}/plan/exterior/all`;
     const studyMetaId = `atlas-meta-${encodeURIComponent(study.id)}`;
+    const studyDerivedId = `atlas-derived-${encodeURIComponent(study.id)}`;
+    const studyProvenanceId = `atlas-provenance-${encodeURIComponent(study.id)}`;
+    const studyReadingId = `atlas-reading-${encodeURIComponent(study.id)}`;
     const floorArea = positiveEstimate(study.floorAreaEstimate);
     const volume = positiveEstimate(study.volumeEstimate);
     const readingProfile = readingProfileScores(study)
@@ -287,13 +290,14 @@ function noScriptFallback() {
       `symmetry ${fixed(study.symmetry, 2)}`,
       floorArea !== null ? `floor area ${Number(floorArea).toLocaleString("en-US")} ${unitSymbol}² (supplied floor-area estimate)` : "floor area not supplied (length × span fallback)",
       volume !== null ? `volume ${Number(volume).toLocaleString("en-US")} ${unitSymbol}³` : "",
-      `reading profile (0–100): ${readingProfile}`
+      `reading profile (interpretive 0–100): ${readingProfile}. ${readingProfileNote} Basis: ${readingProfileBasis}.`
     ].filter(Boolean).join(" · ");
     const reading = study.surfaceNote || study.exteriorNote || study.interiorNote || "No interpretive reading supplied.";
     const source = study.source || "Provenance not supplied";
     const sourceNote = study.sourceNote || "Provenance note not supplied";
     const statusLabel = statusDisplayName(studyStatus(study)).toLowerCase();
-    return `          <li id="${escapeHtml(studyRoute.slice(1))}" tabindex="-1"><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong><a class="noscript-study-link" href="${escapeHtml(studyRoute)}" aria-label="Jump to the static record for ${escapeHtml(study.name)}; interactive drawings require JavaScript" aria-describedby="${escapeHtml(studyMetaId)}">${escapeHtml(study.name)}</a></strong><small id="${escapeHtml(studyMetaId)}">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(axisDisplayLabel(study.axis))} · ${escapeHtml(statusLabel)} · ${escapeHtml(dimensions)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-derived">Readings: ${escapeHtml(readings)}</span><span class="noscript-provenance">Provenance: ${escapeHtml(source)} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading">Reading: ${escapeHtml(reading)}</span></span></li>`;
+    const statusDefinitionText = statusDefinitions[studyStatus(study)] || "Data status is not documented.";
+    return `          <li id="${escapeHtml(studyRoute.slice(1))}" tabindex="-1"><span class="noscript-number" aria-hidden="true">${escapeHtml(study.index)}</span><span><strong><a class="noscript-study-link" href="${escapeHtml(studyRoute)}" aria-label="Jump to the static record for ${escapeHtml(study.name)}; interactive drawings require JavaScript" aria-describedby="${escapeHtml(studyMetaId)} ${escapeHtml(studyDerivedId)} ${escapeHtml(studyProvenanceId)} ${escapeHtml(studyReadingId)}">${escapeHtml(study.name)}</a></strong><small id="${escapeHtml(studyMetaId)}">${escapeHtml(study.typology)} · ${escapeHtml(study.place)} · ${escapeHtml(study.era)} · ${escapeHtml(study.emphasis)} · Axis: ${escapeHtml(axisDisplayLabel(study.axis))} · ${escapeHtml(statusLabel)} (${escapeHtml(statusDefinitionText)}) · ${escapeHtml(dimensions)} · Reference: ${escapeHtml(study.churchName || study.name)}</small><span class="noscript-derived" id="${escapeHtml(studyDerivedId)}">Readings: ${escapeHtml(readings)}</span><span class="noscript-provenance" id="${escapeHtml(studyProvenanceId)}">Provenance: ${escapeHtml(source)} · ${escapeHtml(sourceNote)}</span><span class="noscript-reading" id="${escapeHtml(studyReadingId)}">Reading: ${escapeHtml(reading)}</span></span></li>`;
   }).join("\n");
   const intro = hasStudies
     ? `${escapeHtml(collectionCount[0].toUpperCase() + collectionCount.slice(1))} ${escapeHtml(provenanceLabel)} ${payload.studies.length === 1 ? "study" : "studies"} of church geometry, expressed through plans, sections, modules, axes, and enclosing forms. Dimensions are shown as length × span × height in ${escapeHtml(unitName)}. ${escapeHtml(schemaNote)}.`
