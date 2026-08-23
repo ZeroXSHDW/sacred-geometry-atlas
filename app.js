@@ -2055,7 +2055,7 @@
     $("#analysisVolumeBasis").textContent = volume.basis;
     $("#activeEquation").textContent = `R = L ÷ span = ${number(ratio, 2)}`;
     $("#profileRow").innerHTML = profileScores(study).map(([label, score]) => `
-      <div class="profile-item" role="listitem"><div class="profile-label" aria-hidden="true"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)} interpretive score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100; proportional tendency, not empirical measurement"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
+      <div class="profile-item" role="listitem"><div class="profile-label" aria-hidden="true"><span>${escapeHtml(label)}</span><b>${score}</b></div><div class="profile-track" role="meter" aria-label="${escapeHtml(label)} interpretive score" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${escapeHtml(profileMeterValueText(label, score))}"><i class="profile-fill" style="--profile:${score}%"></i></div></div>
     `).join("");
   }
 
@@ -2279,6 +2279,14 @@
       ["repetition", Math.round(Math.min(100, (study.bayCount / 8) * 100))]
     ];
   }
+
+  const READING_PROFILE_BASIS_BY_KEY = {
+    linearity: "normalized length ÷ span",
+    verticality: "normalized height ÷ span",
+    radiality: "typology cue",
+    repetition: "normalized bay count"
+  };
+  const profileMeterValueText = (profile, score) => `${score} out of 100; ${READING_PROFILE_BASIS_BY_KEY[profile] || "proportional tendency"}; interpretive, not empirical measurement`;
 
   const READING_PROFILE_BASIS = "linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count";
   const READING_PROFILE_NOTE = "Interpretive proportional tendencies, not empirical measurements.";
@@ -3971,7 +3979,7 @@
       const currentCue = isActive ? '<span class="chart-current" title="Current Atlas study">current</span>' : "";
       const currentLabel = isActive ? " This is the current Atlas study." : "";
       const label = `Interpretive reading profile for ${studyShortName(study)}; ${axisLabel}; ${statusLabel} (${status}) record: ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}${currentLabel}`;
-      return `<div class="profile-compare-row${currentClass}" role="listitem" aria-label="${escapeHtml(label)}"${currentDescription}><span class="profile-compare-name" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="profile-compare-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}</span></span><span class="profile-compare-grid">${profileScores(study).map(([profile, score]) => `<span class="profile-compare-cell"><span class="profile-compare-label" aria-hidden="true">${escapeHtml(profile)}</span><span class="profile-compare-track" role="meter" aria-label="${escapeHtml(`${studyShortName(study)} ${profile} interpretive score`)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${score} out of 100; proportional tendency, not empirical measurement"><i class="profile-compare-fill" style="width:${score}%"></i></span><span class="profile-compare-value" aria-hidden="true">${score}</span></span>`).join("")}</span></div>`;
+      return `<div class="profile-compare-row${currentClass}" role="listitem" aria-label="${escapeHtml(label)}"${currentDescription}><span class="profile-compare-name" aria-hidden="true"><span class="chart-study-name">${escapeHtml(studyShortName(study))}</span><span class="profile-compare-meta"><span class="chart-axis-context" title="${escapeHtml(axisLabel)}">${escapeHtml(axisLabel)}</span><span class="chart-status" data-status="${escapeHtml(status)}" title="${escapeHtml(studyStatusDescription(study))}">${escapeHtml(statusLabel)}</span>${currentCue}</span></span><span class="profile-compare-grid">${profileScores(study).map(([profile, score]) => `<span class="profile-compare-cell"><span class="profile-compare-label" aria-hidden="true">${escapeHtml(profile)}</span><span class="profile-compare-track" role="meter" aria-label="${escapeHtml(`${studyShortName(study)} ${profile} interpretive score`)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}" aria-valuetext="${escapeHtml(profileMeterValueText(profile, score))}"><i class="profile-compare-fill" style="width:${score}%"></i></span><span class="profile-compare-value" aria-hidden="true">${score}</span></span>`).join("")}</span></div>`;
     }).join("");
   }
 
