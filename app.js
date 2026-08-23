@@ -3811,7 +3811,11 @@
       const floorArea = floorAreaReading(study);
       const volume = volumeReading(study);
       const readingProfile = Object.fromEntries(profileScores(study));
-      const profileCell = (key, label) => `<td class="comparison-profile-cell" data-profile="${key}" aria-label="${escapeHtml(`${label} profile: ${readingProfile[key]} out of 100; interpretive score`)}" title="Interpretive 0–100 score">${readingProfile[key]}</td>`;
+      const profileCell = (key, label) => {
+        const profileLabel = `${studyShortName(study)} ${label} profile: ${profileMeterValueText(key, readingProfile[key])}`;
+        const profileTitle = `Interpretive 0–100 score; ${READING_PROFILE_BASIS_BY_KEY[key] || "proportional tendency"}`;
+        return `<td class="comparison-profile-cell" data-profile="${key}" aria-label="${escapeHtml(profileLabel)}" title="${escapeHtml(profileTitle)}">${readingProfile[key]}</td>`;
+      };
       const status = studyDataLabel(study);
       const statusLabel = statusDisplayName(status);
       const isActive = study.id === state.activeId;
