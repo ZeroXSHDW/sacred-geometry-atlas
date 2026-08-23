@@ -1153,7 +1153,8 @@ code { color: var(--teal); font-family: var(--mono); font-size: 0.64rem; }
   .catalog-entry:nth-child(even) { padding-left: 0.8rem; }
   .catalog-card:hover { padding-left: 0.35rem; }
   .catalog-entry:nth-child(even) .catalog-card:hover { padding-left: 0.35rem; }
-  .compare-toggle { flex-basis: 22px; width: 22px; height: 22px; margin-right: 0; }
+  .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; margin-right: 0; }
+  .search-clear { width: 36px; height: 36px; }
   .drawing-controls { align-items: start; flex-direction: column; }
   .study-header { flex-direction: column; gap: 1.2rem; }
   .study-header-actions { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.8rem; }
