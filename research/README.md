@@ -22,7 +22,7 @@ The default acquisition uses Wikipedia article thumbnails, which generally resol
 
 [`data-probes.json`](data-probes.json) records endpoint reachability and advertised file sizes without bypassing contact restrictions. The Saint Paul's archive was a reachable 2.11 GB public candidate and is now acquired locally; the probe and acquisition register still do not treat reachability as proof of license, scale, or redistribution rights.
 
-If a raw candidate is acquired locally, [`acquired-assets.json`](acquired-assets.json) records its relative path, byte size, SHA-256, source, and evidence limits; [`research/raw/`](raw/) remains ignored because the archive is too large and its redistribution terms are not verified.
+If a raw candidate is acquired locally, [`acquired-assets.json`](acquired-assets.json) records its relative path, byte size, SHA-256, source, and evidence limits; the optional `research/raw/` directory remains ignored because the archive is too large and its redistribution terms are not verified. A clean checkout therefore does not contain that directory.
 
 The Saint Paul's archive is the first locally measured scene. [`st-pauls-colmap.json`](st-pauls-colmap.json) records the complete COLMAP sparse counts and camera/image metadata, every dense depth-map header and valid-value summary, and a deterministic world-space sample back-projected from the calibrated poses. It is photogrammetry rather than LiDAR. Native reconstruction bounds and robust 1–99% bounds are retained separately; neither is converted to metres until a verified control correspondence is established. The raw archive is at `research/raw/st-pauls/` locally and is intentionally not published.
 
