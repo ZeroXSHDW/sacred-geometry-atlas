@@ -205,6 +205,14 @@ The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.sv
 
 The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon and the safe-zone icons/atlas-maskable.svg launcher mark.
 
+## Contribution, security, and rights
+
+Keep geometry records evidence-led: cite the named building, distinguish documented facts from schematic interpretation, and preserve the generated JSON, CSV, schema, and static-index outputs by running the synchronization check before committing. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the local validation sequence and change boundaries.
+
+Report suspected security issues privately using the contact and handling guidance in [`SECURITY.md`](SECURITY.md). Do not commit credentials, private client information, unpublished therapy configuration, or downloaded research assets whose redistribution rights have not been verified.
+
+This repository does not currently grant a blanket reuse license for its source, interface, research writing, or bundled media. Treat the code and original content as all rights reserved until a maintainer adds an explicit `LICENSE`; third-party sources, images, models, and datasets remain subject to their own terms recorded in the research manifests.
+
 ## Add real churches
 
 The current records point to real named churches. Most geometry values remain explicitly schematic, illustrative proportions—not measured surveys; St Paul's length, greatest breadth, and overall height are now marked as published reference dimensions, while its radius/module/bay inputs remain schematic. Each record carries a source URL and a source note that separates documented building facts from Atlas interpretation. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
@@ -318,6 +326,7 @@ node --check data/geometry.js
 node --check sw.js
 node --check scripts/sync-geometry-json.js
 node scripts/sync-geometry-json.js --check
+node scripts/validate-workflow.mjs
 node -e "JSON.parse(require('fs').readFileSync('data/geometry.json', 'utf8'))"
 node -e "if (!require('fs').readFileSync('data/geometry.csv', 'utf8').trim().split(/\r?\n/).length) process.exit(1)"
 python3 -c "import xml.etree.ElementTree as ET; ET.parse('sitemap.xml')"

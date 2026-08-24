@@ -16,12 +16,19 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
+      - name: Validate workflow contract
+        run: node scripts/validate-workflow.mjs
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Validate static site
@@ -138,7 +145,7 @@ jobs:
           if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('const setConnectionState = (connectionState) =>') || !app.includes('setConnectionState("offline")') || !app.includes('setConnectionState("online")') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[data-connection-state="online"]') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite, state-aware connection notice with print and forced-colors styling');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('sortSelectLabel(state.sort, state.sortDirection)') || !app.includes('aria-label="Clear all active catalog settings"') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
-          if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
+          if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
           const structuredDataMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
           if (!structuredDataMatch) throw new Error('Missing collection JSON-LD metadata');
           let structuredData;
@@ -189,7 +196,7 @@ jobs:
           for (const token of ['From this already initialized checkout', 'git branch -M main', 'git push -u origin main', 'If `git status` shows local changes', 'git add .', 'node scripts/sync-geometry-json.js', 'data/geometry.csv', 'data/geometry.schema.json', 'Raw CSV', 'Open schema', 'published schema URL', 'current site origin', 'JSON, CSV, and JSON Schema distributions', 'stamps the published JSON, CSV, and JSON Schema artifacts', 'favicon.svg', 'site.webmanifest', 'sw.js', 'offline shell', 'static.html', 'static collection index', 'robots.txt', 'sitemap.xml', 'CNAME', 'Narrow phone layouts', 'one-click Copy link action', 'Method guide; clipboard', 'Print guide action', 'stamps the final absolute Pages URL', 'The committed tree already includes the Pages workflow']) {
             if (!readme.includes(token)) throw new Error(`GitHub Pages publishing guide is missing: ${token}`);
           }
-          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify curated Pages artifact', 'PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./static.html</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) {
+          for (const token of ['id: pages', 'Stamp deployed site metadata', 'Verify curated Pages artifact', 'PAGES_BASE_URL: ', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./static.html</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) { + '{{ steps.pages.outputs.base_url }}', 'schema_target = base_url + "data/geometry.schema.json"', 'dataset_marker = \'"schemaUrl": "data/geometry.schema.json"\'', 'schema_replacements = {', 'Sitemap: ./sitemap.xml', '<loc>./</loc>', '<loc>./static.html</loc>', '<loc>./data/geometry.json</loc>', '<loc>./data/geometry.csv</loc>', '<loc>./data/geometry.schema.json</loc>', 'scripts/verify-pages-artifact.py']) {
             if (!workflow.includes(token)) throw new Error(`Pages deployment metadata handoff is missing: ${token}`);
           }
           for (const token of ['PAGES_BASE_URL', 'json.loads', 'csv.DictReader', 'SHELL_PATHS', 'shell_files', 'missing_shell_files', 'Published CSV route is not direct and deterministic', 'Published JSON Schema does not match the stamped dataset contract']) {
@@ -5011,13 +5018,18 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
       - name: Configure Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Prepare Pages artifact
         run: |
           python3 - <<'PY'
@@ -5229,9 +5241,9 @@ jobs:
         run: |
           python3 scripts/verify-pages-artifact.py
       - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: "_site"
       - name: Deploy to Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
