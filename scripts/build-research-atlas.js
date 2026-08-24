@@ -11,6 +11,9 @@ const scanManifest = require(path.join(projectRoot, "research", "scan-manifest.j
 const geometryAnalysis = require(path.join(projectRoot, "research", "geometry-analysis.json"));
 const constructorEvidence = require(path.join(projectRoot, "research", "constructor-evidence.json"));
 const modelMetadata = require(path.join(projectRoot, "research", "model-metadata.json"));
+const assetMeasurements = require(path.join(projectRoot, "research", "asset-measurements.json"));
+const colmapMeasurementPath = path.join(projectRoot, "research", "st-pauls-colmap.json");
+const colmapMeasurement = fs.existsSync(colmapMeasurementPath) ? require(colmapMeasurementPath) : null;
 const outputPath = path.join(projectRoot, "research", "annotated-atlas.html");
 
 const escapeHtml = (value) => String(value ?? "")
@@ -24,8 +27,10 @@ const images = byId(imageManifest.records);
 const scans = byId(scanManifest.records);
 const constructors = byId(constructorEvidence.records);
 const models = new Map(modelMetadata.records.map((record) => [record.churchId, record]));
+const interiorMesh = assetMeasurements.records.find((record) => record.path === "st-pauls/st-pauls-zenodo-interior.glb");
 
 const formatNumber = (value) => typeof value === "number" ? value.toFixed(3).replace(/0+$/, "").replace(/\.$/, "") : "—";
+const formatInteger = (value) => Number.isFinite(value) ? Number(value).toLocaleString("en-US") : "—";
 const sourceLink = (url, label = "source") => url ? `<a href="${escapeHtml(url)}">${escapeHtml(label)}</a>` : "—";
 const evidenceLabel = (value) => value === "reference-dimension" ? "published dimension" : value;
 
@@ -66,6 +71,7 @@ const cardHtml = (record) => {
   const evidence = Object.entries(record.currentGeometryEvidence)
     .map(([field, value]) => `<span class="evidence-chip ${value}">${escapeHtml(field)}: ${escapeHtml(evidenceLabel(value))}</span>`)
     .join("");
+  const acquiredScene = record.id === "st-pauls" && colmapMeasurement ? `<p class="acquired-note"><strong>Acquired inside/out evidence:</strong> ${formatInteger(colmapMeasurement.sparse?.imageCount)} calibrated images · ${formatInteger(colmapMeasurement.sparse?.point3DCount)} sparse 3D points · ${formatInteger(colmapMeasurement.denseDepthMaps?.mapCount)} dense depth maps · ${formatInteger(colmapMeasurement.denseDepthMaps?.totalValidPositiveValueCount)} positive depth values read${interiorMesh ? ` · ${formatInteger(interiorMesh.pointCount)}-vertex / ${formatInteger(interiorMesh.faceCount)}-face interior/crypt GLB mesh` : ""}. The robust sparse native-coordinate principal-axis ratios are ${colmapMeasurement.mathReadings?.nativeSparseRobustAxisExtentRatios?.map(formatNumber).join(" : ") || "—"}; these are unscaled photogrammetry/model statistics, not metric LiDAR or constructor attribution. ${sourceLink("st-pauls-colmap.json", "scene measurement")}</p>` : "";
   return `<article class="card" id="${escapeHtml(record.id)}">
     <div class="card-heading">
       <p class="eyebrow">${escapeHtml(record.index)} · ${escapeHtml(record.typology)} · ${escapeHtml(record.place)}</p>
@@ -93,6 +99,7 @@ const cardHtml = (record) => {
     <div class="evidence-row">${evidence}</div>
     <p class="scan-note"><strong>Scan/model lead:</strong> ${escapeHtml(scan.coverage)} ${sourceLink(scan.sources?.[0]?.url, "open lead")}</p>
     ${model ? `<p class="model-note"><strong>Public 3D metadata:</strong> ${formatNumber(model.vertexCount)} vertices · ${formatNumber(model.faceCount)} faces · ${escapeHtml(model.license?.label || "license not stated in API metadata")} · raw download flag: ${model.isDownloadable ? "yes" : "no"}. These counts are topology metadata, not metric dimensions. ${sourceLink(model.apiUrl, "API record")}</p>` : ""}
+    ${acquiredScene}
     <p class="builder-note"><strong>Documentary attribution:</strong> ${builder.roles?.length ? "" : "No named designer or builder is established in this current source set."} ${roles ? `<ul>${roles}</ul>` : ""}<br /><strong>Construction team:</strong> ${escapeHtml(builder.constructionTeam)} Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>`;
 };
@@ -144,14 +151,15 @@ const html = `<!doctype html>
     .evidence-chip { border:1px solid var(--line); border-radius:99px; padding:4px 9px; font:12px ui-sans-serif,system-ui,sans-serif; }
     .evidence-chip.reference-dimension { border-color:#b2875a; background:#fcf7ef; }
     .evidence-chip.schematic { background:#f3f5f3; color:var(--muted); }
-    .scan-note,.model-note,.builder-note { padding:0 26px; max-width:none; color:#394541; }
+    .scan-note,.model-note,.acquired-note,.builder-note { padding:0 26px; max-width:none; color:#394541; }
     .model-note { font:13px/1.45 ui-sans-serif,system-ui,sans-serif; color:var(--muted); }
+    .acquired-note { margin-top:0; font:13px/1.5 ui-sans-serif,system-ui,sans-serif; color:#285b54; background:#f0f8f4; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding-top:14px; padding-bottom:14px; }
     .builder-note { padding-bottom:22px; }
     .builder-note ul { margin:.35rem 0 .35rem 1.2rem; padding:0; }
     .builder-note span { font-weight:600; }
     .footnote { color:var(--muted); font:14px/1.55 ui-sans-serif,system-ui,sans-serif; }
     @media (max-width: 800px) { .visual-grid { grid-template-columns:1fr; } .math-grid { grid-template-columns:repeat(3,1fr); } .math-grid div:nth-child(3) { border-right:0; } .math-grid div:nth-child(-n+3) { border-bottom:1px solid var(--line); } }
-    @media (max-width: 480px) { main { width:min(100% - 18px,1200px); padding-top:18px; } .card-heading,.visual-grid,.scan-note,.model-note,.builder-note,.evidence-row { padding-left:14px; padding-right:14px; } .math-grid { margin-left:14px; margin-right:14px; grid-template-columns:repeat(2,1fr); } .math-grid div:nth-child(3) { border-right:1px solid var(--line); } .math-grid div:nth-child(2n) { border-right:0; } .math-grid div:nth-child(-n+4) { border-bottom:1px solid var(--line); } }
+    @media (max-width: 480px) { main { width:min(100% - 18px,1200px); padding-top:18px; } .card-heading,.visual-grid,.scan-note,.model-note,.acquired-note,.builder-note,.evidence-row { padding-left:14px; padding-right:14px; } .math-grid { margin-left:14px; margin-right:14px; grid-template-columns:repeat(2,1fr); } .math-grid div:nth-child(3) { border-right:1px solid var(--line); } .math-grid div:nth-child(2n) { border-right:0; } .math-grid div:nth-child(-n+4) { border-bottom:1px solid var(--line); } }
   </style>
 </head>
 <body>
@@ -159,8 +167,8 @@ const html = `<!doctype html>
     <section class="intro">
       <p class="eyebrow" style="color:#9cd8ce">Evidence-aware research atlas · 24 churches</p>
       <h1>Real images, transparent ratios, and the limits of geometric attribution.</h1>
-      <p>Each sheet pairs a downloaded real reference image with a normalized math panel. The formulas use the current Atlas inputs and visibly preserve whether each field is a published dimension or a schematic comparison value. The diagram is not registered to the photograph; it is a visual explanation of the math.</p>
-      <p class="footnote" style="color:#c7ded8">Read the underlying <a href="image-manifest.json">image manifest</a>, <a href="scan-manifest.json">scan/model register</a>, <a href="measurement-register.json">measurement register</a>, <a href="geometry-analysis.json">geometry analysis</a>, and <a href="constructor-evidence.json">constructor evidence</a>.</p>
+      <p>Each sheet pairs a downloaded real reference image with a normalized math panel. The formulas use the current Atlas inputs and visibly preserve whether each field is a published dimension or a schematic comparison value. The diagram is not registered to the photograph; it is a visual explanation of the math. The St Paul's sheet also reports the locally acquired photogrammetry reconstruction separately from the published reference dimensions.</p>
+      <p class="footnote" style="color:#c7ded8">Read the underlying <a href="image-manifest.json">image manifest</a>, <a href="scan-manifest.json">scan/model register</a>, <a href="measurement-register.json">measurement register</a>, <a href="geometry-analysis.json">geometry analysis</a>, <a href="constructor-evidence.json">constructor evidence</a>, and <a href="st-pauls-colmap.json">St Paul's measurement record</a>.</p>
     </section>
     <section class="cards" aria-label="Church research sheets">
       ${cards}
@@ -169,5 +177,5 @@ const html = `<!doctype html>
 </body>
 </html>
 `;
-fs.writeFileSync(outputPath, html);
+fs.writeFileSync(outputPath, html.replace(/[ \t]+$/gm, ""));
 console.log(`Annotated research atlas written: ${path.relative(projectRoot, outputPath)}.`);

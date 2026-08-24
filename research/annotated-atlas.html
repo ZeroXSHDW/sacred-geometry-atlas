@@ -44,14 +44,15 @@
     .evidence-chip { border:1px solid var(--line); border-radius:99px; padding:4px 9px; font:12px ui-sans-serif,system-ui,sans-serif; }
     .evidence-chip.reference-dimension { border-color:#b2875a; background:#fcf7ef; }
     .evidence-chip.schematic { background:#f3f5f3; color:var(--muted); }
-    .scan-note,.model-note,.builder-note { padding:0 26px; max-width:none; color:#394541; }
+    .scan-note,.model-note,.acquired-note,.builder-note { padding:0 26px; max-width:none; color:#394541; }
     .model-note { font:13px/1.45 ui-sans-serif,system-ui,sans-serif; color:var(--muted); }
+    .acquired-note { margin-top:0; font:13px/1.5 ui-sans-serif,system-ui,sans-serif; color:#285b54; background:#f0f8f4; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding-top:14px; padding-bottom:14px; }
     .builder-note { padding-bottom:22px; }
     .builder-note ul { margin:.35rem 0 .35rem 1.2rem; padding:0; }
     .builder-note span { font-weight:600; }
     .footnote { color:var(--muted); font:14px/1.55 ui-sans-serif,system-ui,sans-serif; }
     @media (max-width: 800px) { .visual-grid { grid-template-columns:1fr; } .math-grid { grid-template-columns:repeat(3,1fr); } .math-grid div:nth-child(3) { border-right:0; } .math-grid div:nth-child(-n+3) { border-bottom:1px solid var(--line); } }
-    @media (max-width: 480px) { main { width:min(100% - 18px,1200px); padding-top:18px; } .card-heading,.visual-grid,.scan-note,.model-note,.builder-note,.evidence-row { padding-left:14px; padding-right:14px; } .math-grid { margin-left:14px; margin-right:14px; grid-template-columns:repeat(2,1fr); } .math-grid div:nth-child(3) { border-right:1px solid var(--line); } .math-grid div:nth-child(2n) { border-right:0; } .math-grid div:nth-child(-n+4) { border-bottom:1px solid var(--line); } }
+    @media (max-width: 480px) { main { width:min(100% - 18px,1200px); padding-top:18px; } .card-heading,.visual-grid,.scan-note,.model-note,.acquired-note,.builder-note,.evidence-row { padding-left:14px; padding-right:14px; } .math-grid { margin-left:14px; margin-right:14px; grid-template-columns:repeat(2,1fr); } .math-grid div:nth-child(3) { border-right:1px solid var(--line); } .math-grid div:nth-child(2n) { border-right:0; } .math-grid div:nth-child(-n+4) { border-bottom:1px solid var(--line); } }
   </style>
 </head>
 <body>
@@ -59,8 +60,8 @@
     <section class="intro">
       <p class="eyebrow" style="color:#9cd8ce">Evidence-aware research atlas · 24 churches</p>
       <h1>Real images, transparent ratios, and the limits of geometric attribution.</h1>
-      <p>Each sheet pairs a downloaded real reference image with a normalized math panel. The formulas use the current Atlas inputs and visibly preserve whether each field is a published dimension or a schematic comparison value. The diagram is not registered to the photograph; it is a visual explanation of the math.</p>
-      <p class="footnote" style="color:#c7ded8">Read the underlying <a href="image-manifest.json">image manifest</a>, <a href="scan-manifest.json">scan/model register</a>, <a href="measurement-register.json">measurement register</a>, <a href="geometry-analysis.json">geometry analysis</a>, and <a href="constructor-evidence.json">constructor evidence</a>.</p>
+      <p>Each sheet pairs a downloaded real reference image with a normalized math panel. The formulas use the current Atlas inputs and visibly preserve whether each field is a published dimension or a schematic comparison value. The diagram is not registered to the photograph; it is a visual explanation of the math. The St Paul's sheet also reports the locally acquired photogrammetry reconstruction separately from the published reference dimensions.</p>
+      <p class="footnote" style="color:#c7ded8">Read the underlying <a href="image-manifest.json">image manifest</a>, <a href="scan-manifest.json">scan/model register</a>, <a href="measurement-register.json">measurement register</a>, <a href="geometry-analysis.json">geometry analysis</a>, <a href="constructor-evidence.json">constructor evidence</a>, and <a href="st-pauls-colmap.json">St Paul's measurement record</a>.</p>
     </section>
     <section class="cards" aria-label="Church research sheets">
       <article class="card" id="basilica">
@@ -99,6 +100,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip reference-dimension">length: published dimension</span><span class="evidence-chip reference-dimension">span: published dimension</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Whole building identified; no authoritative open LiDAR or photogrammetric file located. <a href="https://whc.unesco.org/en/list/788/">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -139,6 +141,7 @@
     <div class="evidence-row"><span class="evidence-chip reference-dimension">length: published dimension</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip reference-dimension">height: published dimension</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Chartres laser-analysis work is documented for architectural geometry; no open whole-building point cloud was downloaded. <a href="https://facultysites.vassar.edu/antallon/projects/laser-analysis.html">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> multiple medieval builders; individual constructor not identified here Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="byzantine">
@@ -177,6 +180,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Whole church identified; no authoritative open interior/exterior scan located. <a href="https://whc.unesco.org/en/list/537/">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -217,6 +221,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Whole church identified; no authoritative open LiDAR or photogrammetric file located. <a href="https://www.gesuiti-santandrea.it/storia-e-arte/architettura/">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> Gian Lorenzo Bernini (<a href="https://www.gesuiti-santandrea.it/storia-e-arte/architettura/">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="stave">
@@ -255,6 +260,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Whole church identified; no open, scale-controlled scan located. <a href="https://fortidsminneforeningen.no/en/museum/borgund-stave-church/">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown medieval carpenters and builders Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -295,6 +301,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Whole church identified; public user/commercial models were not accepted as survey evidence. <a href="https://www.moma.org/documents/moma_catalogue_348_300085246.pdf">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> Tadao Ando (<a href="https://www.moma.org/documents/moma_catalogue_348_300085246.pdf">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="san-vitale">
@@ -334,6 +341,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Public photogrammetric model is viewable; it was not treated as a measured survey or downloaded as raw data. <a href="https://sketchfab.com/3d-models/basilica-di-san-vitale-ravenna-italy-22f753fc374644019b05c675de7f5c28">open lead</a></p>
     <p class="model-note"><strong>Public 3D metadata:</strong> 237973 vertices · 440478 faces · CC Attribution · raw download flag: yes. These counts are topology metadata, not metric dimensions. <a href="https://api.sketchfab.com/v3/models/22f753fc374644019b05c675de7f5c28">API record</a></p>
+
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown; do not treat the geometric model author as the historical builder Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="hagia-sophia">
@@ -372,6 +380,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> The UBC Image Matching Challenge page documents an interior image-matching dataset with reconstructed 3D points, but its download page notes that Hagia Sophia Interior was removed in 2022 because of data inconsistencies. It is therefore not treated as a current open download or a complete architectural scan. <a href="https://www.cs.ubc.ca/research/image-matching-challenge/2020/data/">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architects/designers:</span> Anthemios of Tralles and Isidoros of Miletus (<a href="https://whc.unesco.org/pg.cfm?cid=31&amp;id_site=356">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -412,6 +421,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> A CC0 digital model is advertised by the 3D Repository of Hochschule Mainz; it is a reconstructed model, so scale and survey lineage must be checked before metric use. <a href="https://3d-repository.hs-mainz.de/wisski/navigate/60/view">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> medieval building teams; individual constructor not identified here Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="durham">
@@ -450,6 +460,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Durham Chapter House has a documented laser-scan/BIM survey; it covers a major component, not the whole cathedral. <a href="https://nrl.northumbria.ac.uk/id/eprint/43207/1/ECAM-11-2019-0621.pdf">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown in the current source set Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -490,6 +501,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Whole cathedral identified; no authoritative open point cloud or mesh located. <a href="https://catedraldesantiago.es/en/cathedral/">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>early masters:</span> Bernard the Elder, Admirable Master, Roberto, and later Master Esteban (<a href="https://catedraldesantiago.es/en/cathedral/">evidence</a>)</li><li><span>later project master:</span> Master Mateo (<a href="https://catedraldesantiago.es/en/portico-de-la-gloria/">evidence</a>)</li></ul><br /><strong>Construction team:</strong> workshops and stonecutters are implied by the staged project; a single constructor is not supported Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="reims">
@@ -528,6 +540,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Laser-survey documentation and geometric analysis are publicly described; no raw whole-building point cloud was located. <a href="https://archiv.chnt.at/lost-in-the-labyrinth/">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> multiple medieval masters; exact role attribution requires a dedicated architectural-history source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -568,6 +581,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> A peer-reviewed ISPRS paper documents a terrestrial laser-scanning project; no raw point cloud was located in the public paper record. <a href="https://isprs-annals.copernicus.org/articles/IV-2-W2/213/2017/isprs-annals-IV-2-W2-213-2017.html">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> multiple medieval and modern builders followed the design over centuries; this register does not collapse them into one name Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="monreale">
@@ -606,6 +620,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> The main portico has a documented laser-scan and photogrammetric survey; it is partial coverage rather than a complete cathedral scan. <a href="https://www.researchgate.net/publication/328879948_3D_survey_and_modelling_of_the_main_portico_of_the_Cathedral_of_Monreale">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> Arab-Norman workshops and later builders; individual constructor not established here Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -646,6 +661,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Andrew Tallon&#39;s laser-analysis projects provide geometric precedent for Saint-Denis; no open whole-building point cloud was located. <a href="https://facultysites.vassar.edu/antallon/projects/laser-analysis.html">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>patron/abbot associated with the Gothic rebuilding:</span> Abbot Suger (<a href="https://www.saint-denis-basilique.fr/en/discover/the-cradle-of-gothic-art">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="urnes">
@@ -685,6 +701,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> NIKU documents detailed laser scanning of Urnes and the public model/scan references support visual study; a raw full-building point cloud was not downloaded. <a href="https://www.niku.no/en/prosjekter/laserskanning-av-urnes-stavkirke/">open lead</a></p>
     <p class="model-note"><strong>Public 3D metadata:</strong> 326753 vertices · 650382 faces · license not stated in API metadata · raw download flag: no. These counts are topology metadata, not metric dimensions. <a href="https://api.sketchfab.com/v3/models/cc99e41d6fef44f0847fb43a1fa82b04">API record</a></p>
+
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown medieval carpenters and carvers Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="kizhi">
@@ -723,6 +740,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> The Church of the Transfiguration is documented as laser-scanned and measured; no public raw point cloud was located. <a href="https://site.kizhi.karelia.ru/media/info/files/attached/1401/2010_2app.pdf">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong> No named designer or builder is established in this current source set. <br /><strong>Construction team:</strong> unknown carpenters and builders; later attribution legends require separate verification Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -763,6 +781,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> A Palladio Museum digital model records a laser-scanner workflow, photographs, surveys, and an exportable model route; the model was not mirrored here. <a href="https://mediateca.palladiomuseum.org/palladio/modello.php?id=55">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> Andrea Palladio (<a href="https://tour.venice.it/venice/what-to-see/details/basilica-di-san-giorgio-maggiore">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="redentore">
@@ -802,6 +821,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> No authoritative open LiDAR or photogrammetric dataset for the exact Il Redentore church was located; similarly named crypt or project models were excluded. <a href="https://www.veneziaunica.it/sites/default/files/vu_english_170616.pdf">open lead</a></p>
 
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> Andrea Palladio (<a href="https://www.veneziaunica.it/sites/default/files/vu_english_170616.pdf">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="st-pauls">
@@ -839,8 +859,9 @@
       <div><span>radial reach / W</span><strong>0.4</strong></div>
     </div>
     <div class="evidence-row"><span class="evidence-chip reference-dimension">length: published dimension</span><span class="evidence-chip reference-dimension">span: published dimension</span><span class="evidence-chip reference-dimension">height: published dimension</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
-    <p class="scan-note"><strong>Scan/model lead:</strong> A recent measured drone survey covers the exterior and roof, and the UBC Image Matching Challenge page lists a 2.0G Saint Paul&#39;s Cathedral phototourism test sequence with ground truth. The image-matching set is not LiDAR and was not mirrored here; Wren&#39;s drawings provide documentary design evidence. <a href="https://solidpoint.co.uk/project/st-pauls-cathedral/">open lead</a></p>
+    <p class="scan-note"><strong>Scan/model lead:</strong> A recent measured drone survey covers the exterior and roof. The UBC Image Matching Challenge sequence is acquired locally as photogrammetry: 615 source images, 615 dense depth maps, and a 98,872-point COLMAP sparse reconstruction. A separate public Zenodo GLB is also acquired for rough interior/crypt coverage. These are not LiDAR and do not by themselves establish complete interior/exterior survey control; Wren&#39;s drawings provide documentary design evidence. <a href="https://solidpoint.co.uk/project/st-pauls-cathedral/">open lead</a></p>
 
+    <p class="acquired-note"><strong>Acquired inside/out evidence:</strong> 615 calibrated images · 98,872 sparse 3D points · 615 dense depth maps · 446,067,546 positive depth values read · 1,837,701-vertex / 2,500,000-face interior/crypt GLB mesh. The robust sparse native-coordinate principal-axis ratios are 2.256 : 1.432; these are unscaled photogrammetry/model statistics, not metric LiDAR or constructor attribution. <a href="st-pauls-colmap.json">scene measurement</a></p>
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect:</span> Christopher Wren (<a href="https://www.stpauls.co.uk/wren-office-drawings">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="karlskirche">
@@ -879,6 +900,7 @@
     </div>
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> A TU Wien/B2FIND record describes an interior/exterior mesh from laser scanning and photogrammetry; access is by contacting the data provider. <a href="https://b2find.eudat.eu/dataset/2d71208a-ccc8-5e37-b1cf-d4ae55397ba6">open lead</a></p>
+
 
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architectural project:</span> Fischer von Erlach family; exact role split requires source-page verification (<a href="https://www.karlskirche.at/en/history/">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
@@ -919,6 +941,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> A public Sketchfab study model is viewable and marked CC Attribution; it is not treated as a scale-controlled survey without model metadata. <a href="https://sketchfab.com/3d-models/notre-dame-du-haut-933b5cd760d84ae6adcc7194aad12fce">open lead</a></p>
     <p class="model-note"><strong>Public 3D metadata:</strong> 1952 vertices · 3880 faces · CC Attribution · raw download flag: yes. These counts are topology metadata, not metric dimensions. <a href="https://api.sketchfab.com/v3/models/933b5cd760d84ae6adcc7194aad12fce">API record</a></p>
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> Le Corbusier (<a href="https://whc.unesco.org/en/list/1321/">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="brasilia">
@@ -958,6 +981,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Public low-poly and scan/map models are viewable; no authoritative scale-controlled open survey was located. <a href="https://sketchfab.com/3d-models/cathedral-of-brasilia-9f2d2de9642f48ac873b5aab62b667f7">open lead</a></p>
     <p class="model-note"><strong>Public 3D metadata:</strong> 3106 vertices · 5882 faces · CC Attribution · raw download flag: yes. These counts are topology metadata, not metric dimensions. <a href="https://api.sketchfab.com/v3/models/9f2d2de9642f48ac873b5aab62b667f7">API record</a></p>
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> Oscar Niemeyer (<a href="https://catedral.org.br/institucional/historia/">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
 <article class="card" id="thorncrown">
@@ -997,6 +1021,7 @@
     <div class="evidence-row"><span class="evidence-chip schematic">length: schematic</span><span class="evidence-chip schematic">span: schematic</span><span class="evidence-chip schematic">height: schematic</span><span class="evidence-chip schematic">radius: schematic</span><span class="evidence-chip schematic">module: schematic</span><span class="evidence-chip schematic">bayCount: schematic</span></div>
     <p class="scan-note"><strong>Scan/model lead:</strong> Public study models are viewable; no open scale-controlled LiDAR or photogrammetric dataset was located. <a href="https://sketchfab.com/3d-models/thorncrown-chapel-89aaf17e674548dea85cf42469f1c574">open lead</a></p>
     <p class="model-note"><strong>Public 3D metadata:</strong> 47356 vertices · 85373 faces · license not stated in API metadata · raw download flag: no. These counts are topology metadata, not metric dimensions. <a href="https://api.sketchfab.com/v3/models/89aaf17e674548dea85cf42469f1c574">API record</a></p>
+
     <p class="builder-note"><strong>Documentary attribution:</strong>  <ul><li><span>architect/designer:</span> E. Fay Jones (<a href="https://www.thorncrown.com/about">evidence</a>)</li></ul><br /><strong>Construction team:</strong> not identified in the current source Geometry conclusion: <em>not determined by geometry.</em></p>
   </article>
     </section>

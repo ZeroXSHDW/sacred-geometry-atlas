@@ -2,6 +2,7 @@
 """Measure local mesh/point-cloud assets without silently assuming metric scale.
 
 The extractor is intentionally dependency-light. It handles OBJ, ASCII PLY,
+embedded GLB/glTF meshes,
 XYZ/PTS/CSV/TXT point lists, NPY/NPZ arrays, and LAS headers. Every result
 keeps a scale-status field because a bounding box in model units is not a
 building measurement until the source provides control or a verified scale.
@@ -26,7 +27,7 @@ except ImportError as error:  # pragma: no cover - the bundled runtime includes 
 
 
 POINT_EXTENSIONS = {".xyz", ".pts", ".txt", ".csv", ".tsv"}
-MESH_EXTENSIONS = {".obj", ".ply"}
+MESH_EXTENSIONS = {".obj", ".ply", ".glb"}
 ARRAY_EXTENSIONS = {".npy", ".npz"}
 
 
@@ -106,6 +107,142 @@ def parse_ascii_ply(path: Path) -> tuple[np.ndarray, int]:
             parts = handle.readline().decode("ascii", errors="replace").split()
             points.append([float(parts[0]), float(parts[1]), float(parts[2])])
         return finite_points(points), face_count
+
+
+GLTF_COMPONENTS = {
+    5120: ("<i1", 1),
+    5121: ("<u1", 1),
+    5122: ("<i2", 2),
+    5123: ("<u2", 2),
+    5125: ("<u4", 4),
+    5126: ("<f4", 4),
+}
+GLTF_COMPONENT_COUNTS = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4, "MAT2": 4, "MAT3": 9, "MAT4": 16}
+
+
+def gltf_accessor(gltf: dict, binary: bytes, accessor_index: int) -> np.ndarray:
+    accessor = gltf["accessors"][accessor_index]
+    if "sparse" in accessor:
+        raise ValueError("sparse glTF accessors are not supported by the lightweight reader")
+    component_type = accessor["componentType"]
+    if component_type not in GLTF_COMPONENTS:
+        raise ValueError(f"unsupported glTF component type {component_type}")
+    if accessor["type"] not in GLTF_COMPONENT_COUNTS:
+        raise ValueError(f"unsupported glTF accessor type {accessor['type']}")
+    component_format, component_size = GLTF_COMPONENTS[component_type]
+    component_count = GLTF_COMPONENT_COUNTS[accessor["type"]]
+    count = int(accessor["count"])
+    if "bufferView" not in accessor:
+        return np.zeros((count, component_count), dtype=float)
+    view = gltf["bufferViews"][accessor["bufferView"]]
+    element_size = component_count * component_size
+    stride = int(view.get("byteStride", element_size))
+    start = int(view.get("byteOffset", 0)) + int(accessor.get("byteOffset", 0))
+    if stride == element_size:
+        values = np.frombuffer(binary, dtype=np.dtype(component_format), count=count * component_count, offset=start)
+        values = values.reshape(count, component_count)
+    else:
+        values = np.ndarray(
+            shape=(count, component_count),
+            dtype=np.dtype(component_format),
+            buffer=binary,
+            offset=start,
+            strides=(stride, component_size),
+        )
+    return np.asarray(values, dtype=float).copy()
+
+
+def gltf_node_matrix(node: dict) -> np.ndarray:
+    if "matrix" in node:
+        # glTF stores matrices in column-major order.
+        return np.asarray(node["matrix"], dtype=float).reshape((4, 4), order="F")
+    translation = np.asarray(node.get("translation", [0, 0, 0]), dtype=float)
+    scale = np.asarray(node.get("scale", [1, 1, 1]), dtype=float)
+    quaternion = np.asarray(node.get("rotation", [0, 0, 0, 1]), dtype=float)
+    x, y, z, w = quaternion
+    rotation = np.array([
+        [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+        [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+        [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)],
+    ])
+    matrix = np.eye(4, dtype=float)
+    matrix[:3, :3] = rotation @ np.diag(scale)
+    matrix[:3, 3] = translation
+    return matrix
+
+
+def parse_glb(path: Path) -> tuple[np.ndarray, int]:
+    with path.open("rb") as handle:
+        header = handle.read(12)
+        if len(header) != 12 or header[:4] != b"glTF":
+            raise ValueError("not a GLB file")
+        version, declared_length = struct.unpack_from("<II", header, 4)
+        if version != 2:
+            raise ValueError(f"unsupported GLB version {version}")
+        json_chunk = None
+        binary_chunk = None
+        while handle.tell() < declared_length:
+            chunk_header = handle.read(8)
+            if len(chunk_header) != 8:
+                raise ValueError("truncated GLB chunk header")
+            chunk_length, chunk_type = struct.unpack("<II", chunk_header)
+            chunk = handle.read(chunk_length)
+            if len(chunk) != chunk_length:
+                raise ValueError("truncated GLB chunk")
+            if chunk_type == 0x4E4F534A:
+                json_chunk = chunk
+            elif chunk_type == 0x004E4942:
+                binary_chunk = chunk
+        if json_chunk is None or binary_chunk is None:
+            raise ValueError("GLB needs both JSON and BIN chunks")
+    gltf = json.loads(json_chunk.decode("utf-8").rstrip(" \t\r\n\x00"))
+    meshes = gltf.get("meshes", [])
+    nodes = gltf.get("nodes", [])
+    collected: list[np.ndarray] = []
+    face_count = 0
+
+    def collect_mesh(mesh_index: int, transform: np.ndarray) -> None:
+        nonlocal face_count
+        for primitive in meshes[mesh_index].get("primitives", []):
+            position_index = primitive.get("attributes", {}).get("POSITION")
+            if position_index is None:
+                continue
+            positions = gltf_accessor(gltf, binary_chunk, position_index)
+            homogeneous = np.column_stack([positions[:, :3], np.ones(len(positions))])
+            collected.append((transform @ homogeneous.T).T[:, :3])
+            if "indices" in primitive:
+                index_count = int(gltf["accessors"][primitive["indices"]]["count"])
+            else:
+                index_count = len(positions)
+            mode = int(primitive.get("mode", 4))
+            if mode == 4:
+                face_count += index_count // 3
+            elif mode in {5, 6}:
+                face_count += max(0, index_count - 2)
+
+    def collect_node(node_index: int, parent_transform: np.ndarray) -> None:
+        node = nodes[node_index]
+        transform = parent_transform @ gltf_node_matrix(node)
+        if "mesh" in node:
+            collect_mesh(int(node["mesh"]), transform)
+        for child in node.get("children", []):
+            collect_node(int(child), transform)
+
+    if nodes:
+        child_indices = {int(child) for node in nodes for child in node.get("children", [])}
+        if gltf.get("scenes"):
+            scene_index = int(gltf.get("scene", 0))
+            roots = [int(index) for index in gltf["scenes"][scene_index].get("nodes", [])]
+        else:
+            roots = [index for index in range(len(nodes)) if index not in child_indices]
+        for root in roots:
+            collect_node(root, np.eye(4, dtype=float))
+    else:
+        for mesh_index in range(len(meshes)):
+            collect_mesh(mesh_index, np.eye(4, dtype=float))
+    if not collected:
+        raise ValueError("GLB contains no POSITION attributes")
+    return finite_points(np.vstack(collected)), face_count
 
 
 def parse_text_points(path: Path) -> np.ndarray:
@@ -193,6 +330,9 @@ def measure_file(path: Path, root: Path) -> dict:
             result["faceCount"] = faces
         elif suffix == ".ply":
             points, faces = parse_ascii_ply(path)
+            result["faceCount"] = faces
+        elif suffix == ".glb":
+            points, faces = parse_glb(path)
             result["faceCount"] = faces
         elif suffix in POINT_EXTENSIONS:
             points = parse_text_points(path)

@@ -4,6 +4,10 @@ dist/
 build/
 *.log
 
+# Large or rights-sensitive research downloads stay local until individually reviewed.
+research/raw/
+tmp/pdfs/
+
 # Generated GitHub Pages upload output and local Python validation caches.
 _site/
 __pycache__/

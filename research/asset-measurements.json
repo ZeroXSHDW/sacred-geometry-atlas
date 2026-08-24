@@ -1,8 +1,55 @@
 {
   "title": "Sacred Geometry Atlas local geometry asset measurements",
   "generatedBy": "scripts/measure-geometry-assets.py",
-  "generatedAt": "2026-08-23T22:19:05.204804+00:00",
+  "generatedAt": "2026-08-23T22:51:41.873687+00:00",
   "root": "research/raw",
   "note": "Bounds are file/model coordinates until scale and control are verified. They are not automatically building dimensions.",
-  "records": []
+  "records": [
+    {
+      "path": "st-pauls/listing/members.txt",
+      "sizeBytes": 189469,
+      "sha256": "62d6d7c360785eb6607a59d84494a576e60e96fc03782b417a590e2912bd9308",
+      "format": "txt",
+      "measurementStatus": "error",
+      "scaleStatus": "unknown-until-control-is-verified",
+      "error": "ValueError: at least three numeric coordinate columns are required"
+    },
+    {
+      "path": "st-pauls/st-pauls-dimensions.txt",
+      "sizeBytes": 69412,
+      "sha256": "68d05128a20bc2dd5976c2e8905828e2fe8a0987fd93a0134176dcf40fff9a35",
+      "format": "txt",
+      "measurementStatus": "error",
+      "scaleStatus": "unknown-until-control-is-verified",
+      "error": "ValueError: at least three numeric coordinate columns are required"
+    },
+    {
+      "path": "st-pauls/st-pauls-zenodo-interior.glb",
+      "sizeBytes": 90509728,
+      "sha256": "2c7665282a7a1295f76b50fb6764d959b4bf6fed1a6443197c8fad0493ba3362",
+      "format": "glb",
+      "measurementStatus": "bounds-read",
+      "scaleStatus": "unknown-until-control-is-verified",
+      "faceCount": 2500000,
+      "pointCount": 1837701,
+      "bounds": {
+        "min": [
+          -64.510830577,
+          -76.738734951,
+          8.82046683
+        ],
+        "max": [
+          97.807284409,
+          1.369277669,
+          88.382791182
+        ],
+        "extent": [
+          162.318114986,
+          78.10801262,
+          79.562324352
+        ],
+        "diagonal": 196.921800581
+      }
+    }
+  ]
 }

@@ -12,6 +12,7 @@
   "evidenceDefinitions": {
     "reference-dimension": "A dimension published by an institutional or scholarly source.",
     "scan-derived": "A dimension extracted from a registered, scale-controlled scan, mesh, orthophoto, or photogrammetric model.",
+    "native-reconstruction": "A reproducible shape statistic computed in a photogrammetric reconstruction's native coordinate units; it is not a metric building dimension.",
     "image-derived": "A ratio measured from a photograph; it is not metric without scale and camera-control evidence.",
     "schematic": "An Atlas comparison input; it is not a survey measurement."
   },
@@ -97,6 +98,24 @@
         "length": "reference-dimension",
         "span": "reference-dimension",
         "height": "reference-dimension"
+      },
+      "nativeReconstructionEvidence": {
+        "measurementOutput": "research/st-pauls-colmap.json",
+        "status": "native-reconstruction",
+        "sparsePointCount": 98872,
+        "cameraCount": 615,
+        "denseDepthMapCount": 615,
+        "interiorModel": {
+          "assetPath": "research/raw/st-pauls/st-pauls-zenodo-interior.glb",
+          "measurementOutput": "research/asset-measurements.json",
+          "vertexCount": 1837701,
+          "faceCount": 2500000,
+          "nativeBoundsExtent": [162.318114986, 78.10801262, 79.562324352],
+          "nativeDiagonal": 196.921800581,
+          "scaleStatus": "unknown-until-control-is-verified"
+        },
+        "scaleStatus": "unscaled-reconstruction; no verified model-to-published-control correspondence",
+        "note": "Use the raw and robust native-coordinate bounds for proportion testing only. Do not replace the published metre dimensions or infer the historical construction team from the point cloud."
       },
       "publishedMeasurements": [
         {

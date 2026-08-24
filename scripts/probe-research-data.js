@@ -18,6 +18,20 @@ const candidates = [
     note: "Public 2.0G test sequence with images and ground truth; not LiDAR."
   },
   {
+    churchId: "st-pauls",
+    kind: "published-dimension-control",
+    url: "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf",
+    sourcePage: "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf",
+    note: "Government PDF with the visually verified St Paul's dimension table and section drawing."
+  },
+  {
+    churchId: "st-pauls",
+    kind: "interior-model-glb",
+    url: "https://zenodo.org/api/records/10242150/files/21e41040c4ca45c7b134aa768b5c993b.glb/content",
+    sourcePage: "https://zenodo.org/doi/10.5281/zenodo.10242150",
+    note: "Public 90.5 MB rough interior/crypt GLB; Zenodo metadata has no license field, so local use remains rights-limited."
+  },
+  {
     churchId: "speyer",
     kind: "native-reconstruction-model",
     url: "https://3d-repository.hs-mainz.de/sites/default/files/wisski_original/8efb0c48738e42df647d78cefd371504.pln",

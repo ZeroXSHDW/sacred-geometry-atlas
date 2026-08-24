@@ -4,13 +4,57 @@
   "note": "Hashes and sizes prove local acquisition only; they do not prove metric scale or redistribution permission.",
   "records": [
     {
+      "path": "research/raw/st-pauls/listing/members.txt",
+      "churchId": "st-pauls",
+      "sourceUrl": "https://www.cs.ubc.ca/research/kmyi_data/imw2020/TestData/st_pauls_cathedral.tar.gz",
+      "sourcePage": "https://www.cs.ubc.ca/~kmyi/imw2020/data.html",
+      "sizeBytes": 189469,
+      "sha256": "62d6d7c360785eb6607a59d84494a576e60e96fc03782b417a590e2912bd9308",
+      "acquiredAt": "2026-08-23T22:51:40.088Z",
+      "licenseStatus": "derived local archive listing; verify dataset terms before redistribution",
+      "scaleStatus": "not a geometry asset"
+    },
+    {
+      "path": "research/raw/st-pauls/st-pauls-dimensions.pdf",
+      "churchId": "st-pauls",
+      "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf",
+      "sourcePage": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf",
+      "sizeBytes": 1739441,
+      "sha256": "b875a76679972e88051621e19d0a7ed2e5388168c381fe44832c20199732a748",
+      "acquiredAt": "2026-08-23T22:51:40.091Z",
+      "licenseStatus": "public government source; verify reproduction terms",
+      "scaleStatus": "published reference dimensions; page 14 dimension table visually verified"
+    },
+    {
+      "path": "research/raw/st-pauls/st-pauls-dimensions.txt",
+      "churchId": "st-pauls",
+      "sourceUrl": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf",
+      "sourcePage": "https://www.cityoflondon.gov.uk/assets/Services-Environment/ed-htb34-protected-views-spd.pdf",
+      "sizeBytes": 69412,
+      "sha256": "68d05128a20bc2dd5976c2e8905828e2fe8a0987fd93a0134176dcf40fff9a35",
+      "acquiredAt": "2026-08-23T22:51:40.092Z",
+      "licenseStatus": "derived local text extraction; verify reproduction terms",
+      "scaleStatus": "published reference dimensions; source PDF page 14 visually verified"
+    },
+    {
+      "path": "research/raw/st-pauls/st-pauls-zenodo-interior.glb",
+      "churchId": "st-pauls",
+      "sourceUrl": "https://zenodo.org/api/records/10242150/files/21e41040c4ca45c7b134aa768b5c993b.glb/content",
+      "sourcePage": "https://zenodo.org/doi/10.5281/zenodo.10242150",
+      "sizeBytes": 90509728,
+      "sha256": "2c7665282a7a1295f76b50fb6764d959b4bf6fed1a6443197c8fad0493ba3362",
+      "acquiredAt": "2026-08-23T22:51:40.154Z",
+      "licenseStatus": "Zenodo record has no license field; retain locally until redistribution rights are clarified",
+      "scaleStatus": "rough interior/crypt photogrammetry model; scale/control not documented in the record"
+    },
+    {
       "path": "research/raw/st-pauls/st_pauls_cathedral.tar.gz",
       "churchId": "st-pauls",
       "sourceUrl": "https://www.cs.ubc.ca/research/kmyi_data/imw2020/TestData/st_pauls_cathedral.tar.gz",
       "sourcePage": "https://www.cs.ubc.ca/~kmyi/imw2020/data.html",
-      "sizeBytes": 989646848,
-      "sha256": "cd9cba0cbbbcc2e3f96397d2e593ee2b876e97dae3a50e9d2c5c4312acf0945c",
-      "acquiredAt": "2026-08-23T22:22:19.842Z",
+      "sizeBytes": 2113573479,
+      "sha256": "4e5054c0b03a5f4ef7033bb4b937e0fd4d48b066a1066085df0eb189e0a7fdae",
+      "acquiredAt": "2026-08-23T22:51:41.474Z",
       "licenseStatus": "verify dataset terms before redistribution",
       "scaleStatus": "photogrammetric ground truth; metric scale must be verified before building measurement"
     }

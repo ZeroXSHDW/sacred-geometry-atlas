@@ -366,7 +366,7 @@
     {
       "id": "st-pauls",
       "scanStatus": "open-download",
-      "coverage": "A recent measured drone survey covers the exterior and roof, and the UBC Image Matching Challenge page lists a 2.0G Saint Paul's Cathedral phototourism test sequence with ground truth. The image-matching set is not LiDAR and was not mirrored here; Wren's drawings provide documentary design evidence.",
+      "coverage": "A recent measured drone survey covers the exterior and roof. The UBC Image Matching Challenge sequence is acquired locally as photogrammetry: 615 source images, 615 dense depth maps, and a 98,872-point COLMAP sparse reconstruction. A separate public Zenodo GLB is also acquired for rough interior/crypt coverage. These are not LiDAR and do not by themselves establish complete interior/exterior survey control; Wren's drawings provide documentary design evidence.",
       "sources": [
         {
           "kind": "measured-drone-survey",
@@ -380,7 +380,14 @@
           "title": "IMC-PT 2020 dataset: Saint Paul's Cathedral",
           "url": "https://www.cs.ubc.ca/~kmyi/imw2020/data.html",
           "access": "public download page; 2.0G test sequence listed",
-          "dataAction": "candidate image/ground-truth download; not mirrored due size"
+          "dataAction": "2.0G candidate image/ground-truth archive downloaded and extracted locally; parser output records the COLMAP/depth-map evidence without treating it as LiDAR or metric control"
+        },
+        {
+          "kind": "public-interior-3d-model",
+          "title": "St Paul's Cathedral rough interior and crypt scan",
+          "url": "https://zenodo.org/doi/10.5281/zenodo.10242150",
+          "access": "public Zenodo GLB; the record has no license field",
+          "dataAction": "90.5 MB GLB downloaded locally and measured as an unscaled mesh; redistribution rights remain unresolved"
         },
         {
           "kind": "institutional-drawings",
@@ -389,7 +396,18 @@
           "dataAction": "historical plans and elevations; reproduction rights to verify"
         }
       ],
-      "rawData": { "downloaded": false, "status": "candidate-open-dataset-not-mirrored" }
+      "rawData": {
+        "downloaded": true,
+        "status": "downloaded-photogrammetry-archive",
+        "archivePath": "research/raw/st-pauls/st_pauls_cathedral.tar.gz",
+        "archiveSha256": "4e5054c0b03a5f4ef7033bb4b937e0fd4d48b066a1066085df0eb189e0a7fdae",
+        "archiveSizeBytes": 2113573479,
+        "extractedScene": "research/raw/st-pauls/extracted/st_pauls_cathedral",
+        "measurementOutput": "research/st-pauls-colmap.json",
+        "interiorModelPath": "research/raw/st-pauls/st-pauls-zenodo-interior.glb",
+        "interiorModelSha256": "2c7665282a7a1295f76b50fb6764d959b4bf6fed1a6443197c8fad0493ba3362",
+        "interiorModelSizeBytes": 90509728
+      }
     },
     {
       "id": "karlskirche",

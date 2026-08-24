@@ -15,6 +15,8 @@ const constructorEvidence = readJson("research/constructor-evidence.json");
 const modelMetadata = readJson("research/model-metadata.json");
 const dataProbes = readJson("research/data-probes.json");
 const assetMeasurements = readJson("research/asset-measurements.json");
+const acquiredAssets = readJson("research/acquired-assets.json");
+const colmapMeasurements = readJson("research/st-pauls-colmap.json");
 const expectedIds = new Set(measurementRegister.records.map((record) => record.id));
 const expectedCount = 24;
 const fail = (message) => { throw new Error(message); };
@@ -43,7 +45,19 @@ for (const record of modelMetadata.records) {
 if (!Array.isArray(dataProbes.records) || dataProbes.records.length < 8) fail("data probes must retain the registered endpoint checks");
 const stPaulsProbe = dataProbes.records.find((record) => record.churchId === "st-pauls" && record.kind === "photogrammetry-archive");
 if (!stPaulsProbe || stPaulsProbe.status !== "reachable" || stPaulsProbe.contentLength < 2000000000) fail("Saint Paul's public archive probe is missing its reachable size evidence");
+const stPaulsInteriorProbe = dataProbes.records.find((record) => record.churchId === "st-pauls" && record.kind === "interior-model-glb");
+if (!stPaulsInteriorProbe || stPaulsInteriorProbe.status !== "reachable" || stPaulsInteriorProbe.contentLength !== 90509728) fail("Saint Paul's interior GLB endpoint probe is missing its reachable size evidence");
 if (!Array.isArray(assetMeasurements.records)) fail("asset measurement output is missing its records array");
+if (!Array.isArray(acquiredAssets.records)) fail("acquired asset register is missing its records array");
+const acquiredArchive = acquiredAssets.records.find((record) => record.path === "research/raw/st-pauls/st_pauls_cathedral.tar.gz");
+if (!acquiredArchive || acquiredArchive.sizeBytes !== 2113573479 || acquiredArchive.sha256 !== "4e5054c0b03a5f4ef7033bb4b937e0fd4d48b066a1066085df0eb189e0a7fdae") fail("Saint Paul's local archive hash/size evidence is incomplete or stale");
+if (colmapMeasurements.churchId !== "st-pauls" || colmapMeasurements.sparse?.cameraCount !== 615 || colmapMeasurements.sparse?.imageCount !== 615 || colmapMeasurements.sparse?.point3DCount !== 98872 || colmapMeasurements.denseDepthMaps?.mapCount !== 615) fail("Saint Paul's COLMAP measurement record is incomplete");
+const acquiredInteriorModel = acquiredAssets.records.find((record) => record.path === "research/raw/st-pauls/st-pauls-zenodo-interior.glb");
+const measuredInteriorModel = assetMeasurements.records.find((record) => record.path === "st-pauls/st-pauls-zenodo-interior.glb");
+if (!acquiredInteriorModel || acquiredInteriorModel.sizeBytes !== 90509728 || acquiredInteriorModel.sha256 !== "2c7665282a7a1295f76b50fb6764d959b4bf6fed1a6443197c8fad0493ba3362") fail("Saint Paul's interior GLB acquisition evidence is incomplete or stale");
+if (!measuredInteriorModel || measuredInteriorModel.measurementStatus !== "bounds-read" || measuredInteriorModel.pointCount !== 1837701 || measuredInteriorModel.faceCount !== 2500000) fail("Saint Paul's interior GLB measurement output is incomplete");
+const stPaulsScan = scanManifest.records.find((record) => record.id === "st-pauls");
+if (!stPaulsScan?.rawData?.downloaded || stPaulsScan.rawData.archiveSha256 !== acquiredArchive.sha256 || stPaulsScan.rawData.interiorModelSha256 !== acquiredInteriorModel.sha256) fail("Saint Paul's scan manifest is not linked to the verified local acquisitions");
 
 for (const record of imageManifest.records) {
   if (!record.imagePath || !record.downloadStatus.startsWith("downloaded-thumbnail")) fail(`Image was not acquired for ${record.id}`);
