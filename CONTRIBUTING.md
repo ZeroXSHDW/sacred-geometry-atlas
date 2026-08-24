@@ -8,6 +8,9 @@ Keep changes small and reviewable. Do not replace sourced building identities wi
 
 Run these commands from the repository root:
 
+Use the exact Node.js version recorded in [`.node-version`](.node-version)
+before running the JavaScript checks or generators.
+
 ```bash
 node --check app.js
 node --check data/geometry.js
