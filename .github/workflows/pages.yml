@@ -1,5 +1,5 @@
-Warning: truncated output (original token count: 140245)
-Total output lines: 5313
+Warning: truncated output (original token count: 140291)
+Total output lines: 5314
 
 name: Deploy static site to GitHub Pages
 
@@ -33,7 +33,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 22
+          node-version-file: .node-version
       - name: Validate static site
         run: |
           node --check app.js
@@ -163,7 +163,8 @@ jobs:
           if (!html.includes('<div class="connection-status" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true" hidden>') || !html.includes('id="connectionStatusText"') || !app.includes('function setupConnectionStatus()') || !app.includes('const setConnectionState = (connectionState) =>') || !app.includes('setConnectionState("offline")') || !app.includes('setConnectionState("online")') || !app.includes('window.addEventListener("offline", showOffline)') || !app.includes('window.addEventListener("online", showOnline)') || !styles.includes('.connection-status {') || !styles.includes('.connection-status[data-connection-state="online"]') || !styles.includes('.connection-status[hidden]') || !styles.includes('.connection-status { border-color: ButtonText; color: CanvasText; background: Canvas; }') || !readme.includes('accessible connection notice')) throw new Error('Offline mode must expose a polite, state-aware connection notice with print and forced-colors styling');
           if (!html.includes('id="sortDirection" type="button"') || !html.includes('aria-describedby="sortDirectionHelp"') || !html.includes('id="sortDirectionHelp"') || !app.includes('sortDirection: "desc"') || !app.includes('const defaultSortDirection = (sort) => sort === "name" ? "asc" : "desc";') || !app.includes('const catalogRouteParamKeys = [...catalogParamKeys, "direction"];') || !app.includes('direction: state.sort === "index" || state.sortDirection === defaultSortDirection(state.sort) ? "" : state.sortDirection') || !app.includes('function syncSortDirectionControl()') || !app.includes('function catalogSortLabel(') || !app.includes('sortSelectLabel(state.sort, state.sortDirection)') || !app.includes('aria-label="Clear all active catalog settings"') || !app.includes('state.sortDirection = defaultSortDirection(event.target.value);') || !styles.includes('.sort-direction-toggle {') || !styles.includes('.sort-direction-toggle:disabled {') || !styles.includes('.sort-direction-toggle { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !readme.includes('reversible order control')) throw new Error('Catalog sorting must expose an accessible reversible order control with bookmarkable direction state');
           if (!app.includes('const studyLink = event.target.closest("[data-compare-selection-study]");') || !app.includes('selectStudy(studyLink.dataset.compareSelectionStudy') || !app.includes('class="compare-selection-study-link"') || !app.includes('class="compare-selection-chip-remove"') || !app.includes('atlasStudyNavigationUrl(study.id)') || !app.includes('const currentAttribute = isActive ? \' aria-current="true"\' : "";') || !styles.includes('.compare-selection-study-link {') || !styles.includes('.compare-selection-chip-remove {') || !styles.includes('.compare-selection-chip-name {') || !readme.includes('route-native Atlas links, separate inline removal controls')) throw new Error('Focused comparison selection must provide direct Atlas links with separate removal controls and responsive styling');
-          if (!workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4\n        with:\n          node-version: 22")) throw new Error('Pages validation must pin Node.js 22');
+          const nodeVersion = fs.readFileSync('.node-version', 'utf8').trim();
+          if (!/^\d+\.\d+\.\d+$/.test(nodeVersion) || !workflow.includes("      - name: Set up Node.js\n        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4\n        with:\n          node-version-file: .node-version")) throw new Error('Pages validation must use the exact Node.js version from .node-version');
           const structuredDataMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
           if (!structuredDataMatch) throw new Error('Missing collection JSON-LD metadata');
           let structuredData;
@@ -486,7 +487,907 @@ jobs:
           if (!html.includes('id="compareCount" role="status" aria-live="polite"')) throw new Error('Missing live comparison count');
           if (!html.includes('<div class="svg-wrap" id="geometryCanvas"></div>')) throw new Error('Drawing canvas must use the dedicated status channel');
           if (!html.includes('<span class="sr-only" id="keyboardStatus" role="status" aria-live="polite" aria-atomic="true"></span>')) throw new Error('Missing atomic drawing status channel');
-          for (const token of ['id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="shareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="citationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareScope" role="status" aria-live="polite" aria-atomic="true"', 'id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonCitationStatus" role="s…70245 tokens truncated…AreaEstimate: undefined, volumeEstimate: undefined, volumeBasis: undefined };
+          for (const token of ['id="downloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="catalogCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="shareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="citationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="studyLiveStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareScope" role="status" aria-live="polite" aria-atomic="true"', 'id="compareShareStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonCitationStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="compareHelper" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonDownloadStatus" role="status" aria-live="polite" aria-atomic="true"', 'id="comparisonTableScrollStatus" role="status" aria-live="polite" aria-atomic="true"']) {
+            if (!html.includes(token)) throw new Error('Dynamic status channel must announce atomically: ' + token);
+          }
+          if (!styles.includes('.comparison-table-wrap { overflow-x: auto; overscroll-behavior-x: contain; overscroll-behavior-inline: contain; }') || !styles.includes('.comparison-table-wrap:focus-visible')) throw new Error('Comparison table region must contain horizontal touch overscroll and retain a visible focus state');
+          if (!html.includes('id="activeName" tabindex="-1"')) throw new Error('Missing focusable active study heading');
+          for (const token of ['class="noscript-number" aria-hidden="true"', 'class="study-index" id="activeIndex" aria-hidden="true"', 'class="method-card-index" aria-hidden="true"', 'class="note-icon" aria-hidden="true"']) {
+            if (!html.includes(token)) throw new Error('Missing decorative marker guard: ' + token);
+          }
+          if (!app.includes('<span class="catalog-number" aria-hidden="true">')) throw new Error('Missing catalog number guard');
+          if (!app.includes('function normalizeCatalogQuery(value)') || !app.includes('state.query = normalizeCatalogQuery(event.target.value);') || !app.includes('state.query = normalizeCatalogQuery(requestedQuery);') || !app.includes('function queryTerms(value)') || !app.includes('const terms = queryTerms(state.query);') || !app.includes('terms.every((term) => haystack.includes(term))') || !app.includes('function escapeRegExp(value)') || !app.includes('function highlightSearchText(value)') || !app.includes('highlightSearchText(study.name)') || !app.includes('highlightSearchText(study.index)') || !app.includes('function searchMatchContext(study)') || !app.includes('["study index", [study.index]]') || !app.includes('["provenance", [studySource(study), studySourceNote(study), studyStatus(study), studyStatusDescription(study)]]') || !app.includes('studyStatusDescription(study),\n      ...dimensions') || !app.includes('Found in ${labels.join(" · ")}') || !app.includes('class="search-hit"') || !app.includes('class="catalog-card-match"') || !app.includes('function studySearchText(study)') || !app.includes('study.index,\n      study.name') || !app.includes('study.details.flat()')) throw new Error('Catalog search must normalize and cover curated indexes, full study text, provenance definitions, multi-term queries, explain hidden matches, and escape dynamic text');
+          if (!app.includes('const routeStudyId = route.page === "atlas" ? route.studyId : null;') || !app.includes('const isCurrentRoute = routeStudyId === study.id && isActive;') || !app.includes('const currentAttribute = isCurrentRoute ? \' aria-current="page"\' : "";') || app.includes('aria-current="${isActive ? "true" : "false"}"')) throw new Error('Catalog cards must reserve aria-current page semantics for an explicit Atlas study route');
+          if (!app.includes('function routeHash(page, includeStudy, studyId = state.activeId)') || !app.includes('function atlasStudyNavigationUrl(studyId)') || !app.includes('function catalogViewRouteUrl()') || !app.includes('if (page === "method" && includeStudy && studyId)') || !app.includes('const contextStudyId = ["atlas", "method"].includes(page)') || !app.includes('route.contextStudyId') || !app.includes('href="${escapeHtml(atlasStudyNavigationUrl(study.id))}"')) throw new Error('Study-aware Atlas and Method routes must expose route-native links');
+          if (!app.includes('(event.button !== undefined && event.button !== 0) || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey') || !app.includes('event.preventDefault();')) throw new Error('Catalog links must preserve modified-click behavior while selecting in place');
+          if (!styles.includes('color: inherit; text-align: left; text-decoration: none; transition: 180ms ease;')) throw new Error('Catalog route links must retain card styling without browser underlines');
+          if (!html.includes('<label class="sr-only" for="searchInput">Search geometry studies</label>') || !html.includes('placeholder="Search names, status, ratios, refs"') || !html.includes('<p class="catalog-search-note" id="searchHelp">Search names, readings, dimensions, ratios, references, provenance, and catalog indexes.') || !html.includes('Separate terms to match all') || !html.includes('<kbd>/</kbd> to focus') || !html.includes('<kbd>Esc</kbd> to clear') || !html.includes('aria-describedby="searchHelp"') || !html.includes('aria-keyshortcuts="/ Escape"') || !html.includes('spellcheck="false"') || !html.includes('autocapitalize="none"') || !styles.includes('.catalog-search-note {') || !styles.includes('.catalog-search-note kbd {') || !styles.includes('.search-hit { padding: 0 0.08em;')) throw new Error('Missing persistent catalog search guidance or result highlighting');
+          if (!html.includes('<kbd>/</kbd>') || !html.includes('Focus study search') || !html.includes('<kbd>Esc</kbd>') || !html.includes('Clear search when focused')) throw new Error('Missing search keyboard shortcut guidance');
+          if (!app.includes('function handleSearchKeydown(event)') || !app.includes('$("#searchInput").addEventListener("keydown", handleSearchKeydown)') || !app.includes('event.key !== "Escape"') || !app.includes('clearButton.click()')) throw new Error('Missing Escape-to-clear search behavior');
+          if (!html.includes('<summary aria-keyshortcuts="Escape">Keyboard guide</summary>') || !html.includes('<summary aria-keyshortcuts="Escape">Layer guide</summary>') || !html.includes('<summary id="activeProvenanceSummary" aria-keyshortcuts="Escape">') || !html.includes('<summary id="comparisonTableSummary" aria-keyshortcuts="Escape">') || !app.includes('function handleDisclosureKeydown(event)') || !app.includes('target.closest("details[open]")') || !app.includes('disclosure.open = false;') || !app.includes('restoreFocus(summary);') || !app.includes('window.addEventListener("keydown", handleDisclosureKeydown);')) throw new Error('Open disclosures must support Escape-to-close with summary focus restoration');
+          if (!app.includes('function studySearchDimensions(study)') || !app.includes('function studySearchDerivedReadings(study)') || !app.includes('const unit = geometryUnitSymbol();') || !app.includes('`length ${study.length} ${unit}`') || !app.includes('`length ${number(study.length)} ${unit}`') || !app.includes('`${study.bayCount} bays`') || !app.includes('`symmetry ${number(study.symmetry, 2)}`') || !app.includes('`section ratio ${number(study.height / study.span, 2)}`') || !app.includes('`module / span ${number(study.module / study.span, 2)}`') || !app.includes('`radial reach ${number(study.radius)} ${unit}`') || !app.includes('floor area ${number(floorAreaEstimate, 0)} ${unit}²')) throw new Error('Catalog search must include labeled geometry and derived readings');
+          if (!styles.includes('.search-field input::-webkit-search-cancel-button') || !styles.includes('.search-field input::-ms-clear')) throw new Error('Search field must expose one consistent clear affordance');
+          if (!app.includes('function studySearchProfileReadings(study)') || !app.includes('`reading profile ${label} ${score}`') || !app.includes('["reading profile", studySearchProfileReadings(study)]') || !app.includes('...profileReadings')) throw new Error('Catalog search must index and explain reading-profile labels and scores');
+          for (const token of ['<li class="catalog-entry">', 'data-clear-filters', 'catalog-card-title', 'catalog-card-detail', 'class="catalog-card-measure"', 'const measureLabel = `${study.length} × ${study.span} × ${study.height} ${geometryUnitSymbol()} · radius ${study.radius} ${geometryUnitSymbol()}`;', 'highlightSearchText(`${study.era} · Axis: ${studyAxisLabel(study)} · ${study.emphasis}`)', 'compare-study-title', 'Length to span ratio', 'function catalogStudyAriaLabel(study, isActive)', 'study.typology}, ${study.place}, ${study.era};', 'number(study.radius)} ${geometryUnitName()};', 'studyAxisLabel(study)}; ${study.emphasis};', 'Data status: ${statusLabel} (${status}); ${studyStatusDescription(study)}', 'Source: ${studySource(study)}; ${studySourceNote(study)}', 'catalogStudyAriaLabel(study, isActive)', 'study.place', 'number(study.length)} ${geometryUnitName()} long, span', 'if (state.sort !== "index") filters.push({ key: "sort", label: `Sort: ${sortSelectLabel(state.sort, state.sortDirection)}` });', 'sort: "#sortSelect"', 'if (key === "sort")', 'selectStudy(card.dataset.studyId, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'selectStudy(studyCard.dataset.compareStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'selectStudy(studyLink.dataset.tableStudy, { focus: event.detail === 0, restoreCardFocus: true, reveal: event.detail !== 0 })', 'function isCompactAtlasViewport()', 'const { scroll = true, focus = false, restoreCardFocus = false, reveal = false } = options;', 'const revealCompactStudy = reveal && scroll && isCompactAtlasViewport();', 'showPage("atlas", { scroll: revealCompactStudy ? false : scroll });', 'function scrollActiveStudyIntoView()', 'heading.scrollIntoView({ behavior, block: "start" })', 'if (revealCompactStudy) scrollActiveStudyIntoView();', 'toggleCompare(compareToggle.dataset.compareId, { focus: true })', 'announceStudy(activeStudy(), visible.length)', 'function focusCatalogControl(key, options = {})', 'const { preventScroll = true } = options;', 'control.focus({ preventScroll })', 'focusCatalogControl(key)', 'clearFilter("query", { focus: true })', 'clearCatalogFilters({ resetSort: true, focus: true })', 'clearFilter(chip.dataset.clearFilter, { focus: true })', 'if (focus) focusCatalogControl("query")', 'focusCompareToggle(id)', 'focusStudyCard(id)', 'focusCatalogControl("query", { preventScroll: false });', 'cycleStudy(key === "j" ? 1 : -1, { scroll: true, focus: true });']) {
+            if (!app.includes(token)) throw new Error(`Missing accessible catalog structure: ${token}`);
+          }
+          if (!app.includes('function focusStudyTarget(id)') || !app.includes('if (focusStudyCard(id)) return "card";') || !app.includes('const emptyState = $("#visualEmptyState");') || !app.includes('return "empty";') || !app.includes('return "heading";') || !app.includes('focusStudyTarget(id);') || !html.includes('id="visualEmptyHeading" tabindex="-1"') || !styles.includes('#visualEmptyHeading:focus-visible')) throw new Error('Opening a filtered-out study must restore focus to a visible Atlas context heading');
+          if (!app.includes('class="catalog-card-status"') || !app.includes('data-status="${escapeHtml(studyDataLabel(study))}"') || !app.includes('title="${escapeHtml(studyStatusDescription(study))}"') || !app.includes('escapeHtml(measureLabel)') || !styles.includes('.catalog-card-status {') || !styles.includes('.catalog-card-status[data-status="measured"]') || !styles.includes('.catalog-card-measure {') || !styles.includes('.catalog-card-status,\n  .catalog-card-status[data-status="measured"]')) throw new Error('Catalog cards must expose schema-backed status badges and geometry measures');
+          if (!app.includes('window.addEventListener("popstate", syncFromHash)') || !app.includes('let lastRouteSignature = "";') || !app.includes('function currentRouteSignature()') || !app.includes('if (!revealPending && currentRouteSignature() === lastRouteSignature) return;') || !app.includes('lastRouteSignature = currentRouteSignature();')) throw new Error('Missing deduplicated browser history navigation support');
+          if (!app.includes('const previousPage = state.page;') || !app.includes('else if (window.location.hash.length > 0 && (previousPage === route.page || revealPending))') || !app.includes('function focusPageHeading(page, preventScroll = true)')) throw new Error('Same-view and startup hash navigation must restore heading focus');
+          if (!app.includes('const visibleCount = String(count).padStart(2, "0");') || !app.includes('const totalCount = String(studies.length).padStart(2, "0");')) throw new Error('Catalog result counts must preserve two-digit formatting');
+          if (!app.includes('function renderCatalogResultCount(count)') || !app.includes('renderCatalogResultCount(visible.length);') || !app.includes('let lastCatalogStatus = "";') || !app.includes('let lastCatalogStatusFilter = null;') || app.includes('let lastCatalogResultCount = "";') || !app.includes('const scope = catalogScopeLabel();') || !app.includes('const scopeLabel = `${text}; ${scope}.`;') || !app.includes('const statusFilterChanged = lastCatalogStatusFilter !== null && lastCatalogStatusFilter !== state.filterStatus;') || !app.includes('function catalogStatusFilterAnnouncement()') || !app.includes('Data status filter cleared.') || !app.includes('Data status filter: ${status}. ${definition}') || !app.includes('if (statusFilterChanged) announcements.push(catalogStatusFilterAnnouncement());') || !app.includes('Catalog updated: ${scope}.')) throw new Error('Catalog scope and status changes must announce the active scope without repeating the visible count');
+          const refreshStart = app.indexOf('function refreshCatalog()');
+          const refreshEnd = app.indexOf('\n  function renderAll()', refreshStart);
+          const refreshSource = refreshStart >= 0 && refreshEnd >= 0 ? app.slice(refreshStart, refreshEnd) : '';
+          if (refreshStart < 0 || refreshEnd < 0 || refreshSource.includes('renderCatalogResultCount(') || refreshSource.indexOf('if (previousId !== state.activeId && state.page === "atlas") replaceRoute("atlas");') < 0 || refreshSource.indexOf('if (previousId !== state.activeId && state.page === "atlas") replaceRoute("atlas");') > refreshSource.indexOf('renderList();')) throw new Error('Catalog refresh must announce its result count only through renderList and update an active study route before rendering current-page semantics');
+          for (const token of ['function setButtonFeedback(button, visibleLabel, accessibleLabel)', 'setButtonFeedback(button, "Copied", `Share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Copied", `Catalog share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Copied", `Comparison share text and link copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Catalog citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Comparison citation copied: ${scope}`);', 'setButtonFeedback(button, "Citation copied", `Method citation copied: ${scope}`);']) {
+            if (!app.includes(token)) throw new Error('Copy feedback must synchronize visible and accessible labels: ' + token);
+          }
+          if (!app.includes('try {\n        await navigator.clipboard.writeText(value);\n        return true;\n      } catch (error) {\n        // Continue with the textarea fallback if the permissioned API rejects.') || !app.includes('const previousFocus = document.activeElement;') || !app.includes('previousFocus.focus({ preventScroll: true });')) throw new Error('Copy fallback must handle clipboard rejection and restore initiating focus');
+          for (const token of ['exportCompletionScope([study], `${studyShortName(study)} · ${drawingStateLabel()}`)', 'exportCompletionScope([study], studyShortName(study))', 'exportCompletionScope(studies, "full collection")', 'exportCompletionScope(visible, catalogScopeLabel())', 'exportCompletionScope(comparison, comparisonScopeLabel(comparison))']) {
+            if (!app.includes(token)) throw new Error('Export actions must expose scope-aware completion feedback: ' + token);
+          }
+          for (const token of ['function temporaryButtonFeedback(button, visibleLabel, accessibleLabel, resetVisibleLabel, resetAccessibleLabel, key)', 'button.classList.add("is-complete")', 'visibleLabel === "Unavailable"', 'button.classList.add("is-unavailable")', 'button.classList.remove("is-unavailable")', 'function beginAsyncAction(button)', 'button.disabled = true;', 'button.setAttribute("aria-busy", "true");', 'const SYNC_ACTION_COOLDOWN_MS = 400;', 'function endAsyncAction(button, delay = 0)', 'if (delay > 0) window.setTimeout(release, delay);', 'button.setAttribute("aria-busy", "false");', 'function triggerDownload(filename, contents, type)', 'Download activation is unavailable', 'if (!downloaded)', 'temporaryButtonFeedback(button, "Exported", "Drawing exported"', 'temporaryButtonFeedback(button, "Downloaded", "Study JSON downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Study CSV downloaded"', 'temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded"', 'temporaryButtonFeedback(button, "Exported", "Catalog view exported", "JSON"', 'temporaryButtonFeedback(button, "Exported", "Catalog CSV exported"', 'temporaryButtonFeedback(button, "Shared", `Study shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Catalog view shared: ${scope}`', 'temporaryButtonFeedback(button, "Shared", `Comparison shared: ${scope}`']) {
+            if (!app.includes(token)) throw new Error('Actions must expose synchronized completion feedback: ' + token);
+          }
+          for (const token of ['function clearButtonFeedback(button, resetVisibleLabel, resetAccessibleLabel, key, resetTimer)', 'button.classList.remove("is-copied")', 'clearButtonFeedback(button, "Share study", "Share current study", "share-study", shareResetTimer)', 'clearButtonFeedback(button, "Share guide", "Share method guide", "share-method", methodShareResetTimer)', 'clearButtonFeedback(button, "Copy citation", "Copy a citation for this catalog view", "catalog-citation", catalogCitationResetTimer)', 'clearButtonFeedback(button, "Share view", "Share current catalog view", "share-catalog", catalogShareResetTimer)', 'clearButtonFeedback(button, "Share comparison", "Share this comparison", "share-comparison", compareShareResetTimer)', 'clearButtonFeedback(button, "Copy citation", "Copy a citation for this comparison", "comparison-citation", comparisonCitationResetTimer)', 'clearButtonFeedback(button, "Copy citation", "Copy a citation for the active study", "study-citation", citationResetTimer)', 'clearButtonFeedback(button, "Cite guide", "Copy a citation for the Method guide", "method-citation", methodCitationResetTimer)']) {
+            if (!app.includes(token)) throw new Error('Share and citation actions must clear stale feedback before a new attempt: ' + token);
+          }
+          for (const token of ['temporaryButtonFeedback(button, "Unavailable", "SVG download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study JSON download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Study CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Atlas CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog view download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Catalog CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison CSV download is unavailable in this browser."', 'temporaryButtonFeedback(button, "Unavailable", "Comparison JSON download is unavailable in this browser."']) {
+            if (!app.includes(token)) throw new Error('Blocked exports must synchronize the originating control with its Unavailable state: ' + token);
+          }
+          for (const token of ['temporaryButtonFeedback(button, "Unavailable", message, "Share study", "Share current study", "share-study")', 'temporaryButtonFeedback(button, "Unavailable", message, "Share guide", "Share method guide", "share-method")', 'temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for this catalog view", "catalog-citation")', 'temporaryButtonFeedback(button, "Unavailable", message, "Share view", "Share current catalog view", "share-catalog")', 'temporaryButtonFeedback(button, "Unavailable", message, "Share comparison", "Share this comparison", "share-comparison")', 'temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for this comparison", "comparison-citation")', 'temporaryButtonFeedback(button, "Unavailable", message, "Copy citation", "Copy a citation for the active study", "study-citation")', 'temporaryButtonFeedback(button, "Unavailable", message, "Cite guide", "Copy a citation for the Method guide", "method-citation")']) {
+            if (!app.includes(token)) throw new Error('Share and citation fallbacks must synchronize the originating control with its Unavailable state: ' + token);
+          }
+          if (!styles.includes('.download-button.is-unavailable span.download-label::after { content: "Unavailable"; }') || !styles.includes('#downloadCsvData.is-unavailable span.download-label::after { content: "Unavailable"; }') || !styles.includes('#downloadStudyCsv.is-unavailable span.study-action-label::after { content: "Unavailable"; font-size: 0.5rem; }')) throw new Error('Blocked export controls must keep their compact Unavailable labels visible');
+          for (const token of ['#shareStudy.is-unavailable span.study-action-label::after', '#copyCitation.is-unavailable span.study-action-label::after', '.catalog-summary .catalog-share-button.is-unavailable span:last-child::after', '.catalog-summary .catalog-citation-button.is-unavailable span:last-child::after', '.compare-intro-side .compare-share-button.is-unavailable span:last-child::after', '.compare-intro-side .compare-citation-button.is-unavailable span:last-child::after', '.method-share-button.is-unavailable span:last-child::after', '.method-citation-button.is-unavailable span:last-child::after']) {
+            if (!styles.includes(token)) throw new Error('Share and citation controls must keep their compact Unavailable labels visible: ' + token);
+          }
+          for (const functionName of ['downloadDrawing()', 'downloadStudy()', 'downloadStudyCsv()', 'downloadData()', 'downloadCatalogView()', 'downloadCatalogCsv()', 'downloadComparisonCsv()', 'downloadComparisonJson()']) {
+            const start = app.indexOf(`function ${functionName}`);
+            const end = app.indexOf('\n  function ', start + 1);
+            const source = start >= 0 && end >= 0 ? app.slice(start, end) : '';
+            if (!source.includes('beginAsyncAction(button)') || !source.includes('endAsyncAction(button, SYNC_ACTION_COOLDOWN_MS)') || !source.includes('finally')) throw new Error(`Download action is missing busy-state protection: ${functionName}`);
+          }
+          for (const token of ['.download-button.is-complete', '.drawing-export.is-complete', '.share-button.is-complete', 'button[aria-busy="true"]']) {
+            if (!styles.includes(token)) throw new Error('Download completion state is missing styling: ' + token);
+          }
+          for (const token of ['if (!study || !button || !status || !beginAsyncAction(button)) return;', 'if (!button || !status || !beginAsyncAction(button)) return;', 'endAsyncAction(button);']) {
+            if (!app.includes(token)) throw new Error('Async share and citation actions must use the busy-state guard: ' + token);
+          }
+          for (const token of ['aria-label="${escapeHtml(`Study ${study.index}, ${studyShortName(study)}: length to span ratio; ${axisLabel}; ${statusLabel} (${status}) record: ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`)}"', 'aria-label="${escapeHtml(`Study ${study.index}, ${studyShortName(study)}: height to span ratio; ${axisLabel}; ${statusLabel} (${status}) record: ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`)}"', 'aria-label="${escapeHtml(`Study ${study.index}, ${studyShortName(study)}: ${study.bayCount} bays, module length; ${axisLabel}; ${statusLabel} (${status}) record: ${studyStatusDescription(study)}; Source: ${studySource(study)}; ${studySourceNote(study)}`)}"', 'class="chart-study-index"', 'class="bar-label" aria-hidden="true"', 'class="bar-value" aria-hidden="true"', 'class="module-name" aria-hidden="true"', 'class="module-value" aria-hidden="true"']) {
+            if (!app.includes(token)) throw new Error('Comparison chart items must name their metric: ' + token);
+          }
+          if (!app.includes('|| state.compareIds.length > 0') || !app.includes('const catalogSuffix = hasCatalogScope ? ` · ${catalogScopeLabel()}` : "";') || !app.includes('if (state.compareIds.length) parts.push(`${state.compareIds.length} selected for comparison`);') || !app.includes(' + mode + catalogSuffix + " · Sacred Geometry Atlas"')) throw new Error('Study titles must expose an active catalog and comparison scope');
+          if (!app.includes('const pendingStudy = selectedComparisonStudies()[0];') || !app.includes('`Compare · ${studyIdentityLabel(pendingStudy)} selected · Sacred Geometry Atlas`')) throw new Error('Pending comparison titles must identify the selected study');
+          if (!app.includes('const methodScope = catalogScopeLabel();') || !app.includes('const catalogSuffix = methodScope === "the full collection" ? "" : ` · ${methodScope}`;') || !app.includes('`Method · ${studyIdentityLabel(contextStudy)}${catalogSuffix} · Sacred Geometry Atlas`') || !app.includes('`Method${catalogSuffix} · Sacred Geometry Atlas`')) throw new Error('Method titles must preserve the indexed active study context and catalog scope');
+          for (const token of ['state.mode = route.mode || "plan";', 'state.surface = route.surface || "exterior";', 'state.layer = route.layer || "all";', 'requestedPage,', 'requestedStudy,', 'let normalizedStudyRoute = false;', 'let includeStudyInNormalizedRoute = true;', 'let normalizedCompareRoute = false;', 'let normalizedPageRoute = false;', 'const hasRequestedStudy = Boolean(route.requestedStudy);', 'route.requestedPage !== route.page', 'window.location.hash !== routeHash("atlas", true)', 'normalizedCompareRoute = window.location.hash !== routeHash("compare", false);', 'includeStudyInNormalizedRoute = false;', 'if (normalizedStudyRoute) {', 'replaceRoute("atlas", includeStudyInNormalizedRoute);', 'updateDocumentTitle("atlas");', 'if (normalizedCompareRoute) {', 'replaceRoute("compare", false);', 'updateDocumentTitle("compare");', 'const canonicalPageHash = route.page === "method" && route.contextStudyId', 'replaceRoute(route.page, route.page === "method" && Boolean(route.contextStudyId));', 'showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });\n    replaceCatalogRoute();', 'if (route.page === "atlas" && route.studyId && includeStudyInNormalizedRoute)', 'if (state.page === "atlas" && !visible.length) replaceRoute("atlas", false);']) {
+            if (!app.includes(token)) throw new Error('Partial study routes must restore drawing defaults: ' + token);
+          }
+          for (const token of ['const [requestedPage = "atlas", requestedStudy, requestedMode, requestedSurface, requestedLayer, requestedZoom] = segments;', 'const parseZoom = (value) =>', 'zoom: page === "atlas" && studyId ? parseZoom(requestedZoom) : null,', 'state.zoom = route.zoom || 1;', 'const zoomSegment = state.zoom === 1 ? "" : `/${Number(state.zoom.toFixed(2))}`;']) {
+            if (!app.includes(token)) throw new Error('Study routes must restore optional drawing zoom: ' + token);
+          }
+          if (!app.includes('lastRouteSignature = currentUrl;') || !app.includes('lastRouteSignature = nextUrl;')) throw new Error('Local history mutations must refresh the route deduplication marker');
+          if (!app.includes('updateDocumentTitle("atlas");\n    updateCompareTray();')) throw new Error('Catalog changes must refresh the document title');
+          if (!app.includes('const pageAliases = new Map([["methodView", "method"]]);')) throw new Error('Missing method route alias');
+          if (!html.includes('<select id="sortSelect" aria-describedby="sortHelp">') || !html.includes('<span class="sr-only" id="sortHelp">Numeric measures and reading profiles sort from largest to smallest; name sorts A–Z.</span>')) throw new Error('Sort direction and reading-profile ordering must be explained to assistive technology');
+          if (!html.includes('<select id="filterSelect" aria-describedby="filterHelp">') || !html.includes('<select id="filterPlace" aria-describedby="filterHelp">') || !html.includes('<select id="filterEra" aria-describedby="filterHelp">') || !html.includes('<select id="filterAxis" aria-describedby="filterHelp">') || !html.includes('<select id="filterStatus" aria-describedby="filterHelp statusHelp">') || !html.includes('<p class="catalog-filter-note" id="filterHelp">Filter counts reflect the current search and the other active filters.</p>') || !html.includes('<p class="catalog-data-note" id="statusHelp">Schematic = illustrative proportions; not a measured survey. Measured = source-supported dimensions. Counts for the full collection: 99 schematic · 0 measured.</p>') || !styles.includes('.catalog-filter-note {') || !styles.includes('.catalog-data-note {') || !app.includes('function schemaStatusValues()') || !app.includes('const allowedStatusValues = new Set(schemaStatusValues());') || !app.includes('const validStatuses = new Set(["all", ...schemaStatusValues()]);') || !app.includes('function studyStatusCounts(records = studies)') || !app.includes('function statusGuidanceText(records = studies, scope = "the full collection")') || !app.includes('function catalogStatusGuidanceText(records = visibleStudies())') || !app.includes('const catalogFilterSpecs = [') || !app.includes('function catalogFilterScopeRecords(excludedKey = "")') || !app.includes('function replaceSelectOptions(select, options)') || !app.includes('function renderCatalogFilterOptions()') || !app.includes('const scope = catalogFilterScopeRecords(stateKey);') || !app.includes('label: `${allLabel} · ${scope.length}`') || !app.includes('statusHelp.textContent = catalogStatusGuidanceText(visible);') || !app.includes('const statusGuidance = statusGuidanceText(studies, "the full collection");') || !app.includes('comparisonStatusHelp.textContent = statusGuidanceText(comparisonStudies(), focused ? `${selected} selected studies` : "the full collection");') || !app.includes('const countsText = statuses.map((status) =>')) throw new Error('Catalog filters must expose scope-aware counts and schema-backed provenance');
+          if (!html.includes('<span class="select-label">Typology</span>') || !html.includes('<span class="select-label">Sort by</span>') || !html.includes('<span class="select-label">Location</span>') || !html.includes('<span class="select-label">Era</span>') || !html.includes('<span class="select-label">Axis</span>') || !html.includes('<span class="select-label">Data status</span>') || !styles.includes('.select-wrap { position: relative; display: grid; gap: 0.28rem; }') || !styles.includes('.select-label {') || !styles.includes('.select-wrap::after { position: absolute; top: 1.62rem;') || !app.includes('const eras = new Set(studies.map((study) => study.era));') || !app.includes('const axes = new Set(studies.map((study) => study.axis));') || !app.includes('state.filterEra = eras.has(requestedEra) ? requestedEra : "all";') || !app.includes('state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";')) throw new Error('Catalog controls must retain visible labels while era and axis filters remain bookmarkable and accessible');
+          if (!app.includes('if (state.filterEra !== "all") filters.push({ key: "era"') || !app.includes('if (key === "era")') || !app.includes('if (state.filterEra !== "all") parts.push(`era: ${state.filterEra}`);') || !app.includes('if (state.filterAxis !== "all") filters.push({ key: "axis"') || !app.includes('if (key === "axis")') || !app.includes('if (state.filterAxis !== "all") parts.push(`axis: ${axisDisplayLabel(state.filterAxis)}`);')) throw new Error('Era and axis filters must expose clearable catalog scope');
+          for (const token of ['label: `Typology: ${$("#filterSelect").selectedOptions[0].textContent}`', 'label: `Location: ${$("#filterPlace").selectedOptions[0].textContent}`', 'label: `Era: ${$("#filterEra").selectedOptions[0].textContent}`', 'label: `Axis: ${$("#filterAxis").selectedOptions[0].textContent}`', 'label: `Data status: ${$("#filterStatus").selectedOptions[0].textContent}`']) {
+            if (!app.includes(token)) throw new Error('Active filter chips must identify their filter context: ' + token);
+          }
+          for (const token of ['parts.push(`typology: ${state.filter}`);', 'parts.push(`location: ${state.filterPlace}`);', 'parts.push(`era: ${state.filterEra}`);', 'parts.push(`axis: ${axisDisplayLabel(state.filterAxis)}`);', 'parts.push(`data status: ${statusDisplayName(state.filterStatus).toLowerCase()} records`);']) {
+            if (!app.includes(token)) throw new Error('Catalog scope labels must identify their filter context: ' + token);
+          }
+          if (!app.includes('const READING_PROFILE_SORT_KEYS = ["linearity", "verticality", "radiality", "repetition"];') || !app.includes('const validSorts = new Set(["index", "length", "height", "span", "ratio", "symmetry", "name", ...READING_PROFILE_SORT_KEYS]);') || !app.includes('const stableStudyOrder = (left, right) => {') || !app.includes('let order = 0;') || !app.includes('if (READING_PROFILE_SORT_KEYS.includes(state.sort)) order = readingProfileScore(b, state.sort) - readingProfileScore(a, state.sort);') || !app.includes('return order || stableStudyOrder(a, b);') || !app.includes('linearity: "linearity profile (highest first)"') || !app.includes('repetition: "repetition profile (highest first)"') || !app.includes('name: "name (A–Z)"')) throw new Error('Geometry and reading-profile sort direction must persist through filtering and shared catalog scope');
+          if (!app.includes('scrollIntoView({ behavior, block: "start" })')) throw new Error('Section navigation must scroll to its target');
+          if (!app.includes('document.body.classList.add("data-error-state")') || !app.includes('dataError.hidden = false') || !app.includes('$("#dataErrorHeading")') || !app.includes('heading.focus({ preventScroll: true })')) throw new Error('Missing focus-managed data-load recovery behavior');
+          if (!app.includes('function renderVisualState(visible)') || !app.includes('renderVisualState(visible);') || !app.includes('$("#clearVisualFilters").addEventListener("click"') || !app.includes('activeStudyOutsideCatalog') || !app.includes('The active study, ${studyShortName(study)}, is outside the current catalog view.') || !app.includes('Clear the catalog settings to restore ${studyShortName(study)}.') || !styles.includes('.visual-empty-context')) throw new Error('Missing contextual visual empty-state behavior');
+          if (!app.includes('const hasSecondaryFilters = state.filter !== "all" || state.filterPlace !== "all" || state.filterEra !== "all" || state.filterAxis !== "all";') || !app.includes('if (state.filterStatus !== "all" && !hasSecondaryFilters)') || !app.includes('state.filterStatus === "measured"')) throw new Error('Data-status empty-state messaging must respect secondary filters');
+          if (!app.includes('function downloadStudy()') || !app.includes('function activeStudyExportPayload(study)') || !app.includes('function dataStatusDefinitions()') || !app.includes('window.CHURCH_GEOMETRY_SCHEMA && window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions') || !app.includes('const publishedGeometrySchemaUrl = ()') || !app.includes('schemaUrl: publishedGeometrySchemaUrl()') || !app.includes('provenance: exportProvenance([study], "active study")') || !app.includes('function fullAtlasExportPayload()') || !app.includes('function catalogViewExportPayload(visible)') || !app.includes('function studyStatusSummary(records = studies)') || !app.includes('readingProfileBasis: READING_PROFILE_BASIS') || !app.includes('readingProfileNote: READING_PROFILE_NOTE') || !app.includes('derived: derivedStudyReadings(study)') || !app.includes('sacred-geometry-study.json')) throw new Error('Missing context-aware JSON export provenance');
+          const catalogExportStart = app.indexOf('function downloadCatalogView()');
+          const catalogExportEnd = app.indexOf('\n  function changeZoom(delta)', catalogExportStart);
+          const catalogPayloadStart = app.indexOf('function catalogViewExportPayload(visible)');
+          const catalogPayloadEnd = app.indexOf('\n  function downloadData()', catalogPayloadStart);
+          const catalogPayload = app.slice(catalogPayloadStart, catalogPayloadEnd);
+          if (catalogExportStart < 0 || catalogExportEnd < 0 || catalogPayloadStart < 0 || catalogPayloadEnd < 0 || !catalogPayload.includes('const shareUrl = catalogViewRouteUrl();') || !catalogPayload.includes('route: shareUrl.href') || !catalogPayload.includes('era: state.filterEra') || !catalogPayload.includes('axis: state.filterAxis') || !catalogPayload.includes('compareIds: [...state.compareIds]') || !catalogPayload.includes('comparisonSelection: comparisonSelectionExportContext()') || !catalogPayload.includes('provenance: exportProvenance(visible, catalogScopeLabel())')) throw new Error('Catalog export must include a reproducible route, comparison context, and provenance');
+          if (!styles.includes('.data-error-state .skip-link')) throw new Error('Recovery state must remove the dead skip-link target');
+          if (!styles.includes('.no-js .skip-link-app') || !styles.includes('.no-js .skip-link-noscript') || !styles.includes('.js-runtime.no-js .skip-link-runtime') || !styles.includes('.skip-link-runtime { display: none; }')) throw new Error('Missing no-JS/runtime skip-link visibility rules');
+          if (!app.includes('$("#activeReference").textContent') || !app.includes('$("#activeMeta").textContent') || !app.includes('Axis: ${studyAxisLabel(study)}') || !app.includes('const measureSummary = $("#activeMeasureSummary");') || !app.includes('const measureVisible = $("#activeMeasureVisible");') || !app.includes('const measureAccessible = $("#activeMeasureAccessible");') || !app.includes('const measureAccessibleText = `Envelope dimensions: ${number(study.length)} ${geometryUnitName()} long, span ${number(study.span)} ${geometryUnitName()}, height ${number(study.height)} ${geometryUnitName()}; primary radius ${number(study.radius)} ${geometryUnitName()}.`;') || !app.includes('$("#analysisReading").textContent') || !html.includes('id="activeName" tabindex="-1" aria-describedby="activeKicker activeStatusHelp activeMeta activeMeasureAccessible activeSource"') || !html.includes('id="activeMeasureSummary"') || !html.includes('id="activeMeasureVisible" aria-hidden="true"') || !html.includes('id="activeMeasureAccessible"') || !styles.includes('.study-measure-summary {') || !styles.includes('.study-measure-summary { color: Highlight; }')) throw new Error('Missing dynamic study context rendering');
+          if (!app.includes('function volumeReading(study)') || !app.includes('numeric: estimate') || !app.includes('value: estimate !== null ? cubicMeasure(estimate) : "Not supplied"') || !app.includes('studyStatus(study) === "measured" ? "source-supported estimate" : "schematic estimate"') || !app.includes(': "No estimate supplied"')) throw new Error('Optional volume estimates must have an explicit missing-data state');
+          if (!app.includes('const positiveEstimate = (value) => Number.isFinite(value) && value > 0 ? value : null;') || !app.includes('const estimate = positiveEstimate(study.volumeEstimate);') || !app.includes('const volumeBasis = positiveEstimate(study.volumeEstimate) !== null ? study.volumeBasis : "";') || !app.includes('floorArea.numeric !== null ? number(floorArea.numeric, 0) : ""')) throw new Error('Optional estimate handling must share one positive-value rule across search, views, and exports');
+          if (!html.includes('<th scope="col">Axis</th>') || !html.includes('<th scope="col">Source / provenance</th>') || !html.includes('<th scope="col" data-unit-header="area">Floor area estimate (m²)</th>') || !html.includes('<th scope="col" data-unit-header="volume">Est. volume (m³)</th>') || !html.includes('<th scope="col">Volume basis</th>') || !html.includes('<th scope="col">Linearity (0–100)</th>') || !html.includes('<th scope="col">Verticality (0–100)</th>') || !html.includes('<th scope="col">Radiality (0–100)</th>') || !html.includes('<th scope="col">Repetition (0–100)</th>') || !html.includes('<span id="analysisAreaLabel">floor area estimate</span>') || !html.includes('id="analysisAreaBasis">supplied floor-area estimate</small>') || !app.includes('function floorAreaReading(study)') || !app.includes('floorAreaBasis: floorArea.basis') || !app.includes('const floorAreaLabel = floorArea.numeric !== null') || !app.includes('const readingProfile = Object.fromEntries(profileScores(study));') || !app.includes('const profileCell = (key, label) =>') || !app.includes('comparison-source') || !app.includes('studySourceUrl(study)') || !app.includes('class="comparison-provenance"')) throw new Error('Comparison table and export must expose axis, source provenance, optional estimates, provenance, and profile scores');
+          if (!styles.includes('.analysis-reading')) throw new Error('Missing interpretive reading style');
+          for (const token of ['role="listitem"', 'class="profile-label" aria-hidden="true"', 'role="meter"', 'aria-valuemin="0"', 'aria-valuemax="100"', 'aria-valuenow="${score}"', 'aria-valuetext="${escapeHtml(profileMeterValueText(label, score))}"']) {
+            if (!app.includes(token)) throw new Error('Missing accessible reading-profile meter: ' + token);
+          }
+          for (const token of ['document.body.classList.remove("no-js")', 'function syncCatalogFromUrl()', 'const shouldPreserveComparisonQuery = () => state.page !== "compare" || state.compareIds.length < 2;', 'function catalogRouteValues(includeCompare = shouldPreserveComparisonQuery())', 'function applyCatalogRouteState(url, includeCompare = shouldPreserveComparisonQuery())', 'function replaceCatalogRoute()', 'function pushCatalogRoute()', 'function updateCatalogRoute(historyMethod = "replaceState")', 'const catalogParamKeys = ["q", "typology", "place", "era", "axis", "status", "sort", "compare"];', 'requestedEra', 'state.filterEra = eras.has(requestedEra) ? requestedEra : "all";', 'requestedAxis', 'state.filterAxis = axes.has(requestedAxis) ? requestedAxis : "all";', 'function queryComparisonIds()', 'state.compareIds = queryComparisonIds();', 'compare: includeCompare && state.compareIds.length', 'window.history[historyMethod]', 'navigationUrl(nextHash)', 'atlasStudyNavigationUrl(study.id)', 'function catalogViewRouteUrl()', 'clearCatalogParams(new URL(window.location.href))', 'if (route.page === "atlas") {', 'function printStudy()', 'function downloadCatalogView()', 'function attemptNativeShare(payload)', 'function renderComparisonTable()', 'function emptyCatalogMessage()', 'function handleKeyboard(event)', 'if (key === "/") {', 'focusCatalogControl("query");', '\"a\"].includes(tagName)', 'function updateDocumentTitle(page = state.page)', 'const hasCatalogScope = Boolean(', 'document.title = `Atlas · ${catalogScopeLabel()} · Sacred Geometry Atlas`;', 'const label = selected.slice(0, 2).map((study) => studyIdentityLabel(study)).join(" + ");', 'function shareCatalog()', 'catalogScopeLabel()', 'window.print()', 'page === \"compare\" && state.compareIds.length >= 2', 'route.page === \"compare\"', 'function shareComparison()']) {
+            if (!app.includes(token)) throw new Error(`Missing route support: ${token}`);
+          }
+          if (!app.includes('const queryCompareIds = queryComparisonIds();') || !app.includes('compareIds: compareIds.length ? compareIds : []')) throw new Error('Compare routes must preserve partial query selections alongside focused hash selections');
+          if (!app.includes('["input", "select", "textarea", "summary", "a"].includes(tagName)') || !styles.includes('#visualEmptyHeading:focus-visible { outline-color: Highlight; }') || !styles.includes('#dataErrorHeading:focus { outline-color: Highlight; }') || !styles.includes('.page-view h2:focus-visible,')) throw new Error('Atlas shortcuts and focused recovery headings must remain accessible');
+          for (const token of ['state.filter = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterPlace = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterEra = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterAxis = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.filterStatus = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();', 'state.sort = event.target.value;\n      pushCatalogRoute();\n      refreshCatalog();']) {
+            if (!app.includes(token)) throw new Error('Discrete catalog changes must create browser history entries: ' + token.split('\n')[0]);
+          }
+          for (const token of ['function commitComparisonRoute()', 'if (state.page === "atlas") pushCatalogRoute();', 'commitComparisonRoute();']) {
+            if (!app.includes(token)) throw new Error('Comparison selection changes must preserve browser history: ' + token);
+          }
+          const comparisonTitleUpdate = app.slice(app.indexOf('function toggleCompare(id, options = {})'), app.indexOf('\n  function updateCompareTray()', app.indexOf('function toggleCompare(id, options = {})')));
+          if (!comparisonTitleUpdate.includes('updateDocumentTitle(state.page);')) throw new Error('Comparison selection changes must refresh the browser title');
+          const clearComparisonStart = app.indexOf('function clearComparisonSelection(');
+          const clearComparisonEnd = app.indexOf('\n  function removeComparisonStudy', clearComparisonStart);
+          if (clearComparisonStart < 0 || clearComparisonEnd < 0 || !app.slice(clearComparisonStart, clearComparisonEnd).includes('updateDocumentTitle(state.page);')) throw new Error('Clearing comparison selection must refresh the browser title');
+          if (!app.includes('function resetDrawingView()')) throw new Error('Missing drawing reset behavior');
+          if (!styles.includes('.study-header-actions { width: 100%; flex-direction: row;') || !styles.includes('.study-header { flex-direction: column;') || !styles.includes('.compare-selection-chip { width: 100%; justify-content: space-between; }') || !styles.includes('.compare-selection-chip span:first-child { max-width: none; min-width: 0; }')) throw new Error('Missing narrow study-header or comparison-selection layout');
+          if (!styles.includes('@media (forced-colors: active)') || !styles.includes('outline-color: Highlight') || !styles.includes('textarea:focus-visible') || !styles.includes('.manual-copy-fallback textarea:focus { outline: 2px solid Highlight; outline-offset: 2px; }') || !styles.includes('.catalog-card.is-active { border-inline-start: 3px solid Highlight; }') || !styles.includes('.search-hit { color: HighlightText; background: Highlight; }') || !styles.includes('.segment-button.is-active { color: HighlightText; background: Highlight; }') || !styles.includes('.compare-selection-chip { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.compare-selection-chip-axis { color: ButtonText; }') || !styles.includes('.compare-tray-summary { color: ButtonText; }') || !styles.includes('.catalog-batch-action span:first-child { color: ButtonText; }') || !styles.includes('.method-dictionary-links a { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.method-dictionary-formulas span { color: Highlight; }') || !styles.includes('.study-status,') || !styles.includes('.method-return-button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.study-provenance summary::after,') || !styles.includes('.study-nav button:disabled,') || !styles.includes('color: GrayText; }') || !styles.includes('.comparison-table-study-link .comparison-table-study-index,\n  .comparison-table-study-link .comparison-table-study-state { color: Highlight; }') || !styles.includes('.compare-selection-chip-index,\n  .chart-study-index { color: Highlight; }') || !styles.includes('.profile-track,\n  .bar-track,\n  .module-bars { border: 1px solid ButtonText; background: Canvas; }') || !styles.includes('.profile-fill,\n  .bar-fill,\n  .module-bar { background: Highlight; opacity: 1; }') || !styles.includes('.chart-axis-guide { border-top-color: ButtonText; }') || !styles.includes('.visual-empty-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.search-clear { border-color: ButtonText; color: ButtonText; background: ButtonFace; }')) throw new Error('Forced-colors mode must preserve focus, selected-state, recovery, and quantitative meter affordances');
+          if (!styles.includes('.search-field input:focus-visible,\n.select-wrap select:focus-visible,\n.manual-copy-fallback textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }')) throw new Error('Custom form controls must retain a visible keyboard focus ring');
+          if (!styles.includes('@media (prefers-contrast: more)') || !styles.includes('--ink-muted: #b6c4ba;') || !styles.includes('--line-strong: rgba(213, 229, 214, 0.68);') || !styles.includes('outline-width: 3px;') || !styles.includes('.bar-track,\n  .profile-track,\n  .module-bars { border: 1px solid var(--line-strong); }')) throw new Error('Increased-contrast mode must strengthen text, boundaries, quantitative tracks, and focus rings');
+          if (!styles.includes('.download-button,\n  .route-copy-button,\n  .share-button,\n  .segment-button,\n  .mode-button,\n  .layer-button,\n  .compare-tray button { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.download-button:hover,\n  .route-copy-button:hover,\n  .share-button:hover,\n  .segment-button:hover,\n  .mode-button:hover,\n  .layer-button:hover,\n  .compare-tray button:hover { border-color: Highlight; color: HighlightText; background: Highlight; }') || !styles.includes('.share-button span:first-child { color: ButtonText; }') || !styles.includes('.compare-tray button:last-child:disabled { border-color: GrayText; color: GrayText; background: ButtonFace; }')) throw new Error('Primary action controls must preserve visible system-color states in forced-colors mode');
+          if (!styles.includes('.runtime-fallback-actions .hero-action { border-color: ButtonText; color: ButtonText; background: ButtonFace; }')) throw new Error('Runtime recovery actions must remain visible in forced-colors mode');
+          if (!styles.includes('#runtimeFallback:focus { outline-color: Highlight; }')) throw new Error('Runtime recovery focus must remain visible in forced-colors mode');
+          if (!styles.includes('position: sticky;') || !styles.includes('.catalog-panel { position: sticky; top: 7rem;') || (!styles.includes('background: rgba(17, 24, 23, 0.94);') && !styles.includes('background: var(--header-bg);')) || !styles.includes('backdrop-filter: blur(14px);') || !styles.includes('scroll-padding-top: 7rem;') || !styles.includes('scroll-margin-top: 7rem;') || !styles.includes('.site-header { background: Canvas; }')) throw new Error('Long-page navigation must keep the header available, keep the catalog below it, and preserve safe hash offsets in forced-colors mode');
+          if (!styles.includes('.noscript-link { border-color: ButtonText; color: ButtonText; background: ButtonFace; }') || !styles.includes('.noscript-link:hover,\n  .noscript-link:focus-visible { color: HighlightText; background: Highlight; }')) throw new Error('No-script artifact links must preserve visible system-color states in forced-colors mode');
+          for (const token of ['@media (pointer: coarse)', '.compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }', '.clear-search { min-height: 36px; padding: 0.45rem 0.6rem; border-color: var(--amber); background: var(--amber-soft); }', '.visual-empty-action { min-height: 36px; padding-inline: 0.8rem; }', '.study-nav button { width: 40px; height: 40px; }', '.zoom-control button { width: 36px; height: 36px; }', '.search-clear { width: 36px; height: 36px; }', '.search-field input, .select-wrap select { min-height: 40px; }', '.filter-chip, .filter-clear-all, .compare-tray button, .shortcut-guide summary, .comparison-table-panel summary, .study-provenance summary { min-height: 36px; }', '.noscript-link { display: inline-flex; align-items: center; min-height: 36px; padding: 0.35rem 0.5rem; border: 1px solid var(--coral); background: rgba(231, 127, 98, 0.08); }']) {
+            if (!styles.includes(token)) throw new Error('Touch targets must expand on coarse pointers: ' + token);
+          }
+          const narrowStylesStart = styles.indexOf('@media (max-width: 430px)');
+          const narrowStylesEnd = styles.indexOf('@media (pointer: coarse)', narrowStylesStart);
+          const narrowStyles = narrowStylesStart >= 0 && narrowStylesEnd > narrowStylesStart ? styles.slice(narrowStylesStart, narrowStylesEnd) : '';
+          if (!narrowStyles.includes('  .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; }') || !narrowStyles.includes('  .search-clear { width: 36px; height: 36px; }')) throw new Error('Narrow icon-only catalog controls must retain touch-sized targets for every pointer mode');
+          const mobileStylesStart = styles.indexOf('@media (max-width: 740px)');
+          const mobileStylesEnd = styles.indexOf('@media (max-width: 430px)', mobileStylesStart);
+          const mobileStyles = mobileStylesStart >= 0 && mobileStylesEnd > mobileStylesStart ? styles.slice(mobileStylesStart, mobileStylesEnd) : '';
+          for (const token of ['  .compare-toggle { flex-basis: 36px; width: 36px; height: 36px; margin-right: 0; }', '  .search-clear { width: 36px; height: 36px; }', '  .back-to-top { min-height: 40px; }', '  .dataset-link,\n  .download-button,\n  .theme-toggle { min-height: 40px; }', '  .nav-button,\n  .segment-button,\n  .mode-button,\n  .layer-button,\n  .share-button,\n  .drawing-export,\n  .drawing-reset,\n  .filter-chip,\n  .filter-clear-all,\n  .compare-tray button,\n  .shortcut-guide summary,\n  .comparison-table-panel summary,\n  .study-provenance summary,\n  .study-context-note button,\n  .compare-selection-clear,\n  .compare-selection-chip,\n  .catalog-batch-action,\n  .clear-search,\n  .visual-empty-action,\n  .manual-copy-fallback-dismiss,\n  .action-recovery .hero-action,\n  .action-recovery-dismiss,\n  .noscript-artifact-actions a,\n  .noscript-link,\n  .method-dictionary-links a { min-height: 36px; }', '  .study-nav button { width: 40px; height: 40px; }', '  .zoom-control button { width: 36px; height: 36px; }', '  .search-field input,\n  .select-wrap select { min-height: 40px; }', '  .route-copy-button { min-height: 36px; }']) {
+            if (!mobileStyles.includes(token)) throw new Error('Narrow mobile controls must retain touch-sized targets before the phone-only breakpoint: ' + token);
+          }
+          for (const token of ['  .dataset-link,\n  .download-button { min-height: 40px; }', '  .nav-button,\n  .segment-button,\n  .mode-button,\n  .layer-button,\n  .share-button,\n  .drawing-export,\n  .drawing-reset,\n  .filter-chip,\n  .filter-clear-all,\n  .compare-tray button,\n  .shortcut-guide summary,\n  .comparison-table-panel summary,\n  .study-provenance summary,\n  .study-context-note button,\n  .compare-selection-clear,\n  .compare-selection-chip,\n  .catalog-batch-action,\n  .clear-search,\n  .visual-empty-action,\n  .manual-copy-fallback-dismiss,\n  .action-recovery .hero-action,\n  .action-recovery-dismiss,\n  .noscript-artifact-actions a,\n  .noscript-link,\n  .method-dictionary-links a { min-height: 36px; }', '  .study-nav button { width: 40px; height: 40px; }', '  .zoom-control button { width: 36px; height: 36px; }', '  .search-field input,\n  .select-wrap select { min-height: 40px; }']) {
+            if (!narrowStyles.includes(token)) throw new Error('Narrow-screen controls must retain consistent phone target sizes: ' + token);
+          }
+          if (!narrowStyles.includes('  .route-copy-button { min-height: 36px; }')) throw new Error('Narrow route-copy controls must retain a touch-sized target');
+          if (!styles.includes('@media (max-width: 430px)') || !styles.includes('  .header-actions { gap: 0.3rem; }') || !styles.includes('  .dataset-link { padding-inline: 0.6rem; }') || !styles.includes('  .download-button { padding-inline: 0.65rem; }') || !styles.includes('  .tool-row { grid-template-columns: 1fr; }') || !styles.includes('  .drawing-tools { align-items: center; flex-wrap: wrap; gap: 0.55rem; justify-content: flex-start; }') || !styles.includes('  .drawing-scale { flex: 0 0 100%; }') || !styles.includes('  .compare-tray { align-items: start; flex-direction: column; }') || !styles.includes('  .compare-tray-actions { width: 100%; justify-content: space-between; }') || !html.includes('<span class="download-label">Download JSON</span>') || !html.includes('<span class="download-label">Download CSV</span>') || !app.includes('temporaryButtonFeedback(button, "Unavailable", "Atlas data download is unavailable in this browser.", "Download JSON"') || !app.includes('temporaryButtonFeedback(button, "Downloaded", "Atlas data downloaded", "Download JSON"') || !styles.includes('  .download-button span.download-label { display: inline; font-size: 0; }') || !styles.includes('content: "JSON";') || !styles.includes('content: "Done";') || !html.includes('<span class="study-action-label">Share study</span>') || !html.includes('<span class="study-action-label">Copy citation</span>') || !html.includes('<span class="study-action-label">Study JSON</span>') || !html.includes('<span class="study-action-label">Print sheet</span>') || !styles.includes('  .study-share-actions span.study-action-label { display: inline; font-size: 0; white-space: nowrap; }') || !styles.includes('#shareStudy span.study-action-label::after { content: "Share"; font-size: 0.5rem; }') || !styles.includes('#copyCitation span.study-action-label::after { content: "Cite"; font-size: 0.5rem; }') || !styles.includes('#downloadStudy span.study-action-label::after { content: "JSON"; font-size: 0.5rem; }') || !styles.includes('#printStudy span.study-action-label::after { content: "Print"; font-size: 0.5rem; }') || !styles.includes('  .catalog-summary-actions { flex-wrap: wrap; justify-content: flex-end; }') || !styles.includes('  .catalog-summary .catalog-share-button span:last-child::after { content: "Share"; font-size: 0.5rem; }') || !styles.includes('  .catalog-summary .catalog-citation-button span:last-child::after { content: "Cite"; font-size: 0.5rem; }')) throw new Error('Narrow-screen controls must preserve clear visible action labels, compact header spacing, and completion state');
+          if (!styles.incl…40291 tokens truncated…leScale.textContent.startsWith('Scale 0 → ') || !chartScaleStatus.textContent.startsWith('Comparison ranges updated: length to span 0 → ') || !ratioAxisMid.textContent || !ratioAxisMax.textContent || !heightAxisMid.textContent || !heightAxisMax.textContent || !moduleAxisMid.textContent || !moduleAxisMax.textContent) throw new Error('Comparison charts did not expose visible axis, curated study identity, provenance, current-study context, meter ranges, live range announcements, and active maximum context');
+          // End dynamic comparison-chart expectations.
+          // Data-driven chart assertions above cover the active collection ranges and provenance.
+          const moduleWidths = [...moduleChart.innerHTML.matchAll(/<span class="module-bars"[^>]*style="width:([^%]+)%">/g)].map((match) => Number(match[1]));
+          if (moduleWidths.length !== 2 || !(moduleWidths[0] < moduleWidths[1]) || Math.abs(moduleWidths[1] - 100) > 0.0001 || !moduleChart.innerHTML.includes('<i class="module-bar"></i>')) throw new Error('Module chart did not normalize group length or use equal bay markers');
+          if (!ratioChart.innerHTML.includes('record: ' + firstStatusDefinition + '; Source: ' + firstStudy.source + '; ' + firstStudy.sourceNote) || !heightChart.innerHTML.includes('record: ' + firstStatusDefinition + '; Source: ' + firstStudy.source + '; ' + firstStudy.sourceNote) || !moduleChart.innerHTML.includes('record: ' + firstStatusDefinition + '; Source: ' + firstStudy.source + '; ' + firstStudy.sourceNote)) throw new Error('Comparison chart accessible labels did not expose the schematic status definition and source provenance');
+          const compareView = elements.get('#compareView');
+          compareView.hidden = true;
+          chartScaleStatus.textContent = '';
+          renderCharts();
+          if (chartScaleStatus.textContent !== '') throw new Error('Hidden comparison view consumed its live range announcement');
+          compareView.hidden = false;
+          renderCharts();
+          if (!chartScaleStatus.textContent.startsWith('Comparison ranges updated: length to span 0 → ')) throw new Error('Visible comparison view did not restore its live range announcement');
+          const originalGothicStatus = context.window.CHURCH_GEOMETRY[1].status;
+          context.window.CHURCH_GEOMETRY[1].status = 'measured';
+          renderCharts();
+          if (!ratioChart.innerHTML.includes('class="chart-status" data-status="measured" title="Source-supported dimensions.">Measured</span>') || !heightChart.innerHTML.includes('data-status="measured"') || !moduleChart.innerHTML.includes('data-status="measured"')) throw new Error('Comparison chart provenance chips did not follow a measured record');
+          renderComparisonTable();
+          if (!tableBody.innerHTML.includes('class="comparison-status" data-status="measured" aria-label="Measured (measured): Source-supported dimensions."')) throw new Error('Comparison table status styling did not follow a measured record');
+          if (!ratioChart.innerHTML.includes('record: Source-supported dimensions.') || !heightChart.innerHTML.includes('record: Source-supported dimensions.') || !moduleChart.innerHTML.includes('record: Source-supported dimensions.')) throw new Error('Comparison chart accessible labels did not expose the measured status definition');
+          renderGeometryCompare();
+          if (!geometryCompare.innerHTML.includes('class="compare-study-status" data-status="measured" title="Source-supported dimensions.">Measured</span>')) throw new Error('Comparison card provenance badge did not follow a measured record');
+          context.window.CHURCH_GEOMETRY[1].status = originalGothicStatus;
+          renderCharts();
+          renderGeometryCompare();
+          if (!geometryCompare.innerHTML.includes(firstStudy.typology + ' · ' + firstStudy.place + ' · ' + firstStudy.era + ' · ' + firstAxisLabel) || !geometryCompare.innerHTML.includes(secondStudy.typology + ' · ' + secondStudy.place + ' · ' + secondStudy.era + ' · ' + studyAxisLabel(secondStudy)) || !geometryCompare.innerHTML.includes('class="compare-study-status" data-status="' + firstStatus + '"') || !geometryCompare.innerHTML.includes('Source: ' + firstStudy.source + '; ' + firstStudy.sourceNote) || !geometryCompare.innerHTML.includes(firstAxisLabel) || !geometryCompare.innerHTML.includes('Open in Atlas') || !geometryCompare.innerHTML.includes('compare-study-card is-active') || !geometryCompare.innerHTML.includes('aria-current="true"') || geometryCompare.innerHTML.includes('aria-current="page"') || !geometryCompare.innerHTML.includes('Current Atlas study · open in Atlas')) throw new Error('Comparison cards did not render place, era, axis, visible provenance, destination context, source note, and generic current-study state');
+          if (!geometryCompare.innerHTML.includes('class="compare-study-measure">' + firstStudy.length + ' × ' + firstStudy.span + ' × ' + firstStudy.height + ' ' + context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol + ' · radius ' + firstStudy.radius + ' ' + context.window.CHURCH_GEOMETRY_SCHEMA.unitSymbol + '</span>') || !geometryCompare.innerHTML.includes('class="compare-study-emphasis">' + firstStudy.emphasis + '</span>') || !geometryCompare.innerHTML.includes('primary radius ' + Number(firstStudy.radius).toFixed(1) + ' ' + context.window.CHURCH_GEOMETRY_SCHEMA.units)) throw new Error('Comparison cards did not render compact envelope, emphasis, and accessible radius context');
+          renderComparisonTable();
+          if (tableSummary.textContent !== 'Read the 2 selected study records as a table' || !tableCaption.textContent.includes('2 selected studies') || !tableCaption.textContent.includes('curated study index') || !tableCaption.textContent.includes('interpretive 0–100 reading-profile scores') || !tableBody.innerHTML.includes('class="comparison-table-study-link"') || !tableBody.innerHTML.includes('class="comparison-table-study-index" aria-hidden="true">' + firstStudy.index + '</span>') || !tableBody.innerHTML.includes('data-table-study="' + firstStudy.id + '"') || !tableBody.innerHTML.includes('aria-label="Open study ' + firstStudy.index + ', ' + firstStudyHtmlLabel + ' in Atlas.') || !tableBody.innerHTML.includes('aria-label="Open study ' + secondStudy.index + ', ' + secondStudyLabel.replace(/'/g, '&#39;') + ' in Atlas.') || !tableBody.innerHTML.includes('data-profile="linearity"') || !tableBody.innerHTML.includes('Study ' + firstStudy.index + ', ' + firstStudyHtmlLabel + ' Linearity profile:') || !tableBody.innerHTML.includes('aria-current="true"') || tableBody.innerHTML.includes('aria-current="page"') || !tableBody.innerHTML.includes('class="comparison-table-study-state">current</span>') || !tableBody.innerHTML.includes('<td>' + firstAxisLabel + '</td>')) throw new Error('Focused comparison table scope, visible curated index, axis context, status, source provenance, basis-specific profile labels, or Atlas links did not update');
+          state.compareIds = [];
+          renderCompareContext();
+          if (sectionNote.textContent !== 'Relative readings · full collection' || geometryKicker.textContent !== '00 / collection geometry' || compareScope.textContent !== 'Full collection' || !compareHelper.textContent.includes('full collection') || !compareHelper.textContent.includes('Add visible to compare') || comparisonPrintRoute.textContent !== 'Route · /atlas/#compare') throw new Error('Full collection scope, next-step action, or reproducible print route did not update');
+          renderCharts();
+          if (!ratioScale.textContent.startsWith('Scale 0 → ') || !heightScale.textContent.startsWith('Scale 0 → ') || !moduleScale.textContent.startsWith('Scale 0 → ') || !chartScaleStatus.textContent.startsWith('Comparison ranges updated: length to span 0 → ') || !ratioAxisMid.textContent || !ratioAxisMax.textContent || !heightAxisMid.textContent || !heightAxisMax.textContent || !moduleAxisMid.textContent || !moduleAxisMax.textContent) throw new Error('Comparison chart scales, live range announcement, and visual axis guides did not follow the full collection');
+          renderComparisonTable();
+          if (tableSummary.textContent !== 'Read the ' + context.window.CHURCH_GEOMETRY.length + ' study records as a table' || !tableCaption.textContent.includes('full collection')) throw new Error('Full collection table scope copy did not update');
+          state.compareIds = ['basilica', 'gothic'];
+          showPage('atlas', { scroll: false });
+          const finalUrl = new URL(location.href);
+          if (finalUrl.hash !== '#atlas/basilica/plan/exterior/all') throw new Error(`Unexpected Atlas return route: ${finalUrl.hash}`);
+          if (finalUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Comparison selection was not preserved: ${finalUrl.search}`);
+          if (historyCalls.length !== 2 || historyCalls[0][0] !== 'pushState' || historyCalls[1][0] !== 'replaceState') throw new Error(`Unexpected handoff history sequence: ${JSON.stringify(historyCalls)}`);
+          showPage('method', { routeStudy: true, scroll: false });
+          const methodUrl = new URL(location.href);
+          if (methodUrl.hash !== '#method/basilica' || methodUrl.searchParams.get('compare') !== 'basilica,gothic') throw new Error(`Method navigation dropped the selected comparison context: ${methodUrl.href}`);
+          state.compareIds = ['basilica'];
+          showPage('compare', { scroll: false });
+          const partialCompareUrl = new URL(location.href);
+          if (partialCompareUrl.hash !== '#compare' || partialCompareUrl.searchParams.get('compare') !== 'basilica') throw new Error(`Compare navigation dropped a partial selection: ${partialCompareUrl.href}`);
+          console.log('Comparison edit handoff smoke test passed.');
+          NODE
+
+      - name: Smoke-test count-aware catalog comparison action
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const buttonText = { textContent: '' };
+          const button = {
+            disabled: false,
+            title: '',
+            attributes: {},
+            setAttribute(name, value) { this.attributes[name] = value; },
+            querySelector(selector) { return selector === 'span:last-child' ? buttonText : null; }
+          };
+          const context = {
+            window: {},
+            document: {
+              querySelector(selector) { return selector === '#selectVisibleCompare' ? button : null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderVisibleComparisonAction, state };\n})();');
+          vm.runInNewContext(app, context);
+          const { renderVisibleComparisonAction, state } = context.window.__atlasTest;
+          const [basilica, gothic] = context.window.CHURCH_GEOMETRY;
+          state.compareIds = [];
+          renderVisibleComparisonAction([basilica, gothic]);
+          if (button.disabled || button.attributes['aria-label'] !== 'Add 2 visible studies to comparison' || buttonText.textContent !== 'Add 2 visible studies') throw new Error(`Unselected visible action lost its count: ${button.attributes['aria-label']} / ${buttonText.textContent}`);
+          state.compareIds = ['basilica'];
+          renderVisibleComparisonAction([basilica, gothic]);
+          if (button.disabled || button.attributes['aria-label'] !== 'Add 1 visible study to comparison' || buttonText.textContent !== 'Add 1 visible study') throw new Error(`Partial visible action lost its singular count: ${button.attributes['aria-label']} / ${buttonText.textContent}`);
+          state.compareIds = ['basilica', 'gothic'];
+          renderVisibleComparisonAction([basilica, gothic]);
+          if (!button.disabled || button.attributes['aria-label'] !== 'All 2 visible studies are already in comparison' || buttonText.textContent !== 'All 2 visible studies selected') throw new Error(`Complete visible action lost its selected state: ${button.attributes['aria-label']} / ${buttonText.textContent}`);
+          state.compareIds = [];
+          renderVisibleComparisonAction([]);
+          if (!button.disabled || button.attributes['aria-label'] !== 'No visible studies to add to comparison' || buttonText.textContent !== 'No visible studies') throw new Error(`Empty visible action lost its recovery state: ${button.attributes['aria-label']} / ${buttonText.textContent}`);
+          console.log('Count-aware catalog comparison action smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison printing
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const panel = { open: false };
+          const keyboardStatus = { textContent: '' };
+          const classes = new Set();
+          const createPrintButton = () => {
+            const label = { textContent: '' };
+            const attributes = {};
+            return {
+              attributes,
+              classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } },
+              querySelector() { return label; },
+              setAttribute(name, value) { attributes[name] = value; },
+              label,
+              title: ''
+            };
+          };
+          const printComparisonButton = createPrintButton();
+          const printStudyButton = createPrintButton();
+          let printCalls = 0;
+          let afterPrint;
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
+              print() { printCalls += 1; },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
+              removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
+            },
+            document: {
+              body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
+              querySelector(selector) {
+                if (selector === '.comparison-table-panel') return panel;
+                if (selector === '#keyboardStatus') return keyboardStatus;
+                if (selector === '#printComparison') return printComparisonButton;
+                if (selector === '#printStudy') return printStudyButton;
+                return null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, printComparison, printStudy } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, printComparison, printStudy } = context.window.__atlasTest;
+          state.compareIds = ['basilica', 'gothic'];
+          printComparison();
+          if (printCalls !== 1 || !classes.has('print-comparison') || classes.has('is-unavailable') || !panel.open || keyboardStatus.textContent !== 'Printing the comparison for 2 selected studies.' || printComparisonButton.label.textContent !== 'Print opened' || printComparisonButton.attributes['aria-label'] !== 'Print dialog opened for 2 selected studies' || typeof afterPrint !== 'function') throw new Error('Comparison printing did not prepare its scoped print state or visible feedback');
+          afterPrint();
+          if (classes.has('print-comparison') || panel.open || afterPrint !== null) throw new Error('Comparison printing did not restore the interactive state after printing');
+          context.window.print = () => { throw new Error('Print dialog blocked'); };
+          state.compareIds = [];
+          printStudy();
+          if (keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || !classes.has('is-unavailable') || printStudyButton.label.textContent !== 'Unavailable' || printStudyButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Study printing did not recover from a blocked print dialog with visible feedback');
+          console.log('Study and comparison printing smoke test passed.');
+          NODE
+
+      - name: Smoke-test catalog printing
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const keyboardStatus = { textContent: '' };
+          const classes = new Set();
+          const createPrintButton = () => {
+            const label = { textContent: '' };
+            const attributes = {};
+            return {
+              attributes,
+              classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } },
+              querySelector() { return label; },
+              setAttribute(name, value) { attributes[name] = value; },
+              label,
+              title: '',
+              disabled: false
+            };
+          };
+          const printCatalogButton = createPrintButton();
+          let printCalls = 0;
+          let afterPrint;
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#atlas' },
+              print() { printCalls += 1; },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
+              removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
+            },
+            document: {
+              body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
+              querySelector(selector) {
+                if (selector === '#keyboardStatus') return keyboardStatus;
+                if (selector === '#printCatalog') return printCatalogButton;
+                return null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, printCatalog };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, printCatalog } = context.window.__atlasTest;
+          printCatalog();
+          if (printCalls !== 1 || !classes.has('print-catalog') || keyboardStatus.textContent !== 'Printing the catalog view for the full collection.' || printCatalogButton.label.textContent !== 'Print opened' || printCatalogButton.attributes['aria-label'] !== 'Print dialog opened for the full collection' || typeof afterPrint !== 'function') throw new Error('Catalog printing did not prepare its scoped print state or visible feedback');
+          afterPrint();
+          if (classes.has('print-catalog') || afterPrint !== null) throw new Error('Catalog printing did not restore the interactive state after printing');
+          state.query = 'gothic';
+          printCatalog();
+          if (printCalls !== 2 || keyboardStatus.textContent !== 'Printing the catalog view for results matching “gothic”.' || printCatalogButton.attributes['aria-label'] !== 'Print dialog opened for results matching “gothic”') throw new Error('Catalog printing did not retain the active search scope in its announcement and completion label');
+          afterPrint();
+          context.window.print = () => { throw new Error('Print dialog blocked'); };
+          printCatalog();
+          if (classes.has('print-catalog') || !classes.has('is-unavailable') || keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printCatalogButton.label.textContent !== 'Unavailable' || printCatalogButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Catalog printing did not recover from a blocked print dialog with visible feedback');
+          console.log('Catalog printing smoke test passed.');
+          NODE
+
+      - name: Smoke-test Method printing
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const keyboardStatus = { textContent: '' };
+          const classes = new Set();
+          const createPrintButton = () => {
+            const label = { textContent: '' };
+            const attributes = {};
+            return {
+              attributes,
+              classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } },
+              querySelector() { return label; },
+              setAttribute(name, value) { attributes[name] = value; },
+              label,
+              title: ''
+            };
+          };
+          const printMethodButton = createPrintButton();
+          let printCalls = 0;
+          let afterPrint;
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/?q=gothic#method/gothic', hash: '#method/gothic' },
+              print() { printCalls += 1; },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener(name, listener) { if (name === 'afterprint') afterPrint = listener; },
+              removeEventListener(name, listener) { if (name === 'afterprint' && listener === afterPrint) afterPrint = null; }
+            },
+            document: {
+              body: { classList: { add(name) { classes.add(name); }, remove(name) { classes.delete(name); } } },
+              querySelector(selector) {
+                if (selector === '#keyboardStatus') return keyboardStatus;
+                if (selector === '#printMethod') return printMethodButton;
+                return null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const routeStudy = context.window.CHURCH_GEOMETRY.find((study) => study.id === 'gothic');
+          const routeStudyLabel = routeStudy.shortName || routeStudy.name;
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { printMethod };\n})();');
+          vm.runInNewContext(app, context);
+          const { printMethod } = context.window.__atlasTest;
+          printMethod();
+          if (printCalls !== 1 || !classes.has('print-method') || keyboardStatus.textContent !== 'Printing the Method guide for ' + routeStudyLabel + '.' || printMethodButton.label.textContent !== 'Print opened' || printMethodButton.attributes['aria-label'] !== 'Print dialog opened for ' + routeStudyLabel || typeof afterPrint !== 'function') throw new Error('Method printing did not prepare its scoped print state or context-aware feedback');
+          afterPrint();
+          if (classes.has('print-method') || afterPrint !== null) throw new Error('Method printing did not restore the interactive state after printing');
+          context.window.location.href = 'https://example.test/atlas/#method';
+          context.window.location.hash = '#method';
+          context.window.print = () => { throw new Error('Print dialog blocked'); };
+          printMethod();
+          if (classes.has('print-method') || !classes.has('is-unavailable') || keyboardStatus.textContent !== 'Printing is unavailable in this browser.' || printMethodButton.label.textContent !== 'Unavailable' || printMethodButton.attributes['aria-label'] !== 'Printing is unavailable in this browser.') throw new Error('Method printing did not recover from a blocked print dialog with visible feedback');
+          console.log('Method printing smoke test passed.');
+          NODE
+
+      - name: Smoke-test reproducible route links
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = {
+            window: {},
+            document: {
+              querySelector() { return null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderRouteLink, routePath };\n})();');
+          vm.runInNewContext(app, context);
+          const { renderRouteLink, routePath } = context.window.__atlasTest;
+          const attributes = {};
+          const link = {
+            href: '',
+            textContent: '',
+            title: '',
+            setAttribute(name, value) { attributes[name] = value; }
+          };
+          const container = {
+            textContent: '',
+            querySelector(selector) { return selector === '.study-route-link' ? link : null; }
+          };
+          renderRouteLink(container, '.study-route-link', '/atlas/#atlas/gothic/section/interior/axis/1.3', 'Open selected study route in Atlas');
+          if (link.href !== '/atlas/#atlas/gothic/section/interior/axis/1.3' || link.textContent !== '/atlas/#atlas/gothic/section/interior/axis/1.3' || link.title !== 'Open selected study route in Atlas' || attributes['aria-label'] !== 'Open selected study route in Atlas') throw new Error('Route link renderer did not update the native link and accessible label');
+          if (routePath({ pathname: '/atlas/', search: '?q=gothic', hash: '#compare' }) !== '/atlas/?q=gothic#compare') throw new Error('Route path helper did not preserve project-relative search and hash state');
+          const fallback = { textContent: '' };
+          renderRouteLink(fallback, '.comparison-route-link', 'https://example.test/atlas/#compare', 'Open comparison route');
+          if (fallback.textContent !== 'Route · https://example.test/atlas/#compare') throw new Error('Route link renderer did not preserve the fallback route readout');
+          console.log('Reproducible route link smoke test passed.');
+          NODE
+
+      - name: Smoke-test route copy actions
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const copied = [];
+          const makeButton = (labelText) => {
+            const label = { textContent: labelText };
+            const classes = new Set();
+            return {
+              disabled: false,
+              attributes: {},
+              title: '',
+              classList: {
+                add(name) { classes.add(name); },
+                remove(name) { classes.delete(name); }
+              },
+              querySelector(selector) { return selector === 'span:last-child' ? label : null; },
+              setAttribute(name, value) { this.attributes[name] = value; },
+              get label() { return label; },
+              get classes() { return classes; }
+            };
+          };
+          const makeLink = (href) => ({
+            href,
+            getAttribute(name) { return name === 'href' ? href : null; }
+          });
+          const catalogButton = makeButton('Copy link');
+          const studyButton = makeButton('Copy link');
+          const comparisonButton = makeButton('Copy link');
+          const methodButton = makeButton('Copy link');
+          elements.set('#copyCatalogRoute', catalogButton);
+          elements.set('#copyStudyRoute', studyButton);
+          elements.set('#copyComparisonRoute', comparisonButton);
+          elements.set('#copyMethodRoute', methodButton);
+          elements.set('#catalogRouteStatus', { textContent: '' });
+          elements.set('#studyRouteStatus', { textContent: '' });
+          elements.set('#comparisonRouteStatus', { textContent: '' });
+          elements.set('#methodRouteStatus', { textContent: '' });
+          elements.set('.catalog-route-link', makeLink('/atlas/?q=gothic#atlas'));
+          elements.set('.study-route-link', makeLink('/atlas/#atlas/gothic/section/interior/axis/1.3'));
+          elements.set('.comparison-route-link', makeLink('/atlas/?compare=basilica,gothic#compare/basilica,gothic'));
+          elements.set('.method-route-link', makeLink('/atlas/?q=gothic&compare=basilica,gothic#method/gothic'));
+          const makeFallback = () => {
+            const panel = { hidden: true };
+            const text = {
+              value: '',
+              focused: false,
+              selected: false,
+              focus() { this.focused = true; },
+              select() { this.selected = true; }
+            };
+            return { panel, text };
+          };
+          const catalogRouteFallback = makeFallback();
+          const studyRouteFallback = makeFallback();
+          const comparisonRouteFallback = makeFallback();
+          const methodRouteFallback = makeFallback();
+          elements.set('#catalogRouteFallback', catalogRouteFallback.panel);
+          elements.set('#catalogRouteFallbackText', catalogRouteFallback.text);
+          elements.set('#studyRouteFallback', studyRouteFallback.panel);
+          elements.set('#studyRouteFallbackText', studyRouteFallback.text);
+          elements.set('#comparisonRouteFallback', comparisonRouteFallback.panel);
+          elements.set('#comparisonRouteFallbackText', comparisonRouteFallback.text);
+          elements.set('#methodRouteFallback', methodRouteFallback.panel);
+          elements.set('#methodRouteFallbackText', methodRouteFallback.text);
+          const context = {
+            URL,
+            navigator: {
+              clipboard: {
+                writeText(value) {
+                  copied.push(value);
+                  return Promise.resolve();
+                }
+              }
+            },
+            window: {
+              isSecureContext: true,
+              location: { href: 'https://example.test/atlas/' },
+              setTimeout() { return 1; },
+              clearTimeout() {},
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { copyCatalogRoute, copyStudyRoute, copyComparisonRoute, copyMethodRoute, dismissManualCopyFallback };\n})();');
+          vm.runInNewContext(app, context);
+          (async () => {
+            const { copyCatalogRoute, copyStudyRoute, copyComparisonRoute, copyMethodRoute, dismissManualCopyFallback } = context.window.__atlasTest;
+            await copyCatalogRoute();
+            await copyStudyRoute();
+            await copyComparisonRoute();
+            await copyMethodRoute();
+            const expected = [
+              'https://example.test/atlas/?q=gothic#atlas',
+              'https://example.test/atlas/#atlas/gothic/section/interior/axis/1.3',
+              'https://example.test/atlas/?compare=basilica,gothic#compare/basilica,gothic',
+              'https://example.test/atlas/?q=gothic&compare=basilica,gothic#method/gothic'
+            ];
+            if (copied.join('|') !== expected.join('|')) throw new Error('Route copy actions did not resolve each visible route to the full URL');
+            if (elements.get('#catalogRouteStatus').textContent !== 'Catalog view route copied.' || elements.get('#studyRouteStatus').textContent !== 'Active study route copied.' || elements.get('#comparisonRouteStatus').textContent !== 'Comparison route copied.' || elements.get('#methodRouteStatus').textContent !== 'Method route copied.') throw new Error('Route copy actions did not announce success in their live regions');
+            if (catalogButton.label.textContent !== 'Copied' || studyButton.label.textContent !== 'Copied' || comparisonButton.label.textContent !== 'Copied' || methodButton.label.textContent !== 'Copied') throw new Error('Route copy actions did not expose visible completion labels');
+            if (catalogButton.disabled || catalogButton.attributes['aria-busy'] !== 'false' || studyButton.disabled || comparisonButton.disabled || methodButton.disabled) throw new Error('Route copy actions did not release their busy state');
+            context.navigator.clipboard.writeText = () => Promise.reject(new Error('blocked'));
+            const fallbackCases = [
+              {
+                copy: copyCatalogRoute,
+                button: catalogButton,
+                status: elements.get('#catalogRouteStatus'),
+                fallback: catalogRouteFallback,
+                scope: 'catalog view',
+                url: expected[0]
+              },
+              {
+                copy: copyStudyRoute,
+                button: studyButton,
+                status: elements.get('#studyRouteStatus'),
+                fallback: studyRouteFallback,
+                scope: 'active study',
+                url: expected[1]
+              },
+              {
+                copy: copyComparisonRoute,
+                button: comparisonButton,
+                status: elements.get('#comparisonRouteStatus'),
+                fallback: comparisonRouteFallback,
+                scope: 'comparison',
+                url: expected[2]
+              },
+              {
+                copy: copyMethodRoute,
+                button: methodButton,
+                status: elements.get('#methodRouteStatus'),
+                fallback: methodRouteFallback,
+                scope: 'method',
+                url: expected[3]
+              }
+            ];
+            for (const test of fallbackCases) {
+              const result = await test.copy();
+              const message = 'Copying the ' + test.scope + ' route was unavailable. The full route is shown below for manual copying.';
+              if (result !== false || test.fallback.panel.hidden || test.fallback.text.value !== test.url || !test.fallback.text.selected || !test.fallback.text.focused || test.status.textContent !== message || test.button.label.textContent !== 'Unavailable' || !test.button.classes.has('is-unavailable') || test.button.attributes['aria-expanded'] !== 'true') throw new Error('Route copy actions did not expose a focused manual-copy field when clipboard access failed');
+            }
+            dismissManualCopyFallback('#methodRouteFallback');
+            if (!methodRouteFallback.panel.hidden || methodButton.attributes['aria-expanded'] !== 'false') throw new Error('Route copy fallback dismissal did not hide the field or restore its control state');
+            console.log('Route copy actions smoke test passed.');
+          })().catch((error) => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE
+
+      - name: Smoke-test escaped comparison labels
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const geometryCompare = { innerHTML: '', setAttribute(name, value) { this[name] = value; } };
+          const ratioChart = { innerHTML: '' };
+          const heightChart = { innerHTML: '' };
+          const moduleChart = { innerHTML: '' };
+          elements.set('#geometryCompare', geometryCompare);
+          elements.set('#ratioChart', ratioChart);
+          elements.set('#heightChart', heightChart);
+          elements.set('#moduleChart', moduleChart);
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          context.window.CHURCH_GEOMETRY_SCHEMA.statusDefinitions.schematic = 'Quoted "definition" <tag>';
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { renderCharts, renderGeometryCompare };\n})();');
+          vm.runInNewContext(app, context);
+          context.window.CHURCH_GEOMETRY[0].axis = 'Quoted "axis" <tag>';
+          context.window.CHURCH_GEOMETRY[0].source = 'Quoted "source" <tag>';
+          context.window.CHURCH_GEOMETRY[0].sourceNote = 'Quoted "source note" <tag>';
+          context.window.__atlasTest.renderGeometryCompare();
+          context.window.__atlasTest.renderCharts();
+          if (!geometryCompare.innerHTML.includes('Data status: Schematic (schematic); Quoted &quot;definition&quot; &lt;tag&gt;') || !geometryCompare.innerHTML.includes('Source: Quoted &quot;source&quot; &lt;tag&gt;; Quoted &quot;source note&quot; &lt;tag&gt;') || !geometryCompare.innerHTML.includes('Quoted &quot;definition&quot; &lt;tag&gt;') || geometryCompare.innerHTML.includes('Quoted "definition" <tag>') || !ratioChart.innerHTML.includes('title="Quoted &quot;definition&quot; &lt;tag&gt;"') || !heightChart.innerHTML.includes('title="Quoted &quot;definition&quot; &lt;tag&gt;"') || !moduleChart.innerHTML.includes('title="Quoted &quot;definition&quot; &lt;tag&gt;"') || !ratioChart.innerHTML.includes('Source: Quoted &quot;source&quot; &lt;tag&gt;; Quoted &quot;source note&quot; &lt;tag&gt;') || !heightChart.innerHTML.includes('Source: Quoted &quot;source&quot; &lt;tag&gt;; Quoted &quot;source note&quot; &lt;tag&gt;') || !moduleChart.innerHTML.includes('Source: Quoted &quot;source&quot; &lt;tag&gt;; Quoted &quot;source note&quot; &lt;tag&gt;') || !ratioChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !heightChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || !moduleChart.innerHTML.includes('Quoted &quot;axis&quot; &lt;tag&gt; axis') || ratioChart.innerHTML.includes('Quoted "axis" <tag> axis') || ratioChart.innerHTML.includes('Source: Quoted "source" <tag>; Quoted "source note" <tag>')) {
+            throw new Error('Comparison card and chart labels did not escape edited dynamic text');
+          }
+          console.log('Escaped comparison label smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison table shortcut scope
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const scrollStatus = { textContent: '' };
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare/basilica,gothic' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) { return selector === '#comparisonTableScrollStatus' ? scrollStatus : null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { handleComparisonTableKey };\n})();');
+          vm.runInNewContext(app, context);
+          const { handleComparisonTableKey } = context.window.__atlasTest;
+          const scrollCalls = [];
+          const target = {
+            clientWidth: 400,
+            scrollWidth: 1000,
+            scrollLeft: 0,
+            scrollBy(options) { scrollCalls.push(['by', options]); },
+            scrollTo(options) { scrollCalls.push(['to', options]); }
+          };
+          let prevented = false;
+          handleComparisonTableKey({ currentTarget: target, target, key: 'ArrowRight', preventDefault() { prevented = true; } });
+          if (!prevented || scrollCalls.length !== 1 || scrollCalls[0][0] !== 'by' || scrollCalls[0][1].left !== 320 || scrollStatus.textContent !== 'Comparison table moved right.') throw new Error('Table scroll shortcut did not work when the scroll region was focused');
+          target.scrollLeft = 320;
+          prevented = false;
+          handleComparisonTableKey({ currentTarget: target, target, key: 'ArrowLeft', preventDefault() { prevented = true; } });
+          if (!prevented || scrollCalls.length !== 2 || scrollCalls[1][0] !== 'by' || scrollCalls[1][1].left !== -320 || scrollStatus.textContent !== 'Comparison table is at the first columns.') throw new Error('Table scroll shortcut did not announce the first columns');
+          prevented = false;
+          handleComparisonTableKey({ currentTarget: target, target, key: 'End', preventDefault() { prevented = true; } });
+          if (!prevented || scrollCalls.length !== 3 || scrollCalls[2][0] !== 'to' || scrollCalls[2][1].left !== 600 || scrollStatus.textContent !== 'Comparison table is at the last columns.') throw new Error('Table End shortcut did not announce the last columns');
+          const noScrollTarget = { clientWidth: 400, scrollWidth: 400, scrollLeft: 0, scrollBy() {} };
+          handleComparisonTableKey({ currentTarget: noScrollTarget, target: noScrollTarget, key: 'ArrowRight', preventDefault() {} });
+          if (scrollStatus.textContent !== 'The comparison table fits within the available width; horizontal scrolling is not needed.') throw new Error('Table shortcut did not announce when horizontal scrolling was unnecessary');
+          prevented = false;
+          const studyLink = {};
+          handleComparisonTableKey({ currentTarget: target, target: studyLink, key: 'ArrowRight', preventDefault() { prevented = true; } });
+          if (prevented || scrollCalls.length !== 3) throw new Error('Table scroll shortcut hijacked a nested study link');
+          console.log('Comparison table shortcut scope and status smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison table scroll cue
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const cue = { hidden: true, attributes: {}, setAttribute(name, value) { this.attributes[name] = value; } };
+          const cueText = { textContent: '' };
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#compare' },
+              addEventListener() {}
+            },
+            document: {
+              querySelector(selector) {
+                return selector === '#comparisonTableScrollCue' ? cue : selector === '#comparisonTableScrollCueText' ? cueText : null;
+              },
+              querySelectorAll() { return []; }
+            }
+          };
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { updateComparisonTableScrollCue };\n})();');
+          vm.runInNewContext(app, context);
+          const { updateComparisonTableScrollCue } = context.window.__atlasTest;
+          const target = {
+            clientWidth: 400,
+            scrollWidth: 1000,
+            scrollLeft: 0,
+            attributes: {},
+            setAttribute(name, value) { this.attributes[name] = value; }
+          };
+          updateComparisonTableScrollCue(target);
+          if (cue.hidden || target.attributes['data-scroll-state'] !== 'start' || cue.attributes['data-scroll-state'] !== 'start' || cueText.textContent !== 'More columns →') throw new Error('Start-of-table scroll cue was not shown');
+          target.scrollLeft = 320;
+          updateComparisonTableScrollCue(target);
+          if (cue.attributes['data-scroll-state'] !== 'middle' || cueText.textContent !== '← More columns →') throw new Error('Middle-of-table scroll cue was not directional');
+          target.scrollLeft = 600;
+          updateComparisonTableScrollCue(target);
+          if (cue.attributes['data-scroll-state'] !== 'end' || cueText.textContent !== '← More columns') throw new Error('End-of-table scroll cue was not directional');
+          const noScrollTarget = { clientWidth: 400, scrollWidth: 400, scrollLeft: 0, setAttribute() {} };
+          updateComparisonTableScrollCue(noScrollTarget);
+          if (!cue.hidden || cue.attributes['data-scroll-state'] !== 'none' || cueText.textContent !== '') throw new Error('Non-overflowing table did not hide its scroll cue');
+          console.log('Comparison table scroll cue smoke test passed.');
+          NODE
+
+      - name: Smoke-test Method return context
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const elements = new Map();
+          const actionText = { textContent: '' };
+          const contextNote = { textContent: '' };
+          const provenanceNote = { textContent: '' };
+          const readingsIntro = { textContent: '' };
+          const statusIntro = { textContent: '' };
+          const statusList = { innerHTML: '' };
+          const methodRouteLink = { href: '', textContent: '', title: '', setAttribute(name, value) { this[name] = value; } };
+          const methodRoute = { querySelector(selector) { return selector === '.method-route-link' ? methodRouteLink : null; } };
+          const action = {
+            title: '',
+            setAttribute(name, value) { this[name] = value; },
+            querySelector() { return actionText; }
+          };
+          elements.set('#methodBackToStudy', action);
+          elements.set('#methodContextNote', contextNote);
+          elements.set('#methodRoute', methodRoute);
+          elements.set('#methodProvenanceNote', provenanceNote);
+          elements.set('#methodReadingsIntro', readingsIntro);
+          elements.set('#methodStatusKeyIntro', statusIntro);
+          elements.set('#methodStatusKeyList', statusList);
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/#method/basilica', hash: '#method/basilica' },
+              addEventListener() {}
+            },
+            document: {
+              title: 'Sacred Geometry Atlas',
+              body: { classList: { contains() { return false; } } },
+              querySelector(selector) { return elements.get(selector) || null; },
+              querySelectorAll() { return []; }
+            }
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, renderMethodReturnAction, renderMethodContext, renderMethodProvenance, visibleStudies, methodScopeNote, updateDocumentTitle } ;\n})();');
+          vm.runInNewContext(app, context);
+          const { state, renderMethodReturnAction, renderMethodContext, renderMethodProvenance, visibleStudies, methodScopeNote, updateDocumentTitle } = context.window.__atlasTest;
+          const firstStudy = context.window.CHURCH_GEOMETRY.find((study) => study.id === 'basilica');
+          const firstStudyLabel = firstStudy.shortName || firstStudy.name;
+          const firstStudyIdentity = 'Study ' + firstStudy.index + ', ' + firstStudyLabel;
+          state.activeId = 'basilica';
+          renderMethodReturnAction();
+          if (action['aria-label'] !== 'Open ' + firstStudyIdentity + ' in Atlas' || action.title !== action['aria-label'] || action.href !== '/atlas/#atlas/basilica/plan/exterior/all' || actionText.textContent !== 'Open current study') throw new Error('Method action did not identify the indexed visible current study or route');
+          renderMethodContext();
+          updateDocumentTitle('method');
+          if (context.document.title !== 'Method · ' + firstStudyIdentity + ' · Sacred Geometry Atlas') throw new Error('Method title did not identify its indexed current study context');
+          if (contextNote.textContent !== 'Current study · ' + firstStudyIdentity || methodRouteLink.href !== '/atlas/#method/basilica' || methodRouteLink.textContent !== '/atlas/#method/basilica' || methodRouteLink['aria-label'] !== 'Open method route for ' + firstStudyIdentity) throw new Error('Method view did not name its indexed preserved study context or render its direct route');
+          state.query = 'gothic';
+          const gothicRecords = visibleStudies();
+          const gothicRecordCount = gothicRecords.length;
+          const gothicRecordLabel = `${gothicRecordCount} ${gothicRecordCount === 1 ? 'record' : 'records'}`;
+          renderMethodProvenance(gothicRecords);
+          updateDocumentTitle('method');
+          if (context.document.title !== 'Method · ' + firstStudyIdentity + ' · results matching “gothic” · Sacred Geometry Atlas') throw new Error('Method title did not preserve the indexed active filtered Atlas scope');
+          if (methodScopeNote(gothicRecords) !== `Atlas scope · results matching “gothic” · ${gothicRecordLabel}` || !provenanceNote.textContent.startsWith('The current Atlas scope (results matching “gothic”) uses schematic proportional studies.') || !statusIntro.textContent.includes(`for ${gothicRecordLabel}`) || !statusList.innerHTML.includes(gothicRecordLabel)) throw new Error('Method evidence guidance did not follow the active filtered Atlas scope');
+          renderMethodReturnAction();
+          if (action['aria-label'] !== 'Return to Atlas catalog' || action.href !== '/atlas/?q=gothic#atlas' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not fall back to the filtered Atlas catalog route');
+          renderMethodContext();
+          if (contextNote.textContent !== 'Study context · ' + firstStudyIdentity + ' · outside current catalog · Atlas scope · results matching “gothic” · ' + gothicRecordLabel || methodRouteLink.href !== '/atlas/?q=gothic#method/basilica') throw new Error('Method view did not explain an indexed out-of-scope study context, expose the filtered scope, or preserve the filtered direct route');
+          state.query = 'no matching study';
+          const emptyRecords = visibleStudies();
+          renderMethodProvenance(emptyRecords);
+          if (methodScopeNote(emptyRecords) !== 'Atlas scope · results matching “no matching study” · 0 records' || !statusIntro.textContent.includes('for 0 records') || !statusList.innerHTML.includes('0 records')) throw new Error('Method evidence guidance did not remain honest for an empty filtered Atlas scope');
+          renderMethodReturnAction();
+          if (action['aria-label'] !== 'Return to Atlas catalog' || action.href !== '/atlas/?q=no+matching+study#atlas' || actionText.textContent !== 'Return to Atlas') throw new Error('Method action did not preserve the catalog fallback route for an empty result set');
+          state.query = '';
+          state.compareIds = [];
+          state.page = 'atlas';
+          state.activeId = 'basilica';
+          state.mode = 'plan';
+          state.surface = 'exterior';
+          state.layer = 'all';
+          state.zoom = 1;
+          updateDocumentTitle('atlas');
+          if (context.document.title !== 'Sacred Geometry Atlas') throw new Error('Atlas collection title did not remain collection-level without an explicit study route');
+          state.compareIds = ['basilica', 'gothic'];
+          updateDocumentTitle('compare');
+          if (context.document.title !== 'Compare Study 01, Sant\'Apollinare in Classe + Study 02, Chartres Cathedral · Sacred Geometry Atlas') throw new Error('Focused comparison title did not preserve indexed study identities');
+          state.compareIds = ['basilica'];
+          updateDocumentTitle('compare');
+          if (context.document.title !== "Compare · Study 01, Sant'Apollinare in Classe selected · Sacred Geometry Atlas") throw new Error('Pending comparison title did not identify the indexed selected study');
+          console.log('Method return context smoke test passed.');
+          NODE
+
+      - name: Smoke-test comparison export context
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = {
+            URL,
+            window: {
+              location: { href: 'https://example.test/atlas/?q=central%20plan#compare/basilica,gothic' }
+            },
+            document: { baseURI: 'https://example.test/atlas/', querySelectorAll() { return []; } },
+            navigator: {}
+          };
+          vm.runInNewContext(fs.readFileSync('data/geometry.js', 'utf8'), context);
+          const app = fs.readFileSync('app.js', 'utf8').replace('  init();\n})();', '  window.__atlasTest = { state, comparisonStudies, comparisonCitationText, catalogCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, activeStudyCsvPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable };\n})();');
+          vm.runInNewContext(app, context);
+          const { state, comparisonStudies, comparisonCitationText, catalogCitationText, comparisonCsvPayload, catalogCsvPayload, comparisonJsonPayload, csvCell, activeStudyExportPayload, activeStudyCsvPayload, fullAtlasExportPayload, catalogViewExportPayload, renderComparisonTable } = context.window.__atlasTest;
+          const firstStudy = context.window.CHURCH_GEOMETRY[0];
+          const secondStudy = context.window.CHURCH_GEOMETRY[1];
+          const firstStudyLabel = firstStudy.shortName || firstStudy.name;
+          const secondStudyLabel = secondStudy.shortName || secondStudy.name;
+          const firstIdentity = 'Study ' + firstStudy.index + ', ' + firstStudyLabel;
+          const secondIdentity = 'Study ' + secondStudy.index + ', ' + secondStudyLabel;
+          const schema = context.window.CHURCH_GEOMETRY_SCHEMA;
+          const schemaUrl = 'https://example.test/atlas/data/geometry.schema.json';
+          const firstStudyRoute = 'https://example.test/atlas/#atlas/' + firstStudy.id + '/plan/exterior/all';
+          const secondStudyRoute = 'https://example.test/atlas/#atlas/' + secondStudy.id + '/plan/exterior/all';
+          for (const formula of ['=SUM(1,2)', ' +CMD', '-1+1', '@A1', '\u00a0=SUM(1,2)', '\u2003+CMD', '\u202f@A1']) {
+            if (csvCell(formula) !== JSON.stringify(`'${formula}`)) throw new Error(`Formula-like CSV text was not neutralized: ${formula}`);
+          }
+          if (csvCell('plain text') !== JSON.stringify('plain text')) throw new Error('Ordinary CSV text was changed unexpectedly');
+          state.compareIds = ['basilica', 'gothic'];
+          const focusedCitation = comparisonCitationText(comparisonStudies());
+          if (!focusedCitation.includes('Comparison of ' + firstIdentity + ' (' + firstStudy.axis + ' axis; ' + firstStudy.status + ')') || !focusedCitation.includes(secondIdentity + ' (' + secondStudy.axis + ' axis; ' + secondStudy.status + ')') || !focusedCitation.includes('Reading profiles (0–100, interpretive): ' + firstIdentity + ' —') || !focusedCitation.includes(secondIdentity + ' —') || !focusedCitation.includes('Scope: 2 selected studies') || !focusedCitation.includes('Status definitions: Schematic = ' + schema.statusDefinitions.schematic) || !focusedCitation.includes('Schema v' + schema.version + '; units: ' + schema.units) || focusedCitation !== focusedCitation.trim() || !focusedCitation.endsWith('https://example.test/atlas/#compare/basilica,gothic')) {
+            throw new Error('Focused comparison citation did not preserve selected records, status definitions, schema, scope, and route');
+          }
+          if (!focusedCitation.includes('Sources: ' + firstIdentity + ' — ' + firstStudy.source + '; ' + firstStudy.sourceNote) || !focusedCitation.includes(secondIdentity + ' — ' + secondStudy.source + '; ' + secondStudy.sourceNote)) throw new Error('Focused comparison citation did not preserve source and provenance notes');
+          const focusedCsv = comparisonCsvPayload(comparisonStudies()); const focusedCsvPrefix = [firstStudy.id, firstStudyLabel, firstStudy.typology, firstStudy.index, firstStudy.place].map(csvCell).join(','); const focusedCsvRoute = [ '2 selected studies', 'https://example.test/atlas/#compare/basilica,gothic', firstStudyRoute ].map(csvCell).join(','); const secondFocusedCsvRoute = [ '2 selected studies', 'https://example.test/atlas/#compare/basilica,gothic', secondStudyRoute ].map(csvCell).join(',');
+          if (!focusedCsv.includes('"ID","Study","Typology","Index","Place"') || !focusedCsv.includes(focusedCsvPrefix) || !focusedCsv.includes('"Era","Axis","Status","Status definition","Reference"') || !focusedCsv.includes(csvCell(firstStudy.source)) || !focusedCsv.includes(csvCell(secondStudy.source)) || !focusedCsv.includes('"Floor area estimate (m²)","Floor area basis","Volume estimate (m³)","Volume basis","Symmetry index","Scope","Route","Study route","Schema version","Units","Schema URL"') || !focusedCsv.includes(focusedCsvRoute) || !focusedCsv.includes(secondFocusedCsvRoute)) {
+            throw new Error('Focused comparison CSV did not preserve axis, estimates, provenance, scope, and route');
+          }
+          if (!focusedCsv.includes('"Schema URL","Linearity profile (0–100)","Verticality profile (0–100)","Radiality profile (0–100)","Repetition profile (0–100)","Reading profile basis"') || !focusedCsv.includes('linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count; Interpretive proportional tendencies, not empirical measurements.')) throw new Error('Focused comparison CSV did not append self-describing interpretive reading-profile scores');
+          const focusedJson = comparisonJsonPayload(comparisonStudies());
+          if (focusedJson.schemaUrl !== schemaUrl || focusedJson.provenance.scope !== '2 selected studies' || focusedJson.provenance.recordCount !== 2 || focusedJson.provenance.statusCounts[firstStudy.status] !== 2 || focusedJson.view.route !== 'https://example.test/atlas/#compare/basilica,gothic' || focusedJson.view.compareIds.join(',') !== 'basilica,gothic' || focusedJson.records[0].study.id !== firstStudy.id || focusedJson.records[0].studyRoute !== firstStudyRoute || focusedJson.records[1].studyRoute !== secondStudyRoute || focusedJson.records[0].derived.ratios.lengthToSpan !== firstStudy.length / firstStudy.span || focusedJson.records[0].derived.volumeBasis !== 'No estimate supplied' || focusedJson.records[0].derived.readingProfileBasis !== 'linearity = length ÷ span · verticality = height ÷ span · radiality = typology cue · repetition = bay count' || focusedJson.records[0].derived.readingProfileNote !== 'Interpretive proportional tendencies, not empirical measurements.') throw new Error('Focused comparison JSON did not preserve selected order, direct study routes, route, provenance, schema URL, and self-describing derived readings');
+          state.compareIds = [];
+          const fullCitation = comparisonCitationText(comparisonStudies());
+          if (!fullCitation.includes('Scope: full collection') || !fullCitation.endsWith('https://example.test/atlas/#compare')) throw new Error('Full comparison citation did not preserve collection scope and route');
+          const fullCsv = comparisonCsvPayload(comparisonStudies());
+          if (!fullCsv.includes('"full collection","https://example.test/atlas/#compare"')) throw new Error('Full comparison CSV did not preserve its route');
+          const fullJson = comparisonJsonPayload(comparisonStudies());
+          if (fullJson.schemaUrl !== schemaUrl || fullJson.provenance.scope !== 'full collection' || fullJson.provenance.recordCount !== context.window.CHURCH_GEOMETRY.length || fullJson.view.route !== 'https://example.test/atlas/#compare' || fullJson.view.compareIds.length !== 0 || fullJson.records.length !== context.window.CHURCH_GEOMETRY.length) throw new Error('Full comparison JSON did not preserve collection scope, route, and schema URL');
+          const missingEstimateStudy = { ...context.window.CHURCH_GEOMETRY[0], floorAreaEstimate: undefined, volumeEstimate: undefined, volumeBasis: undefined };
           const missingEstimateCsv = comparisonCsvPayload([missingEstimateStudy]); const missingEstimateFields = [Number(firstStudy.radius).toFixed(1), '', 'length × span fallback', '', 'No estimate supplied', Number(firstStudy.symmetry).toFixed(2)].map(csvCell).join(',');
           if (!missingEstimateCsv.includes(missingEstimateFields)) throw new Error('Comparison CSV did not describe missing floor-area and volume estimates consistently');
           const staleBasisStudy = { ...missingEstimateStudy, volumeBasis: 'stale basis without estimate' };
