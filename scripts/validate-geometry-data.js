@@ -37,7 +37,7 @@ const isAbsoluteHttpUrl = (value) => {
 if (!schema || !Array.isArray(studies)) {
   addError("data/geometry.js must expose CHURCH_GEOMETRY_SCHEMA and CHURCH_GEOMETRY");
 } else {
-  if (studies.length !== 24) addError(`Expected exactly 24 real reference studies; found ${studies.length}`);
+  if (studies.length !== 99) addError(`Expected exactly 99 real reference studies; found ${studies.length}`);
   const ids = new Set();
   const indexes = new Set();
 

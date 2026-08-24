@@ -413,6 +413,8 @@ function staticFallbackDocument(source) {
       <nav class="main-nav" aria-label="Static collection navigation">
         <a class="nav-button" href="./">Interactive atlas</a>
         <a class="nav-button is-active" href="#noscript-heading" aria-current="page">Collection</a>
+        <a class="nav-button" href="ireland.html">Ireland map lab</a>
+        <a class="nav-button" href="print-studio.html">Print Studio</a>
         <a class="nav-button" href="#noscript-method-heading">Reading key</a>
         <a class="nav-button" href="data/geometry.json">JSON</a>
         <a class="nav-button" href="data/geometry.csv">CSV</a>
@@ -427,6 +429,8 @@ function staticFallbackDocument(source) {
       </div>
       <nav class="site-footer-links" aria-label="Atlas resources">
         <a href="./">Interactive atlas</a>
+        <a href="ireland.html">Ireland map lab</a>
+        <a href="print-studio.html">Print Studio</a>
         <a href="data/geometry.json">JSON</a>
         <a href="data/geometry.csv">CSV</a>
         <a href="data/geometry.schema.json">Schema</a>

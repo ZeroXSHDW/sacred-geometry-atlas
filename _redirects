@@ -1,0 +1,13 @@
+# Cloudflare Pages routes for the ZERODEVLLC.EU marketfront.
+# Cloudflare Pages evaluates this file before serving static assets.
+/marketfront /ireland.html 302
+/ireland /ireland.html 301
+/ireland-map /ireland.html#map 302
+/ireland-design /ireland.html#design 302
+/print-to-ship /ireland.html#print 302
+/print-studio /print-studio.html 301
+
+# Provider handoff routes. These are outbound research links, not an API integration.
+/go/printful https://www.printful.com/print-on-demand 302
+/go/printify https://printify.com/print-on-demand-ab/ 302
+/go/gelato https://www.gelato.com/the-power-of-local 302

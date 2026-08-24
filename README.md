@@ -6,7 +6,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 ## What is included
 
-- Twenty-four named churches and chapels as real reference buildings, spanning Early Christian/Byzantine, Romanesque, Gothic, Norman-Arab, timber, Renaissance, Baroque, modern, and contemporary work, each with a source-linked schematic proportional study.
+- Ninety-nine named churches and chapels as real reference buildings, spanning Early Christian/Byzantine, Romanesque, Gothic, Norman-Arab, timber, Renaissance, Baroque, modern, colonial, Orthodox, and contemporary work, each with a source-linked schematic proportional study.
 - Interactive plan, elevation, and section drawings.
 - Outside / inside surface switch.
 - Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
@@ -205,6 +205,8 @@ The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.sv
 
 The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon and the safe-zone icons/atlas-maskable.svg launcher mark.
 
+The repository also includes a guarded Cloudflare Pages workflow for the Ireland Map Design Lab and Print Studio. Its pull-request validation assembles the same curated public artifact locally, while only the non-pull-request deploy job receives `deployments: write` and the Cloudflare secrets. Run `node scripts/validate-workflow.mjs`, `python3 scripts/prepare-cloudflare-site.py`, and the artifact checks in [`CONTRIBUTING.md`](CONTRIBUTING.md) before changing that workflow; local verification never deploys or requires Cloudflare credentials.
+
 ## Contribution, security, and rights
 
 Keep geometry records evidence-led: cite the named building, distinguish documented facts from schematic interpretation, and preserve the generated JSON, CSV, schema, and static-index outputs by running the synchronization check before committing. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the local validation sequence and change boundaries.
@@ -213,13 +215,19 @@ Report suspected security issues privately using the contact and handling guidan
 
 This repository does not currently grant a blanket reuse license for its source, interface, research writing, or bundled media. Treat the code and original content as all rights reserved until a maintainer adds an explicit `LICENSE`; third-party sources, images, models, and datasets remain subject to their own terms recorded in the research manifests.
 
+## Ireland Map Design Lab / ZERODEVLLC.EU marketfront
+
+[`ireland.html`](ireland.html) is a separate static product surface for an Ireland map design workflow: compose map layers, inspect design-derived maths, choose an original symbolic cue, preview a T-shirt/hoodie/tote, export transparent SVG/PNG artwork, and hand the design to print-on-demand research links. The island outline and place anchors are explicitly schematic; replace them with licensed source geometry before commercial use. Research and deployment notes are in [`CLOUDFLARE-GITHUB.md`](CLOUDFLARE-GITHUB.md), and the reusable build prompt is in [`research/zerodevllc-marketfront-prompt.md`](research/zerodevllc-marketfront-prompt.md).
+
+Cloudflare Pages can use [`_redirects`](_redirects) for `/marketfront`, `/ireland-map`, `/ireland-design`, `/print-to-ship`, and `/go/...` provider handoffs. [`scripts/prepare-cloudflare-site.py`](scripts/prepare-cloudflare-site.py) keeps repository-only research and automation files out of the Cloudflare artifact. Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` to GitHub Actions, create the `zerodevllc-marketfront` Pages project, and connect `ZERODEVLLC.EU` as the canonical Cloudflare custom domain. Keep one canonical apex DNS target; use GitHub Pages as a fallback or preview rather than pointing the same apex at both services.
+
 ## Add real churches
 
-The current records point to real named churches. Most geometry values remain explicitly schematic, illustrative proportions—not measured surveys; St Paul's length, greatest breadth, and overall height are now marked as published reference dimensions, while its radius/module/bay inputs remain schematic. Each record carries a source URL and a source note that separates documented building facts from Atlas interpretation. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
+The current collection contains 99 real named churches. Most geometry values remain explicitly schematic, illustrative proportions—not measured surveys; St Paul's length, greatest breadth, and overall height are marked as published reference dimensions, while its radius/module/bay inputs remain schematic. Each record carries a source URL and a source note that separates documented building identity from Atlas interpretation. The 75-record expansion is maintained in [`data/expanded-churches.json`](data/expanded-churches.json) and is appended reproducibly by [`scripts/append-expanded-churches.js`](scripts/append-expanded-churches.js). Replace schematic values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
 
 ## Research image and scan layer
 
-The local research layer now contains a real reference image for every study plus an evidence-aware visual sheet that places each image beside its geometry math: [`research/annotated-atlas.html`](research/annotated-atlas.html). The underlying registers keep the provenance and limits separate:
+The local research layer now contains 24 real reference images plus an evidence-aware visual sheet that places each image beside its geometry math: [research/annotated-atlas.html](research/annotated-atlas.html). The remaining 75 named studies retain source links and schematic geometry until their own image or survey evidence is acquired. The underlying registers keep the provenance and limits separate:
 
 - [`research/image-manifest.json`](research/image-manifest.json) — 24 downloaded images with source and rights pages.
 - [`research/scan-manifest.json`](research/scan-manifest.json) — LiDAR, laser-scan, photogrammetry, model, and survey leads, with open/contact/partial/reference status.
@@ -233,9 +241,11 @@ The local research layer now contains a real reference image for every study plu
 - [`research/geometry-analysis.json`](research/geometry-analysis.json) — reproducible ratios, simple-fraction checks, and candidate √2/√3/φ comparisons.
 - [`research/constructor-evidence.json`](research/constructor-evidence.json) — documentary designer/patron evidence; geometry is never used to name a constructor.
 
-Regenerate and validate the research layer with `node scripts/fetch-research-assets.js`, `node scripts/fetch-model-metadata.js`, `node scripts/probe-research-data.js`, `node scripts/register-acquired-assets.js`, `python3 scripts/measure-colmap-scene.py`, `node scripts/analyze-geometry.js`, `node scripts/build-research-atlas.js`, `python3 scripts/measure-geometry-assets.py`, and `node scripts/validate-research-data.js`. The image files are research-only until each rights page is verified, and the current Pages artifact deliberately does not publish this unverified image corpus.
+Regenerate and validate the research layer with `node scripts/fetch-research-assets.js`, `node scripts/fetch-model-metadata.js`, `node scripts/probe-research-data.js`, `node scripts/register-acquired-assets.js`, `python3 scripts/measure-colmap-scene.py`, `node scripts/analyze-geometry.js`, `node scripts/build-research-atlas.js`, `python3 scripts/measure-geometry-assets.py`, and `node scripts/validate-research-data.js`. The 24 local thumbnails are published with their manifest and rights-page links; verify each licence before using any image in a commercial product.
 
-### Current reference list
+### Original evidence-backed reference list
+
+The original 24-record research subset below has downloaded visual and documentary evidence. The primary atlas also contains 75 additional source-linked identity records; those additions are intentionally labeled schematic until their image, survey, or measured-plan evidence is acquired.
 
 | Index | Reference building | Source |
 | --- | --- | --- |
@@ -315,6 +325,10 @@ Each record should include:
 The symmetry index is normalized from 0 to 1; `0` is valid for an intentionally asymmetric study, while physical dimensions and counts remain positive.
 
 The schema metadata is exported with the downloadable JSON as `CHURCH_GEOMETRY_SCHEMA`, including the definitions for each allowed data status and the collection-level `note`. Those same definitions and the note drive the visible filter/comparison guidance, Method warning, no-JavaScript fallback, and accessible study labels, with comparison counts following the focused selection when one is active, so the interface and exports use one provenance vocabulary. Each generated JSON export also includes a `schemaUrl` and a `provenance` object with its scope, record count, status counts, and those schema-backed definitions; each record carries a required `sourceUrl` for its named reference building. Live exports resolve the schema URL against the page origin. The committed [`data/geometry.json`](data/geometry.json) and [`data/geometry.csv`](data/geometry.csv) artifacts are generated from the same source and checked in CI so they cannot drift from [`data/geometry.js`](data/geometry.js), then receive the final absolute schema URL during Pages deployment. The Pages workflow also compares the browser’s reading-profile formulas and basis note with the generator used for CSV and no-JavaScript output, so an interactive score cannot silently diverge from a published record. Keep `status: "schematic"` when dimensions are inferred or illustrative, and include a source/provenance note for measured records.
+
+## Print Studio / live references / print handoff
+
+[Print Studio](print-studio.html) is the public-facing live handoff for the Atlas. It combines a selectable plan/elevation/section rendering for all 99 named studies with the real reference image layer when available, source and rights links, explicit schematic evidence boundaries, an A4 landscape print sheet, vector SVG export, and study JSON export. The print controls create a file or open the browser print dialog; they do not place an order or upload artwork to a fulfilment provider. Before commercial use, check the image manifest and the provider’s current file, colour, proof, shipping, and rights requirements.
 
 ## Test locally
 

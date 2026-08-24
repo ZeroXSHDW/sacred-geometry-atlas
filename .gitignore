@@ -10,6 +10,7 @@ tmp/pdfs/
 
 # Generated GitHub Pages upload output and local Python validation caches.
 _site/
+.cloudflare-site/
 __pycache__/
 *.py[cod]
 

@@ -51,8 +51,10 @@ const sanGiorgioFallback = {
 
 const context = { window: {} };
 vm.runInNewContext(fs.readFileSync(geometryPath, "utf8"), context, { filename: geometryPath });
-const studies = context.window.CHURCH_GEOMETRY;
-if (!Array.isArray(studies) || studies.length !== 24) throw new Error("Expected 24 geometry studies before acquiring research assets");
+const allStudies = context.window.CHURCH_GEOMETRY;
+const researchIds = new Set(Object.keys(wikipediaTitles));
+const studies = Array.isArray(allStudies) ? allStudies.filter((study) => researchIds.has(study.id)) : [];
+if (!Array.isArray(allStudies) || allStudies.length < studies.length || studies.length !== researchIds.size) throw new Error(`Expected the ${researchIds.size} named research studies before acquiring research assets`);
 
 const apiUrl = new URL(wikipediaApi);
 apiUrl.search = new URLSearchParams({
