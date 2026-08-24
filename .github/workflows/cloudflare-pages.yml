@@ -30,7 +30,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
-          node-version: 22
+          node-version-file: .node-version
+      - name: Validate atlas data contract
+        run: |
+          node --check app.js
+          node --check data/geometry.js
+          node --check sw.js
+          node scripts/validate-geometry-data.js
+          node scripts/sync-geometry-json.js --check
       - name: Validate Ireland lab and build artifact
         run: |
           node --check ireland.js
