@@ -28,6 +28,8 @@ if not site.is_dir():
 expected_files = {
     ".nojekyll",
     "404.html",
+    "_headers",
+    "_redirects",
     "app.js",
     "favicon.svg",
     "icons/atlas-180.png",
@@ -35,7 +37,11 @@ expected_files = {
     "icons/atlas-512.png",
     "icons/atlas-maskable.svg",
     "index.html",
+    "ireland.html",
+    "ireland.css",
+    "ireland.js",
     "og.png",
+    "print-studio.html",
     "robots.txt",
     "site.webmanifest",
     "sitemap.xml",
@@ -47,6 +53,23 @@ expected_files = {
     "data/geometry.json",
     "data/geometry.schema.json",
 }
+expected_files.update({
+    "research/README.md",
+    "research/acquired-assets.json",
+    "research/analysis-method.md",
+    "research/annotated-atlas.html",
+    "research/asset-measurements.json",
+    "research/constructor-evidence.json",
+    "research/data-probes.json",
+    "research/geometry-analysis.json",
+    "research/image-manifest.json",
+    "research/measurement-register.json",
+    "research/model-metadata.json",
+    "research/next-acquisition-prompt.md",
+    "research/scan-manifest.json",
+    "research/st-pauls-colmap.json",
+})
+expected_files.update(path.relative_to(Path(".")).as_posix() for path in sorted(Path("research/images").glob("*.jpg")))
 custom_domain = Path("CNAME")
 if custom_domain.is_file():
     expected_files.add("CNAME")
@@ -58,6 +81,7 @@ if custom_domain.is_file() and (site / "CNAME").read_text() != custom_domain.rea
 
 page = (site / "index.html").read_text()
 static_page = (site / "static.html").read_text()
+print_page = (site / "print-studio.html").read_text()
 manifest = (site / "site.webmanifest").read_text()
 service_worker = (site / "sw.js").read_text()
 not_found = (site / "404.html").read_text()
@@ -106,6 +130,9 @@ missing.extend(token for token in [
     f"Sitemap: {base_url}sitemap.xml",
     f"<loc>{base_url}</loc>",
     f"<loc>{base_url}static.html</loc>",
+    f"<loc>{base_url}ireland.html</loc>",
+    f"<loc>{base_url}print-studio.html</loc>",
+    f"<loc>{base_url}research/annotated-atlas.html</loc>",
     f"<loc>{base_url}data/geometry.json</loc>",
     f"<loc>{base_url}data/geometry.csv</loc>",
     f"<loc>{schema_target}</loc>",
@@ -129,6 +156,23 @@ missing.extend(token for token in [
 ] if token not in not_found)
 if missing:
     fail("Deployed metadata is incomplete: " + ", ".join(missing))
+
+required_print_page = [
+    "<title>Print Studio · Sacred Geometry Atlas</title>",
+    f'<link rel="canonical" href="{base_url}print-studio.html" />',
+    f'<meta property="og:url" content="{base_url}print-studio.html" />',
+    f'<meta property="og:image" content="{base_url}og.png" />',
+    f'<meta name="twitter:image" content="{base_url}og.png" />',
+    '<link rel="stylesheet" href="styles.css?print-studio=20260824" />',
+    'fetch("data/geometry.json")',
+    'fetch("research/image-manifest.json")',
+    "research/annotated-atlas.html",
+    "Print / save PDF",
+    "Export SVG",
+]
+missing_print = [token for token in required_print_page if token not in print_page]
+if missing_print:
+    fail("Published Print Studio is incomplete: " + ", ".join(missing_print))
 
 static_required = [
     '<title>Static collection · Sacred Geometry Atlas</title>',
@@ -209,6 +253,8 @@ required_shortcuts = {
     "./#atlas": "Explore Atlas",
     "./#compare": "Compare studies",
     "./#method": "Read Method",
+    "./ireland.html": "Ireland Map Design Lab",
+    "./print-studio.html": "Print Studio",
 }
 manifest_shortcuts = {
     shortcut.get("url"): shortcut
@@ -240,6 +286,7 @@ if not all(token in service_worker for token in (
     'self.addEventListener("activate"',
     'self.addEventListener("fetch"',
     'static.html',
+    'print-studio.html',
     'data/geometry.json',
     'networkFirst(request)',
 )):

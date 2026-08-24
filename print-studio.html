@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111817" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f6f1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        const key = "sacred-geometry-atlas-theme";
+        const valid = ["system", "light", "dark"];
+        let stored = "";
+        try { stored = window.localStorage.getItem(key) || ""; } catch (error) {}
+        const mode = valid.includes(stored) ? stored : "system";
+        const system = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        const theme = mode === "system" ? system : mode;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themeMode = mode;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/atlas-180.png" />
+    <meta name="application-name" content="Sacred Geometry Atlas" />
+    <meta name="description" content="Live reference renderings and print-ready research sheets for the Sacred Geometry Atlas." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="print-studio.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sacred Geometry Atlas" />
+    <meta property="og:title" content="Print Studio · Sacred Geometry Atlas" />
+    <meta property="og:description" content="Pair a live geometry rendering with its real building reference, provenance, and print-ready handoff." />
+    <meta property="og:url" content="print-studio.html" />
+    <meta property="og:image" content="og.png" />
+    <meta property="og:image:alt" content="Sacred Geometry Atlas live geometry drawing." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Print Studio · Sacred Geometry Atlas" />
+    <meta name="twitter:description" content="Live renderings, real references, and print-ready research sheets." />
+    <meta name="twitter:image" content="og.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?print-studio=20260824" />
+    <style>
+      .studio-shell { width: min(1480px, calc(100% - 96px)); margin: 0 auto; }
+      .studio-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 2rem; min-height: 88px; border-bottom: 1px solid var(--line); background: var(--header-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+      .studio-nav { display: flex; align-items: center; gap: clamp(.7rem, 2vw, 2rem); margin-left: auto; }
+      .studio-nav a { position: relative; padding: .8rem 0; color: var(--ink-muted); font: .63rem var(--mono); letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+      .studio-nav a:hover, .studio-nav a[aria-current="page"] { color: var(--ink); }
+      .studio-nav a[aria-current="page"]::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 1px; background: var(--amber); content: ""; }
+      .studio-theme { min-height: 38px; padding: .52rem .65rem; border: 1px solid var(--line); color: var(--ink-muted); background: transparent; font: .56rem var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+      .studio-theme:hover { border-color: var(--amber); color: var(--amber); }
+      .studio-hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; padding: clamp(4rem, 9vw, 8rem) 0 clamp(3rem, 6vw, 5rem); }
+      .studio-eyebrow, .studio-kicker, .studio-overline { margin: 0; color: var(--amber); font: .59rem var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+      .studio-eyebrow { display: flex; align-items: center; gap: .6rem; }
+      .studio-eyebrow::before { width: 2.8rem; height: 1px; background: currentColor; content: ""; }
+      .studio-hero h1 { max-width: 12ch; margin: 1.1rem 0 1.25rem; font-size: clamp(3.2rem, 7vw, 7.8rem); letter-spacing: -.075em; line-height: .9; }
+      .studio-hero h1 em { color: var(--amber); font-style: normal; }
+      .studio-intro { max-width: 43rem; margin: 0; color: var(--ink-soft); font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.8; }
+      .studio-hero-actions, .studio-action-row { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.7rem; }
+      .studio-button, .studio-link-button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; min-height: 42px; padding: .68rem .85rem; border: 1px solid var(--line-strong); color: var(--ink-soft); background: transparent; font: .6rem var(--mono); letter-spacing: .04em; text-decoration: none; text-transform: uppercase; transition: 180ms ease; }
+      .studio-button:hover, .studio-link-button:hover, .studio-button:focus-visible, .studio-link-button:focus-visible { border-color: var(--amber); color: var(--amber); background: var(--amber-soft); }
+      .studio-button-primary { border-color: var(--amber); color: var(--bg); background: var(--amber); }
+      .studio-button-primary:hover, .studio-button-primary:focus-visible { color: var(--bg); background: var(--teal); border-color: var(--teal); }
+      .studio-hero-proof { padding: 1.1rem; border: 1px solid var(--line); background: linear-gradient(145deg, var(--panel), var(--surface-glow)); }
+      .studio-proof-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
+      .studio-proof-heading strong { color: var(--ink); font: 1rem var(--serif); }
+      .studio-proof-heading span { color: var(--teal); font: .55rem var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+      .studio-proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 1.1rem; border: 1px solid var(--line); background: var(--line); }
+      .studio-proof-grid > div { min-height: 92px; padding: .85rem; background: var(--bg-deep); }
+      .studio-proof-grid strong { display: block; color: var(--amber); font: 2rem var(--serif); line-height: 1; }
+      .studio-proof-grid span { display: block; margin-top: .45rem; color: var(--ink-muted); font: .55rem/1.35 var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+      .studio-proof-note { margin: 1rem 0 0; color: var(--ink-muted); font-size: .68rem; line-height: 1.6; }
+      .studio-section { padding: clamp(2.8rem, 6vw, 5.5rem) 0; border-top: 1px solid var(--line); }
+      .studio-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.6rem; }
+      .studio-section-heading h2 { margin: .55rem 0 0; font-size: clamp(1.8rem, 3.6vw, 3.8rem); letter-spacing: -.065em; line-height: .95; }
+      .studio-section-heading p:last-child { max-width: 30rem; margin: 0; color: var(--ink-muted); font-size: .72rem; line-height: 1.65; text-align: right; }
+      .studio-workspace { display: grid; grid-template-columns: minmax(255px, .31fr) minmax(0, .69fr); gap: 1rem; align-items: stretch; }
+      .studio-controls { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; border: 1px solid var(--line); background: var(--panel); }
+      .studio-control-group { display: grid; gap: .45rem; }
+      .studio-control-group + .studio-control-group { padding-top: 1rem; border-top: 1px solid var(--line); }
+      .studio-control-label { color: var(--teal); font: .57rem var(--mono); letter-spacing: .07em; text-transform: uppercase; }
+      .studio-controls input, .studio-controls select { width: 100%; min-height: 43px; padding: .65rem .7rem; border: 1px solid var(--line-strong); border-radius: 0; color: var(--ink); background: var(--bg-deep); font-size: .78rem; }
+      .studio-controls input::placeholder { color: var(--ink-muted); }
+      .studio-controls input:hover, .studio-controls select:hover { border-color: var(--teal); }
+      .studio-segmented { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
+      .studio-segmented-three { grid-template-columns: repeat(3, 1fr); }
+      .studio-segmented button { min-height: 39px; border: 0; color: var(--ink-muted); background: var(--bg-deep); font: .56rem var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+      .studio-segmented button:hover, .studio-segmented button.is-active { color: var(--bg); background: var(--amber); }
+      .studio-segmented button:focus-visible { outline-offset: -3px; }
+      .studio-state { margin: 0; padding: .7rem .75rem; border-left: 2px solid var(--teal); color: var(--ink-soft); background: var(--teal-soft); font: .58rem/1.5 var(--mono); }
+      .studio-control-note { margin: 0; color: var(--ink-muted); font-size: .66rem; line-height: 1.6; }
+      .studio-control-note strong { color: var(--amber); }
+      .studio-controls .studio-action-row { margin-top: auto; }
+      .studio-controls .studio-button { flex: 1 1 8rem; }
+      .studio-live-card { min-width: 0; border: 1px solid var(--line); background: var(--bg-deep); }
+      .studio-live-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .7rem .85rem; border-bottom: 1px solid var(--line); }
+      .studio-live-toolbar span { color: var(--ink-muted); font: .55rem var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+      .studio-live-toolbar strong { color: var(--teal); font: .58rem var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+      .studio-artboard { min-height: 540px; background: radial-gradient(circle at 52% 45%, rgba(136,198,186,.07), transparent 36%), var(--bg-deep); }
+      .studio-artboard svg { display: block; width: 100%; height: auto; }
+      .studio-live-caption { display: grid; grid-template-columns: auto 1fr auto; gap: .75rem; align-items: start; padding: .85rem; border-top: 1px solid var(--line); }
+      .studio-live-caption-mark { color: var(--amber); font-size: 1.1rem; line-height: 1; }
+      .studio-live-caption p { margin: 0; color: var(--ink-soft); font-size: .68rem; line-height: 1.55; }
+      .studio-live-caption p:last-child { color: var(--ink-muted); font: .54rem/1.5 var(--mono); text-align: right; text-transform: uppercase; }
+      .studio-evidence-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr); gap: 1rem; }
+      .studio-evidence-card { min-width: 0; border: 1px solid var(--line); background: var(--panel); }
+      .studio-evidence-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.2rem .8rem; }
+      .studio-evidence-heading h3 { margin: .45rem 0 0; font-size: clamp(1.4rem, 2.7vw, 2.6rem); letter-spacing: -.06em; line-height: .98; }
+      .studio-evidence-heading .studio-index { color: var(--amber); font: 1.5rem var(--serif); }
+      .studio-reference-figure { margin: 0; padding: 0 1.2rem; }
+      .studio-reference-media { position: relative; display: grid; min-height: 310px; place-items: center; overflow: hidden; background: var(--bg-deep); }
+      .studio-reference-media::after { position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.08); content: ""; pointer-events: none; }
+      .studio-reference-media img { display: block; width: 100%; height: 310px; object-fit: cover; }
+      .studio-reference-fallback { width: min(76%, 360px); padding: 2rem 1rem; border: 1px dashed var(--line-strong); color: var(--ink-muted); font: .58rem/1.6 var(--mono); letter-spacing: .04em; text-align: center; text-transform: uppercase; }
+      .studio-reference-caption { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0 0; color: var(--ink-muted); font-size: .62rem; line-height: 1.5; }
+      .studio-reference-caption a, .studio-evidence-card a { color: var(--teal); text-decoration-color: var(--line-strong); text-underline-offset: .2em; }
+      .studio-reference-caption a:hover, .studio-evidence-card a:hover { color: var(--amber); }
+      .studio-evidence-body { padding: 1.2rem; }
+      .studio-badge-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+      .studio-badge { display: inline-flex; padding: .22rem .38rem; border: 1px solid rgba(233,179,108,.42); color: var(--amber); background: var(--amber-soft); font: .52rem var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+      .studio-badge.is-source { border-color: rgba(136,198,186,.42); color: var(--teal); background: var(--teal-soft); }
+      .studio-evidence-body h4 { margin: 0 0 .5rem; color: var(--ink); font-size: 1.1rem; letter-spacing: -.035em; }
+      .studio-evidence-body > p { margin: 0; color: var(--ink-soft); font-size: .72rem; line-height: 1.7; }
+      .studio-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin: 1rem 0; border: 1px solid var(--line); background: var(--line); }
+      .studio-fact { padding: .75rem; background: var(--bg-deep); }
+      .studio-fact span { display: block; color: var(--ink-muted); font: .52rem var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+      .studio-fact strong { display: block; margin-top: .25rem; color: var(--teal); font: .93rem var(--mono); }
+      .studio-source-note { margin-top: 1rem !important; padding: .75rem; border-left: 2px solid var(--amber); color: var(--ink-muted) !important; background: var(--amber-soft); font-size: .66rem !important; }
+      .studio-boundary { margin-top: 1rem; border: 1px solid var(--line); }
+      .studio-boundary summary { padding: .7rem .75rem; color: var(--teal); cursor: pointer; font: .56rem var(--mono); letter-spacing: .05em; list-style: none; text-transform: uppercase; }
+      .studio-boundary summary::-webkit-details-marker { display: none; }
+      .studio-boundary summary::after { float: right; color: var(--amber); content: "+"; font-size: .9rem; }
+      .studio-boundary[open] summary { border-bottom: 1px solid var(--line); }
+      .studio-boundary[open] summary::after { content: "−"; }
+      .studio-boundary p { margin: 0; padding: .75rem; color: var(--ink-muted); font-size: .64rem; line-height: 1.65; }
+      .studio-print-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); gap: 1rem; align-items: start; }
+      .studio-print-sheet { min-width: 0; overflow: hidden; border: 1px solid var(--line-strong); background: var(--panel); box-shadow: 0 1.2rem 3rem rgba(7,12,11,.15); }
+      .print-sheet-head { display: flex; align-items: start; justify-content: space-between; gap: 1.5rem; padding: 1.25rem 1.35rem 1rem; border-bottom: 1px solid var(--line); }
+      .print-sheet-head h3 { max-width: 18ch; margin: .4rem 0 0; font-size: clamp(1.7rem, 3.5vw, 3.6rem); letter-spacing: -.07em; line-height: .92; }
+      .print-sheet-head-side { color: var(--ink-muted); font: .55rem/1.55 var(--mono); text-align: right; text-transform: uppercase; }
+      .print-sheet-head-side strong { display: block; color: var(--amber); font: 1.9rem var(--serif); }
+      .print-sheet-drawing { padding: 1rem; background: var(--bg-deep); }
+      .print-sheet-drawing svg { display: block; width: 100%; height: auto; }
+      .print-sheet-bottom { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, .7fr); gap: 1rem; padding: 1rem 1.35rem 1.2rem; }
+      .print-sheet-copy { margin: 0; color: var(--ink-soft); font-size: .68rem; line-height: 1.65; }
+      .print-sheet-copy strong { color: var(--ink); }
+      .print-sheet-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: .6rem; }
+      .print-sheet-fact { padding-top: .5rem; border-top: 1px solid var(--line); }
+      .print-sheet-fact span { display: block; color: var(--ink-muted); font: .5rem var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+      .print-sheet-fact strong { display: block; margin-top: .2rem; color: var(--teal); font: .77rem var(--mono); }
+      .print-sheet-foot { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 1.35rem; border-top: 1px solid var(--line); color: var(--ink-muted); font: .5rem var(--mono); line-height: 1.5; }
+      .studio-print-ops { padding: 1.2rem; border: 1px solid var(--line); background: var(--panel); }
+      .studio-print-ops h3 { margin: .45rem 0 .65rem; font-size: 1.5rem; letter-spacing: -.05em; }
+      .studio-print-ops > p { margin: 0; color: var(--ink-muted); font-size: .7rem; line-height: 1.7; }
+      .studio-export-list { display: grid; gap: .55rem; margin: 1rem 0 0; }
+      .studio-export-list a, .studio-export-list button { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 42px; padding: .65rem .7rem; border: 1px solid var(--line); color: var(--ink-soft); background: var(--bg-deep); font: .58rem var(--mono); text-decoration: none; text-transform: uppercase; }
+      .studio-export-list a:hover, .studio-export-list button:hover { border-color: var(--teal); color: var(--teal); }
+      .studio-export-list span:last-child { color: var(--amber); }
+      .studio-print-note { margin-top: 1rem !important; padding: .75rem; border-left: 2px solid var(--coral); color: var(--ink-muted) !important; background: var(--coral-soft); font-size: .63rem !important; }
+      .studio-ship-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
+      .studio-ship-card { display: flex; min-height: 190px; flex-direction: column; padding: 1.15rem; background: var(--panel); }
+      .studio-ship-number { color: var(--amber); font: 1.4rem var(--serif); }
+      .studio-ship-card h3 { margin: .8rem 0 .45rem; font-size: 1rem; }
+      .studio-ship-card p { margin: 0; color: var(--ink-muted); font-size: .66rem; line-height: 1.6; }
+      .studio-provider-links { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; padding-top: 1rem; }
+      .studio-provider-links a { color: var(--teal); font: .55rem var(--mono); letter-spacing: .04em; text-decoration: none; text-transform: uppercase; }
+      .studio-provider-links a:hover { color: var(--amber); text-decoration: underline; text-underline-offset: .2em; }
+      .studio-register { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 1rem; align-items: stretch; margin-top: 1rem; }
+      .studio-register-card { padding: 1.2rem; border: 1px solid var(--line); background: var(--surface-glow); }
+      .studio-register-card h3 { margin: .45rem 0 .65rem; font-size: 1.35rem; letter-spacing: -.05em; }
+      .studio-register-card p { margin: 0; color: var(--ink-muted); font-size: .68rem; line-height: 1.7; }
+      .studio-register-list { display: grid; gap: .6rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+      .studio-register-list li { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-top: .6rem; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .67rem; }
+      .studio-register-list strong { color: var(--teal); font: .58rem var(--mono); text-transform: uppercase; }
+      .studio-footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 105px; border-top: 1px solid var(--line); color: var(--ink-muted); font: .57rem var(--mono); }
+      .studio-footer p { margin: 0; }
+      .studio-footer-links { display: flex; flex-wrap: wrap; justify-content: end; gap: .45rem 1rem; }
+      .studio-footer-links a { color: var(--ink-soft); text-decoration: none; }
+      .studio-footer-links a:hover { color: var(--amber); text-decoration: underline; text-underline-offset: .2em; }
+      .studio-error { padding: 1.2rem; border: 1px solid var(--coral); color: var(--coral); background: var(--coral-soft); }
+      .studio-error[hidden] { display: none; }
+      .studio-svg text { font-family: var(--mono); }
+      .studio-svg .svg-overline { fill: var(--ink-soft); font-size: 10px; letter-spacing: 2px; }
+      .studio-svg .svg-label { fill: var(--ink-soft); font-size: 11px; letter-spacing: 1px; }
+      .studio-svg .svg-dim { fill: var(--coral); font-size: 10px; letter-spacing: 1px; }
+      .studio-svg .svg-note { fill: var(--ink-muted); font-size: 9px; letter-spacing: .7px; }
+      .studio-svg .svg-watermark { fill: var(--amber); fill-opacity: .12; font: 54px var(--serif); letter-spacing: -2px; }
+      .studio-svg .svg-grid { stroke: var(--grid-line); stroke-width: 1; }
+      .studio-svg .svg-axis { stroke: var(--teal); stroke-width: 1.2; stroke-dasharray: 7 8; opacity: .8; }
+      .studio-svg .svg-primary { fill: var(--amber-soft); stroke: var(--amber); stroke-width: 2; }
+      .studio-svg .svg-inner { fill: var(--teal-soft); stroke: var(--teal); stroke-width: 1.4; }
+      .studio-svg .svg-module { stroke: var(--teal); stroke-width: 1; stroke-dasharray: 4 5; opacity: .8; }
+      .studio-svg .svg-radius { fill: none; stroke: var(--coral); stroke-width: 1.15; stroke-dasharray: 4 4; }
+      .studio-svg .svg-dimension { stroke: var(--coral); stroke-width: 1; }
+      .studio-svg .svg-secondary { fill: none; stroke: var(--faint-line); stroke-width: 1; }
+      .studio-svg .svg-dot { fill: var(--amber); }
+      @media (max-width: 1060px) {
+        .studio-shell { width: min(100% - 48px, 900px); }
+        .studio-hero { grid-template-columns: 1fr; gap: 2.5rem; }
+        .studio-hero h1 { max-width: 14ch; }
+        .studio-workspace, .studio-evidence-grid, .studio-print-layout, .studio-register { grid-template-columns: 1fr; }
+        .studio-artboard { min-height: 0; }
+      }
+      @media (max-width: 700px) {
+        .studio-shell { width: min(100% - 32px, 560px); }
+        .studio-header { min-height: 72px; gap: .7rem; }
+        .studio-header .brand-subtitle { display: none; }
+        .studio-nav { gap: .8rem; }
+        .studio-nav a { font-size: .52rem; }
+        .studio-theme { font-size: 0; }
+        .studio-theme::before { content: "◐"; font-size: .9rem; }
+        .studio-hero { padding-top: 3.2rem; }
+        .studio-hero h1 { font-size: clamp(3.2rem, 17vw, 5.5rem); }
+        .studio-section-heading { display: block; }
+        .studio-section-heading p:last-child { margin-top: .9rem; text-align: left; }
+        .studio-proof-grid, .studio-ship-grid { grid-template-columns: 1fr; }
+        .studio-proof-grid > div { min-height: 0; }
+        .studio-live-caption { grid-template-columns: auto 1fr; }
+        .studio-live-caption p:last-child { grid-column: 2; text-align: left; }
+        .studio-reference-caption, .studio-footer { display: block; }
+        .studio-reference-caption span + span, .studio-footer-links { margin-top: .45rem; }
+        .studio-footer-links { justify-content: start; }
+        .print-sheet-bottom { grid-template-columns: 1fr; }
+        .studio-print-sheet { box-shadow: none; }
+      }
+      @media print {
+        @page { size: A4 landscape; margin: 10mm; }
+        html, body { background: #fff !important; color: #111817 !important; }
+        body.print-studio > *:not(main) { display: none !important; }
+        body.print-studio .studio-hero,
+        body.print-studio #liveSection,
+        body.print-studio #referenceSection,
+        body.print-studio #shipSection,
+        body.print-studio .studio-footer { display: none !important; }
+        body.print-studio .studio-shell { width: 100%; }
+        body.print-studio #printSection { display: block !important; padding: 0; border: 0; }
+        body.print-studio #printSection > .studio-section-heading,
+        body.print-studio .studio-print-ops { display: none !important; }
+        body.print-studio .studio-print-layout { display: block; }
+        body.print-studio .studio-print-sheet { border: 1px solid #111817; box-shadow: none; }
+        body.print-studio .print-sheet-head { padding: 7mm 8mm 5mm; border-color: #aeb7b0; }
+        body.print-studio .print-sheet-head h3 { color: #111817; font-size: 31pt; }
+        body.print-studio .print-sheet-head-side { color: #58655e; }
+        body.print-studio .print-sheet-head-side strong { color: #965b18; }
+        body.print-studio .print-sheet-drawing { padding: 4mm; background: #fff; }
+        body.print-studio .print-sheet-drawing .studio-svg { background: #fff; }
+        body.print-studio .print-sheet-bottom { padding: 5mm 8mm 6mm; }
+        body.print-studio .print-sheet-copy { color: #343b38; font-size: 8.5pt; }
+        body.print-studio .print-sheet-fact { border-color: #aeb7b0; }
+        body.print-studio .print-sheet-fact span, body.print-studio .print-sheet-foot { color: #58655e; }
+        body.print-studio .print-sheet-fact strong { color: #23665d; }
+        body.print-studio .print-sheet-foot { padding: 3mm 8mm; border-color: #aeb7b0; }
+        body.print-studio .studio-svg .svg-overline,
+        body.print-studio .studio-svg .svg-label,
+        body.print-studio .studio-svg .svg-note { fill: #343b38; }
+        body.print-studio .studio-svg .svg-dim { fill: #93412d; }
+        body.print-studio .studio-svg .svg-grid { stroke: rgba(17,24,23,.14); }
+        body.print-studio .studio-svg .svg-axis { stroke: #23665d; }
+        body.print-studio .studio-svg .svg-primary { fill: rgba(150,91,24,.1); stroke: #965b18; }
+        body.print-studio .studio-svg .svg-inner { fill: rgba(35,102,93,.08); stroke: #23665d; }
+        body.print-studio .studio-svg .svg-module { stroke: #23665d; }
+        body.print-studio .studio-svg .svg-radius,
+        body.print-studio .studio-svg .svg-dimension { stroke: #93412d; }
+        body.print-studio .studio-svg .svg-secondary { stroke: rgba(17,24,23,.34); }
+        body.print-studio .studio-svg .svg-dot { fill: #965b18; }
+        body.print-studio .studio-svg .svg-watermark { fill: #965b18; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      }
+    </style>
+    <title>Print Studio · Sacred Geometry Atlas</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#liveSection">Skip to live rendering</a>
+    <header class="studio-header studio-shell">
+      <a class="brand" href="./" aria-label="Sacred Geometry Atlas home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M16 3v26M9 10h14M11 29h10" /><circle cx="16" cy="16" r="12" /></svg>
+        </span>
+        <span>
+          <span class="brand-name">Sacred Geometry</span>
+          <span class="brand-subtitle">An architectural field atlas</span>
+        </span>
+      </a>
+      <nav class="studio-nav" aria-label="Print Studio navigation">
+        <a href="./#atlas">Live Atlas</a>
+        <a href="research/annotated-atlas.html">Research Atlas</a>
+        <a href="#printSection" aria-current="page">Print Studio</a>
+      </nav>
+      <button class="studio-theme" id="themeToggle" type="button" aria-label="Change color theme" title="Change color theme">System</button>
+    </header>
+
+    <main class="studio-shell" id="main-content">
+      <section class="studio-hero" aria-labelledby="studio-title">
+        <div>
+          <p class="studio-eyebrow">Live reference studio / atlas edition</p>
+          <h1 id="studio-title">Make the geometry <em>travel.</em></h1>
+          <p class="studio-intro">Select a real church reference, move through its live plan, elevation, or section rendering, and produce a clean handoff for research, print, or print-on-demand fulfilment.</p>
+          <div class="studio-hero-actions">
+            <a class="studio-button studio-button-primary" href="#liveSection">Open the live board <span aria-hidden="true">↘</span></a>
+            <a class="studio-link-button" href="./#atlas">Return to Atlas <span aria-hidden="true">↗</span></a>
+            <a class="studio-link-button" href="research/annotated-atlas.html">Open reference atlas <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <aside class="studio-hero-proof" aria-label="Studio coverage">
+          <div class="studio-proof-heading"><strong>Evidence, visible.</strong><span>Current collection</span></div>
+          <div class="studio-proof-grid">
+            <div><strong id="studyCount">99</strong><span>named studies</span></div>
+            <div><strong id="imageCount">24</strong><span>live image anchors</span></div>
+            <div><strong id="sourceCount">99</strong><span>source links</span></div>
+          </div>
+          <p class="studio-proof-note">A reference image is shown only when the local research manifest has one. Every study keeps its source link, status label, and evidence boundary beside the geometry.</p>
+        </aside>
+      </section>
+
+      <section class="studio-section" id="liveSection" aria-labelledby="liveHeading">
+        <div class="studio-section-heading">
+          <div><p class="studio-kicker">01 / live instrument</p><h2 id="liveHeading">The design board</h2></div>
+          <p>Every change below is shareable through the URL and updates the print sheet at the same time. The drawing remains a schematic proportional reading, never a false survey overlay.</p>
+        </div>
+        <div class="studio-error" id="studioError" role="alert" hidden>Atlas data could not be loaded. Open the <a href="./#atlas">interactive Atlas</a> or the <a href="static.html">static collection</a> instead.</div>
+        <div class="studio-workspace" id="studioWorkspace" hidden>
+          <aside class="studio-controls" aria-label="Live rendering controls">
+            <div class="studio-control-group">
+              <label class="studio-control-label" for="studySearch">Find a church</label>
+              <input id="studySearch" type="search" placeholder="Filter the study list" autocomplete="off" spellcheck="false" />
+              <label class="sr-only" for="studySelect">Choose a geometry study</label>
+              <select id="studySelect"></select>
+            </div>
+            <div class="studio-control-group">
+              <span class="studio-control-label">Surface</span>
+              <div class="studio-segmented" role="group" aria-label="Choose drawing surface">
+                <button type="button" data-surface="exterior" class="is-active" aria-pressed="true">Outside</button>
+                <button type="button" data-surface="interior" aria-pressed="false">Inside</button>
+              </div>
+            </div>
+            <div class="studio-control-group">
+              <span class="studio-control-label">Live view</span>
+              <div class="studio-segmented studio-segmented-three" role="group" aria-label="Choose drawing mode">
+                <button type="button" data-mode="plan" class="is-active" aria-pressed="true">Plan</button>
+                <button type="button" data-mode="elevation" aria-pressed="false">Elevation</button>
+                <button type="button" data-mode="section" aria-pressed="false">Section</button>
+              </div>
+            </div>
+            <p class="studio-state" id="studioState" role="status" aria-live="polite">Outside · Plan · live schematic</p>
+            <p class="studio-control-note"><strong>Quality rule:</strong> the real building and the geometric model stay visibly separate. Use the source link for evidence; use the SVG for the design system.</p>
+            <div class="studio-action-row">
+              <button class="studio-button studio-button-primary" id="printButton" type="button">Print / save PDF <span aria-hidden="true">⎙</span></button>
+              <button class="studio-button" id="svgButton" type="button">Export SVG <span aria-hidden="true">↓</span></button>
+            </div>
+            <div class="studio-action-row">
+              <button class="studio-button" id="jsonButton" type="button">Study JSON <span aria-hidden="true">↓</span></button>
+              <a class="studio-link-button" id="atlasLink" href="./#atlas" target="_blank" rel="noopener noreferrer">Open Atlas <span aria-hidden="true">↗</span></a>
+            </div>
+            <span class="sr-only" id="studioStatus" role="status" aria-live="polite" aria-atomic="true"></span>
+          </aside>
+          <div class="studio-live-card">
+            <div class="studio-live-toolbar"><span>Live rendering / vector instrument</span><strong id="liveToolbarMeta">Study 01 · Outside · Plan</strong></div>
+            <div class="studio-artboard" id="studioCanvas" aria-label="Live geometry rendering"></div>
+            <div class="studio-live-caption">
+              <span class="studio-live-caption-mark" aria-hidden="true">✳</span>
+              <p id="liveCaption">A live proportional rendering will appear here.</p>
+              <p id="liveCaptionMeta">Metric units · schematic</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="studio-section" id="referenceSection" aria-labelledby="referenceHeading">
+        <div class="studio-section-heading">
+          <div><p class="studio-kicker">02 / source correspondence</p><h2 id="referenceHeading">Reference, beside the model</h2></div>
+          <p>The visual anchor is a real building reference. It is not silently treated as a measured drawing, and missing thumbnails are reported instead of being replaced with invented imagery.</p>
+        </div>
+        <div class="studio-evidence-grid" id="evidenceGrid" hidden>
+          <article class="studio-evidence-card">
+            <div class="studio-evidence-heading">
+              <div><p class="studio-kicker">Real reference image</p><h3 id="referenceTitle">Selected church</h3></div>
+              <span class="studio-index" id="referenceIndex">01</span>
+            </div>
+            <figure class="studio-reference-figure">
+              <div class="studio-reference-media">
+                <img id="referenceImage" alt="" loading="eager" hidden />
+                <div class="studio-reference-fallback" id="referenceFallback">No local thumbnail in the current research layer.</div>
+              </div>
+              <figcaption class="studio-reference-caption">
+                <span id="referenceImageMeta">Source image status</span>
+                <span><a id="referenceSourceLink" href="#" target="_blank" rel="noopener noreferrer">Open source page ↗</a> · <a id="referenceRightsLink" href="#" target="_blank" rel="noopener noreferrer">Rights page ↗</a></span>
+              </figcaption>
+            </figure>
+          </article>
+          <article class="studio-evidence-card">
+            <div class="studio-evidence-body">
+              <div class="studio-badge-row">
+                <span class="studio-badge" id="statusBadge">Schematic</span>
+                <span class="studio-badge is-source" id="imageBadge">Source linked</span>
+              </div>
+              <h4 id="evidenceTitle">Selected church</h4>
+              <p id="evidenceMeta">Place · era · typology</p>
+              <div class="studio-facts">
+                <div class="studio-fact"><span>Envelope</span><strong id="factEnvelope">—</strong></div>
+                <div class="studio-fact"><span>Length / span</span><strong id="factRatio">—</strong></div>
+                <div class="studio-fact"><span>Module / span</span><strong id="factModule">—</strong></div>
+                <div class="studio-fact"><span>Symmetry</span><strong id="factSymmetry">—</strong></div>
+              </div>
+              <p class="studio-source-note" id="sourceNote">Source note</p>
+              <p style="margin-top:1rem"><a id="sourceLink" href="#" target="_blank" rel="noopener noreferrer">Open the named-building reference ↗</a></p>
+              <details class="studio-boundary" open>
+                <summary>Evidence boundary</summary>
+                <p id="boundaryNote">The geometry is an illustrative proportional model. The reference image is visual evidence only until a scaled plan, scan, or controlled survey is attached.</p>
+              </details>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="studio-section" id="printSection" aria-labelledby="printHeading">
+        <div class="studio-section-heading">
+          <div><p class="studio-kicker">03 / print-ready handoff</p><h2 id="printHeading">Print, then ship</h2></div>
+          <p>The live board produces an A4 landscape research sheet and a scalable SVG. Use the sheet for documentation; use the SVG as the clean art asset for a commercial print workflow.</p>
+        </div>
+        <div class="studio-print-layout">
+          <article class="studio-print-sheet" id="printSheet" aria-labelledby="printSheetTitle">
+            <header class="print-sheet-head">
+              <div><p class="studio-kicker">Sacred Geometry Atlas / reference sheet</p><h3 id="printSheetTitle">Selected church</h3></div>
+              <div class="print-sheet-head-side"><strong id="printSheetIndex">01</strong><span id="printSheetMode">Outside · Plan</span><br /><span>A4 landscape · 100%</span></div>
+            </header>
+            <div class="print-sheet-drawing" id="printSheetDrawing"></div>
+            <div class="print-sheet-bottom">
+              <p class="print-sheet-copy" id="printSheetCopy"><strong>Reading:</strong> The current study’s proportional interpretation will appear here.</p>
+              <div class="print-sheet-facts">
+                <div class="print-sheet-fact"><span>Envelope</span><strong id="printEnvelope">—</strong></div>
+                <div class="print-sheet-fact"><span>L / span</span><strong id="printRatio">—</strong></div>
+                <div class="print-sheet-fact"><span>Source status</span><strong id="printStatus">—</strong></div>
+                <div class="print-sheet-fact"><span>Reference image</span><strong id="printImageStatus">—</strong></div>
+              </div>
+            </div>
+            <footer class="print-sheet-foot"><span id="printSheetSource">Source: —</span><span id="printSheetRoute">Route: —</span></footer>
+          </article>
+          <aside class="studio-print-ops" aria-label="Print and export actions">
+            <p class="studio-kicker">Production handoff</p>
+            <h3>Choose your output.</h3>
+            <p>For a crisp wall print, download the vector SVG. For an evidence-bearing handout, use Print / save PDF and keep the source note on the sheet.</p>
+            <div class="studio-export-list">
+              <button type="button" id="printButtonSecondary">Print / save PDF <span>⎙</span></button>
+              <button type="button" id="svgButtonSecondary">Download vector SVG <span>↓</span></button>
+              <button type="button" id="jsonButtonSecondary">Download study JSON <span>↓</span></button>
+              <a id="sourceButton" href="#" target="_blank" rel="noopener noreferrer">Open source reference <span>↗</span></a>
+            </div>
+            <p class="studio-print-note"><strong>No order is placed from this page.</strong> Review image rights, choose a size and paper, upload the exported asset to your chosen fulfilment provider, and request a proof before selling or shipping.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="studio-section" id="shipSection" aria-labelledby="shipHeading">
+        <div class="studio-section-heading">
+          <div><p class="studio-kicker">04 / fulfilment routes</p><h2 id="shipHeading">From screen to doorstep</h2></div>
+          <p>These are provider handoffs, not embedded checkout integrations. Your account, product choice, pricing, shipping, tax, and rights review remain under your control.</p>
+        </div>
+        <div class="studio-ship-grid">
+          <article class="studio-ship-card">
+            <span class="studio-ship-number">01</span>
+            <h3>Proof the file</h3>
+            <p>Use Print / save PDF for a research sheet. Use Export SVG for a scalable poster asset. Keep the source and rights trail with the order record.</p>
+            <div class="studio-provider-links"><a href="#printSection">Use current sheet ↗</a></div>
+          </article>
+          <article class="studio-ship-card">
+            <span class="studio-ship-number">02</span>
+            <h3>Pick a fulfilment route</h3>
+            <p>Upload the SVG or a provider-approved PDF/PNG to a print-on-demand service, then check the provider’s current file guide, mockup, and proof.</p>
+            <div class="studio-provider-links">
+              <a href="https://www.gelato.com/uk/products/posters-frames" target="_blank" rel="noopener noreferrer">Gelato ↗</a>
+              <a href="https://www.printful.com/custom-posters" target="_blank" rel="noopener noreferrer">Printful ↗</a>
+              <a href="https://printify.com/custom-posters/" target="_blank" rel="noopener noreferrer">Printify ↗</a>
+            </div>
+          </article>
+          <article class="studio-ship-card">
+            <span class="studio-ship-number">03</span>
+            <h3>Ship with confidence</h3>
+            <p>Order one sample first, inspect line weight and colour, then publish the product only after the physical proof and image licence are cleared.</p>
+            <div class="studio-provider-links"><a href="research/README.md">Read research policy ↗</a></div>
+          </article>
+        </div>
+        <div class="studio-register">
+          <article class="studio-register-card">
+            <p class="studio-kicker">Reference register</p>
+            <h3>What is live today?</h3>
+            <p>The page reports the difference between a named source, a local reference image, and a measured survey. That distinction is part of the design.</p>
+            <ul class="studio-register-list">
+              <li><span>Named building studies</span><strong id="registerStudies">99</strong></li>
+              <li><span>Local visual anchors</span><strong id="registerImages">24</strong></li>
+              <li><span>Measured records</span><strong id="registerMeasured">0</strong></li>
+            </ul>
+          </article>
+          <article class="studio-register-card">
+            <p class="studio-kicker">Deep reference surface</p>
+            <h3>Research Atlas</h3>
+            <p>Open the evidence-aware 24-study sheet for real image thumbnails, source and rights pages, normalized math panels, and the explicit limit that a diagram is not registered to its photograph.</p>
+            <div class="studio-action-row"><a class="studio-button studio-button-primary" href="research/annotated-atlas.html">Open annotated atlas <span aria-hidden="true">↗</span></a><a class="studio-link-button" href="research/image-manifest.json">Image manifest <span aria-hidden="true">↗</span></a></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="studio-footer studio-shell">
+      <p><span class="footer-mark" aria-hidden="true">✳</span> Sacred Geometry Atlas · live reference studio</p>
+      <nav class="studio-footer-links" aria-label="Studio resources">
+        <a href="./">Atlas</a>
+        <a href="static.html">Static collection</a>
+        <a href="data/geometry.json">JSON</a>
+        <a href="data/geometry.schema.json">Schema</a>
+      </nav>
+    </footer>
+
+    <noscript>
+      <div class="studio-shell studio-error" style="margin-top:2rem">This live studio needs JavaScript. Open the <a href="./#atlas">interactive Atlas</a>, the <a href="static.html">static collection</a>, or the <a href="research/annotated-atlas.html">research atlas</a>.</div>
+    </noscript>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+        const escapeHtml = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[character]));
+        const number = (value, digits) => {
+          const parsed = Number(value);
+          return Number.isFinite(parsed) ? parsed.toFixed(digits == null ? 1 : digits) : "—";
+        };
+        const unit = () => (state.schema && state.schema.unitSymbol) || "m";
+        const safeFilePart = (value) => String(value || "study").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "study";
+        const state = { studies: [], images: new Map(), schema: null, selectedId: "", surface: "exterior", mode: "plan" };
+        const themeKey = "sacred-geometry-atlas-theme";
+        const themeModes = ["system", "light", "dark"];
+
+        function currentThemeMode() {
+          const mode = document.documentElement.dataset.themeMode;
+          return themeModes.includes(mode) ? mode : "system";
+        }
+
+        function systemTheme() {
+          return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+
+        function applyTheme(mode) {
+          const validMode = themeModes.includes(mode) ? mode : "system";
+          const theme = validMode === "system" ? systemTheme() : validMode;
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.dataset.themeMode = validMode;
+          document.documentElement.style.colorScheme = theme;
+          const button = $("#themeToggle");
+          if (button) {
+            button.textContent = validMode[0].toUpperCase() + validMode.slice(1);
+            button.setAttribute("aria-label", "Color theme: " + validMode + ". Switch theme");
+            button.title = "Color theme: " + validMode + ". Switch theme";
+          }
+          render();
+        }
+
+        function cycleTheme() {
+          const next = themeModes[(themeModes.indexOf(currentThemeMode()) + 1) % themeModes.length];
+          try { window.localStorage.setItem(themeKey, next); } catch (error) {}
+          applyTheme(next);
+        }
+
+        function selectedStudy() {
+          return state.studies.find((study) => study.id === state.selectedId) || state.studies[0] || null;
+        }
+
+        function imageRecord(study) {
+          return study ? state.images.get(study.id) || null : null;
+        }
+
+        function statusLabel(study) {
+          return String((study && study.status) || "schematic").replace(/[_-]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+        }
+
+        function statusDescription(study) {
+          const definitions = state.schema && state.schema.statusDefinitions;
+          return (definitions && definitions[study.status]) || "Illustrative proportions; not a measured survey.";
+        }
+
+        function ratio(study) {
+          return study && study.span ? study.length / study.span : 0;
+        }
+
+        function atlasHref(study) {
+          return "./#atlas/" + encodeURIComponent(study.id) + "/plan/exterior/all";
+        }
+
+        function studioRoute() {
+          return "#studio/" + encodeURIComponent(state.selectedId) + "/" + state.surface + "/" + state.mode;
+        }
+
+        function updateRoute() {
+          if (!state.selectedId || !window.history || typeof window.history.replaceState !== "function") return;
+          window.history.replaceState(null, "", studioRoute());
+        }
+
+        function restoreRoute() {
+          const match = String(window.location.hash || "").match(/^#studio\/([^/]+)(?:\/(exterior|interior))?(?:\/(plan|elevation|section))?$/);
+          if (!match) return;
+          const id = decodeURIComponent(match[1]);
+          if (state.studies.some((study) => study.id === id)) state.selectedId = id;
+          if (match[2]) state.surface = match[2];
+          if (match[3]) state.mode = match[3];
+        }
+
+        function cssVariable(name, fallback) {
+          const value = window.getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+          return value || fallback;
+        }
+
+        function svgStyles(colors) {
+          return [
+            ".studio-svg{background:" + colors.bg + ";color:" + colors.ink + "}",
+            ".studio-svg .svg-overline{fill:" + colors.inkSoft + ";font:10px 'DM Mono',monospace;letter-spacing:2px}",
+            ".studio-svg .svg-label{fill:" + colors.inkSoft + ";font:11px 'DM Mono',monospace;letter-spacing:1px}",
+            ".studio-svg .svg-dim{fill:" + colors.coral + ";font:10px 'DM Mono',monospace;letter-spacing:1px}",
+            ".studio-svg .svg-note{fill:" + colors.inkMuted + ";font:9px 'DM Mono',monospace;letter-spacing:.7px}",
+            ".studio-svg .svg-watermark{fill:" + colors.amber + ";fill-opacity:.12;font:54px 'Playfair Display',Georgia,serif;letter-spacing:-2px}",
+            ".studio-svg .svg-grid{stroke:" + colors.grid + ";stroke-width:1}",
+            ".studio-svg .svg-axis{stroke:" + colors.teal + ";stroke-width:1.2;stroke-dasharray:7 8;opacity:.8}",
+            ".studio-svg .svg-primary{fill:" + colors.amberSoft + ";stroke:" + colors.amber + ";stroke-width:2}",
+            ".studio-svg .svg-inner{fill:" + colors.tealSoft + ";stroke:" + colors.teal + ";stroke-width:1.4}",
+            ".studio-svg .svg-module{stroke:" + colors.teal + ";stroke-width:1;stroke-dasharray:4 5;opacity:.8}",
+            ".studio-svg .svg-radius{fill:none;stroke:" + colors.coral + ";stroke-width:1.15;stroke-dasharray:4 4}",
+            ".studio-svg .svg-dimension{stroke:" + colors.coral + ";stroke-width:1}",
+            ".studio-svg .svg-secondary{fill:none;stroke:" + colors.line + ";stroke-width:1}",
+            ".studio-svg .svg-dot{fill:" + colors.amber + "}"
+          ].join("");
+        }
+
+        function line(x1, y1, x2, y2, className) {
+          return '<line class="' + className + '" x1="' + number(x1, 2) + '" y1="' + number(y1, 2) + '" x2="' + number(x2, 2) + '" y2="' + number(y2, 2) + '" />';
+        }
+
+        function dimension(x1, y1, x2, y2, label, vertical) {
+          const textX = vertical ? x1 - 10 : (x1 + x2) / 2;
+          const textY = vertical ? (y1 + y2) / 2 : y1 + 17;
+          const transform = vertical ? ' transform="rotate(-90 ' + number(textX, 2) + " " + number(textY, 2) + ')"' : "";
+          return line(x1, y1, x2, y2, "svg-dimension") + '<text class="svg-dim" x="' + number(textX, 2) + '" y="' + number(textY, 2) + '" text-anchor="middle"' + transform + ">" + escapeHtml(label) + "</text>";
+        }
+
+        function moduleLines(study, x, y, width, height, central) {
+          const count = Math.max(1, Math.min(12, Number(study.bayCount) || 1));
+          let output = "";
+          if (central) {
+            const cx = x + width / 2;
+            const cy = y + height / 2;
+            for (let i = 1; i < Math.min(count, 5); i += 1) {
+              output += '<circle class="svg-module" cx="' + number(cx, 2) + '" cy="' + number(cy, 2) + '" r="' + number((Math.min(width, height) / 2) * (i / 5), 2) + '" fill="none" />';
+            }
+          } else {
+            for (let i = 1; i < count; i += 1) {
+              const xx = x + (width * i) / count;
+              output += line(xx, y + 5, xx, y + height - 5, "svg-module");
+            }
+          }
+          return output;
+        }
+
+        function planForm(study, x, y, width, height, inner) {
+          const inset = inner ? Math.min(width, height) * .12 : 0;
+          const px = x + inset;
+          const py = y + inset;
+          const pw = width - inset * 2;
+          const ph = height - inset * 2;
+          const type = study.type || "";
+          if (type === "central") {
+            return '<rect class="' + (inner ? "svg-inner" : "svg-primary") + '" x="' + number(px, 2) + '" y="' + number(py, 2) + '" width="' + number(pw, 2) + '" height="' + number(ph, 2) + '" />' +
+              '<circle class="' + (inner ? "svg-inner" : "svg-primary") + '" cx="' + number(px + pw / 2, 2) + '" cy="' + number(py + ph / 2, 2) + '" r="' + number(Math.min(pw, ph) * (inner ? .29 : .38), 2) + '" />';
+          }
+          if (type === "baroque") {
+            return '<ellipse class="' + (inner ? "svg-inner" : "svg-primary") + '" cx="' + number(px + pw / 2, 2) + '" cy="' + number(py + ph / 2, 2) + '" rx="' + number(pw * (inner ? .42 : .48), 2) + '" ry="' + number(ph * (inner ? .37 : .45), 2) + '" />';
+          }
+          if (type === "gothic") {
+            const arm = Math.min(pw, ph) * .27;
+            const d = "M " + number(px + pw * .18, 2) + " " + number(py + ph * .38, 2) + " H " + number(px + pw * .82, 2) + " V " + number(py + ph * .62, 2) + " H " + number(px + pw * .56, 2) + " V " + number(py + ph * .86, 2) + " H " + number(px + pw * .44, 2) + " V " + number(py + ph * .62, 2) + " H " + number(px + pw * .18, 2) + " Z";
+            return '<path class="' + (inner ? "svg-inner" : "svg-primary") + '" d="' + d + '" /><circle class="svg-radius" cx="' + number(px + pw / 2, 2) + '" cy="' + number(py + ph / 2, 2) + '" r="' + number(arm, 2) + '" />';
+          }
+          if (type === "modern") {
+            return '<rect class="' + (inner ? "svg-inner" : "svg-primary") + '" x="' + number(px, 2) + '" y="' + number(py, 2) + '" width="' + number(pw, 2) + '" height="' + number(ph, 2) + '" /><path class="svg-radius" d="M ' + number(px + pw * .35, 2) + " " + number(py) + " V " + number(py + ph) + " M " + number(px + pw * .65, 2) + " " + number(py) + " V " + number(py + ph) + '" />';
+          }
+          const base = '<rect class="' + (inner ? "svg-inner" : "svg-primary") + '" x="' + number(px, 2) + '" y="' + number(py, 2) + '" width="' + number(pw * .83, 2) + '" height="' + number(ph, 2) + '" />';
+          if (type === "basilica") {
+            return base + '<path class="' + (inner ? "svg-inner" : "svg-primary") + '" d="M ' + number(px + pw * .83, 2) + " " + number(py) + " A " + number(pw * .17, 2) + " " + number(ph / 2, 2) + " 0 0 1 " + number(px + pw * .83, 2) + " " + number(py + ph) + '" />';
+          }
+          return base;
+        }
+
+        function elevationForm(study, x, baseline, width, height, inner) {
+          const inset = inner ? width * .06 : 0;
+          const px = x + inset;
+          const pw = width - inset * 2;
+          const top = baseline - height + (inner ? height * .08 : 0);
+          const type = study.type || "";
+          const className = inner ? "svg-inner" : "svg-primary";
+          let d;
+          if (type === "gothic") {
+            d = "M " + number(px, 2) + " " + number(baseline, 2) + " V " + number(top + height * .34, 2) + " L " + number(px + pw / 2, 2) + " " + number(top, 2) + " L " + number(px + pw, 2) + " " + number(top + height * .34, 2) + " V " + number(baseline, 2) + " Z";
+          } else if (type === "stave") {
+            d = "M " + number(px, 2) + " " + number(baseline, 2) + " V " + number(top + height * .32, 2) + " L " + number(px + pw / 2, 2) + " " + number(top, 2) + " L " + number(px + pw, 2) + " " + number(top + height * .32, 2) + " V " + number(baseline, 2) + " Z";
+          } else if (type === "central" || type === "baroque") {
+            d = "M " + number(px, 2) + " " + number(baseline, 2) + " V " + number(top + height * .35, 2) + " Q " + number(px + pw / 2, 2) + " " + number(top - height * .13, 2) + " " + number(px + pw, 2) + " " + number(top + height * .35, 2) + " V " + number(baseline, 2) + " Z";
+          } else {
+            d = "M " + number(px, 2) + " " + number(baseline, 2) + " V " + number(top, 2) + " H " + number(px + pw, 2) + " V " + number(baseline, 2) + " Z";
+          }
+          return '<path class="' + className + '" d="' + d + '" />';
+        }
+
+        function sectionForm(study, cx, baseline, width, height, inner) {
+          const className = inner ? "svg-inner" : "svg-primary";
+          const x = cx - width / 2;
+          const top = baseline - height;
+          const type = study.type || "";
+          if (type === "central" || type === "baroque") {
+            return '<path class="' + className + '" d="M ' + number(x, 2) + " " + number(baseline, 2) + " V " + number(top + height * .38, 2) + " Q " + number(cx, 2) + " " + number(top - height * .12, 2) + " " + number(x + width, 2) + " " + number(top + height * .38, 2) + " V " + number(baseline, 2) + " Z" + '" />';
+          }
+          if (type === "gothic" || type === "stave") {
+            return '<path class="' + className + '" d="M ' + number(x, 2) + " " + number(baseline, 2) + " V " + number(top + height * .3, 2) + " L " + number(cx, 2) + " " + number(top, 2) + " L " + number(x + width, 2) + " " + number(top + height * .3, 2) + " V " + number(baseline, 2) + " Z" + '" />';
+          }
+          return '<rect class="' + className + '" x="' + number(x, 2) + '" y="' + number(top, 2) + '" width="' + number(width, 2) + '" height="' + number(height, 2) + '" />';
+        }
+
+        function buildSvg(study, surface, mode, printPalette) {
+          const colors = printPalette ? {
+            bg: "#ffffff", ink: "#111817", inkSoft: "#343b38", inkMuted: "#5d6862", grid: "rgba(17,24,23,.14)", line: "rgba(17,24,23,.34)", amber: "#965b18", amberSoft: "rgba(150,91,24,.1)", teal: "#23665d", tealSoft: "rgba(35,102,93,.08)", coral: "#93412d"
+          } : {
+            bg: cssVariable("--bg-deep", "#0c1110"), ink: cssVariable("--ink", "#eef2e9"), inkSoft: cssVariable("--ink-soft", "#aebbb1"), inkMuted: cssVariable("--ink-muted", "#84948a"), grid: cssVariable("--grid-line", "rgba(213,229,214,.08)"), line: cssVariable("--faint-line", "rgba(213,229,214,.27)"), amber: cssVariable("--amber", "#e9b36c"), amberSoft: cssVariable("--amber-soft", "rgba(233,179,108,.14)"), teal: cssVariable("--teal", "#88c6ba"), tealSoft: cssVariable("--teal-soft", "rgba(136,198,186,.12)"), coral: cssVariable("--coral", "#e77f62")
+          };
+          const scale = Math.min(410 / Math.max(Number(study.length) || 1, Number(study.span) || 1), 12);
+          const displayWidth = Math.max(220, Math.min(430, (Number(study.length) || 1) * scale));
+          const displaySpan = Math.max(90, Math.min(250, (Number(study.span) || 1) * scale));
+          const displayHeight = Math.max(130, Math.min(270, (Number(study.height) || 1) * Math.min(5.5, 170 / Math.max(Number(study.height) || 1, 1))));
+          const centerX = 360;
+          const baseline = 420;
+          const inner = surface === "interior";
+          const title = String(study.typology || "Study") + " / " + mode.toUpperCase();
+          let content = "";
+          if (mode === "plan") {
+            const x = centerX - displayWidth / 2;
+            const y = 255 - displaySpan / 2;
+            content += planForm(study, x, y, displayWidth, displaySpan, inner);
+            content += moduleLines(study, x, y, displayWidth, displaySpan, study.type === "central");
+            content += line(x, y + displaySpan / 2, x + displayWidth, y + displaySpan / 2, "svg-axis");
+            if (study.type === "central") content += line(centerX, y, centerX, y + displaySpan, "svg-axis");
+            content += dimension(x, y + displaySpan + 36, x + displayWidth, y + displaySpan + 36, "L " + number(study.length, 1) + " " + unit(), false);
+            content += dimension(x - 38, y, x - 38, y + displaySpan, "W " + number(study.span, 1) + " " + unit(), true);
+            content += '<circle class="svg-dot" cx="' + number(centerX, 2) + '" cy="' + number(y + displaySpan / 2, 2) + '" r="3" />';
+          } else if (mode === "elevation") {
+            const width = Math.max(250, Math.min(455, 170 + ratio(study) * 80));
+            const x = centerX - width / 2;
+            content += elevationForm(study, x, baseline, width, displayHeight, inner);
+            for (let i = 1; i < Math.max(2, Math.min(10, Number(study.bayCount) || 1)); i += 1) {
+              const xx = x + (width * i) / Number(study.bayCount || 1);
+              content += line(xx, baseline - displayHeight + 8, xx, baseline, "svg-module");
+            }
+            content += line(centerX, 106, centerX, baseline + 10, "svg-axis");
+            content += dimension(x, baseline + 36, x + width, baseline + 36, "L " + number(study.length, 1) + " " + unit(), false);
+            content += dimension(x - 40, baseline - displayHeight, x - 40, baseline, "H " + number(study.height, 1) + " " + unit(), true);
+          } else {
+            const width = Math.max(200, Math.min(360, 130 + Number(study.span || 1) * 6));
+            const x = centerX - width / 2;
+            content += sectionForm(study, centerX, baseline, width, displayHeight, inner);
+            content += line(x, baseline - displayHeight * .45, x + width, baseline - displayHeight * .45, "svg-module");
+            content += line(centerX, 105, centerX, baseline + 10, "svg-axis");
+            content += dimension(x, baseline + 36, x + width, baseline + 36, "W " + number(study.span, 1) + " " + unit(), false);
+            content += dimension(x - 40, baseline - displayHeight, x - 40, baseline, "H " + number(study.height, 1) + " " + unit(), true);
+            content += '<circle class="svg-radius" cx="' + number(centerX, 2) + '" cy="' + number(baseline - displayHeight * .42, 2) + '" r="' + number(Math.min(width, displayHeight) * .22, 2) + '" />';
+          }
+          const details = [
+            ["ENVELOPE", study.envelope || "—"],
+            ["AXIS", study.axis || "—"],
+            ["RHYTHM", (study.bayCount || "—") + " bays / " + number(study.module, 1) + " " + unit()],
+            ["RADIUS", number(study.radius, 1) + " " + unit()],
+            ["READING", study.emphasis || "Proportional study"]
+          ];
+          const annotations = details.map((detail, index) => '<text class="svg-note" x="650" y="' + (175 + index * 36) + '">' + escapeHtml(detail[0]) + '</text><text class="svg-label" x="650" y="' + (190 + index * 36) + '">' + escapeHtml(String(detail[1])) + "</text>").join("");
+          const grid = '<rect width="900" height="560" fill="' + colors.bg + '" /><g opacity=".9"><path class="svg-grid" d="M40 80H860M40 130H860M40 180H860M40 230H860M40 280H860M40 330H860M40 380H860M40 430H860M40 480H860M80 50V500M130 50V500M180 50V500M230 50V500M280 50V500M330 50V500M380 50V500M430 50V500M480 50V500M530 50V500M580 50V500M630 50V500M680 50V500M730 50V500M780 50V500M830 50V500" /></g>';
+          const header = '<text class="svg-overline" x="48" y="43">LIVE SCHEMATIC / ' + escapeHtml(study.index) + " / " + escapeHtml(title) + '</text><text class="svg-note" x="852" y="43" text-anchor="end">' + escapeHtml(surface === "interior" ? "INNER GEOMETRY" : "OUTER ENVELOPE") + '</text>';
+          const footer = '<text class="svg-watermark" x="50" y="485">' + escapeHtml(study.index) + '</text><text class="svg-note" x="852" y="485" text-anchor="end">NOT A MEASURED SURVEY · ' + escapeHtml(unit()) + '</text>';
+          const source = '<svg class="studio-svg" viewBox="0 0 900 560" role="img" aria-labelledby="studio-svg-title studio-svg-desc" xmlns="http://www.w3.org/2000/svg"><title id="studio-svg-title">' + escapeHtml(surface + " " + mode + " rendering of " + study.name) + '</title><desc id="studio-svg-desc">' + escapeHtml("Live schematic proportional rendering of " + study.name + ". " + statusDescription(study) + " Source: " + (study.source || "source linked") + ".") + '</desc><style>' + svgStyles(colors) + '</style>' + grid + header + '<g>' + content + annotations + '</g>' + footer + "</svg>";
+          return source;
+        }
+
+        function updateButtons() {
+          $$("[data-surface]").forEach((button) => {
+            const active = button.dataset.surface === state.surface;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+          $$("[data-mode]").forEach((button) => {
+            const active = button.dataset.mode === state.mode;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", String(active));
+          });
+        }
+
+        function setLink(element, href, label) {
+          if (!element) return;
+          element.href = href || "#";
+          element.textContent = label;
+        }
+
+        function renderReference(study) {
+          const image = imageRecord(study);
+          const imageElement = $("#referenceImage");
+          const fallback = $("#referenceFallback");
+          const imageMeta = $("#referenceImageMeta");
+          const imageBadge = $("#imageBadge");
+          if (image && image.imagePath) {
+            imageElement.src = image.imagePath;
+            imageElement.alt = "Real reference image of " + study.name + ". Visual evidence only; not a scaled survey.";
+            imageElement.hidden = false;
+            fallback.hidden = true;
+            imageMeta.textContent = "Local thumbnail · visual evidence only";
+            imageBadge.textContent = "Image manifest linked";
+            imageBadge.classList.add("is-source");
+          } else {
+            imageElement.removeAttribute("src");
+            imageElement.alt = "";
+            imageElement.hidden = true;
+            fallback.hidden = false;
+            imageMeta.textContent = "Source linked · no local thumbnail";
+            imageBadge.textContent = "Source only";
+            imageBadge.classList.remove("is-source");
+          }
+          $("#referenceTitle").textContent = study.name;
+          $("#referenceIndex").textContent = study.index || "—";
+          $("#evidenceTitle").textContent = study.name;
+          $("#evidenceMeta").textContent = [study.typology, study.place, study.era].filter(Boolean).join(" · ");
+          $("#statusBadge").textContent = statusLabel(study);
+          $("#factEnvelope").textContent = [number(study.length, 1), number(study.span, 1), number(study.height, 1)].join(" × ") + " " + unit();
+          $("#factRatio").textContent = number(ratio(study), 2) + " : 1";
+          $("#factModule").textContent = study.span ? number(Number(study.module) / Number(study.span), 2) : "—";
+          $("#factSymmetry").textContent = number(study.symmetry, 2);
+          $("#sourceNote").textContent = study.sourceNote || "The source note for this study is not supplied.";
+          $("#boundaryNote").textContent = statusDescription(study) + " The reference image is visual evidence only until a scaled plan, scan, or controlled survey is attached. The live geometry remains a schematic proportional model.";
+          setLink($("#referenceSourceLink"), image && image.sourcePage ? image.sourcePage : study.sourceUrl, "Open source page ↗");
+          setLink($("#referenceRightsLink"), image && image.rightsPage ? image.rightsPage : study.sourceUrl, image && image.rightsPage ? "Rights page ↗" : "Source page ↗");
+          setLink($("#sourceLink"), study.sourceUrl, "Open the named-building reference ↗");
+          setLink($("#sourceButton"), study.sourceUrl, "Open source reference " + "↗");
+        }
+
+        function renderPrintSheet(study) {
+          const currentMode = (state.surface === "interior" ? "Inside" : "Outside") + " · " + state.mode[0].toUpperCase() + state.mode.slice(1);
+          $("#printSheetTitle").textContent = study.name;
+          $("#printSheetIndex").textContent = study.index || "—";
+          $("#printSheetMode").textContent = currentMode;
+          $("#printSheetDrawing").innerHTML = buildSvg(study, state.surface, state.mode, false);
+          $("#printSheetCopy").innerHTML = "<strong>Reading:</strong> " + escapeHtml(study.surfaceNote || study.interiorNote || "A schematic proportional reading of the selected study.") + " <strong>Reference:</strong> " + escapeHtml(study.churchName || study.name) + ".";
+          $("#printEnvelope").textContent = [number(study.length, 1), number(study.span, 1), number(study.height, 1)].join(" × ") + " " + unit();
+          $("#printRatio").textContent = number(ratio(study), 2) + " : 1";
+          $("#printStatus").textContent = statusLabel(study);
+          $("#printImageStatus").textContent = imageRecord(study) ? "linked" : "source only";
+          $("#printSheetSource").textContent = "Source: " + (study.source || "not supplied");
+          $("#printSheetRoute").textContent = "Route: " + window.location.href;
+        }
+
+        function render() {
+          const study = selectedStudy();
+          if (!study) return;
+          state.selectedId = study.id;
+          updateButtons();
+          const liveLabel = (state.surface === "interior" ? "Inside" : "Outside") + " · " + state.mode[0].toUpperCase() + state.mode.slice(1);
+          $("#studioCanvas").innerHTML = buildSvg(study, state.surface, state.mode, false);
+          $("#liveToolbarMeta").textContent = "Study " + study.index + " · " + liveLabel;
+          $("#studioState").textContent = liveLabel + " · live schematic";
+          $("#liveCaption").textContent = study.surfaceNote || study.interiorNote || "A schematic proportional reading of the selected study.";
+          $("#liveCaptionMeta").textContent = (state.schema && state.schema.units ? state.schema.units : "metric units") + " · " + statusLabel(study).toLowerCase();
+          $("#atlasLink").href = atlasHref(study);
+          renderReference(study);
+          renderPrintSheet(study);
+          updateRoute();
+        }
+
+        function populateSelect(studies) {
+          const select = $("#studySelect");
+          const current = state.selectedId;
+          select.innerHTML = "";
+          studies.forEach((study) => {
+            const option = document.createElement("option");
+            option.value = study.id;
+            option.textContent = study.index + " · " + study.name;
+            select.appendChild(option);
+          });
+          if (studies.some((study) => study.id === current)) select.value = current;
+          else if (studies[0]) { state.selectedId = studies[0].id; select.value = state.selectedId; }
+        }
+
+        function filterStudies() {
+          const query = String($("#studySearch").value || "").trim().toLowerCase();
+          const filtered = state.studies.filter((study) => !query || [study.name, study.shortName, study.place, study.typology, study.era, study.source].join(" ").toLowerCase().includes(query));
+          populateSelect(filtered.length ? filtered : state.studies);
+          if (filtered.length && !filtered.some((study) => study.id === state.selectedId)) state.selectedId = filtered[0].id;
+          $("#studySelect").value = state.selectedId;
+          render();
+        }
+
+        function triggerDownload(filename, content, type) {
+          const blob = new Blob([content], { type: type });
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+          anchor.href = url;
+          anchor.download = filename;
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+          window.setTimeout(() => URL.revokeObjectURL(url), 600);
+        }
+
+        function downloadSvg() {
+          const study = selectedStudy();
+          if (!study) return;
+          const source = buildSvg(study, state.surface, state.mode, true);
+          triggerDownload(safeFilePart(study.id) + "-" + state.surface + "-" + state.mode + ".svg", '<?xml version="1.0" encoding="UTF-8"?>\n' + source, "image/svg+xml;charset=utf-8");
+          $("#studioStatus").textContent = "Vector SVG downloaded for " + study.name + ".";
+        }
+
+        function downloadJson() {
+          const study = selectedStudy();
+          if (!study) return;
+          const payload = {
+            title: "Sacred Geometry Atlas · " + study.name,
+            schema: state.schema,
+            route: window.location.href,
+            rendering: { surface: state.surface, mode: state.mode, status: statusLabel(study) },
+            referenceImage: imageRecord(study),
+            study: study
+          };
+          triggerDownload(safeFilePart(study.id) + "-sacred-geometry-study.json", JSON.stringify(payload, null, 2), "application/json");
+          $("#studioStatus").textContent = "Study JSON downloaded for " + study.name + ".";
+        }
+
+        function printStudio() {
+          if (typeof window.print !== "function") {
+            $("#studioStatus").textContent = "Printing is unavailable in this browser. Use Export SVG instead.";
+            return;
+          }
+          document.body.classList.add("print-studio");
+          const cleanup = () => document.body.classList.remove("print-studio");
+          window.addEventListener("afterprint", cleanup, { once: true });
+          window.print();
+          $("#studioStatus").textContent = "Print dialog opened for the current reference sheet.";
+        }
+
+        function bind() {
+          $("#themeToggle").addEventListener("click", cycleTheme);
+          $("#studySearch").addEventListener("input", filterStudies);
+          $("#studySelect").addEventListener("change", (event) => { state.selectedId = event.target.value; render(); });
+          $$("[data-surface]").forEach((button) => button.addEventListener("click", () => { state.surface = button.dataset.surface; render(); }));
+          $$("[data-mode]").forEach((button) => button.addEventListener("click", () => { state.mode = button.dataset.mode; render(); }));
+          ["#printButton", "#printButtonSecondary"].forEach((selector) => $(selector).addEventListener("click", printStudio));
+          ["#svgButton", "#svgButtonSecondary"].forEach((selector) => $(selector).addEventListener("click", downloadSvg));
+          ["#jsonButton", "#jsonButtonSecondary"].forEach((selector) => $(selector).addEventListener("click", downloadJson));
+          window.addEventListener("hashchange", () => { restoreRoute(); populateSelect(state.studies); render(); });
+        }
+
+        async function init() {
+          bind();
+          applyTheme(currentThemeMode());
+          try {
+            const responses = await Promise.all([fetch("data/geometry.json"), fetch("research/image-manifest.json")]);
+            if (!responses[0].ok) throw new Error("geometry data unavailable");
+            const payload = await responses[0].json();
+            const manifest = responses[1].ok ? await responses[1].json() : { records: [] };
+            state.schema = payload.schema || {};
+            state.studies = Array.isArray(payload.studies) ? payload.studies : [];
+            state.images = new Map((Array.isArray(manifest.records) ? manifest.records : []).map((record) => [record.id, record]));
+            if (!state.studies.length) throw new Error("no studies");
+            restoreRoute();
+            state.selectedId = state.selectedId && state.studies.some((study) => study.id === state.selectedId) ? state.selectedId : state.studies[0].id;
+            populateSelect(state.studies);
+            const measured = state.studies.filter((study) => study.status === "measured").length;
+            $("#studyCount").textContent = state.studies.length;
+            $("#imageCount").textContent = state.images.size;
+            $("#sourceCount").textContent = state.studies.filter((study) => /^https?:/i.test(study.sourceUrl || "")).length;
+            $("#registerStudies").textContent = state.studies.length;
+            $("#registerImages").textContent = state.images.size;
+            $("#registerMeasured").textContent = measured;
+            $("#studioWorkspace").hidden = false;
+            $("#evidenceGrid").hidden = false;
+            render();
+          } catch (error) {
+            $("#studioError").hidden = false;
+            $("#studioWorkspace").hidden = true;
+            $("#evidenceGrid").hidden = true;
+          }
+        }
+
+        init();
+      })();
+    </script>
+  </body>
+</html>

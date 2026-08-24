@@ -32,6 +32,18 @@
       "short_name": "Method",
       "description": "Open the geometry method guide.",
       "url": "./#method"
+    },
+    {
+      "name": "Ireland Map Design Lab",
+      "short_name": "Ireland Lab",
+      "description": "Explore Ireland map layers and garment design concepts.",
+      "url": "./ireland.html"
+    },
+    {
+      "name": "Print Studio",
+      "short_name": "Print Studio",
+      "description": "Create live reference renderings and print-ready study sheets.",
+      "url": "./print-studio.html"
     }
   ],
   "icons": [

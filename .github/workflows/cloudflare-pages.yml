@@ -1,0 +1,58 @@
+name: Deploy marketfront to Cloudflare Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: "cloudflare-pages"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Validate Ireland lab and build artifact
+        run: |
+          node --check ireland.js
+          python3 -m py_compile scripts/prepare-cloudflare-site.py
+          python3 scripts/prepare-cloudflare-site.py
+          test -s .cloudflare-site/ireland.html
+          test -s .cloudflare-site/ireland.css
+          test -s .cloudflare-site/ireland.js
+          test -s .cloudflare-site/print-studio.html
+          test -s .cloudflare-site/research/annotated-atlas.html
+          test -s .cloudflare-site/research/image-manifest.json
+          test -s .cloudflare-site/_redirects
+          test -s .cloudflare-site/_headers
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: cloudflare-pages
+      url: ${{ steps.cloudflare.outputs.deployment-url }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v6
+      - name: Prepare the public artifact
+        run: python3 scripts/prepare-cloudflare-site.py
+      - name: Deploy to Cloudflare Pages
+        id: cloudflare
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy .cloudflare-site --project-name=zerodevllc-marketfront --branch=main

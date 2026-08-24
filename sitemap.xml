@@ -10,6 +10,15 @@
     <loc>./static.html</loc>
   </url>
   <url>
+    <loc>./ireland.html</loc>
+  </url>
+  <url>
+    <loc>./print-studio.html</loc>
+  </url>
+  <url>
+    <loc>./research/annotated-atlas.html</loc>
+  </url>
+  <url>
     <loc>./data/geometry.json</loc>
   </url>
   <url>

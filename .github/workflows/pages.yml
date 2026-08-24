@@ -27,12 +27,14 @@ jobs:
       - name: Validate static site
         run: |
           node --check app.js
+          node --check ireland.js
           node --check data/geometry.js
           node --check sw.js
           node --check scripts/append-expanded-churches.js
           node --check scripts/sync-geometry-json.js
           node --check scripts/validate-geometry-data.js
           python3 -m py_compile scripts/verify-pages-artifact.py
+          python3 -m py_compile scripts/prepare-cloudflare-site.py
           node scripts/validate-geometry-data.js
           node scripts/append-expanded-churches.js
           git diff --exit-code -- data/geometry.js
@@ -40,6 +42,14 @@ jobs:
           test -s index.html
           test -s 404.html
           test -s static.html
+          test -s ireland.html
+          test -s ireland.css
+          test -s ireland.js
+          test -s print-studio.html
+          test -s research/annotated-atlas.html
+          test -s research/image-manifest.json
+          test -s _redirects
+          test -s _headers
           test -s styles.css
           test -s data/geometry.json
           test -s data/geometry.csv
@@ -5035,11 +5045,14 @@ jobs:
           site.mkdir()
           (site / "data").mkdir()
           (site / "icons").mkdir()
+          (site / "research" / "images").mkdir(parents=True)
 
           public_files = [
               Path(".nojekyll"),
               Path("404.html"),
               Path("static.html"),
+              Path("_headers"),
+              Path("_redirects"),
               Path("app.js"),
               Path("favicon.svg"),
               Path("icons/atlas-180.png"),
@@ -5047,13 +5060,35 @@ jobs:
               Path("icons/atlas-512.png"),
               Path("icons/atlas-maskable.svg"),
               Path("index.html"),
+              Path("ireland.html"),
+              Path("ireland.css"),
+              Path("ireland.js"),
               Path("og.png"),
+              Path("print-studio.html"),
               Path("robots.txt"),
               Path("site.webmanifest"),
               Path("sitemap.xml"),
               Path("styles.css"),
               Path("sw.js"),
           ]
+          research_files = [
+              Path("research/README.md"),
+              Path("research/acquired-assets.json"),
+              Path("research/analysis-method.md"),
+              Path("research/annotated-atlas.html"),
+              Path("research/asset-measurements.json"),
+              Path("research/constructor-evidence.json"),
+              Path("research/data-probes.json"),
+              Path("research/geometry-analysis.json"),
+              Path("research/image-manifest.json"),
+              Path("research/measurement-register.json"),
+              Path("research/model-metadata.json"),
+              Path("research/next-acquisition-prompt.md"),
+              Path("research/scan-manifest.json"),
+              Path("research/st-pauls-colmap.json"),
+          ]
+          research_files.extend(sorted(Path("research/images").glob("*.jpg")))
+          public_files.extend(research_files)
           custom_domain = Path("CNAME")
           if custom_domain.exists() and not custom_domain.is_file():
               raise SystemExit("CNAME must be a file when present")
@@ -5074,6 +5109,8 @@ jobs:
               ".nojekyll",
               "404.html",
               "static.html",
+              "_headers",
+              "_redirects",
               "app.js",
               "favicon.svg",
               "icons/atlas-180.png",
@@ -5081,7 +5118,11 @@ jobs:
               "icons/atlas-512.png",
               "icons/atlas-maskable.svg",
               "index.html",
+              "ireland.html",
+              "ireland.css",
+              "ireland.js",
               "og.png",
+              "print-studio.html",
               "robots.txt",
               "site.webmanifest",
               "sitemap.xml",
@@ -5092,6 +5133,7 @@ jobs:
               "data/geometry.json",
               "data/geometry.schema.json",
           }
+          expected.update(path.as_posix() for path in research_files)
           if custom_domain.is_file():
               expected.add("CNAME")
           actual = {path.relative_to(site).as_posix() for path in site.rglob("*") if path.is_file()}
@@ -5150,6 +5192,20 @@ jobs:
                   raise SystemExit(f"Missing repository-relative static-page metadata: {old}")
               static_source = static_source.replace(old, new)
           static_page.write_text(static_source)
+
+          print_page = site / "print-studio.html"
+          print_source = print_page.read_text()
+          print_replacements = {
+              '<link rel="canonical" href="print-studio.html" />': f'<link rel="canonical" href="{html.escape(base_url + "print-studio.html", quote=True)}" />',
+              '<meta property="og:url" content="print-studio.html" />': f'<meta property="og:url" content="{html.escape(base_url + "print-studio.html", quote=True)}" />',
+              '<meta property="og:image" content="og.png" />': f'<meta property="og:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
+              '<meta name="twitter:image" content="og.png" />': f'<meta name="twitter:image" content="{html.escape(base_url + "og.png", quote=True)}" />',
+          }
+          for old, new in print_replacements.items():
+              if old not in print_source:
+                  raise SystemExit(f"Missing repository-relative Print Studio metadata: {old}")
+              print_source = print_source.replace(old, new)
+          print_page.write_text(print_source)
 
           dataset = site / "data/geometry.json"
           dataset_source = dataset.read_text()
@@ -5216,6 +5272,9 @@ jobs:
           sitemap_markers = {
               "<loc>./</loc>": f"<loc>{html.escape(base_url, quote=True)}</loc>",
               "<loc>./static.html</loc>": f"<loc>{html.escape(base_url + 'static.html', quote=True)}</loc>",
+              "<loc>./ireland.html</loc>": f"<loc>{html.escape(base_url + 'ireland.html', quote=True)}</loc>",
+              "<loc>./print-studio.html</loc>": f"<loc>{html.escape(base_url + 'print-studio.html', quote=True)}</loc>",
+              "<loc>./research/annotated-atlas.html</loc>": f"<loc>{html.escape(base_url + 'research/annotated-atlas.html', quote=True)}</loc>",
               "<loc>./data/geometry.json</loc>": f"<loc>{html.escape(base_url + 'data/geometry.json', quote=True)}</loc>",
               "<loc>./data/geometry.csv</loc>": f"<loc>{html.escape(base_url + 'data/geometry.csv', quote=True)}</loc>",
               "<loc>./data/geometry.schema.json</loc>": f"<loc>{html.escape(base_url + 'data/geometry.schema.json', quote=True)}</loc>",
