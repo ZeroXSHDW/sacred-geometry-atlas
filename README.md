@@ -4,7 +4,7 @@ An interactive, static GitHub Pages site for exploring the geometry of church in
 It is designed as a visual field atlas: choose a study, switch between plan/elevation/section, focus
 on a geometry layer, compare proportions, and share a direct link to any study.
 
-## What is included
+## Features
 
 - Ninety-nine named churches and chapels as real reference buildings, spanning Early Christian/Byzantine, Romanesque, Gothic, Norman-Arab, timber, Renaissance, Baroque, modern, colonial, Orthodox, and contemporary work, each with a source-linked schematic proportional study.
 - Interactive plan, elevation, and section drawings.
@@ -158,6 +158,22 @@ work from the page or from a matching Atlas control that advertises the same sho
 links, disclosure summaries, and unrelated buttons retain their native keyboard behavior.
 When two or more studies are selected, press `C` to open the focused comparison.
 
+## Prerequisites
+
+- Node.js at the exact version recorded in [`.node-version`](.node-version).
+- Python 3 for the Pages artifact verifier and Cloudflare-site preparation.
+- A modern browser and a local static server for keyboard, responsive,
+  accessibility, no-script, and offline-shell review.
+- No backend or credentials are needed for the static Atlas. Cloudflare
+  credentials are required only for an explicitly approved Pages deployment.
+
+## Installation and setup
+
+Clone the repository, run the documented local validation commands, and
+serve the repository root with a local static server. Edit
+`data/geometry.js` only, then regenerate the committed JSON, CSV, JSON Schema,
+and `static.html` artifacts with `node scripts/sync-geometry-json.js`.
+Do not edit generated artifacts by hand.
 ## Run locally
 
 From this folder, run any simple static server, for example:
@@ -168,6 +184,29 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000>.
 
+## Troubleshooting
+
+- If the Atlas is blank or a dataset fails to load, run
+  `node scripts/validate-geometry-data.js`, verify the generated artifacts
+  with `node scripts/sync-geometry-json.js --check`, and use the static
+  `static.html` collection as the script-free recovery path.
+- If a direct hash route opens the wrong study or comparison, copy the
+  canonical route from the visible Atlas controls and reload after clearing
+  malformed query or fragment parameters. The route parser fails closed to
+  documented defaults.
+- If the offline shell is stale, use the visible Refresh Atlas action or
+  clear the site storage for the local origin, then revisit the root before
+  testing offline mode. Do not edit the revision-stamped Pages cache by hand.
+- If Pages validation fails, inspect the first geometry, schema, metadata,
+  artifact, or path-prefix error, then rerun the local workflow and artifact
+  checks. A Pages upload is not a substitute for the local validation gate.
+- If the Cloudflare artifact fails, run
+  `python3 scripts/prepare-cloudflare-site.py` and inspect the curated
+  `.cloudflare-site/` output. Keep research prompts, deployment secrets, and
+  private provider details out of the public artifact.
+- If a research image, model, or source is unavailable, keep its provenance
+  note and evidence status explicit; do not replace a missing source with a
+  placeholder or upgrade schematic geometry to a measured claim.
 ## Publish on GitHub Pages
 
 1. Create an empty repository on GitHub.
@@ -199,11 +238,25 @@ The workflow keeps pull-request validation read-only; Pages write and OIDC permi
 
 If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository root. The deploy job carries it into the curated public artifact without rewriting its value.
 
-The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
+Both Pages workflows use the exact Node.js version recorded in [`.node-version`](.node-version), so syntax, provenance, and generated-data checks do not depend on a runner's preinstalled version. The Cloudflare validation path runs the same geometry-source and generated-artifact checks before assembling its curated public artifact.
 
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, the generated `static.html` collection index, and the data artifacts required by the site.
 
 The committed public artifact includes a correctly sized 180px icons/atlas-180.png Apple touch icon plus 192px icons/atlas-192.png and 512px icons/atlas-512.png, so install prompts and home-screen shortcuts have dependable raster artwork alongside the SVG favicon and the safe-zone icons/atlas-maskable.svg launcher mark.
+
+The repository also includes a guarded Cloudflare Pages workflow for the Ireland Map Design Lab and Print Studio. Its pull-request validation assembles the same curated public artifact locally, while only the non-pull-request deploy job receives `deployments: write` and the Cloudflare secrets. Run `node scripts/validate-workflow.mjs`, `python3 scripts/prepare-cloudflare-site.py`, and the artifact checks in [`CONTRIBUTING.md`](CONTRIBUTING.md) before changing that workflow; local verification never deploys or requires Cloudflare credentials.
+
+## Contributing
+
+Keep geometry records evidence-led: cite the named building, distinguish documented facts from schematic interpretation, and preserve the generated JSON, CSV, schema, and static-index outputs by running the synchronization check before committing. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the local validation sequence and change boundaries.
+
+## Security
+
+Report suspected security issues privately using the contact and handling guidance in [`SECURITY.md`](SECURITY.md). Do not commit credentials, private client information, unpublished therapy configuration, or downloaded research assets whose redistribution rights have not been verified.
+
+## License
+
+This repository does not currently grant a blanket reuse license for its source, interface, research writing, or bundled media. Treat the code and original content as all rights reserved until a maintainer adds an explicit `LICENSE`; third-party sources, images, models, and datasets remain subject to their own terms recorded in the research manifests.
 
 ## Ireland Map Design Lab / ZERODEVLLC.EU marketfront
 
@@ -330,6 +383,7 @@ node --check data/geometry.js
 node --check sw.js
 node --check scripts/sync-geometry-json.js
 node scripts/sync-geometry-json.js --check
+node scripts/validate-workflow.mjs
 node -e "JSON.parse(require('fs').readFileSync('data/geometry.json', 'utf8'))"
 node -e "if (!require('fs').readFileSync('data/geometry.csv', 'utf8').trim().split(/\r?\n/).length) process.exit(1)"
 python3 -c "import xml.etree.ElementTree as ET; ET.parse('sitemap.xml')"

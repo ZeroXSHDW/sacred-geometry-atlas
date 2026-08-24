@@ -1,6 +1,6 @@
 # Reusable implementation prompt
 
-You are a senior static-web product engineer, information designer, and research-data editor. Work in the repository at `/Users/admin/Desktop/Churches`.
+You are a senior static-web product engineer, information designer, and research-data editor. Work from the checked-out repository root.
 
 Extend the existing Sacred Geometry Atlas into a credible ZERODEVLLC.EU marketfront project called **Ireland Map Design Lab**.
 

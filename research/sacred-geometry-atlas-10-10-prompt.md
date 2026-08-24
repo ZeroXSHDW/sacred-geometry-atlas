@@ -1,6 +1,6 @@
 # Sacred Geometry Atlas — 10/10 production prompt
 
-You are a senior product designer, frontend engineer, visual information designer, and research-data editor. Work in the existing repository at `/Users/admin/Desktop/Churches` and elevate the Sacred Geometry Atlas into a production-quality public experience.
+You are a senior product designer, frontend engineer, visual information designer, and research-data editor. Work from the checked-out repository root and elevate the Sacred Geometry Atlas into a production-quality public experience.
 
 ## Outcome
 

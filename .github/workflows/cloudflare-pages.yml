@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  deployments: write
 
 concurrency:
   group: "cloudflare-pages"
@@ -15,14 +14,30 @@ concurrency:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v6
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          node-version: 22
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
+      - name: Validate workflow contract
+        run: node scripts/validate-workflow.mjs
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .node-version
+      - name: Validate atlas data contract
+        run: |
+          node --check app.js
+          node --check data/geometry.js
+          node --check sw.js
+          node scripts/validate-geometry-data.js
+          node scripts/sync-geometry-json.js --check
       - name: Validate Ireland lab and build artifact
         run: |
           node --check ireland.js
@@ -39,18 +54,27 @@ jobs:
 
   deploy:
     needs: validate
-    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      deployments: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     environment:
       name: cloudflare-pages
       url: ${{ steps.cloudflare.outputs.deployment-url }}
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Check patch hygiene
+        run: git diff --check
       - name: Prepare the public artifact
         run: python3 scripts/prepare-cloudflare-site.py
       - name: Deploy to Cloudflare Pages
         id: cloudflare
-        uses: cloudflare/wrangler-action@v4
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

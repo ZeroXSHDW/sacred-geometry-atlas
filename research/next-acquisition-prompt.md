@@ -1,6 +1,6 @@
 # Reusable continuation prompt
 
-You are continuing the Sacred Geometry Atlas in `/Users/admin/Desktop/Churches`.
+You are continuing the Sacred Geometry Atlas from the checked-out repository root.
 
 Use only the 24 named churches already present in `data/geometry.js` and `research/scan-manifest.json`. Keep the real building identity, downloaded image provenance, survey provenance, geometric calculations, and documentary constructor evidence as separate layers.
 
