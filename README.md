@@ -6,7 +6,7 @@ on a geometry layer, compare proportions, and share a direct link to any study.
 
 ## What is included
 
-- Twenty-four named churches and chapels as real reference buildings, spanning Early Christian/Byzantine, Romanesque, Gothic, Norman-Arab, timber, Renaissance, Baroque, modern, and contemporary work, each with a source-linked schematic proportional study.
+- Ninety-nine named churches and chapels as real reference buildings, spanning Early Christian/Byzantine, Romanesque, Gothic, Norman-Arab, timber, Renaissance, Baroque, modern, colonial, Orthodox, and contemporary work, each with a source-linked schematic proportional study.
 - Interactive plan, elevation, and section drawings.
 - Outside / inside surface switch.
 - Geometry layer focus for isolating envelope, rhythm, axis, or schematic dimensions.
@@ -207,7 +207,7 @@ The committed public artifact includes a correctly sized 180px icons/atlas-180.p
 
 ## Add real churches
 
-The current records point to real named churches. Most geometry values remain explicitly schematic, illustrative proportions—not measured surveys; St Paul's length, greatest breadth, and overall height are now marked as published reference dimensions, while its radius/module/bay inputs remain schematic. Each record carries a source URL and a source note that separates documented building facts from Atlas interpretation. To expand the atlas, edit [`data/geometry.js`](data/geometry.js) and add another object using the same fields. Replace the values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
+The current collection contains 99 real named churches. Most geometry values remain explicitly schematic, illustrative proportions—not measured surveys; St Paul's length, greatest breadth, and overall height are marked as published reference dimensions, while its radius/module/bay inputs remain schematic. Each record carries a source URL and a source note that separates documented building identity from Atlas interpretation. The 75-record expansion is maintained in [`data/expanded-churches.json`](data/expanded-churches.json) and is appended reproducibly by [`scripts/append-expanded-churches.js`](scripts/append-expanded-churches.js). Replace schematic values with measured plans, sections, heights, modules, and radii only when you have a source that supports them.
 
 ## Research image and scan layer
 
@@ -227,7 +227,9 @@ The local research layer now contains a real reference image for every study plu
 
 Regenerate and validate the research layer with `node scripts/fetch-research-assets.js`, `node scripts/fetch-model-metadata.js`, `node scripts/probe-research-data.js`, `node scripts/register-acquired-assets.js`, `python3 scripts/measure-colmap-scene.py`, `node scripts/analyze-geometry.js`, `node scripts/build-research-atlas.js`, `python3 scripts/measure-geometry-assets.py`, and `node scripts/validate-research-data.js`. The image files are research-only until each rights page is verified, and the current Pages artifact deliberately does not publish this unverified image corpus.
 
-### Current reference list
+### Original evidence-backed reference list
+
+The original 24-record research subset below has downloaded visual and documentary evidence. The primary atlas also contains 75 additional source-linked identity records; those additions are intentionally labeled schematic until their image, survey, or measured-plan evidence is acquired.
 
 | Index | Reference building | Source |
 | --- | --- | --- |

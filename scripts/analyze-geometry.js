@@ -13,11 +13,11 @@ const outputPath = path.join(projectRoot, "research", "geometry-analysis.json");
 
 const context = { window: {} };
 vm.runInNewContext(fs.readFileSync(geometryPath, "utf8"), context, { filename: geometryPath });
-const studies = context.window.CHURCH_GEOMETRY;
-if (!Array.isArray(studies) || studies.length !== 24) throw new Error("Expected 24 geometry studies");
-
 const measurementRegister = JSON.parse(fs.readFileSync(measurementPath, "utf8"));
 const measurementById = new Map(measurementRegister.records.map((record) => [record.id, record]));
+const allStudies = context.window.CHURCH_GEOMETRY;
+const studies = Array.isArray(allStudies) ? allStudies.filter((study) => measurementById.has(study.id)) : [];
+if (!Array.isArray(allStudies) || studies.length !== measurementRegister.records.length) throw new Error(`Expected the ${measurementRegister.records.length} research studies represented in the measurement register`);
 const requiredFields = ["length", "span", "height", "radius", "module", "bayCount"];
 const constants = [
   { name: "1:1", value: 1 },

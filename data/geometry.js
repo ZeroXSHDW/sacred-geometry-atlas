@@ -828,3 +828,3458 @@ window.CHURCH_GEOMETRY = [
     ]
   }
 ];
+
+/* expanded studies:start */
+window.CHURCH_GEOMETRY.push(...[
+  {
+    "id": "st-peters-basilica",
+    "index": "25",
+    "name": "St. Peter's Basilica",
+    "shortName": "St. Peter's Basilica",
+    "typology": "Renaissance",
+    "place": "Vatican City",
+    "era": "16th–17th centuries",
+    "emphasis": "Monumental procession",
+    "type": "central",
+    "churchName": "St. Peter's Basilica",
+    "status": "schematic",
+    "source": "Wikipedia · St. Peter's Basilica",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Peter%27s_Basilica",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Peter's Basilica in Vatican City; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + dome",
+    "axis": "Longitudinal",
+    "length": 50.4,
+    "span": 43.2,
+    "height": 36,
+    "bayCount": 8,
+    "module": 6.3,
+    "radius": 21.6,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "milan-cathedral",
+    "index": "26",
+    "name": "Milan Cathedral",
+    "shortName": "Milan Cathedral",
+    "typology": "Gothic",
+    "place": "Milan, Italy",
+    "era": "14th–20th centuries",
+    "emphasis": "Vertical proportion",
+    "type": "gothic",
+    "churchName": "Milan Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Milan Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Milan_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Milan Cathedral in Milan, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + forest of pinnacles",
+    "axis": "Longitudinal",
+    "length": 129.6,
+    "span": 36.7,
+    "height": 48.6,
+    "bayCount": 10,
+    "module": 13,
+    "radius": 18.4,
+    "symmetry": 0.96,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + forest of pinnacles, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "florence-cathedral",
+    "index": "27",
+    "name": "Florence Cathedral",
+    "shortName": "Florence Cathedral",
+    "typology": "Gothic / Renaissance",
+    "place": "Florence, Italy",
+    "era": "13th–15th centuries",
+    "emphasis": "Dome and civic axis",
+    "type": "central",
+    "churchName": "Florence Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Florence Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Florence_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Florence Cathedral in Florence, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + octagonal dome",
+    "axis": "Longitudinal",
+    "length": 44.1,
+    "span": 37.8,
+    "height": 31.5,
+    "bayCount": 6,
+    "module": 7.4,
+    "radius": 18.9,
+    "symmetry": 0.96,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + octagonal dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "6 radial bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "assisi-basilica",
+    "index": "28",
+    "name": "Basilica of Saint Francis of Assisi",
+    "shortName": "Basilica of Saint Francis of Assisi",
+    "typology": "Gothic",
+    "place": "Assisi, Italy",
+    "era": "13th century",
+    "emphasis": "Layered pilgrimage axis",
+    "type": "gothic",
+    "churchName": "Basilica of Saint Francis of Assisi",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of Saint Francis of Assisi",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Saint_Francis_of_Assisi",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of Saint Francis of Assisi in Assisi, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Two-level basilica",
+    "axis": "Longitudinal",
+    "length": 91.2,
+    "span": 25.8,
+    "height": 34.2,
+    "bayCount": 6,
+    "module": 15.2,
+    "radius": 12.9,
+    "symmetry": 0.92,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as two-level basilica, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "6 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "santa-maria-novella",
+    "index": "29",
+    "name": "Santa Maria Novella",
+    "shortName": "Santa Maria Novella",
+    "typology": "Gothic / Renaissance",
+    "place": "Florence, Italy",
+    "era": "13th–15th centuries",
+    "emphasis": "Measured façade proportion",
+    "type": "basilica",
+    "churchName": "Santa Maria Novella",
+    "status": "schematic",
+    "source": "Wikipedia · Santa Maria Novella",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Santa_Maria_Novella",
+    "sourceNote": "Real reference building: the linked reference page identifies Santa Maria Novella in Florence, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + geometric façade",
+    "axis": "Longitudinal",
+    "length": 64.8,
+    "span": 23,
+    "height": 20.2,
+    "bayCount": 7,
+    "module": 9.3,
+    "radius": 11.5,
+    "symmetry": 0.97,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + geometric façade, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "7 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "church-of-the-gesu",
+    "index": "30",
+    "name": "Church of the Gesù",
+    "shortName": "Church of the Gesù",
+    "typology": "Baroque",
+    "place": "Rome, Italy",
+    "era": "16th century",
+    "emphasis": "Votive axis",
+    "type": "baroque",
+    "churchName": "Church of the Gesù",
+    "status": "schematic",
+    "source": "Wikipedia · Church of the Gesù",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Church_of_the_Ges%C3%B9",
+    "sourceNote": "Real reference building: the linked reference page identifies Church of the Gesù in Rome, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + shallow transept",
+    "axis": "Compressed axis",
+    "length": 37.8,
+    "span": 24.1,
+    "height": 25.8,
+    "bayCount": 5,
+    "module": 7.6,
+    "radius": 12,
+    "symmetry": 0.94,
+    "surfaceNote": "The ellipse + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + shallow transept, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the compressed axis and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "ellipse + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "compressed axis"
+      ],
+      [
+        "enclosure",
+        "curved nave"
+      ]
+    ]
+  },
+  {
+    "id": "santa-maria-della-salute",
+    "index": "31",
+    "name": "Santa Maria della Salute",
+    "shortName": "Santa Maria della Salute",
+    "typology": "Baroque",
+    "place": "Venice, Italy",
+    "era": "17th century",
+    "emphasis": "Radial votive balance",
+    "type": "central",
+    "churchName": "Santa Maria della Salute",
+    "status": "schematic",
+    "source": "Wikipedia · Santa Maria della Salute",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Santa_Maria_della_Salute",
+    "sourceNote": "Real reference building: the linked reference page identifies Santa Maria della Salute in Venice, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Octagon + twin domes",
+    "axis": "Radial",
+    "length": 37.8,
+    "span": 32.4,
+    "height": 27,
+    "bayCount": 8,
+    "module": 4.7,
+    "radius": 16.2,
+    "symmetry": 0.95,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as octagon + twin domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "st-marks-basilica",
+    "index": "32",
+    "name": "St Mark's Basilica",
+    "shortName": "St Mark's Basilica",
+    "typology": "Byzantine",
+    "place": "Venice, Italy",
+    "era": "9th–20th centuries",
+    "emphasis": "Nested domes",
+    "type": "central",
+    "churchName": "St Mark's Basilica",
+    "status": "schematic",
+    "source": "Wikipedia · St Mark's Basilica",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St_Mark%27s_Basilica",
+    "sourceNote": "Real reference building: the linked reference page identifies St Mark's Basilica in Venice, Italy; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Greek cross + five domes",
+    "axis": "Radial",
+    "length": 37.8,
+    "span": 32.4,
+    "height": 27,
+    "bayCount": 5,
+    "module": 7.6,
+    "radius": 16.2,
+    "symmetry": 0.94,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as greek cross + five domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "westminster-abbey",
+    "index": "33",
+    "name": "Westminster Abbey",
+    "shortName": "Westminster Abbey",
+    "typology": "Gothic",
+    "place": "London, England",
+    "era": "11th–16th centuries",
+    "emphasis": "Ceremonial procession",
+    "type": "gothic",
+    "churchName": "Westminster Abbey",
+    "status": "schematic",
+    "source": "Wikipedia · Westminster Abbey",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Westminster_Abbey",
+    "sourceNote": "Real reference building: the linked reference page identifies Westminster Abbey in London, England; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Gothic basilica + chapels",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 10,
+    "module": 11.8,
+    "radius": 16.7,
+    "symmetry": 0.93,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as gothic basilica + chapels, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "canterbury-cathedral",
+    "index": "34",
+    "name": "Canterbury Cathedral",
+    "shortName": "Canterbury Cathedral",
+    "typology": "Gothic",
+    "place": "Canterbury, England",
+    "era": "11th–16th centuries",
+    "emphasis": "Pilgrimage axis",
+    "type": "gothic",
+    "churchName": "Canterbury Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Canterbury Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Canterbury_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Canterbury Cathedral in Canterbury, England; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + double transept",
+    "axis": "Longitudinal",
+    "length": 120,
+    "span": 34,
+    "height": 45,
+    "bayCount": 12,
+    "module": 10,
+    "radius": 17,
+    "symmetry": 0.9,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + double transept, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "12 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "york-minster",
+    "index": "35",
+    "name": "York Minster",
+    "shortName": "York Minster",
+    "typology": "Gothic",
+    "place": "York, England",
+    "era": "13th–15th centuries",
+    "emphasis": "Transverse cathedral rhythm",
+    "type": "gothic",
+    "churchName": "York Minster",
+    "status": "schematic",
+    "source": "Wikipedia · York Minster",
+    "sourceUrl": "https://en.wikipedia.org/wiki/York_Minster",
+    "sourceNote": "Real reference building: the linked reference page identifies York Minster in York, England; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + chapter-house polygon",
+    "axis": "Longitudinal",
+    "length": 122.4,
+    "span": 34.7,
+    "height": 45.9,
+    "bayCount": 11,
+    "module": 11.1,
+    "radius": 17.3,
+    "symmetry": 0.93,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + chapter-house polygon, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "11 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "salisbury-cathedral",
+    "index": "36",
+    "name": "Salisbury Cathedral",
+    "shortName": "Salisbury Cathedral",
+    "typology": "Early English Gothic",
+    "place": "Salisbury, England",
+    "era": "13th century",
+    "emphasis": "Vertical needle",
+    "type": "gothic",
+    "churchName": "Salisbury Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Salisbury Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Salisbury_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Salisbury Cathedral in Salisbury, England; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + spire",
+    "axis": "Longitudinal",
+    "length": 112.8,
+    "span": 32,
+    "height": 42.3,
+    "bayCount": 10,
+    "module": 11.3,
+    "radius": 16,
+    "symmetry": 0.95,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + spire, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "lincoln-cathedral",
+    "index": "37",
+    "name": "Lincoln Cathedral",
+    "shortName": "Lincoln Cathedral",
+    "typology": "Gothic",
+    "place": "Lincoln, England",
+    "era": "11th–14th centuries",
+    "emphasis": "Layered verticality",
+    "type": "gothic",
+    "churchName": "Lincoln Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Lincoln Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lincoln_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Lincoln Cathedral in Lincoln, England; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + twin towers",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 12,
+    "module": 9.8,
+    "radius": 16.7,
+    "symmetry": 0.91,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + twin towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "12 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "kings-college-chapel",
+    "index": "38",
+    "name": "King's College Chapel",
+    "shortName": "King's College Chapel",
+    "typology": "Late Gothic",
+    "place": "Cambridge, England",
+    "era": "15th century",
+    "emphasis": "Fan-vault repetition",
+    "type": "gothic",
+    "churchName": "King's College Chapel",
+    "status": "schematic",
+    "source": "Wikipedia · King's College Chapel",
+    "sourceUrl": "https://en.wikipedia.org/wiki/King%27s_College_Chapel,_Cambridge",
+    "sourceNote": "Real reference building: the linked reference page identifies King's College Chapel in Cambridge, England; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Hall chapel + fan vault",
+    "axis": "Longitudinal",
+    "length": 74.4,
+    "span": 21.1,
+    "height": 27.9,
+    "bayCount": 12,
+    "module": 6.2,
+    "radius": 10.5,
+    "symmetry": 0.98,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as hall chapel + fan vault, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "12 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-vitus-cathedral",
+    "index": "39",
+    "name": "St. Vitus Cathedral",
+    "shortName": "St. Vitus Cathedral",
+    "typology": "Gothic",
+    "place": "Prague, Czechia",
+    "era": "14th–20th centuries",
+    "emphasis": "Royal vertical axis",
+    "type": "gothic",
+    "churchName": "St. Vitus Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St. Vitus Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Vitus_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Vitus Cathedral in Prague, Czechia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + polygonal choir",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 10,
+    "module": 11.8,
+    "radius": 16.7,
+    "symmetry": 0.94,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + polygonal choir, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "aachen-cathedral",
+    "index": "40",
+    "name": "Aachen Cathedral",
+    "shortName": "Aachen Cathedral",
+    "typology": "Carolingian",
+    "place": "Aachen, Germany",
+    "era": "8th–15th centuries",
+    "emphasis": "Octagonal center",
+    "type": "central",
+    "churchName": "Aachen Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Aachen Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Aachen_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Aachen Cathedral in Aachen, Germany; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Octagon + ambulatory",
+    "axis": "Radial",
+    "length": 30.2,
+    "span": 25.9,
+    "height": 21.6,
+    "bayCount": 8,
+    "module": 3.8,
+    "radius": 13,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as octagon + ambulatory, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "st-michael-hildesheim",
+    "index": "41",
+    "name": "St. Michael's Church, Hildesheim",
+    "shortName": "St. Michael's Church, Hildesheim",
+    "typology": "Romanesque",
+    "place": "Hildesheim, Germany",
+    "era": "11th century",
+    "emphasis": "Balanced double axis",
+    "type": "basilica",
+    "churchName": "St. Michael's Church, Hildesheim",
+    "status": "schematic",
+    "source": "Wikipedia · St. Michael's Church, Hildesheim",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Michael%27s_Church,_Hildesheim",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Michael's Church, Hildesheim in Hildesheim, Germany; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Double-choir basilica",
+    "axis": "Longitudinal",
+    "length": 72,
+    "span": 25.6,
+    "height": 22.4,
+    "bayCount": 8,
+    "module": 9,
+    "radius": 12.8,
+    "symmetry": 0.98,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as double-choir basilica, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "8 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "bamberg-cathedral",
+    "index": "42",
+    "name": "Bamberg Cathedral",
+    "shortName": "Bamberg Cathedral",
+    "typology": "Romanesque / Gothic",
+    "place": "Bamberg, Germany",
+    "era": "11th–13th centuries",
+    "emphasis": "Four-tower procession",
+    "type": "basilica",
+    "churchName": "Bamberg Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Bamberg Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Bamberg_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Bamberg Cathedral in Bamberg, Germany; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + four towers",
+    "axis": "Longitudinal",
+    "length": 79.2,
+    "span": 28.2,
+    "height": 24.6,
+    "bayCount": 8,
+    "module": 9.9,
+    "radius": 14.1,
+    "symmetry": 0.94,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + four towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "8 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "st-stephens-vienna",
+    "index": "43",
+    "name": "St. Stephen's Cathedral",
+    "shortName": "St. Stephen's Cathedral",
+    "typology": "Gothic",
+    "place": "Vienna, Austria",
+    "era": "14th–20th centuries",
+    "emphasis": "Roof-line rhythm",
+    "type": "gothic",
+    "churchName": "St. Stephen's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St. Stephen's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Stephen%27s_Cathedral,_Vienna",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Stephen's Cathedral in Vienna, Austria; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + patterned roof",
+    "axis": "Longitudinal",
+    "length": 115.2,
+    "span": 32.6,
+    "height": 43.2,
+    "bayCount": 10,
+    "module": 11.5,
+    "radius": 16.3,
+    "symmetry": 0.92,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + patterned roof, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-nicholas-prague",
+    "index": "44",
+    "name": "St. Nicholas Church, Malá Strana",
+    "shortName": "St. Nicholas Church, Malá Strana",
+    "typology": "Baroque",
+    "place": "Prague, Czechia",
+    "era": "18th century",
+    "emphasis": "Dome and theatrical axis",
+    "type": "baroque",
+    "churchName": "St. Nicholas Church, Malá Strana",
+    "status": "schematic",
+    "source": "Wikipedia · St. Nicholas Church, Malá Strana",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Nicholas_Church_(Mal%C3%A1_Strana)",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Nicholas Church, Malá Strana in Prague, Czechia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Ellipse + dome",
+    "axis": "Compressed axis",
+    "length": 30.8,
+    "span": 19.6,
+    "height": 21,
+    "bayCount": 5,
+    "module": 6.2,
+    "radius": 9.8,
+    "symmetry": 0.9,
+    "surfaceNote": "The ellipse + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as ellipse + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the compressed axis and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "ellipse + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "compressed axis"
+      ],
+      [
+        "enclosure",
+        "curved nave"
+      ]
+    ]
+  },
+  {
+    "id": "our-lady-before-tyn",
+    "index": "45",
+    "name": "Church of Our Lady before Týn",
+    "shortName": "Church of Our Lady before Týn",
+    "typology": "Gothic",
+    "place": "Prague, Czechia",
+    "era": "14th–16th centuries",
+    "emphasis": "Twin-tower façade",
+    "type": "gothic",
+    "churchName": "Church of Our Lady before Týn",
+    "status": "schematic",
+    "source": "Wikipedia · Church of Our Lady before Týn",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Church_of_Our_Lady_before_T%C3%BDn",
+    "sourceNote": "Real reference building: the linked reference page identifies Church of Our Lady before Týn in Prague, Czechia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + twin towers",
+    "axis": "Longitudinal",
+    "length": 93.6,
+    "span": 26.5,
+    "height": 35.1,
+    "bayCount": 7,
+    "module": 13.4,
+    "radius": 13.3,
+    "symmetry": 0.95,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + twin towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "7 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "strasbourg-cathedral",
+    "index": "46",
+    "name": "Strasbourg Cathedral",
+    "shortName": "Strasbourg Cathedral",
+    "typology": "Gothic",
+    "place": "Strasbourg, France",
+    "era": "13th–15th centuries",
+    "emphasis": "Single-spire verticality",
+    "type": "gothic",
+    "churchName": "Strasbourg Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Strasbourg Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Strasbourg_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Strasbourg Cathedral in Strasbourg, France; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + openwork spire",
+    "axis": "Longitudinal",
+    "length": 120,
+    "span": 34,
+    "height": 45,
+    "bayCount": 9,
+    "module": 13.3,
+    "radius": 17,
+    "symmetry": 0.9,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + openwork spire, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "amiens-cathedral",
+    "index": "47",
+    "name": "Amiens Cathedral",
+    "shortName": "Amiens Cathedral",
+    "typology": "Gothic",
+    "place": "Amiens, France",
+    "era": "13th century",
+    "emphasis": "High nave proportion",
+    "type": "gothic",
+    "churchName": "Amiens Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Amiens Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Amiens_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Amiens Cathedral in Amiens, France; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + radiating chapels",
+    "axis": "Longitudinal",
+    "length": 122.4,
+    "span": 34.7,
+    "height": 45.9,
+    "bayCount": 10,
+    "module": 12.2,
+    "radius": 17.3,
+    "symmetry": 0.97,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + radiating chapels, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "bourges-cathedral",
+    "index": "48",
+    "name": "Bourges Cathedral",
+    "shortName": "Bourges Cathedral",
+    "typology": "Gothic",
+    "place": "Bourges, France",
+    "era": "12th–13th centuries",
+    "emphasis": "Five-aisle layering",
+    "type": "gothic",
+    "churchName": "Bourges Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Bourges Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Bourges_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Bourges Cathedral in Bourges, France; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + five naves",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 9,
+    "module": 13.1,
+    "radius": 16.7,
+    "symmetry": 0.96,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + five naves, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "sacre-coeur-paris",
+    "index": "49",
+    "name": "Sacré-Cœur",
+    "shortName": "Sacré-Cœur",
+    "typology": "Romanesque-Byzantine",
+    "place": "Paris, France",
+    "era": "19th century",
+    "emphasis": "White domed mass",
+    "type": "central",
+    "churchName": "Sacré-Cœur",
+    "status": "schematic",
+    "source": "Wikipedia · Sacré-Cœur",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Sacr%C3%A9-C%C5%93ur,_Paris",
+    "sourceNote": "Real reference building: the linked reference page identifies Sacré-Cœur in Paris, France; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Greek cross + domes",
+    "axis": "Radial",
+    "length": 35.3,
+    "span": 30.2,
+    "height": 25.2,
+    "bayCount": 5,
+    "module": 7.1,
+    "radius": 15.1,
+    "symmetry": 0.96,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as greek cross + domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "sainte-chapelle",
+    "index": "50",
+    "name": "Sainte-Chapelle",
+    "shortName": "Sainte-Chapelle",
+    "typology": "Rayonnant Gothic",
+    "place": "Paris, France",
+    "era": "13th century",
+    "emphasis": "Stained-glass enclosure",
+    "type": "gothic",
+    "churchName": "Sainte-Chapelle",
+    "status": "schematic",
+    "source": "Wikipedia · Sainte-Chapelle",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Sainte-Chapelle",
+    "sourceNote": "Real reference building: the linked reference page identifies Sainte-Chapelle in Paris, France; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Two-level chapel + polygonal apse",
+    "axis": "Longitudinal",
+    "length": 60,
+    "span": 17,
+    "height": 22.5,
+    "bayCount": 7,
+    "module": 8.6,
+    "radius": 8.5,
+    "symmetry": 0.97,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as two-level chapel + polygonal apse, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "7 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "seville-cathedral",
+    "index": "51",
+    "name": "Seville Cathedral",
+    "shortName": "Seville Cathedral",
+    "typology": "Gothic",
+    "place": "Seville, Spain",
+    "era": "15th–16th centuries",
+    "emphasis": "Monumental hall",
+    "type": "gothic",
+    "churchName": "Seville Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Seville Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Seville_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Seville Cathedral in Seville, Spain; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Five-aisle basilica + tower",
+    "axis": "Longitudinal",
+    "length": 136.8,
+    "span": 38.8,
+    "height": 51.3,
+    "bayCount": 10,
+    "module": 13.7,
+    "radius": 19.4,
+    "symmetry": 0.91,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as five-aisle basilica + tower, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "burgos-cathedral",
+    "index": "52",
+    "name": "Burgos Cathedral",
+    "shortName": "Burgos Cathedral",
+    "typology": "Gothic",
+    "place": "Burgos, Spain",
+    "era": "13th–16th centuries",
+    "emphasis": "Spired pilgrimage axis",
+    "type": "gothic",
+    "churchName": "Burgos Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Burgos Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Burgos_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Burgos Cathedral in Burgos, Spain; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + openwork spires",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 9,
+    "module": 13.1,
+    "radius": 16.7,
+    "symmetry": 0.94,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + openwork spires, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "leon-cathedral",
+    "index": "53",
+    "name": "León Cathedral",
+    "shortName": "León Cathedral",
+    "typology": "Gothic",
+    "place": "León, Spain",
+    "era": "13th century",
+    "emphasis": "Luminous wall",
+    "type": "gothic",
+    "churchName": "León Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · León Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Le%C3%B3n_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies León Cathedral in León, Spain; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + stained-glass walls",
+    "axis": "Longitudinal",
+    "length": 100.8,
+    "span": 28.6,
+    "height": 37.8,
+    "bayCount": 8,
+    "module": 12.6,
+    "radius": 14.3,
+    "symmetry": 0.95,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + stained-glass walls, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "8 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "cordoba-cathedral",
+    "index": "54",
+    "name": "Cathedral of Córdoba",
+    "shortName": "Cathedral of Córdoba",
+    "typology": "Layered basilica",
+    "place": "Córdoba, Spain",
+    "era": "8th–16th centuries",
+    "emphasis": "Hypostyle repetition",
+    "type": "central",
+    "churchName": "Cathedral of Córdoba",
+    "status": "schematic",
+    "source": "Wikipedia · Cathedral of Córdoba",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Mosque%E2%80%93Cathedral_of_C%C3%B3rdoba",
+    "sourceNote": "Real reference building: the linked reference page identifies Cathedral of Córdoba in Córdoba, Spain; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Courtyard + hypostyle hall + cathedral core",
+    "axis": "Grid field",
+    "length": 42,
+    "span": 36,
+    "height": 30,
+    "bayCount": 19,
+    "module": 2.2,
+    "radius": 18,
+    "symmetry": 0.8,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as courtyard + hypostyle hall + cathedral core, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the grid field and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "19 radial bays"
+      ],
+      [
+        "dominant axis",
+        "grid field"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "sagrada-familia",
+    "index": "55",
+    "name": "Basílica de la Sagrada Família",
+    "shortName": "Basílica de la Sagrada Família",
+    "typology": "Modernist",
+    "place": "Barcelona, Spain",
+    "era": "19th–21st centuries",
+    "emphasis": "Tree-like vertical growth",
+    "type": "modern",
+    "churchName": "Basílica de la Sagrada Família",
+    "status": "schematic",
+    "source": "Wikipedia · Basílica de la Sagrada Família",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Sagrada_Fam%C3%ADlia",
+    "sourceNote": "Real reference building: the linked reference page identifies Basílica de la Sagrada Família in Barcelona, Spain; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + branching towers",
+    "axis": "Offset axis",
+    "length": 57.5,
+    "span": 36.8,
+    "height": 41.4,
+    "bayCount": 12,
+    "module": 4.8,
+    "radius": 18.4,
+    "symmetry": 0.86,
+    "surfaceNote": "The folded shell reading uses the real building as a visual anchor; structural frames turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + branching towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the offset axis and structural frames; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "folded shell"
+      ],
+      [
+        "structural rhythm",
+        "12 structural frames"
+      ],
+      [
+        "dominant axis",
+        "offset axis"
+      ],
+      [
+        "enclosure",
+        "expressive shell"
+      ]
+    ]
+  },
+  {
+    "id": "nidaros-cathedral",
+    "index": "56",
+    "name": "Nidaros Cathedral",
+    "shortName": "Nidaros Cathedral",
+    "typology": "Gothic",
+    "place": "Trondheim, Norway",
+    "era": "11th–14th centuries",
+    "emphasis": "Northern pilgrimage axis",
+    "type": "gothic",
+    "churchName": "Nidaros Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Nidaros Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Nidaros_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Nidaros Cathedral in Trondheim, Norway; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + sculpted façade",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 9,
+    "module": 13.1,
+    "radius": 16.7,
+    "symmetry": 0.92,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + sculpted façade, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "hallgrimskirkja",
+    "index": "57",
+    "name": "Hallgrímskirkja",
+    "shortName": "Hallgrímskirkja",
+    "typology": "Expressionist",
+    "place": "Reykjavík, Iceland",
+    "era": "20th century",
+    "emphasis": "Basalt verticality",
+    "type": "modern",
+    "churchName": "Hallgrímskirkja",
+    "status": "schematic",
+    "source": "Wikipedia · Hallgrímskirkja",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Hallgr%C3%ADmskirkja",
+    "sourceNote": "Real reference building: the linked reference page identifies Hallgrímskirkja in Reykjavík, Iceland; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Stepped concrete nave + tower",
+    "axis": "Offset axis",
+    "length": 42,
+    "span": 26.9,
+    "height": 30.2,
+    "bayCount": 8,
+    "module": 5.3,
+    "radius": 13.4,
+    "symmetry": 0.95,
+    "surfaceNote": "The folded shell reading uses the real building as a visual anchor; structural frames turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as stepped concrete nave + tower, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the offset axis and structural frames; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "folded shell"
+      ],
+      [
+        "structural rhythm",
+        "8 structural frames"
+      ],
+      [
+        "dominant axis",
+        "offset axis"
+      ],
+      [
+        "enclosure",
+        "expressive shell"
+      ]
+    ]
+  },
+  {
+    "id": "alexander-nevsky-sofia",
+    "index": "58",
+    "name": "Alexander Nevsky Cathedral",
+    "shortName": "Alexander Nevsky Cathedral",
+    "typology": "Neo-Byzantine",
+    "place": "Sofia, Bulgaria",
+    "era": "20th century",
+    "emphasis": "Domed national monument",
+    "type": "central",
+    "churchName": "Alexander Nevsky Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Alexander Nevsky Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Alexander_Nevsky_Cathedral,_Sofia",
+    "sourceNote": "Real reference building: the linked reference page identifies Alexander Nevsky Cathedral in Sofia, Bulgaria; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + multiple domes",
+    "axis": "Radial",
+    "length": 42,
+    "span": 36,
+    "height": 30,
+    "bayCount": 9,
+    "module": 4.7,
+    "radius": 18,
+    "symmetry": 0.96,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + multiple domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "9 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "saint-sava-belgrade",
+    "index": "59",
+    "name": "Church of Saint Sava",
+    "shortName": "Church of Saint Sava",
+    "typology": "Serbo-Byzantine",
+    "place": "Belgrade, Serbia",
+    "era": "20th–21st centuries",
+    "emphasis": "Central dome and crypt",
+    "type": "central",
+    "churchName": "Church of Saint Sava",
+    "status": "schematic",
+    "source": "Wikipedia · Church of Saint Sava",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Church_of_Saint_Sava",
+    "sourceNote": "Real reference building: the linked reference page identifies Church of Saint Sava in Belgrade, Serbia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Greek cross + dome",
+    "axis": "Radial",
+    "length": 45.4,
+    "span": 38.9,
+    "height": 32.4,
+    "bayCount": 8,
+    "module": 5.7,
+    "radius": 19.4,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as greek cross + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "rotunda-st-george-sofia",
+    "index": "60",
+    "name": "Rotunda of St. George",
+    "shortName": "Rotunda of St. George",
+    "typology": "Late Antique",
+    "place": "Sofia, Bulgaria",
+    "era": "4th century",
+    "emphasis": "Cylindrical center",
+    "type": "central",
+    "churchName": "Rotunda of St. George",
+    "status": "schematic",
+    "source": "Wikipedia · Rotunda of St. George",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Rotunda_of_St._George,_Sofia",
+    "sourceNote": "Real reference building: the linked reference page identifies Rotunda of St. George in Sofia, Bulgaria; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cylinder + dome",
+    "axis": "Radial",
+    "length": 20.2,
+    "span": 17.3,
+    "height": 14.4,
+    "bayCount": 4,
+    "module": 5,
+    "radius": 8.6,
+    "symmetry": 1,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cylinder + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "4 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "etchmiadzin-cathedral",
+    "index": "61",
+    "name": "Etchmiadzin Cathedral",
+    "shortName": "Etchmiadzin Cathedral",
+    "typology": "Armenian Christian",
+    "place": "Vagharshapat, Armenia",
+    "era": "4th–7th centuries",
+    "emphasis": "Centralized cross",
+    "type": "central",
+    "churchName": "Etchmiadzin Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Etchmiadzin Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Etchmiadzin_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Etchmiadzin Cathedral in Vagharshapat, Armenia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross-in-square + conical dome",
+    "axis": "Radial",
+    "length": 31.9,
+    "span": 27.4,
+    "height": 22.8,
+    "bayCount": 4,
+    "module": 8,
+    "radius": 13.7,
+    "symmetry": 0.97,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross-in-square + conical dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "4 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "svetitskhoveli-cathedral",
+    "index": "62",
+    "name": "Svetitskhoveli Cathedral",
+    "shortName": "Svetitskhoveli Cathedral",
+    "typology": "Georgian Orthodox",
+    "place": "Mtskheta, Georgia",
+    "era": "11th century",
+    "emphasis": "Cross and vertical crown",
+    "type": "basilica",
+    "churchName": "Svetitskhoveli Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Svetitskhoveli Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Svetitskhoveli_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Svetitskhoveli Cathedral in Mtskheta, Georgia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + drum dome",
+    "axis": "Longitudinal",
+    "length": 73.8,
+    "span": 26.2,
+    "height": 23,
+    "bayCount": 6,
+    "module": 12.3,
+    "radius": 13.1,
+    "symmetry": 0.94,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + drum dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "6 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "holy-trinity-tbilisi",
+    "index": "63",
+    "name": "Holy Trinity Cathedral of Tbilisi",
+    "shortName": "Holy Trinity Cathedral of Tbilisi",
+    "typology": "Georgian Orthodox",
+    "place": "Tbilisi, Georgia",
+    "era": "21st century",
+    "emphasis": "Monumental central crown",
+    "type": "central",
+    "churchName": "Holy Trinity Cathedral of Tbilisi",
+    "status": "schematic",
+    "source": "Wikipedia · Holy Trinity Cathedral of Tbilisi",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Holy_Trinity_Cathedral_of_Tbilisi",
+    "sourceNote": "Real reference building: the linked reference page identifies Holy Trinity Cathedral of Tbilisi in Tbilisi, Georgia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + stepped dome",
+    "axis": "Radial",
+    "length": 42,
+    "span": 36,
+    "height": 30,
+    "bayCount": 7,
+    "module": 6,
+    "radius": 18,
+    "symmetry": 0.97,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + stepped dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "7 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "saint-basils-cathedral",
+    "index": "64",
+    "name": "Saint Basil's Cathedral",
+    "shortName": "Saint Basil's Cathedral",
+    "typology": "Russian Orthodox",
+    "place": "Moscow, Russia",
+    "era": "16th century",
+    "emphasis": "Clustered radial chapels",
+    "type": "central",
+    "churchName": "Saint Basil's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Saint Basil's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Saint_Basil%27s_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Saint Basil's Cathedral in Moscow, Russia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Central tower + nine chapels",
+    "axis": "Radial",
+    "length": 37,
+    "span": 31.7,
+    "height": 26.4,
+    "bayCount": 9,
+    "module": 4.1,
+    "radius": 15.8,
+    "symmetry": 0.78,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as central tower + nine chapels, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "9 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "savior-on-blood",
+    "index": "65",
+    "name": "Church of the Savior on Blood",
+    "shortName": "Church of the Savior on Blood",
+    "typology": "Russian Revival",
+    "place": "St. Petersburg, Russia",
+    "era": "19th century",
+    "emphasis": "Mosaic-centered enclosure",
+    "type": "central",
+    "churchName": "Church of the Savior on Blood",
+    "status": "schematic",
+    "source": "Wikipedia · Church of the Savior on Blood",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Church_of_the_Savior_on_Blood",
+    "sourceNote": "Real reference building: the linked reference page identifies Church of the Savior on Blood in St. Petersburg, Russia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + clustered domes",
+    "axis": "Radial",
+    "length": 36.1,
+    "span": 31,
+    "height": 25.8,
+    "bayCount": 5,
+    "module": 7.2,
+    "radius": 15.5,
+    "symmetry": 0.9,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + clustered domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "saint-isaacs-cathedral",
+    "index": "66",
+    "name": "Saint Isaac's Cathedral",
+    "shortName": "Saint Isaac's Cathedral",
+    "typology": "Neoclassical",
+    "place": "St. Petersburg, Russia",
+    "era": "19th century",
+    "emphasis": "Classical dome field",
+    "type": "central",
+    "churchName": "Saint Isaac's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Saint Isaac's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Saint_Isaac%27s_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Saint Isaac's Cathedral in St. Petersburg, Russia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Greek cross + dome",
+    "axis": "Radial",
+    "length": 42,
+    "span": 36,
+    "height": 30,
+    "bayCount": 8,
+    "module": 5.3,
+    "radius": 18,
+    "symmetry": 0.99,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as greek cross + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "christ-the-saviour-moscow",
+    "index": "67",
+    "name": "Cathedral of Christ the Saviour",
+    "shortName": "Cathedral of Christ the Saviour",
+    "typology": "Russian Revival",
+    "place": "Moscow, Russia",
+    "era": "19th–20th centuries",
+    "emphasis": "Axial dome monument",
+    "type": "central",
+    "churchName": "Cathedral of Christ the Saviour",
+    "status": "schematic",
+    "source": "Wikipedia · Cathedral of Christ the Saviour",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Cathedral_of_Christ_the_Saviour",
+    "sourceNote": "Real reference building: the linked reference page identifies Cathedral of Christ the Saviour in Moscow, Russia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + dome",
+    "axis": "Radial",
+    "length": 42.8,
+    "span": 36.7,
+    "height": 30.6,
+    "bayCount": 5,
+    "module": 8.6,
+    "radius": 18.4,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "dormition-cathedral-moscow",
+    "index": "68",
+    "name": "Dormition Cathedral",
+    "shortName": "Dormition Cathedral",
+    "typology": "Russian Orthodox",
+    "place": "Moscow, Russia",
+    "era": "15th century",
+    "emphasis": "Five-dome hierarchy",
+    "type": "central",
+    "churchName": "Dormition Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Dormition Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Dormition_Cathedral,_Moscow",
+    "sourceNote": "Real reference building: the linked reference page identifies Dormition Cathedral in Moscow, Russia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + five domes",
+    "axis": "Radial",
+    "length": 30.2,
+    "span": 25.9,
+    "height": 21.6,
+    "bayCount": 5,
+    "module": 6,
+    "radius": 13,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + five domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "5 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "se-cathedral-goa",
+    "index": "69",
+    "name": "Sé Cathedral",
+    "shortName": "Sé Cathedral",
+    "typology": "Portuguese Colonial",
+    "place": "Old Goa, India",
+    "era": "16th century",
+    "emphasis": "Colonial procession",
+    "type": "basilica",
+    "churchName": "Sé Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Sé Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Se_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Sé Cathedral in Old Goa, India; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + Latin cross",
+    "axis": "Longitudinal",
+    "length": 82.8,
+    "span": 29.4,
+    "height": 25.8,
+    "bayCount": 8,
+    "module": 10.3,
+    "radius": 14.7,
+    "symmetry": 0.93,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + latin cross, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "8 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "bom-jesus-goa",
+    "index": "70",
+    "name": "Basilica of Bom Jesus",
+    "shortName": "Basilica of Bom Jesus",
+    "typology": "Baroque",
+    "place": "Old Goa, India",
+    "era": "16th century",
+    "emphasis": "Relic-centered axis",
+    "type": "basilica",
+    "churchName": "Basilica of Bom Jesus",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of Bom Jesus",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Bom_Jesus",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of Bom Jesus in Old Goa, India; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + baroque façade",
+    "axis": "Longitudinal",
+    "length": 61.2,
+    "span": 21.8,
+    "height": 19,
+    "bayCount": 6,
+    "module": 10.2,
+    "radius": 10.9,
+    "symmetry": 0.94,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + baroque façade, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "6 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "santo-nino-cebu",
+    "index": "71",
+    "name": "Basilica Minore del Santo Niño",
+    "shortName": "Basilica Minore del Santo Niño",
+    "typology": "Colonial / Modern",
+    "place": "Cebu City, Philippines",
+    "era": "16th–20th centuries",
+    "emphasis": "Layered pilgrimage axis",
+    "type": "basilica",
+    "churchName": "Basilica Minore del Santo Niño",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica Minore del Santo Niño",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_Minore_del_Santo_Ni%C3%B1o",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica Minore del Santo Niño in Cebu City, Philippines; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + courtyard",
+    "axis": "Longitudinal",
+    "length": 66.6,
+    "span": 23.7,
+    "height": 20.7,
+    "bayCount": 7,
+    "module": 9.5,
+    "radius": 11.8,
+    "symmetry": 0.9,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + courtyard, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "7 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "san-agustin-manila",
+    "index": "72",
+    "name": "San Agustin Church",
+    "shortName": "San Agustin Church",
+    "typology": "Spanish Colonial",
+    "place": "Manila, Philippines",
+    "era": "16th century",
+    "emphasis": "Thick-walled procession",
+    "type": "basilica",
+    "churchName": "San Agustin Church",
+    "status": "schematic",
+    "source": "Wikipedia · San Agustin Church",
+    "sourceUrl": "https://en.wikipedia.org/wiki/San_Agustin_Church_(Manila)",
+    "sourceNote": "Real reference building: the linked reference page identifies San Agustin Church in Manila, Philippines; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + buttressed shell",
+    "axis": "Longitudinal",
+    "length": 64.8,
+    "span": 23,
+    "height": 20.2,
+    "bayCount": 7,
+    "module": 9.3,
+    "radius": 11.5,
+    "symmetry": 0.92,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + buttressed shell, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "7 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "miagao-church",
+    "index": "73",
+    "name": "Miagao Church",
+    "shortName": "Miagao Church",
+    "typology": "Baroque",
+    "place": "Miagao, Philippines",
+    "era": "18th century",
+    "emphasis": "Fortified façade",
+    "type": "basilica",
+    "churchName": "Miagao Church",
+    "status": "schematic",
+    "source": "Wikipedia · Miagao Church",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Miagao_Church",
+    "sourceNote": "Real reference building: the linked reference page identifies Miagao Church in Miagao, Philippines; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + fortress towers",
+    "axis": "Longitudinal",
+    "length": 52.2,
+    "span": 18.6,
+    "height": 16.2,
+    "bayCount": 5,
+    "module": 10.4,
+    "radius": 9.3,
+    "symmetry": 0.9,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + fortress towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "5 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "paoay-church",
+    "index": "74",
+    "name": "Paoay Church",
+    "shortName": "Paoay Church",
+    "typology": "Earthquake Baroque",
+    "place": "Paoay, Philippines",
+    "era": "18th century",
+    "emphasis": "Buttress repetition",
+    "type": "basilica",
+    "churchName": "Paoay Church",
+    "status": "schematic",
+    "source": "Wikipedia · Paoay Church",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Paoay_Church",
+    "sourceNote": "Real reference building: the linked reference page identifies Paoay Church in Paoay, Philippines; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + massive buttresses",
+    "axis": "Longitudinal",
+    "length": 55.8,
+    "span": 19.8,
+    "height": 17.4,
+    "bayCount": 6,
+    "module": 9.3,
+    "radius": 9.9,
+    "symmetry": 0.88,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + massive buttresses, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "6 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "manila-cathedral",
+    "index": "75",
+    "name": "Manila Cathedral",
+    "shortName": "Manila Cathedral",
+    "typology": "Modern Romanesque",
+    "place": "Manila, Philippines",
+    "era": "16th–20th centuries",
+    "emphasis": "Rebuilt civic axis",
+    "type": "basilica",
+    "churchName": "Manila Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Manila Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Manila_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Manila Cathedral in Manila, Philippines; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + dome crossing",
+    "axis": "Longitudinal",
+    "length": 77.4,
+    "span": 27.5,
+    "height": 24.1,
+    "bayCount": 7,
+    "module": 11.1,
+    "radius": 13.8,
+    "symmetry": 0.94,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + dome crossing, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "7 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "st-andrews-singapore",
+    "index": "76",
+    "name": "St Andrew's Cathedral",
+    "shortName": "St Andrew's Cathedral",
+    "typology": "Gothic Revival",
+    "place": "Singapore",
+    "era": "19th century",
+    "emphasis": "White Gothic axis",
+    "type": "gothic",
+    "churchName": "St Andrew's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St Andrew's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St_Andrew%27s_Cathedral,_Singapore",
+    "sourceNote": "Real reference building: the linked reference page identifies St Andrew's Cathedral in Singapore; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + spire",
+    "axis": "Longitudinal",
+    "length": 86.4,
+    "span": 24.5,
+    "height": 32.4,
+    "bayCount": 7,
+    "module": 12.3,
+    "radius": 12.2,
+    "symmetry": 0.94,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + spire, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "7 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-marys-cathedral-tokyo",
+    "index": "77",
+    "name": "St. Mary's Cathedral",
+    "shortName": "St. Mary's Cathedral",
+    "typology": "Modern",
+    "place": "Tokyo, Japan",
+    "era": "20th century",
+    "emphasis": "Folded light shell",
+    "type": "modern",
+    "churchName": "St. Mary's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St. Mary's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Mary%27s_Cathedral,_Tokyo",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Mary's Cathedral in Tokyo, Japan; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Crossed concrete shells",
+    "axis": "Offset axis",
+    "length": 41,
+    "span": 26.2,
+    "height": 29.5,
+    "bayCount": 8,
+    "module": 5.1,
+    "radius": 13.1,
+    "symmetry": 0.82,
+    "surfaceNote": "The folded shell reading uses the real building as a visual anchor; structural frames turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as crossed concrete shells, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the offset axis and structural frames; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "folded shell"
+      ],
+      [
+        "structural rhythm",
+        "8 structural frames"
+      ],
+      [
+        "dominant axis",
+        "offset axis"
+      ],
+      [
+        "enclosure",
+        "expressive shell"
+      ]
+    ]
+  },
+  {
+    "id": "oura-church",
+    "index": "78",
+    "name": "Ōura Church",
+    "shortName": "Ōura Church",
+    "typology": "Gothic Revival",
+    "place": "Nagasaki, Japan",
+    "era": "19th century",
+    "emphasis": "Hidden-faith axis",
+    "type": "gothic",
+    "churchName": "Ōura Church",
+    "status": "schematic",
+    "source": "Wikipedia · Ōura Church",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Oura_Church",
+    "sourceNote": "Real reference building: the linked reference page identifies Ōura Church in Nagasaki, Japan; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + Gothic façade",
+    "axis": "Longitudinal",
+    "length": 69.6,
+    "span": 19.7,
+    "height": 26.1,
+    "bayCount": 5,
+    "module": 13.9,
+    "radius": 9.9,
+    "symmetry": 0.93,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + gothic façade, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "5 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-josephs-cathedral-hanoi",
+    "index": "79",
+    "name": "St. Joseph's Cathedral",
+    "shortName": "St. Joseph's Cathedral",
+    "typology": "Gothic Revival",
+    "place": "Hanoi, Vietnam",
+    "era": "19th century",
+    "emphasis": "Twin-tower axis",
+    "type": "gothic",
+    "churchName": "St. Joseph's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St. Joseph's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Joseph%27s_Cathedral,_Hanoi",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Joseph's Cathedral in Hanoi, Vietnam; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + twin towers",
+    "axis": "Longitudinal",
+    "length": 91.2,
+    "span": 25.8,
+    "height": 34.2,
+    "bayCount": 7,
+    "module": 13,
+    "radius": 12.9,
+    "symmetry": 0.92,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + twin towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "7 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "holy-trinity-addis",
+    "index": "80",
+    "name": "Holy Trinity Cathedral",
+    "shortName": "Holy Trinity Cathedral",
+    "typology": "Ethiopian Modern",
+    "place": "Addis Ababa, Ethiopia",
+    "era": "20th century",
+    "emphasis": "Crowned processional core",
+    "type": "central",
+    "churchName": "Holy Trinity Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Holy Trinity Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Holy_Trinity_Cathedral,_Addis_Ababa",
+    "sourceNote": "Real reference building: the linked reference page identifies Holy Trinity Cathedral in Addis Ababa, Ethiopia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + dome",
+    "axis": "Radial",
+    "length": 37.8,
+    "span": 32.4,
+    "height": 27,
+    "bayCount": 6,
+    "module": 6.3,
+    "radius": 16.2,
+    "symmetry": 0.92,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "6 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "st-georges-addis",
+    "index": "81",
+    "name": "St. George's Cathedral",
+    "shortName": "St. George's Cathedral",
+    "typology": "Ethiopian Orthodox",
+    "place": "Addis Ababa, Ethiopia",
+    "era": "20th century",
+    "emphasis": "Octagonal enclosure",
+    "type": "central",
+    "churchName": "St. George's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St. George's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._George%27s_Cathedral,_Addis_Ababa",
+    "sourceNote": "Real reference building: the linked reference page identifies St. George's Cathedral in Addis Ababa, Ethiopia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Octagon + dome",
+    "axis": "Radial",
+    "length": 26.9,
+    "span": 23,
+    "height": 19.2,
+    "bayCount": 8,
+    "module": 3.4,
+    "radius": 11.5,
+    "symmetry": 0.96,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as octagon + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "biete-ghiorgis",
+    "index": "82",
+    "name": "Biete Ghiorgis",
+    "shortName": "Biete Ghiorgis",
+    "typology": "Rock-hewn church",
+    "place": "Lalibela, Ethiopia",
+    "era": "12th–13th centuries",
+    "emphasis": "Carved cross plan",
+    "type": "central",
+    "churchName": "Biete Ghiorgis",
+    "status": "schematic",
+    "source": "Wikipedia · Biete Ghiorgis",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Church_of_Saint_George,_Lalibela",
+    "sourceNote": "Real reference building: the linked reference page identifies Biete Ghiorgis in Lalibela, Ethiopia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cruciform negative space",
+    "axis": "Radial",
+    "length": 20.2,
+    "span": 17.3,
+    "height": 14.4,
+    "bayCount": 4,
+    "module": 5,
+    "radius": 8.6,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cruciform negative space, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "4 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "our-lady-of-peace",
+    "index": "83",
+    "name": "Basilica of Our Lady of Peace",
+    "shortName": "Basilica of Our Lady of Peace",
+    "typology": "Modern",
+    "place": "Yamoussoukro, Côte d'Ivoire",
+    "era": "20th century",
+    "emphasis": "Colonnaded radial crown",
+    "type": "central",
+    "churchName": "Basilica of Our Lady of Peace",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of Our Lady of Peace",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Our_Lady_of_Peace",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of Our Lady of Peace in Yamoussoukro, Côte d'Ivoire; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Ellipse + dome + colonnade",
+    "axis": "Radial",
+    "length": 52.5,
+    "span": 45,
+    "height": 37.5,
+    "bayCount": 16,
+    "module": 3.3,
+    "radius": 22.5,
+    "symmetry": 0.98,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as ellipse + dome + colonnade, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "16 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "our-lady-of-africa",
+    "index": "84",
+    "name": "Basilica of Our Lady of Africa",
+    "shortName": "Basilica of Our Lady of Africa",
+    "typology": "Byzantine Revival",
+    "place": "Algiers, Algeria",
+    "era": "19th century",
+    "emphasis": "Dome over sea-facing axis",
+    "type": "central",
+    "churchName": "Basilica of Our Lady of Africa",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of Our Lady of Africa",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Our_Lady_of_Africa",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of Our Lady of Africa in Algiers, Algeria; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + dome",
+    "axis": "Radial",
+    "length": 32.8,
+    "span": 28.1,
+    "height": 23.4,
+    "bayCount": 8,
+    "module": 4.1,
+    "radius": 14,
+    "symmetry": 0.94,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "8 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "st-georges-cape-town",
+    "index": "85",
+    "name": "St George's Cathedral",
+    "shortName": "St George's Cathedral",
+    "typology": "Gothic Revival",
+    "place": "Cape Town, South Africa",
+    "era": "19th–20th centuries",
+    "emphasis": "Civic Gothic axis",
+    "type": "gothic",
+    "churchName": "St George's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St George's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St_George%27s_Cathedral,_Cape_Town",
+    "sourceNote": "Real reference building: the linked reference page identifies St George's Cathedral in Cape Town, South Africa; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + pointed vault",
+    "axis": "Longitudinal",
+    "length": 98.4,
+    "span": 27.9,
+    "height": 36.9,
+    "bayCount": 8,
+    "module": 12.3,
+    "radius": 13.9,
+    "symmetry": 0.93,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + pointed vault, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "8 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-patricks-manhattan",
+    "index": "86",
+    "name": "St. Patrick's Cathedral",
+    "shortName": "St. Patrick's Cathedral",
+    "typology": "Gothic Revival",
+    "place": "New York City, USA",
+    "era": "19th century",
+    "emphasis": "Urban vertical axis",
+    "type": "gothic",
+    "churchName": "St. Patrick's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St. Patrick's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St._Patrick%27s_Cathedral_(Manhattan)",
+    "sourceNote": "Real reference building: the linked reference page identifies St. Patrick's Cathedral in New York City, USA; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + twin spires",
+    "axis": "Longitudinal",
+    "length": 110.4,
+    "span": 31.3,
+    "height": 41.4,
+    "bayCount": 9,
+    "module": 12.3,
+    "radius": 15.6,
+    "symmetry": 0.96,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + twin spires, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-john-divine",
+    "index": "87",
+    "name": "Cathedral of St. John the Divine",
+    "shortName": "Cathedral of St. John the Divine",
+    "typology": "Gothic Revival",
+    "place": "New York City, USA",
+    "era": "19th–20th centuries",
+    "emphasis": "Incomplete monumental axis",
+    "type": "gothic",
+    "churchName": "Cathedral of St. John the Divine",
+    "status": "schematic",
+    "source": "Wikipedia · Cathedral of St. John the Divine",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Cathedral_of_St._John_the_Divine",
+    "sourceNote": "Real reference building: the linked reference page identifies Cathedral of St. John the Divine in New York City, USA; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + unfinished towers",
+    "axis": "Longitudinal",
+    "length": 129.6,
+    "span": 36.7,
+    "height": 48.6,
+    "bayCount": 10,
+    "module": 13,
+    "radius": 18.4,
+    "symmetry": 0.9,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + unfinished towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "10 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "washington-national-cathedral",
+    "index": "88",
+    "name": "Washington National Cathedral",
+    "shortName": "Washington National Cathedral",
+    "typology": "Gothic Revival",
+    "place": "Washington, D.C., USA",
+    "era": "20th century",
+    "emphasis": "Civic processional axis",
+    "type": "gothic",
+    "churchName": "Washington National Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Washington National Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Washington_National_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Washington National Cathedral in Washington, D.C., USA; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + flying buttresses",
+    "axis": "Longitudinal",
+    "length": 124.8,
+    "span": 35.4,
+    "height": 46.8,
+    "bayCount": 9,
+    "module": 13.9,
+    "radius": 17.7,
+    "symmetry": 0.95,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + flying buttresses, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "immaculate-conception-basilica",
+    "index": "89",
+    "name": "Basilica of the National Shrine of the Immaculate Conception",
+    "shortName": "Basilica of the National Shrine of the Immaculate Conception",
+    "typology": "Romanesque-Byzantine",
+    "place": "Washington, D.C., USA",
+    "era": "20th century",
+    "emphasis": "Mosaic and dome field",
+    "type": "central",
+    "churchName": "Basilica of the National Shrine of the Immaculate Conception",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of the National Shrine of the Immaculate Conception",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_the_National_Shrine_of_the_Immaculate_Conception",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of the National Shrine of the Immaculate Conception in Washington, D.C., USA; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + multiple domes",
+    "axis": "Radial",
+    "length": 42.8,
+    "span": 36.7,
+    "height": 30.6,
+    "bayCount": 12,
+    "module": 3.6,
+    "radius": 18.4,
+    "symmetry": 0.97,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + multiple domes, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "12 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "guadalupe-basilica",
+    "index": "90",
+    "name": "Basilica of Our Lady of Guadalupe",
+    "shortName": "Basilica of Our Lady of Guadalupe",
+    "typology": "Modern",
+    "place": "Mexico City, Mexico",
+    "era": "20th century",
+    "emphasis": "Circular pilgrimage field",
+    "type": "modern",
+    "churchName": "Basilica of Our Lady of Guadalupe",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of Our Lady of Guadalupe",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Our_Lady_of_Guadalupe",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of Our Lady of Guadalupe in Mexico City, Mexico; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Ellipse + tent roof",
+    "axis": "Offset axis",
+    "length": 50,
+    "span": 32,
+    "height": 36,
+    "bayCount": 12,
+    "module": 4.2,
+    "radius": 16,
+    "symmetry": 0.96,
+    "surfaceNote": "The folded shell reading uses the real building as a visual anchor; structural frames turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as ellipse + tent roof, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the offset axis and structural frames; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "folded shell"
+      ],
+      [
+        "structural rhythm",
+        "12 structural frames"
+      ],
+      [
+        "dominant axis",
+        "offset axis"
+      ],
+      [
+        "enclosure",
+        "expressive shell"
+      ]
+    ]
+  },
+  {
+    "id": "mexico-city-cathedral",
+    "index": "91",
+    "name": "Mexico City Metropolitan Cathedral",
+    "shortName": "Mexico City Metropolitan Cathedral",
+    "typology": "Baroque / Neoclassical",
+    "place": "Mexico City, Mexico",
+    "era": "16th–19th centuries",
+    "emphasis": "Layered colonial axis",
+    "type": "basilica",
+    "churchName": "Mexico City Metropolitan Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Mexico City Metropolitan Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Mexico_City_Metropolitan_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Mexico City Metropolitan Cathedral in Mexico City, Mexico; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + towers + dome",
+    "axis": "Longitudinal",
+    "length": 99,
+    "span": 35.2,
+    "height": 30.8,
+    "bayCount": 9,
+    "module": 11,
+    "radius": 17.6,
+    "symmetry": 0.92,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + towers + dome, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "9 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "las-lajas-sanctuary",
+    "index": "92",
+    "name": "Las Lajas Sanctuary",
+    "shortName": "Las Lajas Sanctuary",
+    "typology": "Gothic Revival",
+    "place": "Ipiales, Colombia",
+    "era": "20th century",
+    "emphasis": "Bridge and ravine axis",
+    "type": "gothic",
+    "churchName": "Las Lajas Sanctuary",
+    "status": "schematic",
+    "source": "Wikipedia · Las Lajas Sanctuary",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Las_Lajas_Sanctuary",
+    "sourceNote": "Real reference building: the linked reference page identifies Las Lajas Sanctuary in Ipiales, Colombia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Gothic church + bridge",
+    "axis": "Longitudinal",
+    "length": 86.4,
+    "span": 24.5,
+    "height": 32.4,
+    "bayCount": 6,
+    "module": 14.4,
+    "radius": 12.2,
+    "symmetry": 0.78,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as gothic church + bridge, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "6 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "aparecida-basilica",
+    "index": "93",
+    "name": "Basilica of the National Shrine of Our Lady of Aparecida",
+    "shortName": "Basilica of the National Shrine of Our Lady of Aparecida",
+    "typology": "Modern",
+    "place": "Aparecida, Brazil",
+    "era": "20th century",
+    "emphasis": "Four-arm pilgrimage cross",
+    "type": "central",
+    "churchName": "Basilica of the National Shrine of Our Lady of Aparecida",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of the National Shrine of Our Lady of Aparecida",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_the_National_Shrine_of_Our_Lady_of_Aparecida",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of the National Shrine of Our Lady of Aparecida in Aparecida, Brazil; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Greek cross + lantern tower",
+    "axis": "Radial",
+    "length": 49.6,
+    "span": 42.5,
+    "height": 35.4,
+    "bayCount": 16,
+    "module": 3.1,
+    "radius": 21.2,
+    "symmetry": 0.99,
+    "surfaceNote": "The square + dome reading uses the real building as a visual anchor; radial bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as greek cross + lantern tower, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the radial and radial bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "square + dome"
+      ],
+      [
+        "structural rhythm",
+        "16 radial bays"
+      ],
+      [
+        "dominant axis",
+        "radial"
+      ],
+      [
+        "enclosure",
+        "central dome"
+      ]
+    ]
+  },
+  {
+    "id": "buenos-aires-cathedral",
+    "index": "94",
+    "name": "Buenos Aires Metropolitan Cathedral",
+    "shortName": "Buenos Aires Metropolitan Cathedral",
+    "typology": "Neoclassical",
+    "place": "Buenos Aires, Argentina",
+    "era": "17th–19th centuries",
+    "emphasis": "Classical portico axis",
+    "type": "basilica",
+    "churchName": "Buenos Aires Metropolitan Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Buenos Aires Metropolitan Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Buenos_Aires_Metropolitan_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Buenos Aires Metropolitan Cathedral in Buenos Aires, Argentina; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + temple front",
+    "axis": "Longitudinal",
+    "length": 77.4,
+    "span": 27.5,
+    "height": 24.1,
+    "bayCount": 7,
+    "module": 11.1,
+    "radius": 13.8,
+    "symmetry": 0.96,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + temple front, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "7 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "lujan-basilica",
+    "index": "95",
+    "name": "Basilica of Our Lady of Luján",
+    "shortName": "Basilica of Our Lady of Luján",
+    "typology": "Gothic Revival",
+    "place": "Luján, Argentina",
+    "era": "19th century",
+    "emphasis": "Twin-spire pilgrimage axis",
+    "type": "gothic",
+    "churchName": "Basilica of Our Lady of Luján",
+    "status": "schematic",
+    "source": "Wikipedia · Basilica of Our Lady of Luján",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Basilica_of_Our_Lady_of_Luj%C3%A1n",
+    "sourceNote": "Real reference building: the linked reference page identifies Basilica of Our Lady of Luján in Luján, Argentina; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + twin spires",
+    "axis": "Longitudinal",
+    "length": 108,
+    "span": 30.6,
+    "height": 40.5,
+    "bayCount": 8,
+    "module": 13.5,
+    "radius": 15.3,
+    "symmetry": 0.96,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + twin spires, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "8 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "lima-cathedral",
+    "index": "96",
+    "name": "Lima Cathedral",
+    "shortName": "Lima Cathedral",
+    "typology": "Colonial",
+    "place": "Lima, Peru",
+    "era": "16th–18th centuries",
+    "emphasis": "Colonial grid procession",
+    "type": "basilica",
+    "churchName": "Lima Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · Lima Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Lima_Cathedral",
+    "sourceNote": "Real reference building: the linked reference page identifies Lima Cathedral in Lima, Peru; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + twin towers",
+    "axis": "Longitudinal",
+    "length": 81,
+    "span": 28.8,
+    "height": 25.2,
+    "bayCount": 9,
+    "module": 9,
+    "radius": 14.4,
+    "symmetry": 0.92,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + twin towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "9 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "santiago-chile-cathedral",
+    "index": "97",
+    "name": "Metropolitan Cathedral of Santiago",
+    "shortName": "Metropolitan Cathedral of Santiago",
+    "typology": "Neoclassical",
+    "place": "Santiago, Chile",
+    "era": "18th–19th centuries",
+    "emphasis": "Civic basilican axis",
+    "type": "basilica",
+    "churchName": "Metropolitan Cathedral of Santiago",
+    "status": "schematic",
+    "source": "Wikipedia · Metropolitan Cathedral of Santiago",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Metropolitan_Cathedral_of_Santiago",
+    "sourceNote": "Real reference building: the linked reference page identifies Metropolitan Cathedral of Santiago in Santiago, Chile; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Basilica + twin towers",
+    "axis": "Longitudinal",
+    "length": 82.8,
+    "span": 29.4,
+    "height": 25.8,
+    "bayCount": 8,
+    "module": 10.3,
+    "radius": 14.7,
+    "symmetry": 0.94,
+    "surfaceNote": "The rectangle + transept reading uses the real building as a visual anchor; nave bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as basilica + twin towers, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and nave bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "rectangle + transept"
+      ],
+      [
+        "structural rhythm",
+        "8 nave bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "vaulted basilica"
+      ]
+    ]
+  },
+  {
+    "id": "st-marys-sydney",
+    "index": "98",
+    "name": "St Mary's Cathedral",
+    "shortName": "St Mary's Cathedral",
+    "typology": "Gothic Revival",
+    "place": "Sydney, Australia",
+    "era": "19th–20th centuries",
+    "emphasis": "Southern Gothic axis",
+    "type": "gothic",
+    "churchName": "St Mary's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St Mary's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St_Mary%27s_Cathedral,_Sydney",
+    "sourceNote": "Real reference building: the linked reference page identifies St Mary's Cathedral in Sydney, Australia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + twin spires",
+    "axis": "Longitudinal",
+    "length": 117.6,
+    "span": 33.3,
+    "height": 44.1,
+    "bayCount": 9,
+    "module": 13.1,
+    "radius": 16.7,
+    "symmetry": 0.96,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + twin spires, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  },
+  {
+    "id": "st-patricks-melbourne",
+    "index": "99",
+    "name": "St Patrick's Cathedral",
+    "shortName": "St Patrick's Cathedral",
+    "typology": "Gothic Revival",
+    "place": "Melbourne, Australia",
+    "era": "19th century",
+    "emphasis": "Spired civic procession",
+    "type": "gothic",
+    "churchName": "St Patrick's Cathedral",
+    "status": "schematic",
+    "source": "Wikipedia · St Patrick's Cathedral",
+    "sourceUrl": "https://en.wikipedia.org/wiki/St_Patrick%27s_Cathedral,_Melbourne",
+    "sourceNote": "Real reference building: the linked reference page identifies St Patrick's Cathedral in Melbourne, Australia; the Atlas dimensions, module, radius, and geometric readings are schematic, not a measured survey.",
+    "envelope": "Cross + triple spires",
+    "axis": "Longitudinal",
+    "length": 112.8,
+    "span": 32,
+    "height": 42.3,
+    "bayCount": 9,
+    "module": 12.5,
+    "radius": 16,
+    "symmetry": 0.96,
+    "surfaceNote": "The cross + pointed apse reading uses the real building as a visual anchor; pointed bays turn its documented form into an exploratory proportional study.",
+    "exteriorNote": "The exterior is abstracted as cross + triple spires, keeping the building's recognizable mass while preserving the Atlas's schematic evidence boundary.",
+    "interiorNote": "Inside, the study follows the longitudinal and pointed bays; these geometry values are interpretive inputs, not a measured plan.",
+    "details": [
+      [
+        "primary figure",
+        "cross + pointed apse"
+      ],
+      [
+        "structural rhythm",
+        "9 pointed bays"
+      ],
+      [
+        "dominant axis",
+        "longitudinal"
+      ],
+      [
+        "enclosure",
+        "nave + aisles"
+      ]
+    ]
+  }
+]);
+/* expanded studies:end */

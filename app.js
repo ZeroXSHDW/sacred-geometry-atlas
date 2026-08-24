@@ -580,6 +580,26 @@
     if (typeof window.addEventListener === "function") window.addEventListener("scroll", updateBackToTop, { passive: true });
   }
 
+  function setupResponsiveDisclosure(selector, breakpoint) {
+    const disclosure = $(selector);
+    const summary = disclosure ? $("summary", disclosure) : null;
+    if (!disclosure || !summary || typeof window.matchMedia !== "function") return;
+    const mediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const sync = () => {
+      if (!mediaQuery.matches) {
+        disclosure.open = true;
+        return;
+      }
+      if (disclosure.dataset.userToggled === "true") return;
+      disclosure.open = false;
+    };
+    summary.addEventListener("click", () => {
+      disclosure.dataset.userToggled = "true";
+    });
+    sync();
+    if (typeof mediaQuery.addEventListener === "function") mediaQuery.addEventListener("change", sync);
+  }
+
   function init() {
     setupThemePreference();
     registerServiceWorker();
@@ -616,6 +636,8 @@
     }
     renderHeroStats();
     populateFilter();
+    setupResponsiveDisclosure("#headerDataDisclosure", 800);
+    setupResponsiveDisclosure("#catalogFilterDisclosure", 740);
     bindEvents();
     setupBackToTop();
     window.addEventListener("hashchange", syncFromHash);
@@ -1216,7 +1238,8 @@
         : routeHash(route.page, false);
       normalizedPageRoute = window.location.hash.length > 0 && window.location.hash !== canonicalPageHash;
     }
-    showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 });
+    const shouldRevealStudy = route.page === "atlas" && Boolean(route.studyId);
+    showPage(route.page, { updateHash: false, scroll: window.location.hash.length > 0 && !shouldRevealStudy });
     replaceCatalogRoute();
     renderAll();
     document.body.classList.remove("no-js");
@@ -1236,7 +1259,8 @@
       announceStudy(activeStudy(), visibleStudies().length);
       announceDrawingState();
       const heading = $("#activeName");
-      if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: false });
+      if (heading && typeof heading.focus === "function") heading.focus({ preventScroll: true });
+      scrollActiveStudyIntoView("auto");
     } else if (window.location.hash.length > 0 && (previousPage === route.page || revealPending)) {
       focusPageHeading(route.page);
     }
@@ -1554,10 +1578,17 @@
     return window.matchMedia("(max-width: 800px)").matches;
   }
 
-  function scrollActiveStudyIntoView() {
+  function scrollActiveStudyIntoView(behaviorOverride = null) {
     const heading = $("#activeName");
     if (!heading || typeof heading.scrollIntoView !== "function") return false;
-    const behavior = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    const behavior = behaviorOverride || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
+    if (behaviorOverride === "auto" && document.documentElement && document.documentElement.style) {
+      const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      heading.scrollIntoView({ behavior: "auto", block: "start" });
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      return true;
+    }
     heading.scrollIntoView({ behavior, block: "start" });
     return true;
   }
@@ -1602,6 +1633,13 @@
     const activeSettingsLabel = filters.length
       ? `${filters.length} active catalog ${filters.length === 1 ? "setting" : "settings"}`
       : "Active catalog settings";
+    const disclosureMeta = $("#catalogFilterDisclosureMeta");
+    if (disclosureMeta) {
+      const visibleCount = visibleStudies().length;
+      disclosureMeta.textContent = filters.length
+        ? `${filters.length} active · ${visibleCount} ${visibleCount === 1 ? "study" : "studies"}`
+        : `${visibleCount} ${visibleCount === 1 ? "study" : "studies"}`;
+    }
     target.setAttribute("aria-label", activeSettingsLabel);
     target.hidden = filters.length === 0;
     target.innerHTML = filters.length
