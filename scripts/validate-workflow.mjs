@@ -16,6 +16,19 @@ function fail(message) {
   throw new Error(message);
 }
 
+function validateResearchPromptPortability() {
+  const promptPaths = [
+    "research/zerodevllc-marketfront-prompt.md",
+    "research/sacred-geometry-atlas-10-10-prompt.md",
+  ];
+  for (const relativePath of promptPaths) {
+    const prompt = fs.readFileSync(path.join(root, relativePath), "utf8");
+    if (/\/Users\/|[A-Z]:\\Users\\/i.test(prompt)) {
+      fail(`${relativePath} must not contain a machine-specific user path`);
+    }
+  }
+}
+
 function validateWorkflow({ name, fileName, expectedJobs, expectedCheckouts }) {
   const workflowPath = path.join(root, ".github", "workflows", fileName);
   const workflow = fs.readFileSync(workflowPath, "utf8");
@@ -93,5 +106,6 @@ validateWorkflow({
   expectedJobs: 2,
   expectedCheckouts: 2,
 });
+validateResearchPromptPortability();
 
 console.log("Pages workflow contracts passed: immutable actions, fixed runners, isolated checkouts, patch hygiene, scoped permissions, concurrency, validation gating, and timeouts.");
