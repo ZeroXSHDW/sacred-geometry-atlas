@@ -6,6 +6,11 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
+const nodeVersion = fs.readFileSync(path.join(root, ".node-version"), "utf8").trim();
+
+if (!/^\d+\.\d+\.\d+$/.test(nodeVersion)) {
+  fail(".node-version must contain an exact semantic Node.js version");
+}
 
 function fail(message) {
   throw new Error(message);
@@ -52,6 +57,12 @@ function validateWorkflow({ name, fileName, expectedJobs, expectedCheckouts }) {
   }
   if ((workflow.match(/timeout-minutes:/g) || []).length !== expectedJobs) {
     fail(`${name} must set one timeout-minutes value per job`);
+  }
+  if (!workflow.includes("node-version-file: .node-version") || workflow.includes("node-version: 22")) {
+    fail(`${name} must use the exact Node.js version from .node-version`);
+  }
+  if (!workflow.includes("node scripts/validate-geometry-data.js") || !workflow.includes("node scripts/sync-geometry-json.js --check")) {
+    fail(`${name} must validate the geometry source and generated artifacts`);
   }
   if (!workflow.includes("permissions:\n  contents: read") || !workflow.includes("concurrency:")) {
     fail(`${name} must declare least-privilege contents access and concurrency`);
