@@ -199,7 +199,7 @@ The workflow keeps pull-request validation read-only; Pages write and OIDC permi
 
 If you use a GitHub Pages custom domain, keep its `CNAME` file at the repository root. The deploy job carries it into the curated public artifact without rewriting its value.
 
-The Pages workflow pins validation to Node.js 22 so syntax and data checks do not depend on the runner's preinstalled version.
+Both Pages workflows use the exact Node.js version recorded in [`.node-version`](.node-version), so syntax, provenance, and generated-data checks do not depend on a runner's preinstalled version. The Cloudflare validation path runs the same geometry-source and generated-artifact checks before assembling its curated public artifact.
 
 The committed tree already includes the Pages workflow, `.nojekyll`, `favicon.svg`, `site.webmanifest`, `sw.js`, `robots.txt`, `sitemap.xml`, the social preview, the generated `static.html` collection index, and the data artifacts required by the site.
 
