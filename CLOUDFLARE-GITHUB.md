@@ -7,10 +7,10 @@ The Ireland Map Design Lab is a static page at [`ireland.html`](ireland.html). I
 ## Current deployed setup
 
 The connected Cloudflare Pages project is `sacred-geometry-atlas`, sourced from
-`ZeroXSHDW/sacred-geometry-atlas` on `main`. Its latest accepted production
-deployment is the separate catalogue surface
-`https://23a12add.sacred-geometry-atlas.pages.dev`. GitHub Pages is also
-accepted for the same commit at
+`ZeroXSHDW/sacred-geometry-atlas` on `main`. Its accepted production
+deployment is a separate `pages.dev` catalogue surface; the current immutable
+deployment URL and commit are recorded in the dated ZeroDevLLC workspace
+evidence. GitHub Pages is also accepted for the same commit at
 `https://zeroxshdw.github.io/sacred-geometry-atlas/`.
 
 Neither deployment is connected to the canonical ZeroDevLLC domains. Do not
