@@ -27,6 +27,23 @@ Use Cloudflare Pages as the canonical host for `ZERODEVLLC.EU` and GitHub as the
 
 The short routes come from [`_redirects`](_redirects). Cloudflare Pages reads that extensionless file from the deployed asset directory; GitHub Pages does not execute it. On GitHub Pages, the provider cards intentionally fall back to the direct provider URLs.
 
+## Cloudflare Git integration contract
+
+The connected Cloudflare Pages project `sacred-geometry-atlas` uses the same
+curated artifact contract as the direct-upload workflow:
+
+- build command: `python3 scripts/prepare-cloudflare-site.py`;
+- build output directory: `.cloudflare-site`;
+- project source: `ZeroXSHDW/sacred-geometry-atlas`, production branch `main`;
+- repository-only research notes, workflows, and build scripts remain outside
+  the published asset directory.
+
+Keep [`wrangler.toml`](wrangler.toml) aligned with that contract. A Cloudflare
+Git build must not publish the repository root, because the root contains
+operator instructions and research/build tooling that are not public-site
+assets. The direct-upload workflow remains useful for an explicit, reviewable
+release and uses the same generator before calling Wrangler.
+
 ## GitHub Pages fallback
 
 The Pages artifact also carries Print Studio and the evidence-aware research layer. The current research register has 24 local visual anchors for the 99 source-linked named studies; local thumbnails are visual evidence only and must be rights-checked before commercial print or resale.

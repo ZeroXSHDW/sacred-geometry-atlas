@@ -189,6 +189,12 @@ git commit -m "Update Sacred Geometry Atlas"
 3. In the repository, open **Settings → Pages** and set the source to **GitHub Actions** if GitHub has not enabled it automatically.
 4. Push to `main` or run the **Deploy static site to GitHub Pages** workflow manually.
 
+The connected Cloudflare Pages project uses the repository's curated
+Cloudflare contract as well: `python3 scripts/prepare-cloudflare-site.py`
+produces `.cloudflare-site`, and only that directory is published. Keep the
+Cloudflare project build command and output directory aligned with
+[`wrangler.toml`](wrangler.toml); do not publish the repository root.
+
 The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, `twitter:image`, `robots.txt`, and `sitemap.xml` crawl metadata before uploading the site artifact.
 
 The root document also includes machine-readable CollectionPage and Dataset metadata so search engines and research tools can identify the atlas and its JSON, CSV, and JSON Schema distributions. The HTML advertises the JSON Schema through an `application/schema+json` alternate link. Browser-generated exports resolve their schema URL from the current site origin, while deployment resolves the Dataset metadata—including the JSON Schema distribution URL—and stamps the published JSON, CSV, and JSON Schema artifacts with the final absolute Pages address.
