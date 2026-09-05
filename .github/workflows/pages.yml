@@ -400,7 +400,9 @@ jobs:
             const missingEstimateGenerated = fs.readFileSync(path.join(temporaryRoot, 'index.html'), 'utf8');
             const missingEstimateCsv = fs.readFileSync(path.join(temporaryRoot, 'data/geometry.csv'), 'utf8');
             if (!missingEstimateGenerated.includes('floor area not supplied (length × span fallback)') || !missingEstimateGenerated.includes('volume not supplied (No estimate supplied)') || !missingEstimateCsv.includes('"length × span fallback"') || !missingEstimateCsv.includes('"No estimate supplied"') || missingEstimateCsv.includes('"stale basis without estimate"')) throw new Error('Generated fallback exposed an estimate basis without its estimate');
-            const emptySource = fs.readFileSync('data/geometry.js', 'utf8').replace(/window\.CHURCH_GEOMETRY = \[[\s\S]*?\n\];/, 'window.CHURCH_GEOMETRY = [];');
+            const emptySource = fs.readFileSync('data/geometry.js', 'utf8')
+              .replace(/\/\* expanded studies:start \*\/[\s\S]*?\/\* expanded studies:end \*\/\n?/, '')
+              .replace(/window\.CHURCH_GEOMETRY = \[[\s\S]*?\n\];/, 'window.CHURCH_GEOMETRY = [];');
             fs.writeFileSync(sourcePath, emptySource);
             const emptyResult = spawnSync(process.execPath, ['scripts/sync-geometry-json.js'], { cwd: temporaryRoot, encoding: 'utf8' });
             if (emptyResult.status !== 0) throw new Error(emptyResult.stderr || emptyResult.stdout || 'Empty no-script generation failed');
