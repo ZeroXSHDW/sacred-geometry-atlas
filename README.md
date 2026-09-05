@@ -170,13 +170,16 @@ Then open <http://localhost:8000>.
 
 ## Publish on GitHub Pages
 
-1. Create an empty repository on GitHub.
-2. From this already initialized checkout, point the existing history at the new repository and push it:
+This repository is already connected to GitHub Pages at
+<https://zeroxshdw.github.io/sacred-geometry-atlas/>. The accepted workflow
+builds from `main` and publishes the curated static artifact; it does not
+publish the repository root. For this connected repository:
+
+1. From this already initialized checkout, commit validated changes and push
+   them to `main`:
 
 ```bash
-git branch -M main
-git remote add origin https://github.com/YOUR-ACCOUNT/YOUR-REPOSITORY.git
-git push -u origin main
+git push origin main
 ```
 
 If `git status` shows local changes you want to publish first, commit them before the push:
@@ -186,14 +189,27 @@ git add .
 git commit -m "Update Sacred Geometry Atlas"
 ```
 
-3. In the repository, open **Settings → Pages** and set the source to **GitHub Actions** if GitHub has not enabled it automatically.
-4. Push to `main` or run the **Deploy static site to GitHub Pages** workflow manually.
+For a separate fork or newly initialized checkout, use the equivalent
+bootstrap sequence with that repository's remote; do not replace the remote
+or history of this connected checkout:
 
-The connected Cloudflare Pages project uses the repository's curated
-Cloudflare contract as well: `python3 scripts/prepare-cloudflare-site.py`
-produces `.cloudflare-site`, and only that directory is published. Keep the
-Cloudflare project build command and output directory aligned with
-[`wrangler.toml`](wrangler.toml); do not publish the repository root.
+```bash
+git branch -M main
+git remote add origin https://github.com/YOUR-ACCOUNT/YOUR-REPOSITORY.git
+git push -u origin main
+```
+
+2. GitHub Actions runs the validation and deployment jobs automatically. You
+   can also run the **Deploy static site to GitHub Pages** workflow manually
+   after confirming the branch and source commit.
+
+The connected Cloudflare Pages project `sacred-geometry-atlas` uses the
+repository's curated Cloudflare contract as well:
+`python3 scripts/prepare-cloudflare-site.py` produces `.cloudflare-site`, and
+only that directory is published. Keep the Cloudflare project build command
+and output directory aligned with [`wrangler.toml`](wrangler.toml); do not
+publish the repository root. Its current accepted deployment is a separate
+`pages.dev` catalogue surface, not a canonical ZeroDevLLC domain.
 
 The source metadata uses repository-relative paths so local previews and project-site subpaths work without a hard-coded repository name. During deployment, the Pages workflow stamps the final absolute Pages URL into the canonical, `og:url`, `og:image`, `twitter:image`, `robots.txt`, and `sitemap.xml` crawl metadata before uploading the site artifact.
 
@@ -215,7 +231,7 @@ The committed public artifact includes a correctly sized 180px icons/atlas-180.p
 
 [`ireland.html`](ireland.html) is a separate static product surface for an Ireland map design workflow: compose map layers, inspect design-derived maths, choose an original symbolic cue, preview a T-shirt/hoodie/tote, export transparent SVG/PNG artwork, and hand the design to print-on-demand research links. The island outline and place anchors are explicitly schematic; replace them with licensed source geometry before commercial use. Research and deployment notes are in [`CLOUDFLARE-GITHUB.md`](CLOUDFLARE-GITHUB.md), and the reusable build prompt is in [`research/zerodevllc-marketfront-prompt.md`](research/zerodevllc-marketfront-prompt.md).
 
-Cloudflare Pages can use [`_redirects`](_redirects) for `/marketfront`, `/ireland-map`, `/ireland-design`, `/print-to-ship`, and `/go/...` provider handoffs. [`scripts/prepare-cloudflare-site.py`](scripts/prepare-cloudflare-site.py) keeps repository-only research and automation files out of the Cloudflare artifact. Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` to GitHub Actions, create the `zerodevllc-marketfront` Pages project, and connect `ZERODEVLLC.EU` as the canonical Cloudflare custom domain. Keep one canonical apex DNS target; use GitHub Pages as a fallback or preview rather than pointing the same apex at both services.
+Cloudflare Pages can use [`_redirects`](_redirects) for `/marketfront`, `/ireland-map`, `/ireland-design`, `/print-to-ship`, and `/go/...` provider handoffs. [`scripts/prepare-cloudflare-site.py`](scripts/prepare-cloudflare-site.py) keeps repository-only research and automation files out of the Cloudflare artifact. The existing project is configured and Git-connected; any future canonical `ZERODEVLLC.EU` custom-domain connection requires confirmation of the authoritative Cloudflare zone, one canonical apex target, and a separate owner/provider cutover decision. Keep GitHub Pages and Cloudflare as separate publish targets rather than pointing the same apex at both services.
 
 ## Add real churches
 

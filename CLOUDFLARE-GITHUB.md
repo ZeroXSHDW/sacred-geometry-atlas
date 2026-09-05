@@ -4,11 +4,25 @@ The Sacred Geometry Print Studio is part of the same public artifact: it combine
 
 The Ireland Map Design Lab is a static page at [`ireland.html`](ireland.html). It is designed to be tracked in GitHub and served from Cloudflare Pages, with the existing GitHub Pages workflow retained as a second publish target.
 
-## Recommended production setup
+## Current deployed setup
 
-Use Cloudflare Pages as the canonical host for `ZERODEVLLC.EU` and GitHub as the source repository and CI history. Do not point the same apex domain at GitHub Pages and Cloudflare Pages at the same time.
+The connected Cloudflare Pages project is `sacred-geometry-atlas`, sourced from
+`ZeroXSHDW/sacred-geometry-atlas` on `main`. Its latest accepted production
+deployment is the separate catalogue surface
+`https://b7fd4579.sacred-geometry-atlas.pages.dev`. GitHub Pages is also
+accepted for the same commit at
+`https://zeroxshdw.github.io/sacred-geometry-atlas/`.
 
-1. Create a Cloudflare Pages project named `zerodevllc-marketfront`.
+Neither deployment is connected to the canonical ZeroDevLLC domains. Do not
+point the same apex domain at GitHub Pages and Cloudflare Pages at the same
+time. A future canonical `ZERODEVLLC.EU` connection requires an owner/provider
+decision, authoritative Cloudflare zone confirmation, and public acceptance
+with rollback evidence.
+
+For a new, separately approved Cloudflare Pages project or a future canonical
+cutover:
+
+1. Create or select the exact approved Cloudflare Pages project.
 2. Add `ZERODEVLLC.EU` as a custom domain in the Pages project before relying on the DNS record. For an apex domain, Cloudflare requires the domain to be a Cloudflare zone and manages the Pages DNS connection after activation.
 3. In GitHub repository settings → Secrets and variables → Actions, add:
    - `CLOUDFLARE_API_TOKEN` — a scoped token with Account → Cloudflare Pages → Edit.
