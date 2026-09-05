@@ -1,11 +1,13 @@
 # Cloudflare Pages routes for the ZERODEVLLC.EU marketfront.
 # Cloudflare Pages evaluates this file before serving static assets.
-/marketfront /ireland.html 302
-/ireland /ireland.html 301
-/ireland-map /ireland.html#map 302
-/ireland-design /ireland.html#design 302
-/print-to-ship /ireland.html#print 302
-/print-studio /print-studio.html 301
+/marketfront /ireland 302
+/ireland-map /ireland#map 302
+/ireland-design /ireland#design 302
+/print-to-ship /ireland#print 302
+
+# Cloudflare's clean-URL handling serves /ireland and /print-studio from the
+# corresponding .html files. Do not add reverse redirects here: they create a
+# loop because Cloudflare canonicalizes the extension-bearing URL back again.
 
 # Provider handoff routes. These are outbound research links, not an API integration.
 /go/printful https://www.printful.com/print-on-demand 302
