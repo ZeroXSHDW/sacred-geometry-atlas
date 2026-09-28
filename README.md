@@ -1,5 +1,7 @@
 # Sacred Geometry Atlas
 
+**Private repository.** Owner: [ZeroXSHDW](https://github.com/ZeroXSHDW).
+
 An interactive, static GitHub Pages site for exploring the geometry of church interiors and exteriors.
 It is designed as a visual field atlas: choose a study, switch between plan/elevation/section, focus
 on a geometry layer, compare proportions, and share a direct link to any study.
@@ -363,3 +365,7 @@ repository subpath without special server rewrites. The Pages workflow repeats t
 social-metadata, and social-card dimension checks before publishing.
 
 The browser QA checklist is: test desktop and approximately 390px phone width; verify no horizontal overflow; test every study in plan/elevation/section and outside/inside modes; test filters, sorting, zoom, layer focus, comparison, method navigation, citation copying, JSON export, SVG drawing export, and print output; and check for console errors.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
