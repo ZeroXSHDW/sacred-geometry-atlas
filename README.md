@@ -11,8 +11,6 @@
 
 # Sacred Geometry Atlas
 
-> **Private repository.** Owner: [ZeroXSHDW](https://github.com/ZeroXSHDW).
-
 **[Sacred Geometry Atlas](https://ZeroDevLLC.com)** by [ZeroDev LLC](https://ZeroDevLLC.com) · GitHub: [ZeroXSHDW/sacred-geometry-atlas](https://github.com/ZeroXSHDW/sacred-geometry-atlas)
 
 > Brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)** · Store: **[https://zerodevllc.store](https://zerodevllc.store)**  
