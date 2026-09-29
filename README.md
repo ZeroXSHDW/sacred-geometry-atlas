@@ -1,7 +1,26 @@
+```
+  ______             ____              _     _     ____
+ |__  /___ _ __ ___ |  _ \  _____   __| |   | |   / ___|
+   / // _ \ '__/ _ \| | | |/ _ \ \ / /| |   | |  | |
+  / /|  __/ | | (_) | |_| |  __/\ V / | |___| |__| |___
+ /____\___|_|  \___/|____/ \___| \_/  |_____|_____\____|
+                    ZeroDev LLC
+             https://ZeroDevLLC.com
+```
+
 # Sacred Geometry Atlas
 
-**Private repository.** Owner: [ZeroXSHDW](https://github.com/ZeroXSHDW).
+**[Sacred Geometry Atlas](https://ZeroDevLLC.com)** by [ZeroDev LLC](https://ZeroDevLLC.com) · GitHub: [ZeroXSHDW/sacred-geometry-atlas](https://github.com/ZeroXSHDW/sacred-geometry-atlas)
 
+> Store / brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)**  
+> Production releases are published on the public-bound repo `sacred-geometry-atlas`.  
+> Active development uses the private twin [`sacred-geometry-atlas-dev`](https://github.com/ZeroXSHDW/sacred-geometry-atlas-dev).
+
+## Screenshots
+
+![Og](og.png)
+
+---
 An interactive, static GitHub Pages site for exploring the geometry of church interiors and exteriors.
 It is designed as a visual field atlas: choose a study, switch between plan/elevation/section, focus
 on a geometry layer, compare proportions, and share a direct link to any study.
