@@ -5,16 +5,20 @@
   / /|  __/ | | (_) | |_| |  __/\ V / | |___| |__| |___
  /____\___|_|  \___/|____/ \___| \_/  |_____|_____\____|
                     ZeroDev LLC
-             https://ZeroDevLLC.com
+                    Sacred Geometry Atlas
+    https://ZeroDevLLC.com  ·  https://zerodevllc.store
 ```
 
 # Sacred Geometry Atlas
 
+> **Private repository.** Owner: [ZeroXSHDW](https://github.com/ZeroXSHDW).
+
 **[Sacred Geometry Atlas](https://ZeroDevLLC.com)** by [ZeroDev LLC](https://ZeroDevLLC.com) · GitHub: [ZeroXSHDW/sacred-geometry-atlas](https://github.com/ZeroXSHDW/sacred-geometry-atlas)
 
-> Store / brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)**  
-> Production releases are published on the public-bound repo `sacred-geometry-atlas`.  
-> Active development uses the private twin [`sacred-geometry-atlas-dev`](https://github.com/ZeroXSHDW/sacred-geometry-atlas-dev).
+> Brand: **[https://ZeroDevLLC.com](https://ZeroDevLLC.com)** · Store: **[https://zerodevllc.store](https://zerodevllc.store)**  
+> Production releases → public-bound `sacred-geometry-atlas`.  
+> Active development → private twin [`sacred-geometry-atlas-dev`](https://github.com/ZeroXSHDW/sacred-geometry-atlas-dev).
+
 
 ## Screenshots
 
